@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Jackson, Tyler Bruce</title>
+<meta name="description" content="Jackson, Tyler Bruce — Design Director in Miami, FL. Focused on agentic solutions for Public Sector and enterprise.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jackson, Tyler Bruce">
+<meta property="og:description" content="Design Director, Miami FL. Focused on agentic solutions for Public Sector and enterprise.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fff'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='22' text-anchor='middle' fill='%23000'%3EJ%3C/text%3E%3C/svg%3E">
+
+<!-- New York ships with macOS/iOS, so Apple visitors get the real typeface and download nothing.
+     Everyone else gets Source Serif 4, whose metrics match New York to within 0.4% on line width
+     and 0.3% on x-height — close enough that the design's line breaks survive the substitution.
+     Note: document.fonts.check() reports true for fonts that don't exist, so detection measures instead. -->
+<script>
+(function () {
+  try {
+    var ctx = document.createElement("canvas").getContext("2d");
+    var probe = "mmmmmmmmmmlliWWMMwwii0Oo";
+    var width = function (family) { ctx.font = '16px ' + family; return ctx.measureText(probe).width; };
+    var installed = ["serif", "sans-serif", "monospace"].some(function (generic) {
+      return width('"New York", ' + generic) !== width(generic);
+    });
+    if (installed) return;              // nothing to download
+  } catch (e) { /* detection unavailable -> load the fallback, the safe direction */ }
+
+  ["https://fonts.googleapis.com", "https://fonts.gstatic.com"].forEach(function (host, i) {
+    var l = document.createElement("link");
+    l.rel = "preconnect"; l.href = host;
+    if (i) l.crossOrigin = "";
+    document.head.appendChild(l);
+  });
+
+  var css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap";
+  document.head.appendChild(css);
+})();
+</script>
+
+<style>
+/* ---------------------------------------------------------------
+   Tokens — every value derived from Land.jpg (3456 x 2234 canvas)
+   --------------------------------------------------------------- */
+:root{
+  --paper:      #ffffff;
+  --ink:        #000000;
+
+  /* Figma: 16px type on a 1728 x 1117 frame (Land.jpg is that frame at @2x) */
+  --fs:         16px;
+  --lh:         1.5;       /* 24px line advance */
+
+  --margin-left: 26.42%;   /* 456.5 / 1728 */
+  --measure:     min(30.9%, 33.2rem);  /* 531px at 1728, then capped for readability */
+
+  --gap-block:   1em;      /*  16px — between identity and bio */
+  --gap-section: 8em;      /* 128px — between bio and project list */
+
+  /* 343.5px above vs 398.5px below -> nudge the centered block upward */
+  --optical-rise: 5.19vh;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0;
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  background:var(--paper);
+  color:var(--ink);
+
+  font-family:"New York", "Source Serif 4", ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size:var(--fs);
+  line-height:var(--lh);
+  font-weight:400;
+  font-kerning:normal;
+  font-variant-ligatures:common-ligatures;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+main{
+  margin-left:var(--margin-left);
+  width:var(--measure);
+  padding-block:8vh;
+  margin-bottom:var(--optical-rise); /* shifts the centered block up by half this */
+}
+
+p{ margin:0; }
+p + p{ margin-top:var(--gap-block); }
+
+/* Text-level emphasis. Italic is the design's only accent — never bold, never color. */
+em, i{ font-style:italic; }
+
+/* Contact is a link, so it reads as one: roman, underlined. */
+.contact{
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-thickness:from-font;
+  text-underline-offset:0.18em;
+  text-decoration-color:rgba(0,0,0,.45);
+  transition:text-decoration-color .18s ease;
+}
+.contact:hover,
+.contact:focus-visible{ text-decoration-color:var(--ink); }
+.contact:focus-visible{ outline:1px solid var(--ink); outline-offset:2px; border-radius:1px; }
+.contact[href]{ cursor:pointer; }
+
+/* ---------------------------------------------------------------
+   "View work" — mobile home only
+   --------------------------------------------------------------- */
+.viewwork{
+  display:none;              /* desktop shows the project list instead */
+  color:inherit;
+  text-decoration:none;      /* undecorated, as designed */
+  align-self:flex-start;
+  padding-block:2px;         /* a little vertical room for the tap target */
+}
+.viewwork:hover{
+  text-decoration:underline;
+  text-decoration-thickness:from-font;
+  text-underline-offset:0.18em;
+}
+.viewwork:focus-visible{
+  outline:1px solid var(--ink);
+  outline-offset:3px;
+  border-radius:1px;
+}
+
+/* ---------------------------------------------------------------
+   Project list
+   --------------------------------------------------------------- */
+#projects{ margin-top:var(--gap-section); }
+
+.project{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* Only projects that actually resolve somewhere advertise themselves. */
+a.project{
+  text-decoration:underline;
+  text-decoration-thickness:from-font;
+  text-underline-offset:0.18em;
+  text-decoration-color:rgba(0,0,0,.28);
+  transition:text-decoration-color .18s ease, opacity .18s ease;
+}
+a.project:hover,
+a.project:focus-visible{ text-decoration-color:var(--ink); }
+
+a.project:focus-visible{
+  outline:1px solid var(--ink);
+  outline-offset:2px;
+  border-radius:1px;
+}
+
+/* A project carrying a thumbnail gets a whisper of affordance on hover. */
+@media (hover:hover) and (pointer:fine){
+  .project.has-thumb{ cursor:crosshair; }
+}
+
+/* ---------------------------------------------------------------
+   Hover thumbnail
+   --------------------------------------------------------------- */
+#thumb{
+  position:fixed;
+  top:0; left:0;
+  z-index:10;
+  width:clamp(180px, 17vw, 320px);
+  height:auto;
+  max-height:60vh;
+  object-fit:cover;
+  pointer-events:none;
+  opacity:0;
+  transform:translate3d(-9999px,-9999px,0) scale(.985);
+  transition:opacity .16s ease, transform .16s ease;
+  will-change:transform, opacity;
+  background:var(--paper);
+}
+#thumb.is-visible{ opacity:1; }
+
+@media (prefers-reduced-motion:reduce){
+  #thumb{ transition:opacity .01ms linear; }
+  a.project{ transition:none; }
+}
+
+/* ---------------------------------------------------------------
+   Responsive — the 26% indent is a large-screen luxury
+   --------------------------------------------------------------- */
+@media (max-width:1024px){
+  :root{ --margin-left:12%; --measure:min(66%, 33.2rem); }
+}
+
+/* The mobile home is a different composition, not a squeezed desktop:
+   the reading matter sits near the top, the project list is dropped, and a
+   single "View work" entry point is pinned toward the bottom of the viewport. */
+@media (max-width:640px){
+  :root{
+    --margin-left:20px;
+    --measure:calc(100% - 40px);
+    --optical-rise:0px;
+  }
+
+  body{ align-items:stretch; }
+
+  main{ padding-block:0; margin-bottom:0; }
+
+  /* Each view fills the screen, so "View work" lands the next one squarely. */
+  .home, .work{
+    display:flex;
+    flex-direction:column;
+    min-height:100dvh;
+    scroll-margin-top:0;
+  }
+
+  .home{ padding-block:96px 72px; }   /* 4 and 3 lines of the 24px grid */
+
+  .viewwork{
+    display:block;
+    margin-top:auto;                  /* pinned above the 72px bottom padding */
+  }
+
+  /* The work view is bottom-anchored and sets its own, larger type. */
+  .work{ padding-block:96px 48px; }
+
+  #projects{
+    margin-top:auto;
+    font-size:20px;
+    line-height:1.5;                  /* 30px advance */
+  }
+
+  /* A project awaiting its first tap shouldn't look like a dead link. */
+  .project.has-thumb{ cursor:pointer; }
+
+  #thumb{ width:min(70vw, 320px); }
+}
+
+@media print{
+  body{ display:block; }
+  main{ margin:0; width:auto; }
+  #thumb{ display:none; }
+}
+</style>
+</head>
+
+<body>
+
+<main>
+ <section class="home">
+  <div class="intro">
+  <!-- Identity block -->
+  <p>
+    Jackson, <em>Tyler</em> Bruce<br>
+    Miami, FL<br>
+    <em>Design</em> Director<br>
+    Virginia Tech <em>Architecture +</em>
+  </p>
+
+  <!-- Positioning block -->
+  <p>
+    Focused on <em>agentic solutions</em> for Public Sector and enterprise.
+    Citizen&mdash;no clearance. <a id="contact" class="contact">Contact</a> me about any past
+    or potential work.
+  </p>
+
+  </div>
+
+  <!-- Mobile home only: the list is replaced by a single entry point pinned to the
+       bottom of the viewport. Hidden at desktop, where the list itself is the navigation. -->
+  <a class="viewwork" id="viewwork" href="#work">View work</a>
+ </section>
+
+ <!-- On mobile this is a second full-height view, reached by "View work" and
+      bottom-anchored. On desktop it is simply the next block in the one composition. -->
+ <section class="work" id="work">
+  <!-- Rendered from PROJECTS below, overridden by the Sheet when configured.
+       The static copy here is the no-JS fallback. -->
+  <p id="projects">Loblaw Canada, Intuit, Model playground, Lazarus Brand Identity, Talent Management, Whitelist, USM: Milan Design Week 2025, Chatter Social, Jet Protocol, Novart, Urvin Finance, CoreLogic, Nestlé, USM: Hue+Man Design Miami</p>
+ </section>
+</main>
+
+
+<img id="thumb" alt="" aria-hidden="true" decoding="async">
+
+<script>
+(() => {
+  "use strict";
+
+  /* =============================================================
+     CONFIG — the two things you'll actually edit
+     ============================================================= */
+  const CONFIG = {
+    // Set this and the italic word "Contact" becomes a mailto link.
+    // Leave empty to keep it as plain italic text, exactly as designed.
+    email: "",
+
+    // Where the mobile "View work" link goes. A page ("work.html"), a section
+    // ("#work"), or anything else — it is only rendered at mobile widths.
+    workUrl: "#work",
+
+    // Google Sheet -> File -> Share -> Publish to web -> Comma-separated values (.csv)
+    // Paste that URL here and the list below becomes live: edit the sheet, the site updates.
+    // Expected columns (header row, any order, case-insensitive):
+    //   name | url | thumb
+    sheetCsvUrl: "",
+  };
+
+  /* Baked-in list. Works offline and over file://, where fetch() is blocked.
+     The Sheet, when configured, replaces this at load. */
+  const PROJECTS = [
+    { name: "Loblaw Canada" },
+    { name: "Intuit" },
+    { name: "Model playground" },
+    { name: "Lazarus Brand Identity" },
+    { name: "Talent Management" },
+    { name: "Whitelist" },
+    { name: "USM: Milan Design Week 2025" },
+    { name: "Chatter Social" },
+    { name: "Jet Protocol" },
+    { name: "Novart" },
+    { name: "Urvin Finance" },
+    { name: "CoreLogic" },
+    { name: "Nestlé" },
+    { name: "USM: Hue+Man Design Miami" },
+  ];
+
+  /* =============================================================
+     Mobile entry point
+     ============================================================= */
+  if (CONFIG.workUrl) document.getElementById("viewwork").href = CONFIG.workUrl;
+
+  /* =============================================================
+     Contact
+     ============================================================= */
+  if (CONFIG.email) document.getElementById("contact").href = "mailto:" + CONFIG.email;
+
+  /* =============================================================
+     Rendering
+     ============================================================= */
+  const listEl = document.getElementById("projects");
+
+  function render(items) {
+    const clean = items
+      .map(p => ({
+        name:  String(p.name  || "").trim(),
+        url:   String(p.url   || "").trim(),
+        thumb: String(p.thumb || "").trim(),
+      }))
+      .filter(p => p.name);
+
+    if (!clean.length) return;
+
+    const frag = document.createDocumentFragment();
+
+    clean.forEach((p, i) => {
+      const node = p.url
+        ? Object.assign(document.createElement("a"), {
+            href: p.url,
+            target: "_blank",
+            rel: "noopener noreferrer",
+          })
+        : document.createElement("span");
+
+      node.className = "project";
+      node.textContent = p.name;
+
+      if (p.thumb) {
+        node.dataset.thumb = p.thumb;
+        node.classList.add("has-thumb");
+      }
+
+      frag.appendChild(node);
+      if (i < clean.length - 1) frag.appendChild(document.createTextNode(", "));
+    });
+
+    listEl.replaceChildren(frag);
+  }
+
+  /* =============================================================
+     CSV — RFC 4180-ish: quoted fields, escaped quotes, CRLF
+     ============================================================= */
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", quoted = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+
+      if (quoted) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else quoted = false;
+        } else field += c;
+        continue;
+      }
+
+      if (c === '"')      quoted = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n"){ row.push(field); rows.push(row); row = []; field = ""; }
+      else if (c !== "\r") field += c;
+    }
+    if (field !== "" || row.length) { row.push(field); rows.push(row); }
+
+    return rows.filter(r => r.some(c => c.trim() !== ""));
+  }
+
+  function rowsToProjects(rows) {
+    if (rows.length < 2) return [];
+
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const find = (...names) => header.findIndex(h => names.includes(h));
+
+    const iName  = find("name", "project", "title", "client");
+    const iUrl   = find("url", "link", "href");
+    const iThumb = find("thumb", "thumbnail", "image", "img");
+
+    if (iName === -1) return [];
+
+    return rows.slice(1).map(r => ({
+      name:  r[iName]  ?? "",
+      url:   iUrl   > -1 ? (r[iUrl]   ?? "") : "",
+      thumb: iThumb > -1 ? (r[iThumb] ?? "") : "",
+    }));
+  }
+
+  /* =============================================================
+     Boot — baked list first (instant, always works), Sheet second
+     ============================================================= */
+  render(PROJECTS);
+
+  if (CONFIG.sheetCsvUrl) {
+    fetch(CONFIG.sheetCsvUrl, { cache: "no-store" })
+      .then(r => (r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status))))
+      .then(txt => {
+        const items = rowsToProjects(parseCSV(txt));
+        if (items.length) render(items);
+        else console.warn("[projects] Sheet parsed but produced no rows — keeping baked list.");
+      })
+      .catch(err => console.warn("[projects] Sheet unavailable, keeping baked list:", err.message));
+  }
+
+  /* =============================================================
+     Hover thumbnail
+     ============================================================= */
+  const thumbEl = document.getElementById("thumb");
+  const finePointer = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+
+  let pending = null, active = null;
+
+  const place = (x, y, centered) => {
+    const w = thumbEl.offsetWidth  || 240;
+    const h = thumbEl.offsetHeight || 160;
+    const pad = 16;
+
+    // Pointer: sit down-right of the cursor. Touch: centre on the tapped word.
+    let tx = centered ? x - w / 2 : x + 24;
+    let ty = y + (centered ? 12 : 24);
+
+    if (!centered && tx + w > window.innerWidth - pad) tx = x - w - 24;
+    if (ty + h > window.innerHeight - pad) ty = y - h - (centered ? 28 : 24);
+
+    tx = Math.min(Math.max(pad, tx), Math.max(pad, window.innerWidth  - w - pad));
+    ty = Math.min(Math.max(pad, ty), Math.max(pad, window.innerHeight - h - pad));
+
+    thumbEl.style.transform = `translate3d(${Math.round(tx)}px, ${Math.round(ty)}px, 0) scale(1)`;
+  };
+
+  const show = (el, x, y, centered) => {
+    const src = el.dataset.thumb;
+    if (!src) return;
+
+    active = el;
+    pending = src;
+
+    const img = new Image();
+    img.onload = () => {
+      if (pending !== src || active !== el) return; // pointer moved on already
+      thumbEl.src = src;
+      place(x, y, centered);
+      thumbEl.classList.add("is-visible");
+    };
+    img.onerror = () => console.warn("[projects] thumbnail failed to load:", src);
+    img.src = src;
+  };
+
+  const hide = () => {
+    active = null;
+    pending = null;
+    thumbEl.classList.remove("is-visible");
+  };
+
+  if (finePointer) {
+    listEl.addEventListener("pointerover", e => {
+      const el = e.target.closest?.(".has-thumb");
+      if (el && el !== active) show(el, e.clientX, e.clientY);
+    });
+
+    listEl.addEventListener("pointermove", e => {
+      if (active && thumbEl.classList.contains("is-visible")) place(e.clientX, e.clientY);
+    });
+
+    listEl.addEventListener("pointerout", e => {
+      const el = e.target.closest?.(".has-thumb");
+      if (el && !el.contains(e.relatedTarget)) hide();
+    });
+  }
+
+  // Touch: the first tap reveals the thumbnail, a second tap on the same project
+  // follows its link. Without this, a tap on a phone both navigates and shows
+  // nothing — the thumbnail would never be seen.
+  if (!finePointer) {
+    listEl.addEventListener("click", e => {
+      const el = e.target.closest?.(".has-thumb");
+      if (!el) return;
+      if (active === el) return;              // second tap -> let the link work
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      show(el, r.left + r.width / 2, r.bottom, true);
+    });
+
+    // Tapping anywhere else dismisses it.
+    document.addEventListener("click", e => {
+      if (!e.target.closest?.(".has-thumb")) hide();
+    });
+  }
+
+  // Keyboard parity: focusing a linked project anchors its thumbnail beside it.
+  listEl.addEventListener("focusin", e => {
+    const el = e.target.closest?.(".has-thumb");
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    show(el, r.right, r.bottom);
+  });
+  listEl.addEventListener("focusout", hide);
+
+  window.addEventListener("blur", hide);
+  window.addEventListener("scroll", hide, { passive: true });
+})();
+</script>
+
+</body>
+</html>
