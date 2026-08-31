@@ -148,6 +148,77 @@ composition still scales.
 Verified: the rendered page reproduces the mockup's line advances exactly —
 `48, 48, 48, 80, 48, 304, 48, 47, 49` — with the first baseline on the same pixel.
 
+## Testing before you push
+
+Three layers, cheapest first. Use as many as the change warrants.
+
+### 1. Look at it locally
+
+```sh
+cd Portfolio && python3 -m http.server 8000
+```
+
+Then open <http://localhost:8000>. Use this rather than double-clicking the file:
+over `file://` the browser blocks `fetch()`, so the Google Sheet never loads.
+
+Resize the window past 640px to cross the breakpoint, or use your browser's
+device toolbar to check the phone views.
+
+### 2. Run the layout check
+
+```sh
+python3 scripts/verify.py
+```
+
+Renders the site headlessly at desktop, tablet, and phone widths, then compares
+the typographic line grid against baselines measured from the Figma mockups.
+Exits non-zero on failure, so it works in a hook or CI.
+
+It catches what this project is actually prone to — problems that look fine at a
+glance:
+
+- **Layout drift.** A copy or CSS edit reflowing the text so it no longer matches
+  the design. Lowercasing "Public Sector" was one keystroke away from doing this.
+- **Font stack order.** `ui-serif` resolves to Times in Chrome, so if it ever
+  precedes `Source Serif 4`, every non-Apple visitor silently gets Times.
+- **Root-relative paths.** `src="/assets/..."` works locally and breaks the
+  moment the site is served from a subpath.
+- **A missing `CNAME`.** Deleting it silently drops the custom domain on deploy.
+
+If you changed the design **on purpose**, re-record the baselines:
+
+```sh
+python3 scripts/verify.py --update
+```
+
+Requires Chrome and `pip3 install --user pillow numpy`.
+
+### 3. Work on a branch
+
+```sh
+git switch -c change-the-thing
+# ... edit, then run the two checks above ...
+git push -u origin change-the-thing
+```
+
+Open a pull request and merge when you're happy. `main` is what deploys, so
+anything on a branch is invisible to the public site.
+
+GitHub Pages has no per-branch preview URLs. If you ever want them, Netlify and
+Cloudflare Pages both give a live URL per pull request for free — that's the one
+real advantage they have over Pages for this site.
+
+### Optional: block bad pushes automatically
+
+```sh
+printf '#!/bin/sh\nexec python3 "$(git rev-parse --show-toplevel)/scripts/verify.py"\n' \
+  > .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+```
+
+Now `git push` refuses to run if the checks fail. Bypass a specific push with
+`git push --no-verify`. Hooks are local and not committed, so set this up on any
+machine you want it on.
+
 ## Deploying
 
 It's one static folder. Drag it onto Netlify Drop, or point Vercel/GitHub Pages/
