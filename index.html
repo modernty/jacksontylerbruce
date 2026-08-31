@@ -119,13 +119,18 @@ em, i{ font-style:italic; }
 /* ---------------------------------------------------------------
    "View work" — mobile home only
    --------------------------------------------------------------- */
-.viewwork{
+.viewwork-line{
   display:none;              /* desktop shows the project list instead */
+  margin:0;
+}
+.viewwork{
   color:inherit;
   text-decoration:none;      /* undecorated, as designed */
-  align-self:flex-start;
   padding-block:2px;         /* a little vertical room for the tap target */
 }
+/* A qualifier, not part of the link — it stays outside the tap target
+   so it never underlines and never swallows a tap. */
+.soon{ color:inherit; }
 .viewwork:hover{
   text-decoration:underline;
   text-decoration-thickness:from-font;
@@ -225,7 +230,7 @@ a.project:focus-visible{
 
   .home{ padding-block:96px 72px; }   /* 4 and 3 lines of the 24px grid */
 
-  .viewwork{
+  .viewwork-line{
     display:block;
     margin-top:auto;                  /* pinned above the 72px bottom padding */
   }
@@ -277,7 +282,7 @@ a.project:focus-visible{
 
   <!-- Mobile home only: the list is replaced by a single entry point pinned to the
        bottom of the viewport. Hidden at desktop, where the list itself is the navigation. -->
-  <a class="viewwork" id="viewwork" href="#work">View work</a>
+  <p class="viewwork-line"><a class="viewwork" id="viewwork" href="#work">View work</a> <span class="soon">(coming soon)</span></p>
  </section>
 
  <!-- On mobile this is a second full-height view, reached by "View work" and
