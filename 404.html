@@ -276,7 +276,7 @@ em, i{ font-style:italic; }
     "intuit": {
       name: "Intuit",
       copy: [
-        "Selected Intuit product screens — the Wallet home, and an invoice-sent confirmation that prompts the next set-up step.",
+        "(project description coming soon)",
       ],
       images: [
         "assets/images/intuit/01.png",
@@ -486,10 +486,12 @@ em, i{ font-style:italic; }
     },
   };
 
-  // At least this many slides, so the gallery mechanic is visible while imagery
-  // is still being supplied. Real images fill from the front; the rest are
-  // placeholder surfaces.
+  // Pad up to this many slides with placeholder surfaces, but only while a
+  // project has fewer than 2 real images — that's when there isn't enough
+  // imagery yet to show the flick-through mechanic on its own. Once a project
+  // has 2 or more real images, no placeholders are added.
   const MIN_SLIDES = 3;
+  const PAD_BELOW = 2;
 
   /* =============================================================
      Which project? ?p=<slug> wins; otherwise the last path segment
@@ -639,7 +641,7 @@ em, i{ font-style:italic; }
       slides.push(slide);
     });
 
-    for (let i = images.length; i < MIN_SLIDES; i++) {
+    for (let i = images.length; images.length < PAD_BELOW && i < MIN_SLIDES; i++) {
       const slide = el("div", "gallery__slide");
       slide.appendChild(el("div", "surface", "Image " + (i + 1)));
       track.appendChild(slide);

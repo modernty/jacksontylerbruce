@@ -604,24 +604,9 @@ a.project:focus-visible{
     });
   }
 
-  // Touch: the first tap reveals the thumbnail, a second tap on the same project
-  // follows its link. Without this, a tap on a phone both navigates and shows
-  // nothing — the thumbnail would never be seen.
-  if (!finePointer) {
-    listEl.addEventListener("click", e => {
-      const el = e.target.closest?.(".has-thumb");
-      if (!el) return;
-      if (active === el) return;              // second tap -> let the link work
-      e.preventDefault();
-      const r = el.getBoundingClientRect();
-      show(el, r.left + r.width / 2, r.bottom, true);
-    });
-
-    // Tapping anywhere else dismisses it.
-    document.addEventListener("click", e => {
-      if (!e.target.closest?.(".has-thumb")) hide();
-    });
-  }
+  // Touch: no preview step — a tap follows the link immediately, same as any
+  // other link. The pinned thumbnail is a hover affordance (see finePointer
+  // above); touch simply doesn't get it.
 
   // Keyboard parity: focusing a linked project anchors its thumbnail beside it.
   listEl.addEventListener("focusin", e => {

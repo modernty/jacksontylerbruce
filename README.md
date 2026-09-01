@@ -182,12 +182,12 @@ seven line breaks exactly, which is also what confirms the 20px gutter.
 
 | Input | Behaviour |
 |---|---|
-| Mouse | Hover reveals; the image follows the cursor and flips near edges |
-| Touch | **First tap reveals, second tap follows the link.** Tapping elsewhere dismisses |
-| Keyboard | Focus reveals, anchored beside the focused project |
+| Mouse | Hover fades a project's thumbnail in — pinned beside the list for a `slug` (internal page) link, else it follows the cursor and flips near edges |
+| Touch | Tap follows the link immediately — no preview step |
+| Keyboard | Focus reveals it, same placement as hover |
 
-The touch path matters: without it a tap would navigate away before the thumbnail
-was ever seen. Projects without a `thumb` are unaffected — they link on the first tap.
+Touch skips the preview on purpose: a tap should behave like any other link. The
+pinned position is a hover/focus-only affordance.
 
 ## Layout
 
