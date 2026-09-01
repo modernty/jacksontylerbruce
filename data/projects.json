@@ -1,16 +1,86 @@
 [
-  { "name": "Loblaw Canada",              "url": "", "thumb": "" },
-  { "name": "Intuit",                     "url": "", "thumb": "" },
-  { "name": "Model playground",           "url": "", "thumb": "" },
-  { "name": "Lazarus Brand Identity",     "url": "", "thumb": "" },
-  { "name": "Talent Management",          "url": "", "thumb": "" },
-  { "name": "Whitelist",                  "url": "", "thumb": "" },
-  { "name": "USM: Milan Design Week 2025","url": "", "thumb": "" },
-  { "name": "Chatter Social",             "url": "", "thumb": "" },
-  { "name": "Jet Protocol",               "url": "", "thumb": "" },
-  { "name": "Novart",                     "url": "", "thumb": "" },
-  { "name": "Urvin Finance",              "url": "", "thumb": "" },
-  { "name": "CoreLogic",                  "url": "", "thumb": "" },
-  { "name": "Nestlé",                     "url": "", "thumb": "" },
-  { "name": "USM: Hue+Man Design Miami",  "url": "", "thumb": "" }
+  {
+    "name": "Loblaw Canada",
+    "slug": "",
+    "url": "",
+    "thumb": ""
+  },
+  {
+    "name": "Intuit",
+    "slug": "",
+    "url": "",
+    "thumb": ""
+  },
+  {
+    "name": "Model playground",
+    "slug": "model-playground",
+    "url": "",
+    "thumb": "assets/thumbs/model-playground.jpg"
+  },
+  {
+    "name": "Lazarus Brand Identity",
+    "slug": "lazarus-ai-pubsec-brand",
+    "url": "",
+    "thumb": "assets/thumbs/lazarus-ai-pubsec-brand.jpg"
+  },
+  {
+    "name": "Talent Management",
+    "slug": "talent-management",
+    "url": "",
+    "thumb": "assets/thumbs/talent-management.jpg"
+  },
+  {
+    "name": "Whitelist",
+    "slug": "whitelist",
+    "url": "",
+    "thumb": "assets/thumbs/whitelist.jpg"
+  },
+  {
+    "name": "USM: Milan Design Week 2025",
+    "slug": "",
+    "url": "https://www.jobastudio.com/clients/usm-connected-by-our-dreams",
+    "thumb": ""
+  },
+  {
+    "name": "Chatter Social",
+    "slug": "chatter-social",
+    "url": "",
+    "thumb": "assets/thumbs/chatter-social.jpg"
+  },
+  {
+    "name": "Jet Protocol",
+    "slug": "jet-protocol",
+    "url": "",
+    "thumb": "assets/thumbs/jet-protocol.jpg"
+  },
+  {
+    "name": "Novart",
+    "slug": "novart",
+    "url": "",
+    "thumb": "assets/thumbs/novart.jpg"
+  },
+  {
+    "name": "Urvin Finance",
+    "slug": "urvin-finance",
+    "url": "",
+    "thumb": "assets/thumbs/urvin-finance.jpg"
+  },
+  {
+    "name": "CoreLogic",
+    "slug": "corelogic",
+    "url": "",
+    "thumb": "assets/thumbs/corelogic.jpg"
+  },
+  {
+    "name": "Nestlé",
+    "slug": "nestle",
+    "url": "",
+    "thumb": "assets/thumbs/nestle.jpg"
+  },
+  {
+    "name": "USM: Hue+Man Design Miami",
+    "slug": "usm-hue-man",
+    "url": "",
+    "thumb": "assets/thumbs/usm-hue-man.jpg"
+  }
 ]

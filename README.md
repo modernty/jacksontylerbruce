@@ -1,16 +1,18 @@
 # Portfolio — Jackson, Tyler Bruce
 
-Single-file static site. No build step, no dependencies, no framework.
+Static site. No build step, no dependencies, no framework.
 Open `index.html` in a browser and it works — including straight from Finder.
 
 ```
 Portfolio/
-├── index.html                    the entire site (HTML + CSS + JS inline)
+├── index.html                    the landing page (HTML + CSS + JS inline)
+├── 404.html                      project-page template + router (see "Project pages")
 ├── data/projects.json            project list (reference copy; see note below)
+├── data/projects.csv             reformatted, ready to publish as the Sheet
 ├── design/landing-reference.jpg  the Figma export this was built from
 └── assets/
-    ├── thumbs/                   project thumbnails
-    ├── images/                   any full-size imagery
+    ├── thumbs/                   project thumbnails (assets/thumbs/<slug>.jpg)
+    ├── images/                   full-size imagery (assets/images/<slug>/…)
     └── fonts/                    self-hosted fonts (currently unused)
 ```
 
@@ -36,11 +38,71 @@ The list is rendered from the `PROJECTS` array in `index.html`. Each entry:
 | Field   | Required | Effect |
 |---------|----------|--------|
 | `name`  | yes      | The text shown |
+| `slug`  | no       | Makes the name link to its own project page at `/slug` (same tab). Hovering shows the thumbnail **pinned** top-right, not trailing the cursor |
 | `url`   | no       | Makes the name a link (opens in a new tab, subtly underlined) |
-| `thumb` | no       | Shows a thumbnail that follows the cursor on hover |
+| `thumb` | no       | Shows a thumbnail — pinned if the row has a `slug`, cursor-following otherwise |
 
-A project with neither `url` nor `thumb` renders as plain text — which is why the
-page currently looks exactly like the mockup. It gains behavior as you fill fields in.
+A project with none of `slug` / `url` / `thumb` renders as plain text — which is why
+the page currently looks exactly like the mockup. It gains behavior as you fill
+fields in. `slug` wins over `url` when both are set.
+
+## Project pages
+
+Each project can have its own page — description stacked above a flick-through
+gallery, same left gutter as the home page. Content is written in the same sheet
+(see the columns below); no per-project HTML file.
+
+### Routing — `404.html`
+
+There is no `project.html`. GitHub Pages serves `404.html` for any path it can't
+resolve, leaving the URL in the address bar, so **`404.html` is the router**:
+
+- `jacksontylerbruce.com/lazarus-ai-pubsec-brand` → Pages serves `404.html` →
+  its script reads the path, takes `lazarus-ai-pubsec-brand` as the slug, and
+  renders that project. Reload works. The page carries an HTTP 404 status — fine
+  here, a little worse for search/social unfurls.
+- Locally there is no 404 fallback. The home-page links detect this
+  (`localhost` / `127.0.0.1` / `file://`) and point at `404.html?p=<slug>`
+  instead, so clicking through works with a plain `python3 -m http.server 8000`.
+  On the live site those links use the clean `/<slug>` path, and `404.html`
+  rewrites any `?p=` visitor to it.
+- Hit with no resolvable slug, `404.html` shows a short "not found" linking home —
+  so it still works as a real 404 page.
+
+`404.html` has its own baked `SAMPLE` (currently just Lazarus) so it renders
+offline / over `file://` / before any sheet exists, exactly like `index.html`'s
+`PROJECTS` array. Set `CONFIG.sheetCsvUrl` in **both** `index.html` and
+`404.html` to the same published-CSV URL to make the content live.
+
+### Sheet columns for pages
+
+`data/projects.csv` is the reformatted, ready-to-publish version. Extra columns
+on top of `name` / `slug` / `url` / `thumb`:
+
+| Column      | Effect |
+|-------------|--------|
+| `copy`      | The description. A blank line starts a new paragraph. |
+| `images`    | Gallery images — a `\|`-separated list of URLs or repo paths (`\|`, not commas, to dodge CSV quoting). Fewer than 3 → the rest render as placeholder surfaces. |
+| `link name` | Label for an external call-to-action on the page (e.g. "Download now"). |
+| `link`      | The URL that label points to (new tab). |
+
+Eleven rows have a `slug`, `copy`, and gallery `images` filled in and are live:
+Model Playground, Lazarus AI Brand Identity, Talent Management, Whitelist,
+Chatter Social, Jet Protocol, Novart, Urvin Finance, CoreLogic, Nestlé, and
+USM: Hue+Man. **Loblaw Canada**, **Intuit**, and **USM: Milan Design Week 2025**
+have no `slug` (no content in the export yet) and stay plain text on the home
+page — paste a slug in once each is written to take it live.
+
+The same content is baked into `404.html`'s `SAMPLE` object and `index.html`'s
+`PROJECTS` array, so every page works offline / over `file://` with no sheet.
+`data/projects.csv` only matters once you publish it and set `CONFIG.sheetCsvUrl`.
+
+### Images
+
+Download them into `assets/images/<slug>/` rather than hotlinking a CDN, then
+point `images` at the repo paths. Downscale first — e.g.
+`sips -Z 1800 -s format jpeg -s formatOptions 86 big.png --out assets/images/<slug>/shot.jpg`.
+The hover thumbnail goes in `assets/thumbs/<slug>.jpg` at ~1000px.
 
 ### Connecting the Google Sheet
 

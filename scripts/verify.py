@@ -143,6 +143,23 @@ def static_checks(html):
     elif open(cname).read().strip() != "jacksontylerbruce.com":
         problems.append(f"CNAME says {open(cname).read().strip()!r}, expected jacksontylerbruce.com")
 
+    # 404.html is the project-page router (GitHub Pages serves it for /<slug>).
+    # It has no layout baseline, but the same cheap traps apply.
+    p404 = os.path.join(ROOT, "404.html")
+    if not os.path.exists(p404):
+        problems.append("404.html missing — project-page routing depends on it")
+    else:
+        h404 = open(p404, encoding="utf-8").read()
+        if "<title>" not in h404:
+            problems.append("404.html: missing <title>")
+        if re.search(r'(?:src|href)="/[^/]', h404):
+            problems.append('404.html: root-relative path (src="/..." or href="/...")')
+        i_web404, i_ui404 = h404.find('"Source Serif 4"'), h404.find("ui-serif")
+        if i_web404 == -1 or i_ui404 == -1:
+            problems.append("404.html: font stack no longer contains both Source Serif 4 and ui-serif")
+        elif i_ui404 < i_web404:
+            problems.append("404.html: ui-serif precedes Source Serif 4 in the font stack")
+
     return problems
 
 

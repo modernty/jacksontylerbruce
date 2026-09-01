@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Jackson, Tyler Bruce</title>
+<meta name="description" content="Jackson, Tyler Bruce — selected project.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jackson, Tyler Bruce">
+<meta property="og:description" content="Design Director, Miami FL. Focused on agentic solutions for public sector and enterprise.">
+
+<!-- This file is GitHub Pages' 404 document. Pages serves it for any path that
+     doesn't resolve to a file, leaving the requested URL in the address bar — so
+     it doubles as the router for project pages: /lazarus-ai-pubsec-brand lands
+     here, the script below reads the path, and renders that project.
+     Locally (or over file://) there is no 404 fallback, so ?p=<slug> works too:
+       python3 -m http.server 8000
+       open http://localhost:8000/404.html?p=lazarus-ai-pubsec-brand -->
+
+<!-- Favicon: solid brand blue. Kept identical to index.html. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B5CF6'/%3E%3C/svg%3E">
+
+<!-- New York ships with macOS/iOS, so Apple visitors get the real typeface and download nothing.
+     Everyone else gets Source Serif 4, whose metrics match New York closely enough that the
+     line breaks survive the substitution. Detection measures rendered width — document.fonts.check()
+     reports true for fonts that don't exist. Identical to index.html. -->
+<script>
+(function () {
+  try {
+    var ctx = document.createElement("canvas").getContext("2d");
+    var probe = "mmmmmmmmmmlliWWMMwwii0Oo";
+    var width = function (family) { ctx.font = '16px ' + family; return ctx.measureText(probe).width; };
+    var installed = ["serif", "sans-serif", "monospace"].some(function (generic) {
+      return width('"New York", ' + generic) !== width(generic);
+    });
+    if (installed) return;              // nothing to download
+  } catch (e) { /* detection unavailable -> load the fallback, the safe direction */ }
+
+  ["https://fonts.googleapis.com", "https://fonts.gstatic.com"].forEach(function (host, i) {
+    var l = document.createElement("link");
+    l.rel = "preconnect"; l.href = host;
+    if (i) l.crossOrigin = "";
+    document.head.appendChild(l);
+  });
+
+  var css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap";
+  document.head.appendChild(css);
+})();
+</script>
+
+<style>
+/* ---------------------------------------------------------------
+   Tokens — the base set is shared verbatim with index.html so the
+   project page sits on the same grid and gutter as the landing.
+   --------------------------------------------------------------- */
+:root{
+  --paper:      #ffffff;
+  --ink:        #000000;
+
+  --fs:         16px;
+  --lh:         1.5;       /* 24px line advance */
+
+  --margin-left: 26.42%;   /* 456.5 / 1728 — identical to the home page */
+  --gap-block:   1em;      /*  16px */
+  --gap-section: 8em;      /* 128px */
+
+  /* Project-page additions */
+  --copy-measure:    min(100%, 40rem);
+  --gallery-measure: min(100%, 60rem);
+  --surface-bg:      #f2f2f2;
+  --hairline:        rgba(0,0,0,.12);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0;
+  min-height:100dvh;
+  background:var(--paper);
+  color:var(--ink);
+
+  font-family:"New York", "Source Serif 4", ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size:var(--fs);
+  line-height:var(--lh);
+  font-weight:400;
+  font-kerning:normal;
+  font-variant-ligatures:common-ligatures;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+main{
+  margin-left:var(--margin-left);
+  padding-block:8vh;               /* same block padding as the home page */
+  padding-right:20px;              /* keeps text off the right edge on narrow desktops */
+}
+
+p{ margin:0; }
+em, i{ font-style:italic; }
+
+/* ---------------------------------------------------------------
+   Nav — one line, back to the index. Styled like index.html's
+   "Contact": roman, underlined, ink on hover.
+   --------------------------------------------------------------- */
+.nav{
+  margin:0 0 var(--gap-section);
+  font-size:var(--fs);
+}
+.nav a{
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-thickness:from-font;
+  text-underline-offset:0.18em;
+  text-decoration-color:rgba(0,0,0,.45);
+  transition:text-decoration-color .18s ease;
+}
+.nav a:hover,
+.nav a:focus-visible{ text-decoration-color:var(--ink); }
+.nav a:focus-visible{ outline:1px solid var(--ink); outline-offset:2px; border-radius:1px; }
+
+/* ---------------------------------------------------------------
+   Project heading + copy — the description sits above the gallery.
+   --------------------------------------------------------------- */
+.proj__title{
+  font-size:var(--fs);
+  font-weight:600;                 /* semi-bold — the one bold note on the page */
+  margin:0 0 var(--gap-block);
+}
+.proj__copy{
+  max-width:var(--copy-measure);
+}
+.proj__copy p + p{ margin-top:var(--gap-block); }
+
+.proj__link{
+  display:inline-block;
+  margin-top:var(--gap-block);
+  max-width:var(--copy-measure);
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-thickness:from-font;
+  text-underline-offset:0.18em;
+  text-decoration-color:rgba(0,0,0,.45);
+}
+.proj__link:hover,
+.proj__link:focus-visible{ text-decoration-color:var(--ink); }
+
+/* ---------------------------------------------------------------
+   Gallery — flick through horizontally. Native scroll-snap does the
+   flicking; the buttons drive it for mouse and keyboard.
+   --------------------------------------------------------------- */
+.gallery{
+  margin-top:var(--gap-section);
+  max-width:var(--gallery-measure);
+}
+
+.gallery__viewport{
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  touch-action:pan-y;
+}
+.gallery__viewport::-webkit-scrollbar{ display:none; }
+
+.gallery__track{ display:flex; }
+
+.gallery__slide{
+  flex:0 0 100%;
+  scroll-snap-align:start;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+/* Sized by its own proportions: full slide width unless that would push it
+   past 80vh tall, then bounded by height. No letterbox fill — any spare room
+   in the slide is just the page, so tall shots never get grey side bars. */
+.gallery__slide img{
+  display:block;
+  max-width:100%;
+  max-height:80vh;
+  width:auto;
+  height:auto;
+}
+
+/* Placeholder surface — stands in until real imagery is supplied. */
+.surface{
+  width:100%;
+  aspect-ratio:16 / 10;
+  background:var(--surface-bg);
+  border:1px solid var(--hairline);
+  display:grid;
+  place-items:center;
+  font-style:italic;
+  color:rgba(0,0,0,.35);
+}
+
+.gallery__bar{
+  display:flex;
+  align-items:baseline;
+  gap:1em;
+  margin-top:var(--gap-block);
+}
+.gallery__nav{
+  font:inherit;
+  line-height:1;
+  background:none;
+  border:0;
+  padding:.1em .35em;
+  color:inherit;
+  cursor:pointer;
+}
+.gallery__nav:disabled{ opacity:.3; cursor:default; }
+.gallery__nav:focus-visible{ outline:1px solid var(--ink); outline-offset:2px; border-radius:1px; }
+.gallery__count{ font-variant-numeric:tabular-nums; color:rgba(0,0,0,.55); }
+
+@media (prefers-reduced-motion:reduce){
+  .nav a, .proj__link{ transition:none; }
+}
+
+/* ---------------------------------------------------------------
+   Responsive — the gutter tracks the home page exactly.
+   --------------------------------------------------------------- */
+@media (max-width:1024px){
+  :root{ --margin-left:12%; }
+}
+
+@media (max-width:640px){
+  :root{ --margin-left:20px; }
+  main{ padding-block:96px 48px; padding-right:20px; }
+  .nav{ margin-bottom:var(--gap-section); }
+}
+
+@media print{
+  main{ margin:0; padding:0; }
+  .gallery__bar{ display:none; }
+}
+</style>
+</head>
+
+<body>
+
+<main id="view">
+  <!-- Filled by the script. Static fallback keeps the page from flashing empty. -->
+  <nav class="nav"><a href=".">Jackson, Tyler Bruce</a></nav>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  /* =============================================================
+     CONFIG — one line to make the content live
+     ============================================================= */
+  const CONFIG = {
+    // Same published-CSV URL as index.html. Empty -> the baked SAMPLE below is
+    // used, so the page still renders offline and over file://.
+    // Expected columns (header row, any order, case-insensitive):
+    //   name | slug | copy | images | link name | link
+    // "images" is a "|"-separated list of URLs or repo paths.
+    sheetCsvUrl: "",
+  };
+
+  /* Baked content. Mirrors index.html's PROJECTS array: works with no network.
+     Keyed by slug. "copy" is an array of paragraphs. */
+  const SAMPLE = {
+    "lazarus-ai-pubsec-brand": {
+      name: "Lazarus AI Brand Identity",
+      copy: [
+        "Lazarus AI builds foundation models for the world’s hardest problems, and does it in stealth. The brief was an identity that signals precision and capability without ever raising its voice — a system where the work speaks and the marketing recedes, because these customers care about results above all else. Every decision runs through that lens: a radically minimal website showing only a key visual, one bold statement, obfuscated client logos, and a single call to action, paired with a verbal identity built to be clear, concise, and quietly exact.",
+        "The design team established the brand from the ground up, codifying five pillars — Cool, Capable, Critical, Premium, Inevitable — and translating them into a full visual language: wireframe and dithered textures for engineered elegance, gradient-contour data visualization accented by a single Neon Ember Orange highlight, and strict monochrome discipline so color, when it appears, carries weight. An atomic component library — down to the chamfered chip container and a purpose-built icon set, used sparingly and never as decoration — keeps the system sharp as it scales. The result positions Lazarus AI as a company that doesn’t need to explain itself, and it lands with enterprise buyers across Defense, Public Sector, and Healthcare who value substance over spectacle.",
+      ],
+      images: [
+        "assets/images/lazarus-ai-pubsec-brand/key-visual.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "model-playground": {
+      name: "Model Playground",
+      copy: [
+        "When foundation models are reached only through an API, the hard part is translation: how do you make invisible intelligence visible enough to trust and act on? Enterprise buyers across Defense, Public Sector, Insurance, Healthcare, and Finance aren’t buying an algorithm — they’re buying certainty about their own data. Model Playground is the constructed environment where that certainty gets built: users prompt the models directly, orchestrate custom demos, and assemble tools that drop into their real workflows, watching abstract capability become something observable and legible.",
+        "I led the design team as both Lead Product Designer and Product Manager, working alongside engineering to define what was possible and push on what was worth building. The guiding decision was to treat the product as a flexible architecture rather than a fixed interface — users request the input and output representations they need and the system reshapes around them. That one principle lets Model Playground serve three audiences at once: sales teams tailoring an analytical walkthrough to each customer meeting, the design team pressure-testing new patterns as the models evolve, and the on-premise Defense and Public Sector deployments built out from this environment, all resting on a shared design system.",
+      ],
+      images: [
+        "assets/images/model-playground/01.jpg",
+        "assets/images/model-playground/02.jpg",
+        "assets/images/model-playground/03.jpg",
+        "assets/images/model-playground/04.jpg",
+        "assets/images/model-playground/05.jpg",
+        "assets/images/model-playground/06.jpg",
+        "assets/images/model-playground/07.jpg",
+        "assets/images/model-playground/08.jpg",
+        "assets/images/model-playground/09.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "talent-management": {
+      name: "Talent Management",
+      copy: [
+        "Talent management comes down to one stubborn human problem: putting the right person in the right role while weighing skills, constraints, context, and a hundred intangibles. For Defense and Federal organizations that process runs for weeks or months and directly gates readiness. The design question wasn’t whether AI could replace that judgment — it was whether a system could amplify it, explaining and justifying every step so decision-makers can move with confidence.",
+        "This is an on-prem deployment of ATLS, Lazarus AI’s agentic orchestration platform, applied to assignment. It evaluates the full pool of candidates and open positions against the customer’s own methodology and returns ranked, scored recommendations with the rationale surfaced at every level — constraint toggles for refining the pool, side-by-side candidate comparisons, and explainability woven throughout so teams always know why a match was made. The interface is layered from a dashboard overview down into individual results, keeping speed and transparency in the same view. In production it cut talent-management cycle times from months to minutes — over 100,000% faster — without giving up accuracy or the human judgment that makes the call defensible, and it has since been adapted for a Federal organization matching agents to mission-critical objectives.",
+      ],
+      images: [
+        "assets/images/talent-management/01.jpg",
+        "assets/images/talent-management/02.jpg",
+        "assets/images/talent-management/03.jpg",
+        "assets/images/talent-management/04.jpg",
+        "assets/images/talent-management/05.jpg",
+        "assets/images/talent-management/06.jpg",
+      ],
+      linkName: "v1 Demonstration video",
+      link: "https://www.linkedin.com/posts/lazarus-ai_talentmanagement-federalgovernment-dod-ugcPost-7342930978916491265-lggZ",
+    },
+    "whitelist": {
+      name: "Whitelist",
+      copy: [
+        "In the field, speed and certainty are the same requirement. Operators need to identify drone technology on the spot — to flag a hostile system or confirm that a platform meets mission requirements — and they need to trust the answer enough to act on it. Whitelist brings ATLS, Lazarus AI’s agentic orchestration platform, into their hands through a mobile-first design, drawing on partnered drone research, production data, and open-source intelligence to return not just a verdict but verifiable reasoning.",
+        "The design work was about carrying the prompting and analysis patterns refined in Model Playground into a mobile architecture without losing consistency, so operators move between phone in the field and desktop at base camp with cognitive continuity. Rather than build a one-off, we used Whitelist to set the standard for how every Lazarus AI product will behave in field-deployed scenarios. It is currently in development and QA, heading into MVP testing with an initial cohort of 50 users.",
+      ],
+      images: [
+        "assets/images/whitelist/01.jpg",
+        "assets/images/whitelist/02.jpg",
+        "assets/images/whitelist/03.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "chatter-social": {
+      name: "Chatter Social",
+      copy: [
+        "Chatter Social is a real-time, group-first social platform for creators and communities to connect, perform, and grow through live audio-visual experiences. Most social products treat community as a layer bolted onto a feed, leaving creators to stitch together separate tools for engagement, monetization, and retention; social audio proved voice as a medium but stalled on discovery, depth, and real ways to earn.",
+        "Chatter pulls real-time streaming, group-based interaction, and creator monetization into one platform. Groups, Live Rooms, and Stream let creators host genuine conversations and perform live while the audience takes part rather than just watching, and built-in tools — RocketChats, subscriptions, ticketed events — let creators earn directly without spending community trust to do it. The work spans years of iteration and testing, and is shipped on the App Store.",
+      ],
+      images: [
+        "assets/images/chatter-social/01.jpg",
+        "assets/images/chatter-social/02.jpg",
+        "assets/images/chatter-social/03.jpg",
+        "assets/images/chatter-social/04.jpg",
+        "assets/images/chatter-social/05.jpg",
+        "assets/images/chatter-social/06.jpg",
+      ],
+      linkName: "Download now",
+      link: "https://apps.apple.com/app/id6470361217",
+    },
+    "jet-protocol": {
+      name: "Jet Protocol",
+      copy: [
+        "Jet Protocol launched fixed-rate, fixed-term lending on Solana just as that model was becoming a new frontier in decentralized finance — a market still writing its own rules, where users needed education and confidence in equal measure to navigate complex mechanics at blockchain speed. The question was how to build trust in a system that new.",
+        "I led the complete redesign of the platform, reworking the existing variable-rate lending experience and launching new products alongside it: fixed-term markets and an Orca LP integration with borrowing against wallet collateral. The interface had to hold several trading modes at once without the flows collapsing into complexity, and I refined the brand identity in the same pass to state plainly what the protocol offers — precision, accessibility, and reliability in a volatile space.",
+      ],
+      images: [
+        "assets/images/jet-protocol/01.jpg",
+        "assets/images/jet-protocol/02.jpg",
+        "assets/images/jet-protocol/03.jpg",
+        "assets/images/jet-protocol/04.jpg",
+        "assets/images/jet-protocol/05.jpg",
+        "assets/images/jet-protocol/06.jpg",
+        "assets/images/jet-protocol/07.jpg",
+        "assets/images/jet-protocol/08.jpg",
+        "assets/images/jet-protocol/09.jpg",
+        "assets/images/jet-protocol/10.jpg",
+        "assets/images/jet-protocol/11.jpg",
+        "assets/images/jet-protocol/12.jpg",
+        "assets/images/jet-protocol/13.jpg",
+        "assets/images/jet-protocol/14.jpg",
+        "assets/images/jet-protocol/15.jpg",
+        "assets/images/jet-protocol/16.jpg",
+        "assets/images/jet-protocol/17.jpg",
+        "assets/images/jet-protocol/18.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "novart": {
+      name: "Novart",
+      copy: [
+        "Novart lets people use an art collection as loan collateral. It began as a way to buy from partner galleries in California, Florida, and New York against the piece being purchased or a collection already owned, and over time narrowed to a cleaner core: upload your collateral with supporting documentation and submit a loan request, with Novart sitting between lender and borrower.",
+        "The redesign replaced a single long application form with two upfront gates — location and minimum collateral value — that screen out likely denials before anyone invests time, then a short form that delivers the user to a dashboard. From there the work becomes manageable: the dashboard generates action items for each artwork, tracks the status of a loan offer, opens a line to lenders and admins, and handles review, acceptance, or decline. A heavy, front-loaded process becomes steps a user can pick up and put down.",
+      ],
+      images: [
+        "assets/images/novart/01.jpg",
+        "assets/images/novart/02.jpg",
+        "assets/images/novart/03.jpg",
+        "assets/images/novart/04.jpg",
+        "assets/images/novart/05.jpg",
+        "assets/images/novart/06.jpg",
+        "assets/images/novart/07.jpg",
+        "assets/images/novart/08.jpg",
+        "assets/images/novart/09.jpg",
+        "assets/images/novart/10.jpg",
+        "assets/images/novart/11.jpg",
+        "assets/images/novart/12.jpg",
+        "assets/images/novart/13.jpg",
+        "assets/images/novart/14.jpg",
+        "assets/images/novart/15.jpg",
+        "assets/images/novart/16.jpg",
+        "assets/images/novart/17.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "urvin-finance": {
+      name: "Urvin Finance",
+      copy: [
+        "Urvin Finance’s Terminal puts advanced market data, information, and tools in the hands of everyday retail investors — a SaaS product with tiered subscriptions that scale from learner to active trader, letting users go deep on a security through its charts, data, and news. I led News, Education, and the early data and chart explorations, and supported communities, authentication, and data.",
+        "Education runs both inside the Terminal and free to everyone on a companion microsite built on Webflow CMS, hosting long- and short-form writing, audio, and video. Across the product the team moves between two modes as the situation calls for it — a design-driven, inside-out approach when there is little user data, leaning on sibling products like News to inform decisions that Alpha and Beta users then test, and a forecasting, design-thinking approach that keeps user needs central through prototyping and testing with tools like Sprig. A tight loop with Product and Engineering makes it possible to pivot quickly when the data or the build changes.",
+      ],
+      images: [
+        "assets/images/urvin-finance/01.jpg",
+        "assets/images/urvin-finance/02.jpg",
+        "assets/images/urvin-finance/03.jpg",
+        "assets/images/urvin-finance/04.jpg",
+        "assets/images/urvin-finance/05.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "corelogic": {
+      name: "CoreLogic",
+      copy: [
+        "CoreLogic is known in real estate for its data and tools; my team at Soul Machines was asked to design and build the experience for its new Discovery Center in Texas, where executives explore data-driven visualizations of their real estate portfolios across use cases like churn, hazards, and liens. The design problem was letting users understand risk from a national view down to a single property while keeping the relevant data in sight to guide decisions.",
+        "The experience is multi-modal by necessity, scaling between a 6×3 angled video wall with a touch-screen input table at the Discovery Center and a desktop breakpoint for executives working remotely. Cora, a digital person representing CoreLogic, acts as the user’s chief of staff — manipulating filters and facets, surfacing insight on what is on screen, her dialogue designed alongside the product so conversation and interface reinforce each other.",
+      ],
+      images: [
+        "assets/images/corelogic/01.jpg",
+        "assets/images/corelogic/02.jpg",
+        "assets/images/corelogic/03.jpg",
+        "assets/images/corelogic/04.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "nestle": {
+      name: "Nestlé",
+      copy: [
+        "Nestlé’s Digital Baking Coach is an AI-guided baking experience led by Ruth, a digital person who walks people at home through making the perfect chocolate chip cookies. Beyond the guided bake, the coach helps users find recipes from ingredients they already have and shop within the experience for what they will need next time — turning a product demonstration into something people actually want to spend time with.",
+      ],
+      images: [
+        "assets/images/nestle/01.jpg",
+        "assets/images/nestle/02.jpg",
+        "assets/images/nestle/03.jpg",
+        "assets/images/nestle/04.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+    "usm-hue-man": {
+      name: "USM: Hue+Man Design Miami",
+      copy: [
+        "HUE+MAN is a global design competition and traveling installation dedicated to expanding resources and access for BIPOC creatives across the design industry — a collaboration between Kevin Jones’s Virginia-based Joba Studio and Swiss furniture maker USM, whose modular systems have been in production for over fifty years. The partnership formed in mid-2020 as support for the Black Lives Matter movement intensified, around Jones’s observation that less than 1% of the furniture produced by leading brands is designed by Black designers.",
+        "“The term HUE+MAN stands for Culture + Humanity,” Jones explains; “Hue is an old term for culture.” Shown at Design Miami, the installation immerses viewers in that idea — design as a form of expression, but also of empowerment and symbolism, and a way to build awareness and prompt difficult conversations.",
+      ],
+      images: [
+        "assets/images/usm-hue-man/01.gif",
+        "assets/images/usm-hue-man/02.jpg",
+        "assets/images/usm-hue-man/03.jpg",
+        "assets/images/usm-hue-man/04.jpg",
+        "assets/images/usm-hue-man/05.jpg",
+        "assets/images/usm-hue-man/06.jpg",
+      ],
+      linkName: "",
+      link: "",
+    },
+  };
+
+  // At least this many slides, so the gallery mechanic is visible while imagery
+  // is still being supplied. Real images fill from the front; the rest are
+  // placeholder surfaces.
+  const MIN_SLIDES = 3;
+
+  /* =============================================================
+     Which project? ?p=<slug> wins; otherwise the last path segment
+     (that's how /lazarus-ai-pubsec-brand resolves via 404.html).
+     ============================================================= */
+  const NO_PAGES_FALLBACK =
+    location.protocol === "file:" ||
+    /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|::1)$/.test(location.hostname);
+
+  function resolveSlug() {
+    const q = new URLSearchParams(location.search).get("p");
+    if (q && q.trim()) {
+      const slug = q.trim();
+      // On the live site, tidy /404.html?p=<slug> -> /<slug> in the address bar
+      // (a reload just re-hits 404.html). Skip it where there is no fallback.
+      if (!NO_PAGES_FALLBACK) {
+        try { history.replaceState(null, "", "/" + encodeURIComponent(slug)); } catch (e) {}
+      }
+      return slug;
+    }
+
+    const seg = location.pathname.split("/").filter(Boolean);
+    const last = seg[seg.length - 1] || "";
+    if (last && last !== "404" && !/\.html?$/i.test(last)) {
+      return decodeURIComponent(last);
+    }
+    return "";
+  }
+
+  /* =============================================================
+     CSV — RFC 4180-ish: quoted fields, escaped quotes, CRLF.
+     Identical to index.html.
+     ============================================================= */
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", quoted = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+
+      if (quoted) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else quoted = false;
+        } else field += c;
+        continue;
+      }
+
+      if (c === '"')      quoted = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n"){ row.push(field); rows.push(row); row = []; field = ""; }
+      else if (c !== "\r") field += c;
+    }
+    if (field !== "" || row.length) { row.push(field); rows.push(row); }
+
+    return rows.filter(r => r.some(c => c.trim() !== ""));
+  }
+
+  function rowToProject(rows, wantSlug) {
+    if (rows.length < 2) return null;
+
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const find = (...names) => header.findIndex(h => names.includes(h));
+
+    const iName  = find("name", "project", "title", "client");
+    const iSlug  = find("slug", "handle", "path");
+    const iCopy  = find("copy", "description", "body", "text", "about");
+    const iImgs  = find("images", "gallery", "photos");
+    const iLName = find("link name", "link_name", "linkname", "cta");
+    const iLink  = find("link", "href", "url");
+    if (iSlug === -1) return null;
+
+    const slugify = s => s.toLowerCase().trim()
+      .replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+
+    for (const r of rows.slice(1)) {
+      const slug = (r[iSlug] || "").trim() || (iName > -1 ? slugify(r[iName] || "") : "");
+      if (slug !== wantSlug) continue;
+
+      const rawCopy = iCopy > -1 ? (r[iCopy] || "") : "";
+      const copy = rawCopy.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+
+      const images = iImgs > -1
+        ? (r[iImgs] || "").split(/\s*\|\s*|\r?\n/).map(s => s.trim()).filter(Boolean)
+        : [];
+
+      return {
+        name: (iName > -1 ? r[iName] : slug || "").trim(),
+        copy: copy.length ? copy : (rawCopy.trim() ? [rawCopy.trim()] : []),
+        images,
+        linkName: iLName > -1 ? (r[iLName] || "").trim() : "",
+        link: iLink > -1 ? (r[iLink] || "").trim() : "",
+      };
+    }
+    return null;
+  }
+
+  /* =============================================================
+     Render
+     ============================================================= */
+  const view = document.getElementById("view");
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderNav() {
+    const nav = el("nav", "nav");
+    const a = el("a", null, "Jackson, Tyler Bruce");
+    a.href = ".";
+    nav.appendChild(a);
+    return nav;
+  }
+
+  function renderNotFound() {
+    view.replaceChildren(renderNav());
+    const p = el("p", "proj__copy");
+    p.append("That project isn’t here. ");
+    const a = el("a", null, "Index");
+    a.href = ".";
+    a.style.textDecoration = "underline";
+    p.appendChild(a);
+    view.appendChild(p);
+    document.title = "Not found — Jackson, Tyler Bruce";
+  }
+
+  function buildGallery(images) {
+    const wrap = el("div", "gallery");
+    const viewport = el("div", "gallery__viewport");
+    const track = el("div", "gallery__track");
+
+    const slides = [];
+
+    images.forEach((src, i) => {
+      const slide = el("div", "gallery__slide");
+      const img = new Image();
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.alt = "";
+      img.src = src;
+      img.onerror = () => console.warn("[project] image failed to load:", src);
+      slide.appendChild(img);
+      track.appendChild(slide);
+      slides.push(slide);
+    });
+
+    for (let i = images.length; i < MIN_SLIDES; i++) {
+      const slide = el("div", "gallery__slide");
+      slide.appendChild(el("div", "surface", "Image " + (i + 1)));
+      track.appendChild(slide);
+      slides.push(slide);
+    }
+
+    viewport.appendChild(track);
+    wrap.appendChild(viewport);
+
+    if (slides.length <= 1) return wrap;
+
+    const bar   = el("div", "gallery__bar");
+    const prev  = el("button", "gallery__nav", "‹");
+    const next  = el("button", "gallery__nav", "›");
+    const count = el("span", "gallery__count");
+    prev.type = next.type = "button";
+    prev.setAttribute("aria-label", "Previous image");
+    next.setAttribute("aria-label", "Next image");
+    bar.append(prev, next, count);
+    wrap.appendChild(bar);
+
+    const reduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    const pad = n => String(n).padStart(2, "0");
+    let index = 0;
+
+    const sync = () => {
+      const w = viewport.clientWidth || 1;
+      index = Math.round(viewport.scrollLeft / w);
+      index = Math.max(0, Math.min(slides.length - 1, index));
+      count.textContent = pad(index + 1) + " / " + pad(slides.length);
+      prev.disabled = index <= 0;
+      next.disabled = index >= slides.length - 1;
+    };
+
+    const go = i => {
+      const target = Math.max(0, Math.min(slides.length - 1, i));
+      viewport.scrollTo({ left: viewport.clientWidth * target, behavior: reduced ? "auto" : "smooth" });
+    };
+
+    prev.addEventListener("click", () => go(index - 1));
+    next.addEventListener("click", () => go(index + 1));
+
+    let raf = 0;
+    viewport.addEventListener("scroll", () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = 0; sync(); });
+    }, { passive: true });
+
+    window.addEventListener("resize", () => go(index), { passive: true });
+
+    wrap.addEventListener("keydown", e => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key === "ArrowLeft")  { e.preventDefault(); go(index - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+    });
+
+    sync();
+    return wrap;
+  }
+
+  function renderProject(data) {
+    view.replaceChildren(renderNav());
+
+    view.appendChild(el("h1", "proj__title", data.name || ""));
+
+    if (data.copy && data.copy.length) {
+      const copy = el("div", "proj__copy");
+      data.copy.forEach(par => copy.appendChild(el("p", null, par)));
+      view.appendChild(copy);
+    }
+
+    if (data.link) {
+      const a = el("a", "proj__link", data.linkName || "Visit");
+      a.href = data.link;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      view.appendChild(a);
+    }
+
+    view.appendChild(buildGallery(data.images || []));
+
+    document.title = (data.name ? data.name + " — " : "") + "Jackson, Tyler Bruce";
+  }
+
+  /* =============================================================
+     Boot — baked first, sheet second (same order as index.html)
+     ============================================================= */
+  const slug = resolveSlug();
+  const baked = slug ? SAMPLE[slug] : null;
+
+  if (baked) renderProject(baked);
+  else if (slug && CONFIG.sheetCsvUrl) renderProject({ name: "", copy: [], images: [] });
+  else renderNotFound();
+
+  if (slug && CONFIG.sheetCsvUrl) {
+    fetch(CONFIG.sheetCsvUrl, { cache: "no-store" })
+      .then(r => (r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status))))
+      .then(txt => {
+        const data = rowToProject(parseCSV(txt), slug);
+        if (data) renderProject(data);
+        else if (!baked) renderNotFound();
+        else console.warn("[project] slug not found in sheet — keeping baked copy:", slug);
+      })
+      .catch(err => {
+        if (!baked) renderNotFound();
+        console.warn("[project] sheet unavailable:", err.message);
+      });
+  }
+})();
+</script>
+
+</body>
+</html>

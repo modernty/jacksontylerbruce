@@ -155,12 +155,13 @@ em, i{ font-style:italic; }
   text-decoration:none;
 }
 
-/* Only projects that actually resolve somewhere advertise themselves. */
+/* Only projects that actually resolve somewhere advertise themselves —
+   underlined like "Contact": roman, from-font thickness, same offset and colour. */
 a.project{
   text-decoration:underline;
   text-decoration-thickness:from-font;
   text-underline-offset:0.18em;
-  text-decoration-color:rgba(0,0,0,.28);
+  text-decoration-color:rgba(0,0,0,.45);
   transition:text-decoration-color .18s ease, opacity .18s ease;
 }
 a.project:hover,
@@ -196,6 +197,34 @@ a.project:focus-visible{
   background:var(--paper);
 }
 #thumb.is-visible{ opacity:1; }
+
+/* A project that points at its own page (data-slug) pins the preview to a fixed
+   spot instead of trailing the cursor. Fade only — no slide-in from the corner. */
+#thumb.is-fixed{
+  top:50%;
+  left:auto;
+  right:clamp(20px, 6vw, 96px);
+  width:clamp(220px, 24vw, 400px);
+  max-height:80vh;
+  transform:translateY(-50%);
+}
+/* Wide screens: sit it just to the right of the text column, level with it. */
+@media (min-width:1200px){
+  #thumb.is-fixed{
+    left:calc(var(--margin-left) + var(--measure) + 3rem);
+    right:auto;
+  }
+}
+@media (max-width:640px){
+  #thumb.is-fixed{
+    top:auto;
+    bottom:24px;
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+    width:min(70vw, 320px);
+  }
+}
 
 @media (prefers-reduced-motion:reduce){
   #thumb{ transition:opacity .01ms linear; }
@@ -327,18 +356,18 @@ a.project:focus-visible{
   const PROJECTS = [
     { name: "Loblaw Canada" },
     { name: "Intuit" },
-    { name: "Model playground" },
-    { name: "Lazarus Brand Identity" },
-    { name: "Talent Management" },
-    { name: "Whitelist" },
-    { name: "USM: Milan Design Week 2025" },
-    { name: "Chatter Social" },
-    { name: "Jet Protocol" },
-    { name: "Novart" },
-    { name: "Urvin Finance" },
-    { name: "CoreLogic" },
-    { name: "Nestlé" },
-    { name: "USM: Hue+Man Design Miami" },
+    { name: "Model playground", slug: "model-playground", thumb: "assets/thumbs/model-playground.jpg" },
+    { name: "Lazarus Brand Identity", slug: "lazarus-ai-pubsec-brand", thumb: "assets/thumbs/lazarus-ai-pubsec-brand.jpg" },
+    { name: "Talent Management", slug: "talent-management", thumb: "assets/thumbs/talent-management.jpg" },
+    { name: "Whitelist", slug: "whitelist", thumb: "assets/thumbs/whitelist.jpg" },
+    { name: "USM: Milan Design Week 2025", url: "https://www.jobastudio.com/clients/usm-connected-by-our-dreams" },
+    { name: "Chatter Social", slug: "chatter-social", thumb: "assets/thumbs/chatter-social.jpg" },
+    { name: "Jet Protocol", slug: "jet-protocol", thumb: "assets/thumbs/jet-protocol.jpg" },
+    { name: "Novart", slug: "novart", thumb: "assets/thumbs/novart.jpg" },
+    { name: "Urvin Finance", slug: "urvin-finance", thumb: "assets/thumbs/urvin-finance.jpg" },
+    { name: "CoreLogic", slug: "corelogic", thumb: "assets/thumbs/corelogic.jpg" },
+    { name: "Nestlé", slug: "nestle", thumb: "assets/thumbs/nestle.jpg" },
+    { name: "USM: Hue+Man Design Miami", slug: "usm-hue-man", thumb: "assets/thumbs/usm-hue-man.jpg" },
   ];
 
   /* =============================================================
@@ -356,10 +385,21 @@ a.project:focus-visible{
      ============================================================= */
   const listEl = document.getElementById("projects");
 
+  // On the live site, /<slug> is served by 404.html (GitHub Pages' fallback).
+  // A plain local server (python3 -m http.server) has no such fallback, and
+  // neither does file://, so there we link straight at 404.html?p=<slug>.
+  const NO_PAGES_FALLBACK =
+    location.protocol === "file:" ||
+    /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|::1)$/.test(location.hostname);
+
+  const projectHref = slug =>
+    NO_PAGES_FALLBACK ? "404.html?p=" + encodeURIComponent(slug) : slug;
+
   function render(items) {
     const clean = items
       .map(p => ({
         name:  String(p.name  || "").trim(),
+        slug:  String(p.slug  || "").trim(),
         url:   String(p.url   || "").trim(),
         thumb: String(p.thumb || "").trim(),
       }))
@@ -370,13 +410,20 @@ a.project:focus-visible{
     const frag = document.createDocumentFragment();
 
     clean.forEach((p, i) => {
-      const node = p.url
-        ? Object.assign(document.createElement("a"), {
-            href: p.url,
-            target: "_blank",
-            rel: "noopener noreferrer",
-          })
-        : document.createElement("span");
+      let node;
+      if (p.slug) {
+        // Its own page: clean /<slug> on the live site, 404.html?p=<slug> locally.
+        node = Object.assign(document.createElement("a"), { href: projectHref(p.slug) });
+        node.dataset.slug = p.slug;
+      } else if (p.url) {
+        node = Object.assign(document.createElement("a"), {
+          href: p.url,
+          target: "_blank",
+          rel: "noopener noreferrer",
+        });
+      } else {
+        node = document.createElement("span");
+      }
 
       node.className = "project";
       node.textContent = p.name;
@@ -428,6 +475,7 @@ a.project:focus-visible{
     const find = (...names) => header.findIndex(h => names.includes(h));
 
     const iName  = find("name", "project", "title", "client");
+    const iSlug  = find("slug", "handle", "path");
     const iUrl   = find("url", "link", "href");
     const iThumb = find("thumb", "thumbnail", "image", "img");
 
@@ -435,6 +483,7 @@ a.project:focus-visible{
 
     return rows.slice(1).map(r => ({
       name:  r[iName]  ?? "",
+      slug:  iSlug  > -1 ? (r[iSlug]  ?? "") : "",
       url:   iUrl   > -1 ? (r[iUrl]   ?? "") : "",
       thumb: iThumb > -1 ? (r[iThumb] ?? "") : "",
     }));
@@ -488,12 +537,14 @@ a.project:focus-visible{
 
     active = el;
     pending = src;
+    const fixed = !!el.dataset.slug;   // links to a project page pin the preview
 
     const img = new Image();
     img.onload = () => {
       if (pending !== src || active !== el) return; // pointer moved on already
       thumbEl.src = src;
-      place(x, y, centered);
+      thumbEl.classList.toggle("is-fixed", fixed);
+      if (!fixed) place(x, y, centered);
       thumbEl.classList.add("is-visible");
     };
     img.onerror = () => console.warn("[projects] thumbnail failed to load:", src);
@@ -504,6 +555,7 @@ a.project:focus-visible{
     active = null;
     pending = null;
     thumbEl.classList.remove("is-visible");
+    thumbEl.classList.remove("is-fixed");
   };
 
   if (finePointer) {
@@ -513,7 +565,7 @@ a.project:focus-visible{
     });
 
     listEl.addEventListener("pointermove", e => {
-      if (active && thumbEl.classList.contains("is-visible")) place(e.clientX, e.clientY);
+      if (active && !active.dataset.slug && thumbEl.classList.contains("is-visible")) place(e.clientX, e.clientY);
     });
 
     listEl.addEventListener("pointerout", e => {
