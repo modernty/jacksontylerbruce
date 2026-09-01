@@ -202,7 +202,8 @@ a.project:focus-visible{
 #thumb.is-visible{ opacity:1; }
 
 /* A project that points at its own page (data-slug) pins the preview to a fixed
-   spot instead of trailing the cursor. Fade only — no slide-in from the corner. */
+   spot instead of trailing the cursor. Fade only — the position is static, so
+   overriding the transition to opacity kills the transform's slide-in. */
 #thumb.is-fixed{
   top:50%;
   left:auto;
@@ -210,6 +211,7 @@ a.project:focus-visible{
   width:clamp(220px, 24vw, 400px);
   max-height:80vh;
   transform:translateY(-50%);
+  transition:opacity .2s ease;
 }
 /* Wide screens: sit it just to the right of the text column, level with it. */
 @media (min-width:1200px){
@@ -567,7 +569,16 @@ a.project:focus-visible{
       if (pending !== src || active !== el) return; // pointer moved on already
       thumbEl.src = src;
       thumbEl.classList.toggle("is-fixed", fixed);
-      if (!fixed) place(x, y, centered);
+      if (fixed) {
+        // Pin it beside the list, vertically centred on it. No inline transform,
+        // so the CSS position is static and only opacity animates — a plain fade.
+        const r = listEl.getBoundingClientRect();
+        thumbEl.style.transform = "";
+        thumbEl.style.top = Math.round(r.top + r.height / 2) + "px";
+      } else {
+        thumbEl.style.top = "";
+        place(x, y, centered);
+      }
       thumbEl.classList.add("is-visible");
     };
     img.onerror = () => console.warn("[projects] thumbnail failed to load:", src);
@@ -578,7 +589,7 @@ a.project:focus-visible{
     active = null;
     pending = null;
     thumbEl.classList.remove("is-visible");
-    thumbEl.classList.remove("is-fixed");
+    // Keep .is-fixed so the fade-out happens in place; show() re-syncs it.
   };
 
   if (finePointer) {
