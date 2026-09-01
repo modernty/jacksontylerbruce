@@ -2,14 +2,14 @@
   {
     "name": "Loblaw Canada",
     "slug": "",
-    "url": "",
+    "url": "https://loblaw-latecheckout-handoff.vercel.app/",
     "thumb": ""
   },
   {
     "name": "Intuit",
-    "slug": "",
+    "slug": "intuit",
     "url": "",
-    "thumb": ""
+    "thumb": "assets/thumbs/intuit.png"
   },
   {
     "name": "Model playground",
