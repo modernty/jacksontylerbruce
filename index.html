@@ -130,10 +130,6 @@ em, i{ font-style:italic; }
   text-decoration:none;      /* undecorated, as designed */
   padding-block:2px;         /* a little vertical room for the tap target */
 }
-/* A qualifier, not part of the link — it stays outside the tap target
-   so it never underlines and never swallows a tap. Italic marks it as an
-   aside, in the same accent the rest of the page uses. */
-.soon{ color:inherit; font-style:italic; }
 .viewwork:hover{
   text-decoration:underline;
   text-decoration-thickness:from-font;
@@ -319,7 +315,7 @@ a.project:focus-visible{
 
   <!-- Mobile home only: the list is replaced by a single entry point pinned to the
        bottom of the viewport. Hidden at desktop, where the list itself is the navigation. -->
-  <p class="viewwork-line"><a class="viewwork" id="viewwork" href="#work">View work</a> <span class="soon">(coming soon)</span></p>
+  <p class="viewwork-line"><a class="viewwork" id="viewwork" href="#work">View work</a></p>
  </section>
 
  <!-- On mobile this is a second full-height view, reached by "View work" and
