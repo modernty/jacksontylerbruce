@@ -17,8 +17,9 @@ Themes: AI · Trust in AI · Systems · Architecture · Spatial · Material · I
 | Model Playground (2024–25) | AI, Trust in AI, Architecture, Systems | Prompting foundation models; making intelligence legible; "flexible architecture"; shared design system. |
 | USM Milan (2025) | Spatial, Material, Identity | Immersive Haller Soft Panel installation; awarded for event branding. |
 | ATLS Talent Mgmt (2025–26) | AI, Trust in AI | Agentic matching with rationale at every level and constraint toggles. |
-| Remedy / PC Health (2026) | AI, Trust in AI, Systems | Health chat with consent, citations, red-flag escalation, and handoff components. |
-| Intuit (2026) | Finance | Assumed from the client only; no project details exist. |
+| PC Health app (2026) | Systems | PC Health and Shoppers app work and the dev-microsite handoff process. |
+| Remedy (2026) | AI, Trust in AI, Systems | Health chat with consent, citations, red-flag escalation, and handoff components. |
+| Intuit (2026) | Finance | A project under the current role, not a separate client. Finance work; public detail is still thin. |
 | Overmatch patterns (2026–) | AI, Trust in AI, Systems | AI tooling patterns; themes inferred from the role brief. |
 | Traveller (2026–) | Architecture, Systems | Own full-stack trip platform (Supabase, Anthropic API). |
 
