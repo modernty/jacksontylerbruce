@@ -12,14 +12,18 @@
   var statusEl = document.getElementById("status");
 
   var camera = { yaw: 0.55, pitch: 0.22, distance: 8.2, fov: 0.86 };
-  var rest = { yaw: 0.55, pitch: 0.22 };
+  var rest = { yaw: 0.55, pitch: 0.22, distance: 8.2 };
   var map = null;
   var nodes = [];
   var byId = {};
+  var clusterById = {};
+  var view = {};
   var selected = null;
   var dragging = false;
   var moved = 0;
   var last = null;
+  var anim = 0;
+  var booted = false;
 
   function publishText(value) {
     if (typeof value !== "string") return "";
@@ -38,7 +42,8 @@
       idea: "Idea",
       tool: "Tool",
       client: "Client",
-      discipline: "Discipline"
+      discipline: "Discipline",
+      theme: "Theme"
     }[type] || type || "";
   }
 
@@ -49,15 +54,15 @@
     var sy = Math.sin(yaw);
     var eye = [distance * sy * cp, distance * sp, distance * cy * cp];
     var forward = [-eye[0] / distance, -eye[1] / distance, -eye[2] / distance];
-    var up = [0, 1, 0];
+    var upGuess = [0, 1, 0];
     var right = [
-      forward[1] * up[2] - forward[2] * up[1],
-      forward[2] * up[0] - forward[0] * up[2],
-      forward[0] * up[1] - forward[1] * up[0]
+      forward[1] * upGuess[2] - forward[2] * upGuess[1],
+      forward[2] * upGuess[0] - forward[0] * upGuess[2],
+      forward[0] * upGuess[1] - forward[1] * upGuess[0]
     ];
     var rl = Math.hypot(right[0], right[1], right[2]) || 1;
     right = [right[0] / rl, right[1] / rl, right[2] / rl];
-    up = [
+    var up = [
       right[1] * forward[2] - right[2] * forward[1],
       right[2] * forward[0] - right[0] * forward[2],
       right[0] * forward[1] - right[1] * forward[0]
@@ -81,20 +86,31 @@
     };
   }
 
-  function readNodeParam() {
-    return new URLSearchParams(window.location.search).get("node");
+  function readState() {
+    var params = new URLSearchParams(window.location.search);
+    var node = params.get("node");
+    var cluster = params.get("cluster");
+    if (node && byId[node]) return { node: node };
+    if (cluster && clusterById[cluster]) return { cluster: cluster };
+    return {};
   }
 
-  function writeNodeParam(id) {
+  function urlFor(state) {
     var url = new URL(window.location.href);
-    if (id) url.searchParams.set("node", id);
-    else url.searchParams.delete("node");
-    history.replaceState(null, "", url.pathname + url.search + url.hash);
+    url.searchParams.delete("node");
+    url.searchParams.delete("cluster");
+    if (state.node) url.searchParams.set("node", state.node);
+    else if (state.cluster) url.searchParams.set("cluster", state.cluster);
+    return url.pathname + url.search + url.hash;
+  }
+
+  function sameState(a, b) {
+    return (a.node || "") === (b.node || "") && (a.cluster || "") === (b.cluster || "");
   }
 
   function relations(id) {
     var rank = { client: 0, idea: 1, tool: 2, discipline: 3, manual: 4, semantic: 5 };
-    var ranked = (map.edges || []).filter(function (edge) {
+    return (map.edges || []).filter(function (edge) {
       return edge.from === id || edge.to === id;
     }).map(function (edge) {
       var otherId = edge.from === id ? edge.to : edge.from;
@@ -103,10 +119,29 @@
     }).filter(Boolean).sort(function (a, b) {
       var ra = rank[a.edge.kind] == null ? 9 : rank[a.edge.kind];
       var rb = rank[b.edge.kind] == null ? 9 : rank[b.edge.kind];
-      return ra - rb || (b.edge.weight || 0) - (a.edge.weight || 0);
+      if (ra !== rb) return ra - rb;
+      return (b.edge.weight || 0) - (a.edge.weight || 0) || a.other.label.localeCompare(b.other.label);
     });
-    var explicit = ranked.filter(function (item) { return item.edge.kind !== "semantic"; });
-    return (explicit.length ? explicit : ranked).slice(0, 4);
+  }
+
+  function onward(state) {
+    if (state.node && byId[state.node]) {
+      return relations(state.node).map(function (item) {
+        return {
+          id: item.other.id,
+          label: item.other.label || item.other.id,
+          reason: publishText(item.edge.reason) || item.other.label
+        };
+      });
+    }
+    if (state.cluster && clusterById[state.cluster]) {
+      return clusterById[state.cluster].memberIds.filter(function (id) {
+        return byId[id];
+      }).map(function (id) {
+        return { id: id, label: byId[id].label || id, reason: "In this theme" };
+      });
+    }
+    return [];
   }
 
   function setText(el, value) {
@@ -115,24 +150,51 @@
     el.hidden = !text;
   }
 
-  function renderDetail(node) {
-    if (!node) {
+  function linkRow(item) {
+    var li = document.createElement("li");
+    var button = document.createElement("button");
+    button.type = "button";
+    button.dataset.go = item.id;
+    var who = document.createElement("span");
+    who.className = "who";
+    who.textContent = item.label;
+    var why = document.createElement("span");
+    why.className = "why";
+    why.textContent = item.reason;
+    button.appendChild(who);
+    button.appendChild(why);
+    button.addEventListener("click", function () {
+      go({ node: item.id }, "push");
+    });
+    li.appendChild(button);
+    return li;
+  }
+
+  function renderDetail(state) {
+    var list = document.getElementById("detail-relations");
+    list.replaceChildren();
+    if (state.node && byId[state.node]) {
+      var node = byId[state.node];
+      document.getElementById("detail-kind").textContent = kindLabel(node.type);
+      document.getElementById("detail-label").textContent = node.label || node.id;
+      var meta = [publishText(node.year), publishText(node.role), publishText(node.status)].filter(Boolean);
+      if (node.archived) meta.push("Archived");
+      setText(document.getElementById("detail-meta"), meta.join(" · "));
+      setText(document.getElementById("detail-summary"), node.summary);
+      setText(document.getElementById("detail-patterns"), node.patterns);
+    } else if (state.cluster && clusterById[state.cluster]) {
+      var cluster = clusterById[state.cluster];
+      document.getElementById("detail-kind").textContent = "Theme";
+      document.getElementById("detail-label").textContent = cluster.label || "Theme";
+      setText(document.getElementById("detail-meta"), "");
+      setText(document.getElementById("detail-summary"), "");
+      setText(document.getElementById("detail-patterns"), "");
+    } else {
       detail.hidden = true;
       return;
     }
-    document.getElementById("detail-kind").textContent = kindLabel(node.type);
-    document.getElementById("detail-label").textContent = node.label || node.id;
-    var meta = [publishText(node.year), publishText(node.role), publishText(node.status)].filter(Boolean);
-    if (node.archived) meta.push("Archived");
-    setText(document.getElementById("detail-meta"), meta.join(" · "));
-    setText(document.getElementById("detail-summary"), node.summary);
-    setText(document.getElementById("detail-patterns"), node.patterns);
-    var list = document.getElementById("detail-relations");
-    list.replaceChildren();
-    relations(node.id).forEach(function (item) {
-      var li = document.createElement("li");
-      li.textContent = publishText(item.edge.reason) || item.other.label;
-      list.appendChild(li);
+    onward(state).forEach(function (item) {
+      list.appendChild(linkRow(item));
     });
     detail.hidden = false;
   }
@@ -140,9 +202,11 @@
   function paint() {
     var width = stage.clientWidth;
     var height = stage.clientHeight;
+    if (!width || !height) return;
     var placed = nodes.map(function (node) {
       return { node: node, at: project(node.pos, width, height) };
     }).sort(function (a, b) { return b.at.z - a.at.z; });
+    var theme = view.cluster;
 
     placed.forEach(function (item) {
       var el = item.node.el;
@@ -152,8 +216,11 @@
       var depth = Math.max(0.25, Math.min(1, 7.2 / item.at.z));
       var base = item.node.type === "origin" ? 8 : item.node.type === "project" ? 6 : 4.5;
       el.style.setProperty("--s", (base * (0.85 + depth * 0.3)) + "px");
-      var quiet = item.node.type === "origin" || item.node.type === "project" ? 0.92 : 0.38;
-      el.style.setProperty("--o", String(item.node.id === selected ? 1 : quiet * depth));
+      var inTheme = theme && item.node.clusterId === theme;
+      var quiet = item.node.type === "origin" || item.node.type === "project" || inTheme ? 0.92 : 0.38;
+      el.style.setProperty("--o", String(item.node.id === selected || inTheme ? 1 : quiet * depth));
+      el.classList.toggle("is-selected", item.node.id === selected);
+      el.setAttribute("aria-pressed", item.node.id === selected ? "true" : "false");
     });
 
     var lookup = {};
@@ -164,30 +231,113 @@
         var a = lookup[selected];
         var b = lookup[item.other.id];
         if (!a || !b) return;
-        lines.push("<line x1=\"" + a.x + "\" y1=\"" + a.y + "\" x2=\"" + b.x + "\" y2=\"" + b.y + "\"></line>");
+        lines.push("<line x1=\"" + a.x.toFixed(1) + "\" y1=\"" + a.y.toFixed(1) + "\" x2=\"" + b.x.toFixed(1) + "\" y2=\"" + b.y.toFixed(1) + "\"></line>");
       });
     }
     edgesEl.setAttribute("viewBox", "0 0 " + width + " " + height);
     edgesEl.innerHTML = lines.join("");
+    stage.dataset.yaw = camera.yaw.toFixed(4);
   }
 
-  function select(id, fromUser) {
-    if (id && !byId[id]) id = null;
-    selected = id;
-    nodes.forEach(function (node) {
-      node.el.classList.toggle("is-selected", node.id === id);
-      node.el.setAttribute("aria-pressed", node.id === id ? "true" : "false");
-    });
-    renderDetail(id ? byId[id] : null);
-    writeNodeParam(id);
+  function unwrap(from, to) {
+    var delta = to - from;
+    while (delta > Math.PI) delta -= Math.PI * 2;
+    while (delta < -Math.PI) delta += Math.PI * 2;
+    return from + delta;
+  }
+
+  function focusTarget(pos) {
+    if (!pos) return { yaw: rest.yaw, pitch: rest.pitch, distance: rest.distance };
+    var yaw = Math.atan2(pos[0], pos[2] || 0.0001);
+    yaw = unwrap(camera.yaw, yaw);
+    var targetYaw = camera.yaw + (yaw - camera.yaw) * 0.55;
+    var flat = Math.hypot(pos[0], pos[2]) || 1;
+    var pitch = Math.max(-0.35, Math.min(0.55, Math.atan2(pos[1], flat) * 0.4));
+    var distance = Math.max(6.4, Math.min(10.5, 8.4 - Math.hypot(pos[0], pos[1], pos[2]) * 0.12));
+    return { yaw: targetYaw, pitch: pitch, distance: distance };
+  }
+
+  function animateCamera(target) {
+    if (anim) cancelAnimationFrame(anim);
+    var from = { yaw: camera.yaw, pitch: camera.pitch, distance: camera.distance };
+    var yaw = unwrap(from.yaw, target.yaw);
+    if (reduceMotion) {
+      camera.yaw = yaw;
+      camera.pitch = target.pitch;
+      camera.distance = target.distance;
+      paint();
+      return;
+    }
+    var start = performance.now();
+    function frame(now) {
+      var t = Math.min(1, (now - start) / 720);
+      var ease = 1 - Math.pow(1 - t, 3);
+      camera.yaw = from.yaw + (yaw - from.yaw) * ease;
+      camera.pitch = from.pitch + (target.pitch - from.pitch) * ease;
+      camera.distance = from.distance + (target.distance - from.distance) * ease;
+      paint();
+      if (t < 1) anim = requestAnimationFrame(frame);
+    }
+    anim = requestAnimationFrame(frame);
+  }
+
+  function aim(state) {
+    if (state.node && byId[state.node] && state.node !== ORIGIN_ID) {
+      animateCamera(focusTarget(byId[state.node].pos));
+    } else if (state.cluster && clusterById[state.cluster] && clusterById[state.cluster].centroid) {
+      animateCamera(focusTarget(clusterById[state.cluster].centroid));
+    } else if (booted) {
+      animateCamera(rest);
+    }
+  }
+
+  function apply(state, mode) {
+    state = state || {};
+    if (state.node && !byId[state.node]) state = {};
+    if (state.cluster && !clusterById[state.cluster]) state = { node: state.node };
+    view = state;
+    selected = state.node || null;
+    renderDetail(state);
+    if (mode === "push" && !sameState(state, history.state || readState())) {
+      history.pushState(state, "", urlFor(state));
+    } else if (mode === "replace") {
+      history.replaceState(state, "", urlFor(state));
+    }
     paint();
-    if (fromUser && id) document.getElementById("detail-label").focus();
+    if (state.node || state.cluster) aim(state);
+    else if (mode === "push" || mode === "silent") animateCamera({ yaw: rest.yaw, pitch: rest.pitch, distance: rest.distance });
+    if (mode === "push" && (state.node || state.cluster)) {
+      document.getElementById("detail-label").focus();
+    }
+  }
+
+  function go(state, mode) {
+    apply(state, mode);
+  }
+
+  function parentOf(state) {
+    if (state.node && byId[state.node]) {
+      var clusterId = byId[state.node].clusterId;
+      if (clusterId && clusterById[clusterId]) return { cluster: clusterId };
+      if (state.node !== ORIGIN_ID) return { node: ORIGIN_ID };
+      return {};
+    }
+    if (state.cluster) return { node: ORIGIN_ID };
+    return {};
+  }
+
+  function backOut() {
+    go(parentOf(view), "push");
   }
 
   function build(data) {
     map = data;
     nodes = (data.nodes || []).filter(isPublic);
     byId = {};
+    clusterById = {};
+    (data.clusters || []).forEach(function (cluster) {
+      clusterById[cluster.id] = cluster;
+    });
     pointsEl.replaceChildren();
     nodes.forEach(function (node) {
       byId[node.id] = node;
@@ -210,37 +360,40 @@
       });
       button.addEventListener("click", function (event) {
         event.stopPropagation();
-        select(node.id, true);
+        go({ node: node.id }, "push");
       });
       node.el = button;
       pointsEl.appendChild(button);
     });
     statusEl.textContent = "";
     document.body.dataset.nodeCount = String(nodes.length);
-    paint();
     document.body.dataset.ready = "true";
-    var requested = readNodeParam();
-    if (requested && byId[requested]) select(requested, false);
+    booted = true;
+    var initial = readState();
+    apply(initial, "replace");
+    if (!initial.node && !initial.cluster) settle();
   }
 
-  function settle(now) {
-    if (reduceMotion) {
+  function settle() {
+    if (reduceMotion || view.node || view.cluster) {
       paint();
       return;
     }
-    var start = now || performance.now();
+    var start = performance.now();
     function frame(time) {
+      if (view.node || view.cluster || dragging) return;
       var t = Math.min(1, (time - start) / 1600);
       var ease = 1 - Math.pow(1 - t, 3);
       camera.yaw = 0.2 + (rest.yaw - 0.2) * ease;
       camera.pitch = 0.05 + (rest.pitch - 0.05) * ease;
       paint();
-      if (t < 1 && !dragging) requestAnimationFrame(frame);
+      if (t < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   }
 
   stage.addEventListener("pointerdown", function (event) {
+    if (anim) cancelAnimationFrame(anim);
     dragging = true;
     moved = 0;
     last = { x: event.clientX, y: event.clientY };
@@ -259,11 +412,10 @@
     paint();
   });
 
-  function endDrag(event) {
+  function endDrag() {
     if (!dragging) return;
     dragging = false;
     stage.classList.remove("is-dragging");
-    if (moved <= 4 && event.target === stage) select(null, false);
   }
 
   stage.addEventListener("pointerup", endDrag);
@@ -276,24 +428,23 @@
     paint();
   }, { passive: false });
 
-  document.getElementById("detail-close").addEventListener("click", function () {
-    select(null, false);
-  });
+  document.getElementById("detail-back").addEventListener("click", backOut);
 
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && selected) select(null, false);
+    if (event.key === "Escape" && (view.node || view.cluster)) backOut();
   });
 
   window.addEventListener("resize", paint);
   window.addEventListener("popstate", function () {
-    var id = readNodeParam();
-    select(id && byId[id] ? id : null, false);
+    apply(readState(), "silent");
   });
 
   window.MapView = {
     isPublic: isPublic,
     project: project,
-    ORIGIN_ID: ORIGIN_ID
+    ORIGIN_ID: ORIGIN_ID,
+    open: function (id) { apply(byId[id] ? { node: id } : {}, "silent"); },
+    onwardCount: function (id) { return onward({ node: id }).length; }
   };
 
   fetch("public/map.json", { cache: "no-store" })
@@ -301,10 +452,7 @@
       if (!response.ok) throw new Error("HTTP " + response.status);
       return response.json();
     })
-    .then(function (data) {
-      build(data);
-      settle();
-    })
+    .then(build)
     .catch(function () {
       statusEl.textContent = "The map did not load.";
     });

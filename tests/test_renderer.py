@@ -98,6 +98,43 @@ def test_click_opens_detail_and_deep_link(page):
     assert page.locator("#detail-summary").inner_text().startswith("Sample work in progress:")
 
 
+def test_every_node_has_an_onward_link(page):
+    misses = page.evaluate(
+        """() => {
+          const ids = [...document.querySelectorAll("[data-node-id]")].map((el) => el.dataset.nodeId);
+          return ids.filter((id) => {
+            window.MapView.open(id);
+            return document.querySelectorAll("#detail-relations [data-go]").length < 1;
+          });
+        }"""
+    )
+    assert misses == []
+
+
+def test_onward_link_moves_and_back_out_steps_up(page, server):
+    page.goto(server + "/map.html?node=project:overmatch-ai", wait_until="networkidle")
+    page.wait_for_selector("#detail-relations [data-go]")
+    yaw = page.locator("#stage").get_attribute("data-yaw")
+    link = page.locator("#detail-relations [data-go]").first
+    target = link.get_attribute("data-go")
+    link.click()
+    page.wait_for_function(
+        "(id) => new URL(location.href).searchParams.get('node') === id",
+        arg=target,
+    )
+    assert page.locator("#detail-kind").inner_text() == "Client"
+    page.wait_for_timeout(750)
+    assert page.locator("#stage").get_attribute("data-yaw") != yaw
+    page.go_back()
+    page.wait_for_function("() => document.getElementById('detail-label').textContent === 'Overmatch AI'")
+    page.locator("#detail-back").click()
+    page.wait_for_function("() => location.search.includes('cluster=')")
+    assert page.locator("#detail-relations [data-go]").count() >= 1
+    page.locator("#detail-back").click()
+    page.wait_for_function("() => location.search.includes('origin')")
+    assert "Tyler Jackson" in page.locator("#detail-label").inner_text()
+
+
 def test_private_nodes_are_not_rendered(page):
     kept = page.evaluate(
         """() => window.MapView.isPublic({
