@@ -377,6 +377,18 @@ def _staffing(project: Project) -> str:
     return ""
 
 
+def published_sections(project) -> list[dict]:
+    """Public section copy. Placeholder text is omitted, wording is unchanged."""
+    rows = []
+    for section in project.sections:
+        title = clean_text(section.title)
+        body = clean_text(section.body)
+        if not title or not body:
+            continue
+        rows.append({"id": section.id, "title": title, "body": body})
+    return rows
+
+
 def _base(**values) -> dict:
     values.setdefault("title", "")
     values.setdefault("summary", "")
@@ -459,6 +471,7 @@ def export_public(catalog: Catalog) -> dict:
                 preview=clean_text(project.preview),
                 url=clean_text(project.url),
                 teamSize=project.teamSize if isinstance(project.teamSize, int) else None,
+                sections=published_sections(project),
                 visible=True,
                 confidential=False,
             )

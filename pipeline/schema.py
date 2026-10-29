@@ -6,9 +6,12 @@ the build actually runs. `clientId` is rejected; projects use `clientIds`.
 
 from __future__ import annotations
 
+import re
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+_KEBAB = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 
 
 class Award(BaseModel):
@@ -17,6 +20,24 @@ class Award(BaseModel):
     name: str
     year: int | None = None
     credit: str
+
+
+class Section(BaseModel):
+    """A stable slice of project copy. `id` is the URL anchor."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    title: str
+    body: str
+
+    @model_validator(mode="after")
+    def anchor_is_a_kebab_slug(self):
+        if not _KEBAB.fullmatch(self.id):
+            raise ValueError(f"section id {self.id!r} is not a kebab slug")
+        if not self.title.strip() or not self.body.strip():
+            raise ValueError(f"section {self.id} needs a title and a body")
+        return self
 
 
 class Project(BaseModel):
@@ -29,6 +50,7 @@ class Project(BaseModel):
     name: str
     summary: str
     body: str | None = None
+    sections: list[Section] = []
     year: str | None = None
     start: str | None = None
     end: str | None = None
@@ -61,6 +83,15 @@ class Project(BaseModel):
     def archived_has_no_live_link(self):
         if self.archived and any((self.demo, self.url, self.preview)):
             raise ValueError(f"{self.id} is archived and still has a live link")
+        return self
+
+    @model_validator(mode="after")
+    def section_anchors_are_unique(self):
+        seen = set()
+        for section in self.sections:
+            if section.id in seen:
+                raise ValueError(f"{self.id} repeats section id {section.id}")
+            seen.add(section.id)
         return self
 
 
