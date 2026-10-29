@@ -26,32 +26,44 @@ function center(element, host) {
 }
 
 function overlaps(a, b) {
-  const pad = 4;
+  const pad = 2;
   return !(a.right + pad <= b.left || a.left >= b.right + pad || a.bottom + pad <= b.top || a.top >= b.bottom + pad);
+}
+
+function obstacleCount(box, leader, ticks, squares, leaders) {
+  const own = leader.closest(".mark");
+  let count = 0;
+  for (const tick of ticks) {
+    if (overlaps(box, tick.getBoundingClientRect())) count += 1;
+  }
+  for (const square of squares) {
+    if (own && own.contains(square)) continue;
+    if (overlaps(box, square.getBoundingClientRect())) count += 1;
+  }
+  for (const other of leaders) {
+    if (other !== leader && overlaps(box, other.getBoundingClientRect())) count += 1;
+  }
+  return count;
 }
 
 function placeLabels(root) {
   const leaders = [...root.querySelectorAll(".mark.is-now .leader")];
   const ticks = [...root.querySelectorAll(".tick")];
+  const squares = [...root.querySelectorAll(".square")];
+  const shifts = [0, 8, 16, 28, 40, 56, 72, -12, -28, -48, -72].map((dy) => [0, dy]);
   leaders.forEach((leader) => {
     leader.style.transform = "";
   });
-  const shifts = [
-    [0, 0],
-    [0, 28],
-    [0, 56],
-    [-160, 0],
-    [-160, 28],
-    [16, 28],
-  ];
   leaders.forEach((leader) => {
+    let best = { dx: 0, dy: 0, count: Infinity };
     for (const [dx, dy] of shifts) {
       leader.style.transform = dx || dy ? `translate(${dx}px, ${dy}px)` : "";
-      const box = leader.getBoundingClientRect();
-      const hit = ticks.some((tick) => overlaps(box, tick.getBoundingClientRect()))
-        || leaders.some((other) => other !== leader && overlaps(box, other.getBoundingClientRect()));
-      if (!hit) return;
+      const count = obstacleCount(leader.getBoundingClientRect(), leader, ticks, squares, leaders);
+      const nearer = Math.abs(dy) + dx < Math.abs(best.dy) + best.dx;
+      if (count < best.count || (count === best.count && nearer)) best = { dx, dy, count };
+      if (count === 0) break;
     }
+    leader.style.transform = best.dx || best.dy ? `translate(${best.dx}px, ${best.dy}px)` : "";
   });
 }
 
@@ -140,9 +152,11 @@ export function Timeline({ focus, anchor }) {
                 >
                   <span className="square" />
                   <span className="leader">
-                    <span className={lane.id === "roles" ? "company" : "project-name"}>{item.label}</span>
+                    <span className="company-row">
+                      <span className={lane.id === "roles" ? "company" : "project-name"}>{item.label}</span>
+                      {item.year ? <span className={lane.id === "roles" ? "company" : "project-name"}>{item.year}</span> : null}
+                    </span>
                     {item.meta ? <span className="meta quiet">{item.meta}</span> : null}
-                    {item.year ? <span className={lane.id === "roles" ? "company" : "project-name"}>{item.year}</span> : null}
                   </span>
                 </a>
                 </Fragment>

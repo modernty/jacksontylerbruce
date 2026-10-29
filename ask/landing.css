@@ -392,7 +392,7 @@
 
 .leader {
   position: absolute;
-  left: 10px;
+  left: 50%;
   bottom: 12px;
   display: none;
   flex-direction: column;
@@ -400,7 +400,13 @@
   padding-bottom: 2px;
   border-bottom: var(--line-width) dashed var(--line);
   white-space: nowrap;
+  line-height: 1.2;
   text-transform: none;
+}
+
+.company-row {
+  display: flex;
+  gap: var(--space-2);
 }
 
 .mark.is-now .leader,
@@ -410,7 +416,7 @@
 }
 
 .mark.is-now .leader {
-  top: calc(14px + max(var(--stack, 0), 0) * 3.25rem);
+  top: 12px;
   bottom: auto;
 }
 
