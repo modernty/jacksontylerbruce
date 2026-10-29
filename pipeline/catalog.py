@@ -583,7 +583,7 @@ def export_public(catalog: Catalog) -> dict:
 def scan_public(text: str, digests: frozenset[str] | None = None) -> list[str]:
     errors = []
     if FORBIDDEN_TITLE.search(text):
-        errors.append("generated output contains the forbidden title 'Product Designer'")
+        errors.append("generated output contains a forbidden title")
     if contains_blocked(text, PUBLISHED if digests is None else digests):
         errors.append("public output contains a blocked term")
     if TEAM_PHRASING.search(text):

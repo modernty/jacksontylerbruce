@@ -204,15 +204,30 @@ def test_timeline_is_public_and_marks_now(page, server):
         """() => {
           const plot = document.querySelector(".tick-row .plot").getBoundingClientRect();
           const label = [...document.querySelectorAll(".tick")].find((el) => el.innerText.includes("2020")).querySelector(".meta").getBoundingClientRect();
-          const leaders = [...document.querySelectorAll(".mark.is-now .leader")].map((el) => el.getBoundingClientRect());
+          const marks = [...document.querySelectorAll(".lane[data-lane='roles'] .mark.is-now")];
+          const leaders = marks.map((mark) => mark.querySelector(".leader").getBoundingClientRect());
           const ticks = [...document.querySelectorAll(".tick")].map((el) => el.getBoundingClientRect());
+          const squares = [...document.querySelectorAll(".square")].map((el) => ({
+            box: el.getBoundingClientRect(),
+            own: el.closest(".mark.is-now"),
+          }));
           const hit = (a, b) => !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
-          const collisions = leaders.filter((leader) => ticks.some((tick) => hit(leader, tick))).length;
-          return { labelLeft: label.left, plotLeft: plot.left, collisions };
+          const tickHits = leaders.filter((leader) => ticks.some((tick) => hit(leader, tick))).length;
+          const markHits = marks.filter((mark, index) => squares.some((square) => square.own !== mark && hit(leaders[index], square.box))).length;
+          const labelHits = leaders.filter((leader, index) => leaders.some((other, otherIndex) => otherIndex !== index && hit(leader, other))).length;
+          const early = marks.filter((mark) => {
+            const square = mark.querySelector(".square").getBoundingClientRect();
+            const leader = mark.querySelector(".leader").getBoundingClientRect();
+            return leader.left < square.left + square.width / 2 - 1;
+          }).length;
+          return { labelLeft: label.left, plotLeft: plot.left, tickHits, markHits, labelHits, early };
         }"""
     )
     assert placed["labelLeft"] >= placed["plotLeft"] - 1
-    assert placed["collisions"] == 0
+    assert placed["tickHits"] == 0
+    assert placed["markHits"] == 0
+    assert placed["labelHits"] == 0
+    assert placed["early"] == 0
     assert page.locator("[data-timeline]").get_attribute("data-orientation") == "horizontal"
 
 
