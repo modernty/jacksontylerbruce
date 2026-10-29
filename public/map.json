@@ -7124,7 +7124,7 @@
       "type": "project",
       "visible": true,
       "weight": 3.0,
-      "year": "2026",
+      "year": "2026–present",
       "sections": [
         {
           "id": "summary",
@@ -7136,7 +7136,8 @@
           "title": "Metrics",
           "body": "PC Health: #19 Medical and #25 Shopping"
         }
-      ]
+      ],
+      "start": "2026-01"
     },
     {
       "archived": false,

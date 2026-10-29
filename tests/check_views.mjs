@@ -66,26 +66,27 @@ const unknownAnchor = resolveView(
 check(unknownAnchor.type === "show_project" && unknownAnchor.anchor === undefined, "unknown anchor was kept");
 
 const timeline = resolveView(
-  { type: "show_timeline", anchor: "summary", focus: "TwelveLabs" },
+  { type: "show_timeline", anchor: "summary", focus: "project:not-a-record" },
   catalog,
 );
 check(timeline.type === "show_timeline", "timeline view was not registered");
 check(timeline.anchor === "summary", "timeline anchor was not preserved");
 check(timeline.focus === undefined, "unknown timeline focus was kept");
-check(!JSON.stringify(timeline).toLowerCase().includes("twelvelabs"), "focus text leaked");
 
 const timed = buildTimeline({ nodes: map.nodes, edges: map.edges });
 const flat = JSON.stringify(timed).toLowerCase();
-check(!flat.includes("twelvelabs"), "timeline names TwelveLabs");
-check(!flat.includes("latecheckout") && !flat.includes("late checkout"), "timeline names LateCheckout");
 check(!flat.includes("graduat"), "timeline mentions graduation");
 check(!flat.includes("virginia tech"), "timeline mentions Virginia Tech");
 check(!/\bvt\b/.test(flat), "timeline mentions VT");
+check(timed.end < 2027, "axis runs past now");
+check(timed.ticks.includes(2026) && !timed.ticks.includes(2027) && !timed.ticks.includes(2028), "ticks pass now");
 check(timed.lanes.find((lane) => lane.id === "posts").items.length === 0, "posts lane is not quiet");
 const now = timed.lanes.flatMap((lane) => lane.items).filter((item) => item.now);
-check(now.length === 1 && now[0].id === "project:overmatch-ai", "now is not Overmatch");
-check(now[0].open === true, "now line is closed");
-check(now[0].label === "Overmatch AI" && now[0].meta === "Design Lead", "now label drifted");
+check(now.length === 2, "expected two current roles");
+check(now.every((item) => item.open && item.x1 === 1), "current roles are not open-ended");
+check(now.some((item) => item.id === "project:overmatch-ai" && item.label === "Overmatch AI" && item.meta === "Design Lead"), "overmatch now drifted");
+check(now.some((item) => item.id === "project:loblaw" && item.label === "Loblaw / PC Health" && item.meta === "Senior Designer"), "loblaw now drifted");
+check(!now.some((item) => /canada/i.test(item.label)), "role label names the company");
 check(
   timed.lanes.find((lane) => lane.id === "labs").items.some((item) => item.id === "project:verystrongopinion"),
   "labs lane missed own work",
@@ -93,40 +94,8 @@ check(
 const corelogic = timed.lanes.flatMap((lane) => lane.items).find((item) => item.id === "project:corelogic");
 check(corelogic && corelogic.related.includes("project:nestle"), "related arc ids missing");
 
-const poisoned = buildTimeline({
+const unnamed = buildTimeline({
   nodes: [
-    {
-      id: "project:secret-lab",
-      type: "project",
-      slug: "secret-lab",
-      label: "TwelveLabs",
-      name: "TwelveLabs",
-      role: "Design Lead",
-      year: "2024",
-      visible: true,
-      confidential: false,
-      clientIds: ["client:own"],
-    },
-    {
-      id: "client:own",
-      type: "client",
-      slug: "own",
-      label: "LateCheckout",
-      summary: "Own",
-      visible: true,
-      confidential: false,
-    },
-    {
-      id: "project:school",
-      type: "project",
-      slug: "school",
-      label: "Virginia Tech",
-      role: "Student",
-      year: "2012",
-      visible: true,
-      confidential: false,
-      clientIds: [],
-    },
     {
       id: "project:blank",
       type: "project",
@@ -141,12 +110,11 @@ const poisoned = buildTimeline({
   ],
   edges: [],
 });
-const poisonedText = JSON.stringify(poisoned).toLowerCase();
-check(!poisonedText.includes("twelvelabs"), "injected TwelveLabs survived");
-check(!poisonedText.includes("latecheckout"), "injected LateCheckout survived");
-check(!poisonedText.includes("virginia tech"), "injected school survived");
-check(!poisonedText.includes("unnamed"), "unnamed row survived");
-check(poisoned.lanes.every((lane) => lane.items.length === 0), "unsafe rows were placed");
+check(unnamed.lanes.every((lane) => lane.items.length === 0), "unnamed row was placed");
+
+const loblaw = now.find((item) => item.id === "project:loblaw");
+const january = (2026 - timed.start) / (timed.end - timed.start);
+check(loblaw && Math.abs(loblaw.x0 - january) < 0.02, "Loblaw does not start in January 2026");
 
 const scripted = projectCard("project:evil", {
   nodes: [

@@ -305,7 +305,7 @@
 
 .timeline {
   position: relative;
-  margin-top: var(--space-10);
+  margin-top: var(--space-4);
   color: var(--ink);
 }
 
@@ -316,7 +316,19 @@
   align-items: center;
 }
 
-.lane { min-height: 4.75rem; }
+.lane {
+  position: relative;
+  min-height: 4.75rem;
+}
+
+.lane[data-lane="roles"] {
+  z-index: var(--type-company-z);
+}
+
+.lane[data-lane="projects"],
+.lane[data-lane="labs"] {
+  z-index: var(--type-project-z);
+}
 
 .lane-name { color: var(--ink-70); }
 
@@ -339,6 +351,11 @@
   letter-spacing: var(--text-mono-track);
 }
 
+.tick[data-edge="start"] {
+  transform: none;
+  text-align: left;
+}
+
 .plus { display: block; text-align: center; }
 
 .mark {
@@ -347,7 +364,7 @@
   top: 50%;
   width: 7px;
   height: 7px;
-  transform: translate(-50%, calc(-50% - var(--stack, 0) * 9px));
+  transform: translate(-50%, calc(-50% + var(--stack, 0) * 10px));
 }
 
 .square {
@@ -366,7 +383,7 @@
 .bar {
   position: absolute;
   left: calc(var(--a) * 100%);
-  top: 50%;
+  top: calc(50% + var(--offset, 0) * 10px);
   width: calc((var(--b) - var(--a)) * 100%);
   height: 1px;
   background: var(--ink);
@@ -390,6 +407,33 @@
 .mark:hover .leader,
 .mark:focus-visible .leader {
   display: flex;
+}
+
+.mark.is-now .leader {
+  top: calc(14px + max(var(--stack, 0), 0) * 3.25rem);
+  bottom: auto;
+}
+
+.company {
+  font-weight: var(--type-company-weight);
+  color: var(--ink);
+  opacity: var(--type-company-opacity);
+}
+
+.lane[data-lane="roles"] .bar,
+.lane[data-lane="roles"] .square {
+  z-index: var(--type-company-z);
+}
+
+.lane[data-lane="projects"] .mark,
+.lane[data-lane="labs"] .mark {
+  opacity: var(--type-project-opacity);
+  z-index: var(--type-project-z);
+}
+
+.project-name {
+  font-weight: var(--type-project-weight);
+  color: var(--ink-40);
 }
 
 .meta.quiet { color: var(--ink-40); }

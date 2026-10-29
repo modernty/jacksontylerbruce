@@ -9,6 +9,7 @@ from pipeline.blocklist import PUBLISHED, contains_blocked
 from pipeline.catalog import (
     CONFIRMED_OVERLAPS,
     CONTENT_DIR,
+    FORBIDDEN_TITLE,
     CatalogError,
     count_placeholders,
     export_public,
@@ -175,6 +176,9 @@ def test_tyler_role_and_date_answers():
     loblaw = projects["project:loblaw"]
     assert loblaw.summary == "A mobile health chat assistant codenamed Remedy."
     assert loblaw.role == "Senior Designer"
+    assert loblaw.year == "2026–present"
+    assert loblaw.start == "2026-01"
+    assert loblaw.end is None
     assert loblaw.ledOrMade == "Made"
     assert loblaw.metrics == "PC Health: #19 Medical and #25 Shopping"
     assert loblaw.demo is None
@@ -274,6 +278,8 @@ def test_built_site_has_no_blocked_terms():
         text = path.read_text(encoding="utf-8", errors="ignore")
         if contains_blocked(text, PUBLISHED):
             hits.append(str(path.relative_to(CONTENT_DIR.parent)))
+        if FORBIDDEN_TITLE.search(text):
+            hits.append(str(path.relative_to(CONTENT_DIR.parent)) + " title")
     assert hits == []
     page = (CONTENT_DIR.parent / "index.html").read_text(encoding="utf-8")
     assert "What are you looking for?" in page
@@ -348,9 +354,38 @@ def test_blocklist_catches_a_synthetic_term():
 
 def test_public_scan_rejects_blocked_terms():
     assert scan_public("Tyler, Product Designer")
+    assert scan_public("Lead Product Designer")
+    assert scan_public("senior product designer")
+    assert scan_public("product-designer")
+    assert scan_public("ProductDesigner")
+    assert scan_public("product designers")
     assert scan_public("graduated in 2014")
     assert scan_public("still NEEDS TYLER")
     assert scan_public("Designer / Design Director") == []
+    assert scan_public("Lead Designer") == []
+
+
+def test_tracked_files_omit_blocked_plaintext():
+    """Digests only. The plaintext forms are not stored in this test."""
+    banned = frozenset({
+        "0741e4137fe40db582bb91ef35da3ce83daa6d6ba35de784ba478a0f825f339e",
+        "8be464106f2d6f1eabe7ff36c3e84d5eae6c5c24870887d7155640193af12545",
+        "94cf3858beeb446a763d03b7d9180263e88cee425868a4bfca826879e16457a3",
+        "c0fa256940a6b1be495b94822c9622931bfcd11dd42e818c600ec36aade2af1a",
+        "e342afe5bdfedc90c2531e69ffa98768427d86212deab8abd2818da8997b5b13",
+    })
+    root = CONTENT_DIR.parent
+    listed = __import__("subprocess").check_output(["git", "ls-files"], cwd=root, text=True).splitlines()
+    skip = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".woff", ".woff2", ".bin", ".pdf"}
+    hits = []
+    for rel in listed:
+        path = root / rel
+        if not path.is_file() or path.suffix.lower() in skip:
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if contains_blocked(text, banned):
+            hits.append(rel)
+    assert hits == []
 
 
 def test_bad_seed_fails_validation(tmp_path: Path):
