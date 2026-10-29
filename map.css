@@ -120,7 +120,9 @@ body { overflow: hidden; }
 .node:focus-visible .name { display: block; }
 
 #detail {
+  max-height: calc(100dvh - 16rem);
   margin: 2.75rem 0 0;
+  overflow: auto;
   pointer-events: auto;
 }
 
@@ -154,28 +156,50 @@ body { overflow: hidden; }
   list-style: none;
 }
 
-#detail-relations li + li { margin-top: 0.45rem; }
+#detail-relations { max-height: 38vh; overflow: auto; }
 
-#detail-relations li { color: var(--quiet); }
+#detail-relations li + li { margin-top: 0.7rem; }
 
-#detail-close {
-  margin: 1.4rem 0 0;
+#detail-relations button {
+  display: block;
+  width: 100%;
+  margin: 0;
   padding: 0;
   border: 0;
-  background: transparent;
+  background: none;
   color: inherit;
   font: inherit;
-  text-decoration: underline;
-  text-decoration-thickness: from-font;
-  text-underline-offset: 0.18em;
-  text-decoration-color: rgba(0, 0, 0, 0.45);
+  text-align: left;
   cursor: pointer;
 }
 
-#detail-close:hover,
-#detail-close:focus-visible { text-decoration-color: var(--ink); }
+#detail-relations .who { display: block; }
 
-#detail-close:focus-visible {
+#detail-relations .why {
+  display: block;
+  color: var(--quiet);
+}
+
+#detail-relations button:hover .who,
+#detail-relations button:focus-visible .who {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+#detail-back {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--quiet);
+  font: inherit;
+  cursor: pointer;
+}
+
+#detail-back:hover,
+#detail-back:focus-visible { color: var(--ink); }
+
+#detail-back:focus-visible {
   outline: 1px solid var(--ink);
   outline-offset: 3px;
 }
