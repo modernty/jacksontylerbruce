@@ -2,10 +2,19 @@ import "server-only"
 import { loadCatalog } from "@/src/content/catalog"
 import { employerPublicName } from "@/src/content/employer"
 import { publishCatalog } from "@/src/content/publish"
-import { wordCount } from "@/src/content/guard"
+import { containsBlocked } from "@/src/content/guard"
 import type { Project, Role, Theme } from "@/src/content/schema"
-import { followUpsFor, sheetCopy } from "./pills"
-import type { Intent, ViewSpec } from "./types"
+import {
+  careerAnnotation,
+  compareAnnotation,
+  focusAnnotation,
+  followUpsFor,
+  projectsAnnotation,
+  roleAnnotation,
+  sectionHref,
+  sheetAnswer,
+} from "@/src/content/answers"
+import type { ViewSpec } from "./types"
 
 function normalize(value: string): string {
   return value.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase()
@@ -20,32 +29,28 @@ function hasPhrase(haystack: string, phrase: string): boolean {
 
 function view(partial: Omit<ViewSpec, "annotation" | "followUps" | "source"> & { annotation?: string }): ViewSpec {
   const sheet = partial.filter === "sheet"
-  const topic = sheet ? partial.intent : ""
-  const authored = partial.annotation ?? (sheet ? sheetCopy(topic === "off_topic" ? "off_topic" : partial.intent).body : "")
+  const topic = sheet ? (partial.intent === "off_topic" ? "off_topic" : partial.intent) : ""
+  const authored = partial.annotation ?? (sheet ? sheetAnswer(topic).body : "")
   return {
     ...partial,
     annotation: authored,
-    followUps: followUpsFor(partial.intent),
+    followUps: followUpsFor(partial.intent, partial.focusIds),
     source: "keyword",
   }
-}
-
-function projectHref(project: Project): string {
-  return `/work/${project.slug}#${project.sections[0]?.id ?? "summary"}`
 }
 
 export function keywordRoute(question: string): ViewSpec {
   const catalog = publishCatalog()
   const q = normalize(question).trim()
   const flagged = loadCatalog().projects.filter((project) => project.flagged)
-  if (!q) return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic", confidence: 0.4 })
-  if (flagged.some((project) => mentionsProject(q, project))) {
-    return view({ intent: "decline", focusIds: [], filter: "sheet", href: "/sheet?topic=decline", confidence: 0.95 })
+  if (!q) return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic#answer", confidence: 0.4 })
+  if (containsBlocked(question) || flagged.some((project) => mentionsProject(q, project))) {
+    return view({ intent: "decline", focusIds: [], filter: "sheet", href: "/sheet?topic=decline#answer", confidence: 0.95 })
   }
   const employer = catalog.roles.find((role) => role.employer)
   if (employer && hasPhrase(q, employerPublicName())) return roleView(employer)
-  if (/\b(ignore (all |your |previous )?instructions|system prompt|jailbreak|developer mode)\b/.test(q)) {
-    return view({ intent: "decline", focusIds: [], filter: "sheet", href: "/sheet?topic=decline", confidence: 0.98 })
+  if (/\b(ignore (all |your |previous )?instructions|system prompt|jailbreak|developer mode|blocklist|disregard (the |your )?rules)\b/.test(q)) {
+    return view({ intent: "decline", focusIds: [], filter: "sheet", href: "/sheet?topic=decline#answer", confidence: 0.98 })
   }
 
   const projects = catalog.projects.filter((project) => mentionsProject(q, project))
@@ -55,9 +60,9 @@ export function keywordRoute(question: string): ViewSpec {
       intent: "compare",
       focusIds: ids,
       filter: "timeline",
-      href: `/timeline?focus=${ids.join(",")}`,
+      href: `/timeline?focus=${ids.join(",")}#axis`,
       confidence: 0.9,
-      annotation: annotationFor("compare", ids),
+      annotation: compareAnnotation(catalog, ids),
     })
   }
 
@@ -65,7 +70,7 @@ export function keywordRoute(question: string): ViewSpec {
   if (roleHit && /\bat\b/.test(q)) {
     return roleView(roleHit)
   }
-  if (projects.length === 1) return projectView(projects[0])
+  if (projects.length === 1) return projectView(projects[0], question)
   if (roleHit) return roleView(roleHit)
 
   const theme = themeHit(q, catalog.themes)
@@ -74,32 +79,32 @@ export function keywordRoute(question: string): ViewSpec {
       intent: "focus",
       focusIds: [theme.id],
       filter: "focus",
-      href: `/focus/${theme.slug}`,
+      href: `/focus/${theme.slug}#focus`,
       confidence: 0.86,
-      annotation: `These are the public projects tagged ${theme.name}.`,
+      annotation: focusAnnotation(theme, catalog),
     })
   }
 
   if (/\b(where (are|do) you|where are you based|located|location|time zone|timezone|which city|where do you live|based)\b/.test(q)) {
-    return view({ intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/sheet?topic=location", confidence: 0.92 })
+    return view({ intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/sheet?topic=location#answer", confidence: 0.92 })
   }
   if (/\bwhy\b.*\bhire\b|\bshould i hire\b|\bhire you\b/.test(q)) {
-    return view({ intent: "about", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=about", confidence: 0.9 })
+    return view({ intent: "about", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=about#answer", confidence: 0.9 })
   }
   if (/\b(available|availability|full-time|full time|freelance|open to|book a call|reach you|contact)\b/.test(q)) {
-    return view({ intent: "availability", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=availability", confidence: 0.88 })
+    return view({ intent: "availability", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=availability#answer", confidence: 0.88 })
   }
   if (/\b(process|vague brief|how do you (work|approach|start)|design process|way of working)\b/.test(q)) {
-    return view({ intent: "process", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=process", confidence: 0.86 })
+    return view({ intent: "process", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=process#answer", confidence: 0.86 })
   }
   if (/\b(career|timeline|resume|\bcv\b|walk me through)\b/.test(q)) {
     return view({
       intent: "career",
       focusIds: ["profile:tyler"],
       filter: "timeline",
-      href: "/timeline",
+      href: "/timeline#axis",
       confidence: 0.9,
-      annotation: "Roles run from Joba Studio in 2019 to the open roles in 2026, on one time axis.",
+      annotation: careerAnnotation(catalog),
     })
   }
   if (/\b(projects|case stud|portfolio|your work)\b/.test(q)) {
@@ -107,15 +112,15 @@ export function keywordRoute(question: string): ViewSpec {
       intent: "projects",
       focusIds: [],
       filter: "projects",
-      href: "/timeline/projects",
+      href: "/timeline/projects#projects",
       confidence: 0.84,
-      annotation: "The project row is every public engagement, on the same years as the timeline.",
+      annotation: projectsAnnotation(catalog),
     })
   }
   if (/\b(poem|recipe|weather|joke|score|lottery|homework)\b/.test(q)) {
-    return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic", confidence: 0.9 })
+    return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic#answer", confidence: 0.9 })
   }
-  return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic", confidence: 0.35 })
+  return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic#answer", confidence: 0.35 })
 }
 
 function mentionsProject(q: string, project: Project): boolean {
@@ -145,39 +150,26 @@ function themeHit(q: string, themes: Theme[]): Theme | undefined {
   return undefined
 }
 
-function projectView(project: Project): ViewSpec {
-  const catalog = publishCatalog()
-  const themes = project.themeIds.map((id) => catalog.themes.find((theme) => theme.id === id)?.name).filter(Boolean)
-  const annotation = `${project.name} is public work across ${themes.join(", ")}.`
+function projectView(project: Project, question: string): ViewSpec {
   return view({
     intent: "project",
     focusIds: [project.id],
     filter: "work",
-    href: projectHref(project),
+    href: sectionHref(project, question),
     confidence: 0.93,
-    annotation: wordCount(annotation) <= 40 ? annotation : project.summary,
+    annotation: project.summary,
   })
 }
 
 function roleView(role: Role): ViewSpec {
-  const name = role.employer ? employerPublicName() : role.name
   return view({
     intent: "role",
     focusIds: [role.id],
     filter: "timeline",
-    href: `/timeline?role=${role.id}`,
+    href: `/timeline?role=${role.id}#axis`,
     confidence: 0.9,
-    annotation: `${name} is on the timeline as ${role.title}, ${role.yearLabel}.`,
+    annotation: roleAnnotation(role),
   })
-}
-
-function annotationFor(intent: Intent, ids: string[]): string {
-  if (intent === "compare") {
-    const catalog = publishCatalog()
-    const names = ids.map((id) => catalog.projects.find((project) => project.id === id)?.name).filter(Boolean)
-    if (names.length >= 2) return `${names[0]} and ${names[1]} are both on the public timeline.`
-  }
-  return ""
 }
 
 export function withQuestion(href: string, question: string): string {
