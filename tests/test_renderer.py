@@ -1,6 +1,7 @@
 """Browser checks for the map page."""
 
 import json
+import re
 import socket
 import subprocess
 import sys
@@ -122,7 +123,7 @@ def test_onward_link_moves_and_back_out_steps_up(page, server):
         "(id) => new URL(location.href).searchParams.get('node') === id",
         arg=target,
     )
-    assert page.locator("#detail-kind").inner_text() == "Client"
+    assert page.locator("#detail-kind").inner_text() == "CLIENT"
     page.wait_for_timeout(750)
     assert page.locator("#stage").get_attribute("data-yaw") != yaw
     page.go_back()
@@ -172,6 +173,90 @@ def test_every_list_row_has_an_onward_link(page, server):
             "els => els.filter((row) => !row.querySelector('.onward [data-go]')).map((row) => row.dataset.row)"
         )
         assert missing == []
+
+
+def _channels(color):
+    return [float(channel) for channel in re.findall(r"[\d.]+", color)[:3]]
+
+
+def _contrast(foreground, background):
+    def linear(channel):
+        channel = channel / 255
+        if channel <= 0.04045:
+            return channel / 12.92
+        return ((channel + 0.055) / 1.055) ** 2.4
+
+    def luminance(color):
+        red, green, blue = [linear(channel) for channel in _channels(color)]
+        return 0.2126 * red + 0.7152 * green + 0.0722 * blue
+
+    darker, lighter = sorted((luminance(foreground), luminance(background)))
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def test_renderer_colours_come_from_the_tokens():
+    css = (ROOT / "map.css").read_text(encoding="utf-8")
+    hexes = {item.upper() for item in re.findall(r"#[0-9A-Fa-f]{3,8}", css)}
+    assert hexes == {"#FBFBF8", "#2E3A87"}
+    assert "rgba(" not in css and "rgb(" not in css
+    script = (ROOT / "map.js").read_text(encoding="utf-8")
+    assert re.search(r"#[0-9A-Fa-f]{3,8}|rgba?\(", script) is None
+
+
+def test_ink_on_paper_meets_aa(page, server):
+    page.wait_for_function("() => document.fonts.check('16px \"Courier Prime\"')")
+    measured = page.evaluate(
+        """() => {
+          window.THREE = { Color: function (value) { this.value = value; } };
+          const colors = window.MapView.palette();
+          const style = (sel) => getComputedStyle(document.querySelector(sel));
+          const hero = style("#hero");
+          const label = style(".node.is-origin .name");
+          return {
+            body: style("body").backgroundColor,
+            hero: hero.color,
+            heroFont: hero.fontFamily,
+            label: label.color,
+            labelFont: label.fontFamily,
+            labelCase: label.textTransform,
+            ink: colors.ink,
+            line: colors.line,
+            threeInk: colors.three.ink.value,
+            threeLine: colors.three.line.value
+          };
+        }"""
+    )
+    assert _contrast(measured["hero"], measured["body"]) >= 4.5
+    assert _contrast(measured["label"], measured["body"]) >= 4.5
+    assert measured["hero"] == measured["ink"]
+    assert measured["label"] == measured["ink"]
+    assert measured["threeInk"] == measured["ink"]
+    assert measured["threeLine"] == measured["line"]
+    assert measured["line"] != measured["ink"]
+    assert "Courier Prime" in measured["labelFont"]
+    assert measured["labelCase"] == "uppercase"
+    assert "Courier Prime" not in measured["heroFont"]
+
+    page.locator("[data-node-id='origin:tyler']").click()
+    page.wait_for_selector("#edges line")
+    stroke = page.evaluate("() => getComputedStyle(document.querySelector('#edges line')).stroke")
+    assert stroke == measured["line"]
+
+    page.goto(server + "/map.html?view=list", wait_until="networkidle")
+    page.wait_for_selector(".row-meta")
+    page.wait_for_function("() => document.fonts.check('16px \"Courier Prime\"')")
+    meta = page.evaluate(
+        """() => {
+          const row = getComputedStyle(document.querySelector(".row-meta"));
+          const title = getComputedStyle(document.querySelector(".row-title"));
+          return { color: row.color, font: row.fontFamily, title: title.fontFamily, transform: row.textTransform };
+        }"""
+    )
+    assert _contrast(meta["color"], measured["body"]) >= 4.5
+    assert meta["color"] == measured["ink"]
+    assert "Courier Prime" in meta["font"]
+    assert meta["transform"] == "uppercase"
+    assert "Courier Prime" not in meta["title"]
 
 
 def test_private_nodes_are_not_rendered(page):

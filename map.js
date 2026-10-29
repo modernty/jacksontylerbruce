@@ -291,11 +291,11 @@
       el.style.left = item.at.x + "px";
       el.style.top = item.at.y + "px";
       el.style.zIndex = String(Math.round(1000 - item.at.z));
-      var depth = Math.max(0.25, Math.min(1, 7.2 / item.at.z));
+      var depth = Math.max(0.72, Math.min(1, 7.2 / item.at.z));
       var base = item.node.type === "origin" ? 8 : item.node.type === "project" ? 6 : 4.5;
       el.style.setProperty("--s", (base * (0.85 + depth * 0.3)) + "px");
       var inTheme = theme && item.node.clusterId === theme;
-      var quiet = item.node.type === "origin" || item.node.type === "project" || inTheme ? 0.92 : 0.38;
+      var quiet = item.node.type === "origin" || item.node.type === "project" || inTheme ? 1 : 0.82;
       el.style.setProperty("--o", String(item.node.id === selected || inTheme ? 1 : quiet * depth));
       el.classList.toggle("is-selected", item.node.id === selected);
       el.hidden = !visible[item.node.id];
@@ -623,13 +623,46 @@
     apply(readState(), "silent");
   });
 
+  function resolvedColor(token) {
+    var probe = document.createElement("span");
+    probe.hidden = true;
+    probe.style.color = "var(" + token + ")";
+    document.body.appendChild(probe);
+    var value = getComputedStyle(probe).color;
+    probe.remove();
+    return value;
+  }
+
+  // CSS variables are the only colour source. three.js materials read the
+  // same resolved values when THREE is on the page.
+  function palette() {
+    var colors = {
+      paper: resolvedColor("--paper"),
+      ink: resolvedColor("--ink"),
+      haze: resolvedColor("--ink-08"),
+      fog: resolvedColor("--ink-16"),
+      line: resolvedColor("--ink-32")
+    };
+    if (window.THREE && window.THREE.Color) {
+      colors.three = {
+        paper: new window.THREE.Color(colors.paper),
+        ink: new window.THREE.Color(colors.ink),
+        haze: new window.THREE.Color(colors.haze),
+        fog: new window.THREE.Color(colors.fog),
+        line: new window.THREE.Color(colors.line)
+      };
+    }
+    return colors;
+  }
+
   window.MapView = {
     isPublic: isPublic,
     project: project,
     ORIGIN_ID: ORIGIN_ID,
     open: function (id) { go({ node: id, cluster: "" }, "silent"); },
     entries: function (filter, which) { return entries(filter, which).map(function (entry) { return entry.id; }); },
-    linksFor: function (id) { return linksFor(id); }
+    linksFor: function (id) { return linksFor(id); },
+    palette: palette
   };
 
   fetch("public/map.json", { cache: "no-store" })

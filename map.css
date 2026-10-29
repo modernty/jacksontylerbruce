@@ -1,8 +1,19 @@
+@font-face {
+  font-family: "Courier Prime";
+  src: url("fonts/courier-prime-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --paper: #ffffff;
-  --ink: #000000;
-  --quiet: rgba(0, 0, 0, 0.55);
-  --faint: rgba(0, 0, 0, 0.28);
+  --paper: #FBFBF8;
+  --ink: #2E3A87;
+  --ink-08: color-mix(in srgb, var(--ink) 8%, var(--paper));
+  --ink-16: color-mix(in srgb, var(--ink) 16%, var(--paper));
+  --ink-32: color-mix(in srgb, var(--ink) 32%, var(--paper));
+  --serif: "New York", "Source Serif 4", ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --mono: "Courier Prime", "Courier New", Courier, ui-monospace, monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -12,7 +23,7 @@ html, body {
   height: 100%;
   background: var(--paper);
   color: var(--ink);
-  font-family: "New York", "Source Serif 4", ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
@@ -30,7 +41,7 @@ body { overflow: hidden; }
   width: min(34rem, 46vw);
   padding: 8vh 3rem 2rem 7vw;
   pointer-events: none;
-  background: linear-gradient(90deg, #fff 0 78%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, var(--paper) 0 78%, transparent 100%);
 }
 
 #hero {
@@ -52,7 +63,25 @@ body { overflow: hidden; }
   pointer-events: auto;
 }
 
-.filters { margin-top: 0.35rem; }
+.filters { margin-top: 0.45rem; }
+
+.views,
+.filters,
+#detail-kind,
+#detail-meta,
+#detail-relations .why,
+#detail-back,
+.row-meta,
+.name,
+#status {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  text-shadow: 0 0 0.4px color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.name { font-size: 0.68rem; letter-spacing: 0.12em; }
 
 .views button,
 .filters button,
@@ -64,14 +93,17 @@ body { overflow: hidden; }
   padding: 0;
   border: 0;
   background: none;
-  color: var(--quiet);
+  color: var(--ink);
   font: inherit;
   text-align: left;
   cursor: pointer;
 }
 
 .views button.is-current,
-.filters button.is-current { color: var(--ink); }
+.filters button.is-current {
+  text-decoration: underline;
+  text-underline-offset: 0.28em;
+}
 
 .views button:focus-visible,
 .filters button:focus-visible,
@@ -99,8 +131,8 @@ body { overflow: hidden; }
 .row-title:hover { text-decoration: underline; text-underline-offset: 0.18em; }
 
 .row-meta {
-  margin: 0.2rem 0 0;
-  color: var(--quiet);
+  margin: 0.35rem 0 0;
+  color: var(--ink);
 }
 
 #list .onward {
@@ -115,13 +147,16 @@ body { overflow: hidden; }
 #list .onward li:not(:last-child)::after {
   content: "·";
   margin: 0 0.45rem;
-  color: var(--faint);
+  color: var(--ink);
 }
 
-#list .onward button { color: var(--quiet); }
+#list .onward button { color: var(--ink); }
 
 #list .onward button:hover,
-#list .onward button:focus-visible { color: var(--ink); }
+#list .onward button:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
 
 body.is-list { overflow: auto; height: auto; min-height: 100%; }
 
@@ -146,6 +181,7 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
   inset: 0;
   touch-action: none;
   cursor: grab;
+  background: radial-gradient(ellipse at center, transparent 58%, var(--ink-08) 100%);
 }
 
 #stage.is-dragging { cursor: grabbing; }
@@ -160,7 +196,7 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
 }
 
 #edges line {
-  stroke: rgba(0, 0, 0, 0.22);
+  stroke: var(--ink-32);
   stroke-width: 1;
 }
 
@@ -205,11 +241,11 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
   display: none;
   position: absolute;
   left: 50%;
-  top: calc(100% - 4px);
+  top: calc(100% - 2px);
   transform: translateX(-50%);
   white-space: nowrap;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 0.68rem;
+  line-height: 1.2;
   pointer-events: none;
 }
 
@@ -228,9 +264,8 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
 #detail[hidden] { display: none; }
 
 #detail-kind {
-  margin: 0 0 0.35rem;
-  color: var(--quiet);
-  font-size: 13px;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
 }
 
 #detail-label {
@@ -247,7 +282,7 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
   margin: 0.9rem 0 0;
 }
 
-#detail-meta { color: var(--quiet); }
+#detail-meta { color: var(--ink); }
 
 #detail-relations {
   margin: 1.1rem 0 0;
@@ -276,7 +311,8 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
 
 #detail-relations .why {
   display: block;
-  color: var(--quiet);
+  margin-top: 0.15rem;
+  color: var(--ink);
 }
 
 #detail-relations button:hover .who,
@@ -290,14 +326,16 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--quiet);
-  font: inherit;
+  color: var(--ink);
   cursor: pointer;
   pointer-events: auto;
 }
 
 #detail-back:hover,
-#detail-back:focus-visible { color: var(--ink); }
+#detail-back:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
 
 #detail-back:focus-visible {
   outline: 1px solid var(--ink);
@@ -309,7 +347,7 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
   left: 8vw;
   bottom: 8vh;
   margin: 0;
-  color: var(--quiet);
+  color: var(--ink);
 }
 
 #status:empty { display: none; }
@@ -340,7 +378,8 @@ body.is-list #list { display: block; margin-top: 2.75rem; }
     overflow: auto;
     margin: 0;
     padding: 1.25rem 1.25rem 1.75rem;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    border-top: 1px solid var(--ink-16);
   }
 }
 
