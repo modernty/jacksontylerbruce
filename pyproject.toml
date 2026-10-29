@@ -1,0 +1,31 @@
+[project]
+name = "portfolio-map"
+version = "0.1.0"
+description = "Local embedding build for the portfolio semantic map. Not the live site."
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26,<3",
+  "pydantic>=2.7,<3",
+  "pytest>=8",
+  "scikit-learn>=1.5,<2",
+  "scipy>=1.11,<2",
+  "sentence-transformers>=3.0,<6",
+  "torch",
+  "umap-learn>=0.5.6,<0.6",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]

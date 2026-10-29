@@ -1,0 +1,212 @@
+[
+  {
+    "id": "tool:vite",
+    "notionId": "4062280f-d03d-8100-bba7-fce4a4ce2825",
+    "type": "tool",
+    "slug": "vite",
+    "name": "Vite",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:sketch",
+    "notionId": "4062280f-d03d-8103-bf03-c283b90686f7",
+    "type": "tool",
+    "slug": "sketch",
+    "name": "Sketch",
+    "category": "Design",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:adobe-cc",
+    "notionId": "4062280f-d03d-810b-88be-c7e166462016",
+    "type": "tool",
+    "slug": "adobe-cc",
+    "name": "Adobe CC",
+    "category": "Design",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:supabase",
+    "notionId": "4062280f-d03d-810f-a8aa-e6667fcaed8a",
+    "type": "tool",
+    "slug": "supabase",
+    "name": "Supabase",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:keynote",
+    "notionId": "4062280f-d03d-8119-85ff-dc320129048f",
+    "type": "tool",
+    "slug": "keynote",
+    "name": "Keynote",
+    "category": "Prototyping",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:tailwind",
+    "notionId": "4062280f-d03d-8128-8c90-cc1dfe2f82dd",
+    "type": "tool",
+    "slug": "tailwind",
+    "name": "Tailwind CSS",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:cursor",
+    "notionId": "4062280f-d03d-8130-9a1e-d139845be591",
+    "type": "tool",
+    "slug": "cursor",
+    "name": "Cursor",
+    "category": "AI and models",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:shadcn",
+    "notionId": "4062280f-d03d-813c-95a5-e60ccdc7e867",
+    "type": "tool",
+    "slug": "shadcn",
+    "name": "shadcn/ui",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:webflow",
+    "notionId": "4062280f-d03d-8142-99fb-f3a8b72da579",
+    "type": "tool",
+    "slug": "webflow",
+    "name": "Webflow",
+    "category": "Web / CMS",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:claude",
+    "notionId": "4062280f-d03d-8143-82c8-f58895cea812",
+    "type": "tool",
+    "slug": "claude",
+    "name": "Claude (Anthropic API)",
+    "category": "AI and models",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:gitlab",
+    "notionId": "4062280f-d03d-815c-9b5d-e5d2c040313d",
+    "type": "tool",
+    "slug": "gitlab",
+    "name": "GitLab",
+    "category": "Collaboration",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:atlassian",
+    "notionId": "4062280f-d03d-8161-b2b1-e316307709af",
+    "type": "tool",
+    "slug": "atlassian",
+    "name": "Atlassian",
+    "category": "Collaboration",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:nextjs",
+    "notionId": "4062280f-d03d-8170-956a-cda37e728728",
+    "type": "tool",
+    "slug": "nextjs",
+    "name": "Next.js",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:rhino-grasshopper",
+    "notionId": "4062280f-d03d-817a-b50a-e447a41388c7",
+    "type": "tool",
+    "slug": "rhino-grasshopper",
+    "name": "Rhino + Grasshopper",
+    "category": "3D / Spatial",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:cad",
+    "notionId": "4062280f-d03d-817d-8b03-f809ce636e62",
+    "type": "tool",
+    "slug": "cad",
+    "name": "CAD",
+    "category": "3D / Spatial",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:cinema-4d",
+    "notionId": "4062280f-d03d-8180-9966-ee74898b99a3",
+    "type": "tool",
+    "slug": "cinema-4d",
+    "name": "Cinema 4D",
+    "category": "3D / Spatial",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:notion",
+    "notionId": "4062280f-d03d-8185-b4b7-f66cc2ea1ffd",
+    "type": "tool",
+    "slug": "notion",
+    "name": "Notion",
+    "category": "Collaboration",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:github-pages",
+    "notionId": "4062280f-d03d-8185-bcdc-fa791c17844a",
+    "type": "tool",
+    "slug": "github-pages",
+    "name": "GitHub Pages",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:vercel",
+    "notionId": "4062280f-d03d-81c5-a11b-f796678957dc",
+    "type": "tool",
+    "slug": "vercel",
+    "name": "Vercel",
+    "category": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:sprig",
+    "notionId": "4062280f-d03d-81d6-84ad-d7c235cde333",
+    "type": "tool",
+    "slug": "sprig",
+    "name": "Sprig",
+    "category": "Research",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "tool:figma",
+    "notionId": "4062280f-d03d-81dc-8e76-e37570826cb9",
+    "type": "tool",
+    "slug": "figma",
+    "name": "Figma",
+    "category": "Design",
+    "visible": true,
+    "confidential": false
+  }
+]

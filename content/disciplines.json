@@ -1,0 +1,110 @@
+[
+  {
+    "id": "discipline:product",
+    "notionId": "4062280f-d03d-8108-a1fb-ff3ef7f18f8c",
+    "type": "discipline",
+    "slug": "product",
+    "name": "Product",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:systems",
+    "notionId": "4062280f-d03d-811b-860e-c4da26b6f843",
+    "type": "discipline",
+    "slug": "systems",
+    "name": "Design systems",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:brand",
+    "notionId": "4062280f-d03d-814e-b281-dd08524550f2",
+    "type": "discipline",
+    "slug": "brand",
+    "name": "Brand",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:code",
+    "notionId": "4062280f-d03d-815b-9f8d-d7e1e253bfb1",
+    "type": "discipline",
+    "slug": "code",
+    "name": "Code",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:direction",
+    "notionId": "4062280f-d03d-815c-9615-fdca3bf065db",
+    "type": "discipline",
+    "slug": "direction",
+    "name": "Direction",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:web",
+    "notionId": "4062280f-d03d-8182-8deb-d60b4c6fac65",
+    "type": "discipline",
+    "slug": "web",
+    "name": "Web",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:ic",
+    "notionId": "4062280f-d03d-8186-b454-ef2dac3c0b4b",
+    "type": "discipline",
+    "slug": "ic",
+    "name": "IC craft",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:spatial",
+    "notionId": "4062280f-d03d-81aa-8c2f-db266c02c5cd",
+    "type": "discipline",
+    "slug": "spatial",
+    "name": "Spatial / Environmental",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:conversational",
+    "notionId": "4062280f-d03d-81c6-b379-f0b63057a7a7",
+    "type": "discipline",
+    "slug": "conversational",
+    "name": "Conversational AI",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:research",
+    "notionId": "4062280f-d03d-81e2-bacf-c00ddf2e9223",
+    "type": "discipline",
+    "slug": "research",
+    "name": "Research",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:mobile",
+    "notionId": "4062280f-d03d-81f5-8c21-db4546cb7af5",
+    "type": "discipline",
+    "slug": "mobile",
+    "name": "Mobile",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "discipline:pm",
+    "notionId": "4062280f-d03d-81fa-9a68-ef8cfc2a748a",
+    "type": "discipline",
+    "slug": "pm",
+    "name": "Product management",
+    "visible": true,
+    "confidential": false
+  }
+]

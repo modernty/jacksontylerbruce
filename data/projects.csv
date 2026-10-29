@@ -1,5 +1,5 @@
 name,slug,thumb,copy,images,link_name,link
-Loblaw Canada,,,,,,https://loblaw-latecheckout-handoff.vercel.app/
+Loblaw Canada,,,,,,
 Intuit,intuit,assets/thumbs/intuit.png,(project description coming soon),assets/images/intuit/01.png | assets/images/intuit/02.png,,
 Model playground,model-playground,assets/thumbs/model-playground.jpg,"When foundation models are reached only through an API, the hard part is translation: how do you make invisible intelligence visible enough to trust and act on? Enterprise buyers across Defense, Public Sector, Insurance, Healthcare, and Finance aren’t buying an algorithm — they’re buying certainty about their own data. Model Playground is the constructed environment where that certainty gets built: users prompt the models directly, orchestrate custom demos, and assemble tools that drop into their real workflows, watching abstract capability become something observable and legible.
 

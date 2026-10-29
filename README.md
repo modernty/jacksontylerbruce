@@ -281,6 +281,23 @@ Now `git push` refuses to run if the checks fail. Bypass a specific push with
 `git push --no-verify`. Hooks are local and not committed, so set this up on any
 machine you want it on.
 
+## Semantic map
+
+The pages above are the live site. This command does not change them, does
+not deploy, and does not call an embedding API. It reads `content/*.json`
+and writes `public/map.json`.
+
+```sh
+./scripts/build-map
+```
+
+The first run downloads the pinned local model `BAAI/bge-small-en-v1.5`.
+A second run with the same content writes the same bytes. Checks:
+
+```sh
+uv run pytest
+```
+
 ## Deploying
 
 It's one static folder. Drag it onto Netlify Drop, or point Vercel/GitHub Pages/

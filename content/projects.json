@@ -1,0 +1,763 @@
+[
+  {
+    "id": "project:overmatch-ai",
+    "notionId": null,
+    "type": "project",
+    "slug": "overmatch-ai",
+    "name": "Overmatch AI",
+    "summary": "Sample work in progress: product patterns I'm exploring as Design Lead at Overmatch AI.",
+    "body": null,
+    "year": "May 2026\u2013present",
+    "start": "2026-05",
+    "end": null,
+    "role": "Design Lead",
+    "ledOrMade": null,
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 4,
+    "clientIds": [
+      "client:overmatch-ai"
+    ],
+    "toolIds": [],
+    "ideaIds": [],
+    "patternIdeaIds": [
+      "idea:dynamic-objective-specific-plans",
+      "idea:agentic-trust"
+    ],
+    "disciplineIds": [],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "status": "in progress",
+    "featured": true,
+    "visuals": "NEEDS TYLER",
+    "patterns": "Dynamic objective-specific plans; Trust and verifiable reasoning",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:novart",
+    "notionId": "4062280f-d03d-811c-94be-c3bd8300228f",
+    "type": "project",
+    "slug": "novart",
+    "name": "Novart",
+    "summary": "An art-as-collateral lending platform. The redesign added two upfront gates (location, minimum collateral), then a short form and a dashboard with action items, offer status and lender messaging.",
+    "body": null,
+    "year": "2023",
+    "start": null,
+    "end": null,
+    "role": "Sr. UI/UX Designer",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 1,
+    "clientIds": [
+      "client:nax-group"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:progressive-disclosure"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:ic"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:chatter",
+    "notionId": "4062280f-d03d-8127-8fee-f726d0d7ac69",
+    "type": "project",
+    "slug": "chatter",
+    "name": "Chatter Social",
+    "summary": "A real-time, group-first social platform (Groups, Live Rooms, Stream) with creator monetization (RocketChats, subscriptions, ticketed events), shipped on iOS and Android.",
+    "body": "Owned product and brand from concept to release.",
+    "year": "2023–Sep 2025",
+    "start": "2023",
+    "end": "2025-09",
+    "role": "Head of Design",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": 1,
+    "teamNote": "solo",
+    "demo": "https://apps.apple.com/app/id6470361217",
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:chatter"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:community",
+      "idea:creator-economy"
+    ],
+    "disciplineIds": [
+      "discipline:direction",
+      "discipline:product",
+      "discipline:brand",
+      "discipline:mobile"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": "NEEDS TYLER",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:usm-milan-2025",
+    "notionId": "4062280f-d03d-8160-9c1b-ec53736ff619",
+    "type": "project",
+    "slug": "usm-milan-2025",
+    "name": "USM: Connected by our Dreams (Milan Design Week 2025)",
+    "summary": "An immersive installation introducing the USM Haller Soft Panel at Spotti Milano, Milan Design Week 2025, with Joba Studio.",
+    "body": null,
+    "year": "2025",
+    "start": null,
+    "end": null,
+    "role": "Lead designer",
+    "ledOrMade": "Led",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": "https://www.jobastudio.com/clients/usm-connected-by-our-dreams",
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:usm",
+      "client:joba"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:architecture-space"
+    ],
+    "disciplineIds": [
+      "discipline:spatial",
+      "discipline:brand"
+    ],
+    "awards": [
+      {
+        "name": "Indigo Gold",
+        "year": 2025,
+        "credit": "Tyler"
+      },
+      {
+        "name": "Indigo Silver",
+        "year": 2025,
+        "credit": "Tyler"
+      },
+      {
+        "name": "IDA Silver",
+        "year": 2025,
+        "credit": "Tyler"
+      }
+    ],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:nestle",
+    "notionId": "4062280f-d03d-817a-aaa1-ee7057efbe82",
+    "type": "project",
+    "slug": "nestle",
+    "name": "Nestlé Digital Baking Coach",
+    "summary": "Ruth, a digital person, guides chocolate chip cookie baking, finds recipes from ingredients on hand, and supports in-experience shopping.",
+    "body": null,
+    "year": "2021–2022",
+    "start": null,
+    "end": null,
+    "role": "Solo designer",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": 1,
+    "teamNote": "solo",
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 1,
+    "clientIds": [
+      "client:nestle",
+      "client:soul-machines"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:digital-humans"
+    ],
+    "disciplineIds": [
+      "discipline:conversational",
+      "discipline:product"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:talent-management",
+    "notionId": "4062280f-d03d-8182-8daa-ec3d2d6c7155",
+    "type": "project",
+    "slug": "talent-management",
+    "name": "Talent Management",
+    "summary": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives.",
+    "body": null,
+    "year": "NEEDS TYLER (2025?)",
+    "start": null,
+    "end": null,
+    "role": "NEEDS TYLER",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": "https://www.linkedin.com/posts/lazarus-ai_talentmanagement-federalgovernment-dod-ugcPost-7342930978916491265-lggZ",
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:lazarus"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:explainability",
+      "idea:human-judgment",
+      "idea:agentic-trust"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:systems"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": "Site: cut cycle times from months to minutes, 'over 100,000% faster' (Lazarus claim)",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:intuit",
+    "notionId": "4062280f-d03d-819a-880e-f2bd93ef459f",
+    "type": "project",
+    "slug": "intuit",
+    "name": "Intuit",
+    "summary": "Exploring a ChatGPT integration that lets clients invoice and track balances, connected to Intuit Wallet.",
+    "body": null,
+    "year": "NEEDS TYLER",
+    "start": null,
+    "end": null,
+    "role": "NEEDS TYLER",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:intuit"
+    ],
+    "toolIds": [],
+    "ideaIds": [],
+    "disciplineIds": [],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:usm-hueman",
+    "notionId": "4062280f-d03d-819b-a0da-ddef5b7f673d",
+    "type": "project",
+    "slug": "usm-hueman",
+    "name": "USM: Hue+Man Design Miami",
+    "summary": "HUE+MAN, a global design competition and traveling installation expanding access for BIPOC creatives, shown at Design Miami. Joba Studio with USM.",
+    "body": null,
+    "year": "2020",
+    "start": null,
+    "end": null,
+    "role": "NEEDS TYLER",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:usm",
+      "client:joba"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:empowerment",
+      "idea:architecture-space"
+    ],
+    "disciplineIds": [
+      "discipline:spatial",
+      "discipline:brand"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:loblaw",
+    "notionId": "4062280f-d03d-81ad-bfe9-ec52f8a6f0d4",
+    "type": "project",
+    "slug": "loblaw",
+    "name": "Loblaw Canada",
+    "summary": "A mobile health chat assistant codenamed Remedy.",
+    "body": null,
+    "year": "2026",
+    "start": null,
+    "end": null,
+    "role": "Senior Designer",
+    "ledOrMade": "Made",
+    "teamSize": "NEEDS TYLER",
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:loblaw"
+    ],
+    "toolIds": [
+      "tool:figma",
+      "tool:vercel"
+    ],
+    "ideaIds": [
+      "idea:consent",
+      "idea:agentic-trust",
+      "idea:legible-ai"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:conversational",
+      "discipline:mobile"
+    ],
+    "awards": [],
+    "aliases": [
+      "PC Health"
+    ],
+    "archived": false,
+    "metrics": "PC Health: #19 Medical and #25 Shopping",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:whitelist",
+    "notionId": "4062280f-d03d-81c3-b1d2-c5f9335692a7",
+    "type": "project",
+    "slug": "whitelist",
+    "name": "Whitelist",
+    "summary": "A mobile-first ATLS field tool that identifies drone tech as hostile or mission-compliant, with verifiable reasoning from research, production data and OSINT. Carries Model Playground patterns to mobile, with phone-to-desktop continuity.",
+    "body": null,
+    "year": "NEEDS TYLER (2025–26)",
+    "start": null,
+    "end": null,
+    "role": "NEEDS TYLER",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:lazarus"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:continuity",
+      "idea:agentic-trust"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:mobile"
+    ],
+    "awards": [],
+    "aliases": [
+      "ATLS field app"
+    ],
+    "archived": false,
+    "metrics": "Site: in QA, heading into MVP testing with 50 initial users",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:jet-protocol",
+    "notionId": "4062280f-d03d-81c7-bed6-f76fa8dc5761",
+    "type": "project",
+    "slug": "jet-protocol",
+    "name": "Jet Protocol",
+    "summary": "Complete redesign of a Solana DeFi lending platform: variable-rate lending, fixed-term markets, Orca LP integration, multiple trading modes, and a refined brand.",
+    "body": "Led the complete redesign.",
+    "year": "2022–2023",
+    "start": null,
+    "end": null,
+    "role": "Solo designer",
+    "ledOrMade": "Led",
+    "teamSize": 1,
+    "teamNote": "solo",
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:jet"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:complexity"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:brand",
+      "discipline:ic"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": true,
+    "metrics": "NEEDS TYLER",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:urvin",
+    "notionId": "4062280f-d03d-81d7-97c2-cd99c759810c",
+    "type": "project",
+    "slug": "urvin",
+    "name": "Urvin Finance",
+    "summary": "A retail-investor Terminal SaaS. Led News, Education and early data/chart explorations; supported communities, auth and data. Built an education microsite on Webflow CMS and tested with Sprig.",
+    "body": null,
+    "year": "2022",
+    "start": null,
+    "end": null,
+    "role": "Led News, Education, early data/chart work",
+    "ledOrMade": "Both",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 1,
+    "clientIds": [
+      "client:urvin"
+    ],
+    "toolIds": [
+      "tool:webflow",
+      "tool:sprig"
+    ],
+    "ideaIds": [
+      "idea:complexity"
+    ],
+    "disciplineIds": [
+      "discipline:product",
+      "discipline:research",
+      "discipline:web"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:lazarus-brand",
+    "notionId": "4062280f-d03d-81e6-8ba7-fed3a46aab66",
+    "type": "project",
+    "slug": "lazarus-brand",
+    "name": "Lazarus AI Brand Identity",
+    "summary": "Identity for a stealth foundation-model company: a minimal site, a verbal identity (Cool, Capable, Critical, Premium, Inevitable), wireframe and dithered textures, one Neon Ember Orange accent, monochrome discipline, and an atomic library with chamfered chips and custom icons.",
+    "body": null,
+    "year": "NEEDS TYLER",
+    "start": null,
+    "end": null,
+    "role": "Led",
+    "ledOrMade": "Led",
+    "teamSize": null,
+    "teamNote": "Directed 6+ designers",
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:lazarus"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:restraint",
+      "idea:systems-scale"
+    ],
+    "disciplineIds": [
+      "discipline:brand",
+      "discipline:direction",
+      "discipline:systems",
+      "discipline:web"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:model-playground",
+    "notionId": "4062280f-d03d-81f5-8513-faf6a4fe80f6",
+    "type": "project",
+    "slug": "model-playground",
+    "name": "Model Playground",
+    "summary": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system.",
+    "body": null,
+    "year": "2024–2025",
+    "start": null,
+    "end": null,
+    "role": "Design Lead",
+    "ledOrMade": "Led and made",
+    "teamSize": "NEEDS TYLER",
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:lazarus"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:legible-ai",
+      "idea:flexible-architecture",
+      "idea:systems-scale",
+      "idea:agentic-trust"
+    ],
+    "disciplineIds": [
+      "discipline:direction",
+      "discipline:product",
+      "discipline:systems",
+      "discipline:pm"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": "NEEDS TYLER",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:corelogic",
+    "notionId": "4062280f-d03d-81fa-8e4f-eb9a5e81cdc3",
+    "type": "project",
+    "slug": "corelogic",
+    "name": "CoreLogic Discovery Center",
+    "summary": "A Texas Discovery Center experience: risk visualization from national to property level (churn, hazards, liens) on a 6×3 angled video wall, touch table and desktop, with Cora, a digital person, as chief of staff.",
+    "body": null,
+    "year": "2021–2022",
+    "start": null,
+    "end": null,
+    "role": "Solo designer",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": 1,
+    "teamNote": "solo",
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:corelogic",
+      "client:soul-machines"
+    ],
+    "toolIds": [],
+    "ideaIds": [
+      "idea:multimodal",
+      "idea:digital-humans"
+    ],
+    "disciplineIds": [
+      "discipline:spatial",
+      "discipline:product",
+      "discipline:conversational"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:usm-venice-2025",
+    "notionId": null,
+    "type": "project",
+    "slug": "usm-venice-2025",
+    "name": "USM Venice show 2025",
+    "summary": "NEEDS TYLER",
+    "body": null,
+    "year": "2025",
+    "start": null,
+    "end": null,
+    "role": "NEEDS TYLER",
+    "ledOrMade": "NEEDS TYLER",
+    "teamSize": "NEEDS TYLER",
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 2,
+    "clientIds": [
+      "client:usm"
+    ],
+    "toolIds": [],
+    "ideaIds": [],
+    "disciplineIds": [],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:verystrongopinion",
+    "notionId": "4062280f-d03d-8107-8f8c-da37af08d6e2",
+    "type": "project",
+    "slug": "verystrongopinion",
+    "name": "verystrongopinion (habit tracker)",
+    "summary": "A personal habit tracker with weather context. Uses Aeonik Pro type on an IBM Carbon type scale.",
+    "body": null,
+    "year": "2026",
+    "start": null,
+    "end": null,
+    "role": "Made",
+    "ledOrMade": "Made",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": "https://verystrongopinion.vercel.app",
+    "url": null,
+    "preview": null,
+    "weight": 1,
+    "clientIds": [
+      "client:own"
+    ],
+    "toolIds": [
+      "tool:nextjs",
+      "tool:tailwind",
+      "tool:shadcn",
+      "tool:supabase",
+      "tool:vercel"
+    ],
+    "ideaIds": [],
+    "disciplineIds": [
+      "discipline:code",
+      "discipline:ic"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:traveller",
+    "notionId": "4062280f-d03d-8137-bcc2-ca1c383f5db0",
+    "type": "project",
+    "slug": "traveller",
+    "name": "Traveller (trip platform)",
+    "summary": "A personal trip-planning microsite and map, plus stay research.",
+    "body": null,
+    "year": "2026",
+    "start": null,
+    "end": null,
+    "role": "Made",
+    "ledOrMade": "Made",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": null,
+    "url": null,
+    "preview": null,
+    "weight": 1,
+    "clientIds": [
+      "client:own"
+    ],
+    "toolIds": [
+      "tool:vite",
+      "tool:vercel",
+      "tool:supabase",
+      "tool:claude",
+      "tool:notion",
+      "tool:cursor"
+    ],
+    "ideaIds": [],
+    "disciplineIds": [
+      "discipline:code",
+      "discipline:web"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "project:idea-map",
+    "notionId": "4062280f-d03d-81da-8724-de44a5acbdc3",
+    "type": "project",
+    "slug": "idea-map",
+    "name": "Semantic idea map (this portfolio)",
+    "summary": "A 3D semantic map of projects, ideas and tools with Tyler as the origin. It replaces the current static site (jacksontylerbruce.com).",
+    "body": null,
+    "year": "2026–2027",
+    "start": null,
+    "end": null,
+    "role": "Made (solo, directing coding agents)",
+    "ledOrMade": "Made",
+    "teamSize": null,
+    "teamNote": null,
+    "demo": "https://jacksontylerbruce.com",
+    "url": null,
+    "preview": null,
+    "weight": 3,
+    "clientIds": [
+      "client:own"
+    ],
+    "toolIds": [
+      "tool:nextjs",
+      "tool:cursor",
+      "tool:github-pages"
+    ],
+    "ideaIds": [
+      "idea:architecture-space"
+    ],
+    "disciplineIds": [
+      "discipline:ic",
+      "discipline:code"
+    ],
+    "awards": [],
+    "aliases": [],
+    "archived": false,
+    "metrics": null,
+    "visible": true,
+    "confidential": false
+  }
+]

@@ -1,0 +1,158 @@
+[
+  {
+    "id": "client:overmatch-ai",
+    "notionId": null,
+    "type": "client",
+    "slug": "overmatch-ai",
+    "name": "Overmatch AI",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:chatter",
+    "notionId": "4062280f-d03d-8111-931f-f35fcee5d955",
+    "type": "client",
+    "slug": "chatter",
+    "name": "Chatter Social",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:nestle",
+    "notionId": "4062280f-d03d-8112-94ca-e4b60bfa0688",
+    "type": "client",
+    "slug": "nestle",
+    "name": "Nestlé",
+    "aliases": [],
+    "clientType": "Client",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:corelogic",
+    "notionId": "4062280f-d03d-8151-b6d5-c9f225aca961",
+    "type": "client",
+    "slug": "corelogic",
+    "name": "CoreLogic",
+    "aliases": [],
+    "clientType": "Client",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:soul-machines",
+    "notionId": "4062280f-d03d-8158-99bc-d7ffd4a78cfb",
+    "type": "client",
+    "slug": "soul-machines",
+    "name": "Soul Machines",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:usm",
+    "notionId": "4062280f-d03d-816a-8740-fcc95634dba3",
+    "type": "client",
+    "slug": "usm",
+    "name": "USM",
+    "aliases": [],
+    "clientType": "Client",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:lazarus",
+    "notionId": "4062280f-d03d-816c-a5c9-c629b456f8f9",
+    "type": "client",
+    "slug": "lazarus",
+    "name": "Lazarus AI",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:intuit",
+    "notionId": "4062280f-d03d-8170-a4fd-f09b40b40c75",
+    "type": "client",
+    "slug": "intuit",
+    "name": "Intuit",
+    "aliases": [],
+    "clientType": "Client",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:loblaw",
+    "notionId": "4062280f-d03d-81d9-9ce8-e8f362a46ecb",
+    "type": "client",
+    "slug": "loblaw",
+    "name": "Loblaw Canada",
+    "aliases": [],
+    "clientType": "Client",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:urvin",
+    "notionId": "4062280f-d03d-81ea-a82a-d997de806173",
+    "type": "client",
+    "slug": "urvin",
+    "name": "Urvin Finance",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:nax-group",
+    "notionId": "4062280f-d03d-81eb-b0dc-c850af0e31f1",
+    "type": "client",
+    "slug": "nax-group",
+    "name": "Nax Group",
+    "aliases": [
+      "Novart"
+    ],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:joba",
+    "notionId": "4062280f-d03d-81ec-97a8-fc0a56d5f6fd",
+    "type": "client",
+    "slug": "joba",
+    "name": "Joba Studio",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:jet",
+    "notionId": "4062280f-d03d-81f4-b617-ce7eced7adf9",
+    "type": "client",
+    "slug": "jet",
+    "name": "Jet Protocol",
+    "aliases": [],
+    "clientType": "Employer",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "client:own",
+    "notionId": "4062280f-d03d-81ec-b06e-e6a90e1dd6b2",
+    "type": "client",
+    "slug": "own",
+    "name": "Tyler (own work)",
+    "aliases": [],
+    "clientType": "Own",
+    "visible": true,
+    "confidential": false
+  }
+]
