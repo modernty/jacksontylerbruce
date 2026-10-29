@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Jackson, Tyler Bruce</title>
+<meta name="description" content="Designing the intimacy between people and machines.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B5CF6'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="map.css">
+<script>
+(function () {
+  try {
+    var ctx = document.createElement("canvas").getContext("2d");
+    var probe = "mmmmmmmmmmlliWWMMwwii0Oo";
+    var width = function (family) { ctx.font = "16px " + family; return ctx.measureText(probe).width; };
+    var installed = ["serif", "sans-serif", "monospace"].some(function (generic) {
+      return width('"New York", ' + generic) !== width(generic);
+    });
+    if (installed) return;
+  } catch (e) { /* load the fallback */ }
+  var css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap";
+  document.head.appendChild(css);
+})();
+</script>
+</head>
+<body>
+<div class="column">
+<h1 id="hero">Designing the intimacy between people and machines.</h1>
+<section id="detail" hidden aria-labelledby="detail-label">
+  <p id="detail-kind"></p>
+  <h2 id="detail-label" tabindex="-1"></h2>
+  <p id="detail-meta"></p>
+  <p id="detail-summary"></p>
+  <p id="detail-patterns"></p>
+  <ul id="detail-relations"></ul>
+  <button type="button" id="detail-close">Close</button>
+</section>
+</div>
+
+<div id="stage">
+  <svg id="edges" aria-hidden="true"></svg>
+  <div id="points"></div>
+</div>
+
+<p id="status" role="status"></p>
+<script src="map.js"></script>
+</body>
+</html>

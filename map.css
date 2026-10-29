@@ -1,0 +1,223 @@
+:root {
+  --paper: #ffffff;
+  --ink: #000000;
+  --quiet: rgba(0, 0, 0, 0.55);
+  --faint: rgba(0, 0, 0, 0.28);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "New York", "Source Serif 4", ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow: hidden; }
+
+.column {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: min(34rem, 46vw);
+  padding: 8vh 3rem 2rem 7vw;
+  pointer-events: none;
+  background: linear-gradient(90deg, #fff 0 78%, rgba(255, 255, 255, 0) 100%);
+}
+
+#hero {
+  margin: 0;
+  max-width: 16em;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+#stage {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+#stage.is-dragging { cursor: grabbing; }
+
+#edges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+#edges line {
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 1;
+}
+
+#points { position: absolute; inset: 0; }
+
+.node {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.node:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--s, 5px);
+  height: var(--s, 5px);
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: var(--o, 0.7);
+  transform: translate(-50%, -50%);
+}
+
+.node.is-selected .dot {
+  opacity: 1;
+}
+
+.name {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 4px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.node.is-origin .name,
+.node.is-selected .name,
+.node:hover .name,
+.node:focus-visible .name { display: block; }
+
+#detail {
+  margin: 2.75rem 0 0;
+  pointer-events: auto;
+}
+
+#detail[hidden] { display: none; }
+
+#detail-kind {
+  margin: 0 0 0.35rem;
+  color: var(--quiet);
+  font-size: 13px;
+}
+
+#detail-label {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.011em;
+}
+
+#detail-meta,
+#detail-summary,
+#detail-patterns {
+  margin: 0.9rem 0 0;
+}
+
+#detail-meta { color: var(--quiet); }
+
+#detail-relations {
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#detail-relations li + li { margin-top: 0.45rem; }
+
+#detail-relations li { color: var(--quiet); }
+
+#detail-close {
+  margin: 1.4rem 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.18em;
+  text-decoration-color: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+#detail-close:hover,
+#detail-close:focus-visible { text-decoration-color: var(--ink); }
+
+#detail-close:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+#status {
+  position: absolute;
+  left: 8vw;
+  bottom: 8vh;
+  margin: 0;
+  color: var(--quiet);
+}
+
+#status:empty { display: none; }
+
+@media (max-width: 640px) {
+  .column {
+    width: auto;
+    right: 0;
+    padding: 1.75rem 1.25rem 0;
+    background: none;
+  }
+
+  #hero {
+    max-width: 18rem;
+    font-size: 1.35rem;
+  }
+
+  body:has(#detail:not([hidden])) .node.is-origin .name { display: none; }
+
+  #detail {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-height: 46dvh;
+    overflow: auto;
+    margin: 0;
+    padding: 1.25rem 1.25rem 1.75rem;
+    background: rgba(255, 255, 255, 0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node, .dot { transition: none; }
+}

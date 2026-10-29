@@ -298,6 +298,14 @@ A second run with the same content writes the same bytes. Checks:
 uv run pytest
 ```
 
+The map itself is `map.html`. It reads `public/map.json`. From the repo root:
+
+```sh
+python3 -m http.server 8000
+```
+
+Then open <http://localhost:8000/map.html>. A node can be cited with `?node=` and its id.
+
 ## Deploying
 
 It's one static folder. Drag it onto Netlify Drop, or point Vercel/GitHub Pages/
