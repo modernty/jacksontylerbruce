@@ -1,3 +1,4 @@
+import { anchorExists } from "@/src/content/answers"
 import { textIssues, wordCount } from "@/src/content/guard"
 import { publicFocusIds } from "@/src/content/publish"
 import { keywordRoute } from "@/src/router/keyword"
@@ -22,9 +23,10 @@ function check(view: { intent: string; focusIds: string[]; href: string; annotat
   for (const id of item.ids) {
     if (!view.focusIds.includes(id)) problems.push(`missing id ${id}`)
   }
-  if (!/^\/(timeline(\/projects)?|focus\/[a-z0-9-]+|work\/[a-z0-9-]+|sheet)(\?[^#]*)?(#.+)?$/.test(view.href)) {
+  if (!/^\/(timeline(\/projects)?|focus\/[a-z0-9-]+|work\/[a-z0-9-]+|sheet)(\?[^#]*)?#.+$/.test(view.href)) {
     problems.push("not a deep link")
   }
+  if (!anchorExists(view.href)) problems.push(`missing anchor ${view.href}`)
   const issues = textIssues(view.annotation)
   if (issues.length) problems.push(issues.join(", "))
   if (wordCount(view.annotation) > 40) problems.push("annotation over 40 words")
@@ -52,7 +54,9 @@ const keywordRows = CASES.map((item) => {
 })
 
 async function main() {
-  let failures = report("keyword", keywordRows)
+  const keywordFailures = report("keyword", keywordRows)
+  let llmRate = 1
+  let llmRan = false
   if (process.env.EVAL_LLM === "1") {
     if (!process.env.ANTHROPIC_API_KEY) {
       console.log("\nllm: skipped, ANTHROPIC_API_KEY is unset")
@@ -62,12 +66,15 @@ async function main() {
         const view = await modelRoute(item.q)
         llmRows.push({ q: item.q, problems: check(view, item) })
       }
-      failures += report("llm", llmRows)
+      const llmFailures = report("llm", llmRows)
+      llmRan = true
+      llmRate = (llmRows.length - llmFailures) / llmRows.length
+      console.log(`llm accuracy ${(llmRate * 100).toFixed(1)}%`)
     }
   } else {
     console.log("\nllm: skipped (set EVAL_LLM=1 to run)")
   }
-  if (failures) process.exit(1)
+  if (keywordFailures || (llmRan && llmRate < 0.95)) process.exit(1)
   console.log("\neval passed")
 }
 
