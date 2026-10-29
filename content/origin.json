@@ -1,0 +1,19 @@
+{
+  "id": "origin:tyler",
+  "type": "origin",
+  "slug": "tyler",
+  "name": "Tyler Jackson",
+  "title": "Designer / Design Director",
+  "label": "Tyler Jackson, Designer / Design Director",
+  "summary": "Designer and Design Director. Origin of the map.",
+  "body": null,
+  "visible": true,
+  "confidential": false,
+  "withheld": [
+    {
+      "field": "graduationYear",
+      "public": false,
+      "reason": "The graduation year is not stored and is not public."
+    }
+  ]
+}
