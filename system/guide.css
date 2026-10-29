@@ -64,6 +64,29 @@ jtb-text[data-read] {
   text-shadow: none;
 }
 
+.type-company,
+.type-project {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-size);
+  letter-spacing: var(--text-mono-track);
+  text-transform: uppercase;
+}
+
+.type-company {
+  font-weight: var(--type-company-weight);
+  color: var(--ink);
+  opacity: var(--type-company-opacity);
+  z-index: var(--type-company-z);
+}
+
+.type-project {
+  font-weight: var(--type-project-weight);
+  color: var(--ink-40);
+  opacity: var(--type-project-opacity);
+  z-index: var(--type-project-z);
+}
+
 .specimen { margin-top: var(--space-6); }
 .specimen + .specimen { margin-top: var(--space-5); }
 .specimen .meta { margin-bottom: var(--space-1); }

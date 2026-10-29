@@ -10,27 +10,16 @@ const MONTH = {
   jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
 };
 
-const UNSAFE = [
-  /twelvelabs/i,
-  /latecheckout/i,
-  /late\s+checkout/i,
-  /graduat/i,
-  /virginia\s+tech/i,
-  /\bvt\b/i,
-];
-
 const RANK = { manual: 0, client: 1, semantic: 2, idea: 3, discipline: 4, tool: 5 };
 
-export function isTimelineSafe(text) {
-  if (typeof text !== "string" || !text) return true;
-  return !UNSAFE.some((pattern) => pattern.test(text));
-}
+// October 2026, plus a short margin so the open end has room.
+const NOW = 2026 + 9 / 12;
+const AXIS_END = NOW + 2 / 12;
 
 function clean(value) {
   if (typeof value !== "string") return "";
   const text = value.trim();
   if (!text || text.includes("NEEDS TYLER")) return "";
-  if (!isTimelineSafe(text)) return "";
   if (/^unnamed$/i.test(text)) return "";
   return text;
 }
@@ -112,6 +101,16 @@ function sectionId(project) {
   return section ? section.id : undefined;
 }
 
+function aliasesOf(project) {
+  return (project.aliases || []).map((item) => clean(item)).filter(Boolean);
+}
+
+function roleName(project, host) {
+  if (aliasesOf(project).includes("PC Health")) return "Loblaw / PC Health";
+  return clean((host && (host.label || host.name)) || "");
+}
+
+
 export function buildTimeline(catalog, options = {}) {
   const projects = projectsOf(catalog);
   const clients = clientsOf(catalog);
@@ -125,10 +124,12 @@ export function buildTimeline(catalog, options = {}) {
     const linked = (project.clientIds || []).map((id) => byClient.get(id)).filter(Boolean);
     const own = linked.some(isOwn);
     const employers = linked.filter(isEmployer);
-    const label = clean(project.label || project.name || "");
+    const label = aliasesOf(project).includes("PC Health")
+      ? "Loblaw / PC Health"
+      : clean(project.label || project.name || "");
     const role = clean(project.role);
     const year = when.label;
-    if (!label || !isTimelineSafe(label) || !isTimelineSafe(role) || !isTimelineSafe(year)) continue;
+    if (!label) continue;
     const href = workHref(project.slug, sectionId(project));
     const lane = own ? "labs" : "projects";
     items.push({
@@ -142,9 +143,10 @@ export function buildTimeline(catalog, options = {}) {
       when,
     });
     if (own || !role) continue;
-    const hosts = employers.length ? employers : [];
+    let hosts = employers;
+    if (when.open && hosts.length === 0) hosts = linked.filter((client) => !isOwn(client));
     for (const host of hosts) {
-      const hostLabel = clean(host.label || host.name || "");
+      const hostLabel = roleName(project, host);
       if (!hostLabel) continue;
       items.push({
         markId: `roles:${project.id}:${host.id}`,
@@ -155,7 +157,7 @@ export function buildTimeline(catalog, options = {}) {
         year,
         href,
         when,
-        now: project.id === "project:overmatch-ai" && when.open,
+        now: Boolean(when.open),
       });
     }
   }
@@ -167,7 +169,6 @@ export function buildTimeline(catalog, options = {}) {
       if (!edge) continue;
       const other = edge.from === item.id ? edge.to : edge.to === item.id ? edge.from : "";
       if (!other || other === item.id || !present.has(other)) continue;
-      if (!isTimelineSafe(edge.reason || "")) continue;
       related.push({ id: other, kind: edge.kind || "" });
     }
     related.sort((left, right) => (RANK[left.kind] ?? 9) - (RANK[right.kind] ?? 9) || left.id.localeCompare(right.id));
@@ -182,23 +183,17 @@ export function buildTimeline(catalog, options = {}) {
   }
 
   let min = Infinity;
-  let max = -Infinity;
-  for (const item of items) {
-    min = Math.min(min, item.when.start);
-    max = Math.max(max, item.when.open ? item.when.start + 1 : item.when.end);
-  }
-  if (!Number.isFinite(min)) {
-    min = 2020;
-    max = 2027;
-  }
+  for (const item of items) min = Math.min(min, item.when.start);
+  if (!Number.isFinite(min)) min = 2020;
   min = Math.floor(min);
-  max = Math.ceil(max);
-  if (max <= min) max = min + 1;
-  const span = max - min;
+  const end = Math.max(AXIS_END, min + 1 / 12);
+  const span = end - min;
+  const clamp = (value) => Math.min(1, Math.max(0, value));
 
   for (const item of items) {
-    item.x0 = (item.when.start - min) / span;
-    item.x1 = item.when.open ? 1 : (item.when.end - min) / span;
+    item.x0 = clamp((item.when.start - min) / span);
+    item.x1 = item.when.open ? 1 : clamp((item.when.end - min) / span);
+    if (item.x1 < item.x0) item.x1 = item.x0;
     item.point = item.lane === "roles" ? item.x0 : (item.x0 + item.x1) / 2;
     item.open = Boolean(item.when.open);
     item.now = Boolean(item.now);
@@ -215,8 +210,8 @@ export function buildTimeline(catalog, options = {}) {
       .sort((left, right) => left.x0 - right.x0 || left.id.localeCompare(right.id)),
   }));
   const ticks = [];
-  for (let year = min; year <= max; year += 1) ticks.push(year);
+  for (let year = min; year <= end; year += 1) ticks.push(year);
   const requested = options && typeof options.focus === "string" ? options.focus : "";
   const focus = requested && present.has(requested) ? requested : undefined;
-  return { lanes, ticks, start: min, end: max, focus };
+  return { lanes, ticks, start: min, end, focus };
 }

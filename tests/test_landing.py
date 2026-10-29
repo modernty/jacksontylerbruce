@@ -185,16 +185,34 @@ def test_timeline_is_public_and_marks_now(page, server):
     page.wait_for_selector("[data-timeline]")
     text = page.locator("[data-timeline]").inner_text()
     lowered = text.lower()
-    assert "twelvelabs" not in lowered
-    assert "latecheckout" not in lowered
-    assert "late checkout" not in lowered
     assert "graduat" not in lowered
     assert "virginia tech" not in lowered
     assert "vt" not in lowered.split()
     assert "overmatch ai" in lowered
     assert "design lead" in lowered
+    assert "loblaw / pc health" in lowered
+    assert "senior designer" in lowered
+    assert "loblaw canada" not in lowered
     assert page.locator("[data-lane='posts'] [data-timeline-id]").count() == 0
-    assert page.locator("[data-now='true']").count() == 1
+    assert page.locator("[data-lane='roles'] [data-now='true']").count() == 2
+    assert page.locator("[data-lane='roles'] [data-open='true']").count() == 2
+    years = page.locator(".tick .meta").all_inner_texts()
+    assert "2026" in years
+    assert "2027" not in years
+    assert "2028" not in years
+    placed = page.evaluate(
+        """() => {
+          const plot = document.querySelector(".tick-row .plot").getBoundingClientRect();
+          const label = [...document.querySelectorAll(".tick")].find((el) => el.innerText.includes("2020")).querySelector(".meta").getBoundingClientRect();
+          const leaders = [...document.querySelectorAll(".mark.is-now .leader")].map((el) => el.getBoundingClientRect());
+          const ticks = [...document.querySelectorAll(".tick")].map((el) => el.getBoundingClientRect());
+          const hit = (a, b) => !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+          const collisions = leaders.filter((leader) => ticks.some((tick) => hit(leader, tick))).length;
+          return { labelLeft: label.left, plotLeft: plot.left, collisions };
+        }"""
+    )
+    assert placed["labelLeft"] >= placed["plotLeft"] - 1
+    assert placed["collisions"] == 0
     assert page.locator("[data-timeline]").get_attribute("data-orientation") == "horizontal"
 
 
@@ -211,8 +229,9 @@ def test_show_timeline_answer(page, server):
     page.locator("#ask-tyler").fill("How does Tyler approach design leadership as a design director?")
     page.locator(".send").click()
     page.wait_for_selector("[data-role='assistant'] [data-timeline]")
-    assert "overmatch ai" in page.locator("[data-role='assistant'] [data-timeline]").inner_text().lower()
-    assert "twelvelabs" not in page.locator("[data-role='assistant']").inner_text().lower()
+    answer = page.locator("[data-role='assistant'] [data-timeline]").inner_text().lower()
+    assert "overmatch ai" in answer
+    assert "loblaw / pc health" in answer
 
 
 def test_production_bundle_omits_dialkit():

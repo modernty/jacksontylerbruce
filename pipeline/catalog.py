@@ -30,7 +30,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT_DIR = ROOT / "content"
 PLACEHOLDER = "NEEDS TYLER"
 
-FORBIDDEN_TITLE = re.compile(r"product\s+designer", re.IGNORECASE)
+# Any spelling of the title: spaces, hyphens, or closed up, singular or plural.
+FORBIDDEN_TITLE = re.compile(r"product[\s-]*designers?", re.IGNORECASE)
 TEAM_PHRASING = re.compile(r"my team|design team|\bthe team\b", re.IGNORECASE)
 GRADUATION = re.compile(r"graduat", re.IGNORECASE)
 YEAR_RANGE = re.compile(
