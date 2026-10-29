@@ -1,0 +1,35 @@
+{
+  "note": "TYLER: edit these",
+  "prompts": [
+    {
+      "id": "overmatch-plans",
+      "label": "Dynamic plans",
+      "prompt": "How do dynamic objective-specific plans work at Overmatch AI?",
+      "placeholder": true
+    },
+    {
+      "id": "overmatch-reasoning",
+      "label": "Verifiable reasoning",
+      "prompt": "What patterns keep reasoning verifiable at Overmatch AI?",
+      "placeholder": true
+    },
+    {
+      "id": "design-leadership",
+      "label": "Design leadership",
+      "prompt": "How does Tyler approach design leadership as a design director?",
+      "placeholder": true
+    },
+    {
+      "id": "lazarus",
+      "label": "Lazarus",
+      "prompt": "What was Tyler's role and focus on Project Lazarus?",
+      "placeholder": true
+    },
+    {
+      "id": "labs",
+      "label": "Labs and side projects",
+      "prompt": "What are verystrongopinion, traveller, and the semantic idea map?",
+      "placeholder": true
+    }
+  ]
+}

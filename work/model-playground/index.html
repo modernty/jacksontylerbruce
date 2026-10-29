@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Playground</title>
+<link rel="stylesheet" href="../../system/tokens.css">
+<link rel="stylesheet" href="../../system/primitives.css">
+<link rel="stylesheet" href="../../ask/landing.css">
+<script src="../../system/fonts.js"></script>
+</head>
+<body>
+<main class="work" data-project-id="project:model-playground">
+<p class="kicker"><a href="/">Ask Tyler</a></p>
+<h1>Model Playground</h1>
+<p class="meta">Design Lead · 2024–2025</p>
+<section id="summary">
+<h2>Summary</h2>
+<p>Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system.</p>
+</section>
+<p class="kicker"><a href="/">Back</a></p>
+</main>
+<script src="../../system/primitives.js"></script>
+<script>
+(function () {
+  var id = location.hash.replace(/^#/, '');
+  if (!id) return;
+  var el = document.getElementById(id);
+  if (!el) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var top = el.getBoundingClientRect().top + window.scrollY - 24;
+  if (reduce) window.scrollTo(0, top);
+  else {
+    var start = window.scrollY;
+    var change = top - start;
+    var t0 = performance.now();
+    var dur = 360;
+    var frame = function (now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      window.scrollTo(0, start + change * e);
+      if (p < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+  el.classList.add('is-target');
+  window.setTimeout(function () { el.classList.remove('is-target'); }, 400);
+})();
+</script>
+</body>
+</html>

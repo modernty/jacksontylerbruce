@@ -179,6 +179,7 @@ def _map_node(
             node["awards"] = entity["awards"]
         if entity.get("staffing"):
             node["staffing"] = entity["staffing"]
+        node["sections"] = entity.get("sections") or []
     if entity["type"] == "client" and entity.get("aliases"):
         node["aliases"] = entity["aliases"]
     return node

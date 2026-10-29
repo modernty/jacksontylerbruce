@@ -7,7 +7,7 @@
     "name": "Overmatch AI",
     "summary": "Sample work in progress: product patterns I'm exploring as Design Lead at Overmatch AI.",
     "body": null,
-    "year": "May 2026\u2013present",
+    "year": "May 2026–present",
     "start": "2026-05",
     "end": null,
     "role": "Design Lead",
@@ -37,7 +37,19 @@
     "visuals": "NEEDS TYLER",
     "patterns": "Dynamic objective-specific plans; Trust and verifiable reasoning",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Sample work in progress: product patterns I'm exploring as Design Lead at Overmatch AI."
+      },
+      {
+        "id": "patterns",
+        "title": "Patterns",
+        "body": "Dynamic objective-specific plans; Trust and verifiable reasoning"
+      }
+    ]
   },
   {
     "id": "project:novart",
@@ -74,7 +86,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "An art-as-collateral lending platform. The redesign added two upfront gates (location, minimum collateral), then a short form and a dashboard with action items, offer status and lender messaging."
+      }
+    ]
   },
   {
     "id": "project:chatter",
@@ -114,7 +133,19 @@
     "archived": false,
     "metrics": "NEEDS TYLER",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A real-time, group-first social platform (Groups, Live Rooms, Stream) with creator monetization (RocketChats, subscriptions, ticketed events), shipped on iOS and Android."
+      },
+      {
+        "id": "body",
+        "title": "Body",
+        "body": "Owned product and brand from concept to release."
+      }
+    ]
   },
   {
     "id": "project:usm-milan-2025",
@@ -168,7 +199,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "An immersive installation introducing the USM Haller Soft Panel at Spotti Milano, Milan Design Week 2025, with Joba Studio."
+      }
+    ]
   },
   {
     "id": "project:nestle",
@@ -206,7 +244,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Ruth, a digital person, guides chocolate chip cookie baking, finds recipes from ingredients on hand, and supports in-experience shopping."
+      }
+    ]
   },
   {
     "id": "project:talent-management",
@@ -245,7 +290,19 @@
     "archived": false,
     "metrics": "Site: cut cycle times from months to minutes, 'over 100,000% faster' (Lazarus claim)",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives."
+      },
+      {
+        "id": "metrics",
+        "title": "Metrics",
+        "body": "Site: cut cycle times from months to minutes, 'over 100,000% faster' (Lazarus claim)"
+      }
+    ]
   },
   {
     "id": "project:intuit",
@@ -277,7 +334,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Exploring a ChatGPT integration that lets clients invoice and track balances, connected to Intuit Wallet."
+      }
+    ]
   },
   {
     "id": "project:usm-hueman",
@@ -316,7 +380,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "HUE+MAN, a global design competition and traveling installation expanding access for BIPOC creatives, shown at Design Miami. Joba Studio with USM."
+      }
+    ]
   },
   {
     "id": "project:loblaw",
@@ -361,7 +432,19 @@
     "archived": false,
     "metrics": "PC Health: #19 Medical and #25 Shopping",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A mobile health chat assistant codenamed Remedy."
+      },
+      {
+        "id": "metrics",
+        "title": "Metrics",
+        "body": "PC Health: #19 Medical and #25 Shopping"
+      }
+    ]
   },
   {
     "id": "project:whitelist",
@@ -401,7 +484,19 @@
     "archived": false,
     "metrics": "Site: in QA, heading into MVP testing with 50 initial users",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A mobile-first ATLS field tool that identifies drone tech as hostile or mission-compliant, with verifiable reasoning from research, production data and OSINT. Carries Model Playground patterns to mobile, with phone-to-desktop continuity."
+      },
+      {
+        "id": "metrics",
+        "title": "Metrics",
+        "body": "Site: in QA, heading into MVP testing with 50 initial users"
+      }
+    ]
   },
   {
     "id": "project:jet-protocol",
@@ -439,7 +534,19 @@
     "archived": true,
     "metrics": "NEEDS TYLER",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Complete redesign of a Solana DeFi lending platform: variable-rate lending, fixed-term markets, Orca LP integration, multiple trading modes, and a refined brand."
+      },
+      {
+        "id": "body",
+        "title": "Body",
+        "body": "Led the complete redesign."
+      }
+    ]
   },
   {
     "id": "project:urvin",
@@ -480,7 +587,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A retail-investor Terminal SaaS. Led News, Education and early data/chart explorations; supported communities, auth and data. Built an education microsite on Webflow CMS and tested with Sprig."
+      }
+    ]
   },
   {
     "id": "project:lazarus-brand",
@@ -520,7 +634,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Identity for a stealth foundation-model company: a minimal site, a verbal identity (Cool, Capable, Critical, Premium, Inevitable), wireframe and dithered textures, one Neon Ember Orange accent, monochrome discipline, and an atomic library with chamfered chips and custom icons."
+      }
+    ]
   },
   {
     "id": "project:model-playground",
@@ -562,7 +683,14 @@
     "archived": false,
     "metrics": "NEEDS TYLER",
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system."
+      }
+    ]
   },
   {
     "id": "project:corelogic",
@@ -602,7 +730,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A Texas Discovery Center experience: risk visualization from national to property level (churn, hazards, liens) on a 6×3 angled video wall, touch table and desktop, with Cora, a digital person, as chief of staff."
+      }
+    ]
   },
   {
     "id": "project:usm-venice-2025",
@@ -634,7 +769,8 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": []
   },
   {
     "id": "project:verystrongopinion",
@@ -675,7 +811,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A personal habit tracker with weather context. Uses Aeonik Pro type on an IBM Carbon type scale."
+      }
+    ]
   },
   {
     "id": "project:traveller",
@@ -717,7 +860,14 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A personal trip-planning microsite and map, plus stay research."
+      }
+    ]
   },
   {
     "id": "project:idea-map",
@@ -758,6 +908,13 @@
     "archived": false,
     "metrics": null,
     "visible": true,
-    "confidential": false
+    "confidential": false,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Summary",
+        "body": "A 3D semantic map of projects, ideas and tools with Tyler as the origin. It replaces the current static site (jacksontylerbruce.com)."
+      }
+    ]
   }
 ]

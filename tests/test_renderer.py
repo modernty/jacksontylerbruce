@@ -221,7 +221,12 @@ def test_no_raw_hex_outside_the_token_file():
         if not path.is_file() or path.suffix.lower() not in {".css", ".html", ".js"}:
             continue
         rel = path.relative_to(ROOT)
-        if rel.parts[0] in skip_roots or path.name in skip_names:
+        if (
+            rel.parts[0] in skip_roots
+            or path.name in skip_names
+            or "node_modules" in rel.parts
+            or (rel.parts[0] == "ask" and "dist" in rel.parts)
+        ):
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         if pattern.search(text):

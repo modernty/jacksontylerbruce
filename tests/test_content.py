@@ -20,6 +20,7 @@ from pipeline.catalog import (
     validate,
 )
 from pipeline.schema import Project
+from pipeline.sections import render_work_page, sections_from_copy
 
 EXPECTED_PLACEHOLDERS = 26
 
@@ -275,8 +276,8 @@ def test_built_site_has_no_blocked_terms():
             hits.append(str(path.relative_to(CONTENT_DIR.parent)))
     assert hits == []
     page = (CONTENT_DIR.parent / "index.html").read_text(encoding="utf-8")
-    assert '{ name: "Loblaw Canada" }' in page
-    assert "Loblaw Canada" in page
+    assert "What are you looking for?" in page
+    assert "Ask Tyler" in page
 
 
 def test_overmatch_is_featured_sample_work_without_sensitive_specifics():
@@ -382,3 +383,56 @@ def test_bad_seed_fails_validation(tmp_path: Path):
             embeddings_path=None,
             embed_fn=lambda texts: {key: [0.0] * 8 for key in texts},
         )
+
+
+def test_section_anchors_are_unique_and_keep_the_wording():
+    catalog = load_catalog()
+    for project in catalog.projects:
+        ids = [section.id for section in project.sections]
+        assert ids == list(dict.fromkeys(ids))
+        assert [section.model_dump() for section in project.sections] == sections_from_copy(project)
+        for section in project.sections:
+            assert getattr(project, section.id) == section.body
+
+
+def test_every_section_renders_its_anchor():
+    catalog = load_catalog()
+    root = CONTENT_DIR.parent
+    for project in catalog.projects:
+        if not project.visible or project.confidential:
+            continue
+        html = render_work_page(project)
+        page = (root / "work" / project.slug / "index.html").read_text(encoding="utf-8")
+        assert page == html
+        for section in project.sections:
+            assert page.count(f'id="{section.id}"') == 1
+            assert f'<section id="{section.id}">' in page
+        assert scan_public(page) == []
+
+
+def test_public_sections_pass_guards():
+    public = export_public(load_catalog())
+    blob = json.dumps([project["sections"] for project in public["projects"]])
+    assert scan_public(blob) == []
+    for project in public["projects"]:
+        ids = [section["id"] for section in project["sections"]]
+        assert ids == list(dict.fromkeys(ids))
+        for section in project["sections"]:
+            assert scan_public(section["title"]) == []
+            assert scan_public(section["body"]) == []
+            assert "NEEDS TYLER" not in section["body"]
+
+
+def test_duplicate_and_non_kebab_section_ids_are_rejected():
+    raw = json.loads((CONTENT_DIR / "projects.json").read_text(encoding="utf-8"))[0]
+    duplicated = dict(raw)
+    duplicated["sections"] = [
+        {"id": "summary", "title": "Summary", "body": "One sentence."},
+        {"id": "summary", "title": "Again", "body": "Another sentence."},
+    ]
+    with pytest.raises(ValidationError):
+        Project.model_validate(duplicated)
+    broken = dict(raw)
+    broken["sections"] = [{"id": "Not Slug", "title": "Summary", "body": "One sentence."}]
+    with pytest.raises(ValidationError):
+        Project.model_validate(broken)
