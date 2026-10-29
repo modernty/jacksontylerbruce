@@ -1,0 +1,31 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts",
+    "eval": "tsx --conditions=react-server evals/run.ts",
+    "fonts": "node scripts/check-fonts.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.67.0",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "server-only": "^0.0.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.28.0",
+    "eslint-config-next": "^15.5.4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.3"
+  }
+}
