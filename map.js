@@ -19,6 +19,7 @@
   var clusterById = {};
   var view = {};
   var selected = null;
+  var themeDots = [];
   var dragging = false;
   var moved = 0;
   var last = null;
@@ -86,26 +87,54 @@
     };
   }
 
+  var FILTERS = ["project", "theme", "tool", "client", "idea"];
+
   function readState() {
     var params = new URLSearchParams(window.location.search);
+    var state = { view: "", filter: "", node: "", cluster: "" };
+    if (params.get("view") === "list") state.view = "list";
+    if (FILTERS.indexOf(params.get("filter")) !== -1) state.filter = params.get("filter");
     var node = params.get("node");
     var cluster = params.get("cluster");
-    if (node && byId[node]) return { node: node };
-    if (cluster && clusterById[cluster]) return { cluster: cluster };
-    return {};
+    if (node && byId[node]) state.node = node;
+    else if (cluster && clusterById[cluster]) state.cluster = cluster;
+    return state;
   }
 
   function urlFor(state) {
     var url = new URL(window.location.href);
+    url.searchParams.delete("view");
+    url.searchParams.delete("filter");
     url.searchParams.delete("node");
     url.searchParams.delete("cluster");
+    if (state.view === "list") url.searchParams.set("view", "list");
+    if (state.filter) url.searchParams.set("filter", state.filter);
     if (state.node) url.searchParams.set("node", state.node);
     else if (state.cluster) url.searchParams.set("cluster", state.cluster);
     return url.pathname + url.search + url.hash;
   }
 
   function sameState(a, b) {
-    return (a.node || "") === (b.node || "") && (a.cluster || "") === (b.cluster || "");
+    a = a || {};
+    b = b || {};
+    return (a.view || "") === (b.view || "") && (a.filter || "") === (b.filter || "") && (a.node || "") === (b.node || "") && (a.cluster || "") === (b.cluster || "");
+  }
+
+  function entries(filter, which) {
+    if (filter === "theme") {
+      return (map.clusters || []).map(function (cluster) {
+        return { id: cluster.id, kind: "theme", label: cluster.label, pos: cluster.centroid };
+      }).sort(function (a, b) { return a.label.localeCompare(b.label); });
+    }
+    var type = filter;
+    if (!type && which === "list") type = "project";
+    return nodes.filter(function (node) {
+      return !type || node.type === type;
+    }).sort(function (a, b) {
+      return (b.featured === true) - (a.featured === true) || (a.label || "").localeCompare(b.label || "");
+    }).map(function (node) {
+      return { id: node.id, kind: "node", label: node.label || node.id, pos: node.pos, node: node };
+    });
   }
 
   function relations(id) {
@@ -124,9 +153,16 @@
     });
   }
 
-  function onward(state) {
-    if (state.node && byId[state.node]) {
-      return relations(state.node).map(function (item) {
+  function linksFor(id) {
+    if (clusterById[id]) {
+      return clusterById[id].memberIds.filter(function (memberId) {
+        return byId[memberId];
+      }).map(function (memberId) {
+        return { id: memberId, label: byId[memberId].label || memberId, reason: "In this theme" };
+      });
+    }
+    if (byId[id]) {
+      return relations(id).map(function (item) {
         return {
           id: item.other.id,
           label: item.other.label || item.other.id,
@@ -134,14 +170,44 @@
         };
       });
     }
-    if (state.cluster && clusterById[state.cluster]) {
-      return clusterById[state.cluster].memberIds.filter(function (id) {
-        return byId[id];
-      }).map(function (id) {
-        return { id: id, label: byId[id].label || id, reason: "In this theme" };
+    return [];
+  }
+
+  // List rows carry the direct connections (client, idea, tool, and the
+  // rare hand-linked project). Shared-facet and semantic edges stay on the
+  // map, where the full set still has room. A row with no direct link keeps
+  // a few semantic neighbors so nothing dead-ends.
+  function listLinks(id) {
+    if (clusterById[id]) {
+      return linksFor(id).slice().sort(function (a, b) {
+        return a.label.localeCompare(b.label);
       });
     }
-    return [];
+    var node = byId[id];
+    var seen = {};
+    var chosen = [];
+    var fallback = [];
+    relations(id).forEach(function (item) {
+      var otherId = item.other.id;
+      if (seen[otherId]) return;
+      var kind = item.edge.kind;
+      var reason = publishText(item.edge.reason) || "";
+      var entry = {
+        id: otherId,
+        label: item.other.label || otherId,
+        reason: kindLabel(item.other.type)
+      };
+      if (kind === "semantic") {
+        seen[otherId] = true;
+        fallback.push(entry);
+        return;
+      }
+      if (node && node.type === "project" && (reason.indexOf("same ") === 0 || kind === "discipline")) return;
+      seen[otherId] = true;
+      chosen.push(entry);
+    });
+    if (chosen.length) return chosen;
+    return fallback.slice(0, 3);
   }
 
   function setText(el, value) {
@@ -164,7 +230,7 @@
     button.appendChild(who);
     button.appendChild(why);
     button.addEventListener("click", function () {
-      go({ node: item.id }, "push");
+      go({ node: item.id, cluster: "" }, "push");
     });
     li.appendChild(button);
     return li;
@@ -193,16 +259,28 @@
       detail.hidden = true;
       return;
     }
-    onward(state).forEach(function (item) {
+    linksFor(state.node || state.cluster).forEach(function (item) {
       list.appendChild(linkRow(item));
     });
     detail.hidden = false;
   }
 
+  function shownIds(which) {
+    var ids = {};
+    entries(view.filter, which).forEach(function (entry) { ids[entry.id] = true; });
+    if (view.node && (byId[view.node] || clusterById[view.node])) ids[view.node] = true;
+    if (view.cluster && clusterById[view.cluster]) ids[view.cluster] = true;
+    return ids;
+  }
+
   function paint() {
     var width = stage.clientWidth;
     var height = stage.clientHeight;
-    if (!width || !height) return;
+    if (!width || !height) {
+      if (view.view !== "list") requestAnimationFrame(paint);
+      return;
+    }
+    var visible = shownIds("map");
     var placed = nodes.map(function (node) {
       return { node: node, at: project(node.pos, width, height) };
     }).sort(function (a, b) { return b.at.z - a.at.z; });
@@ -220,7 +298,16 @@
       var quiet = item.node.type === "origin" || item.node.type === "project" || inTheme ? 0.92 : 0.38;
       el.style.setProperty("--o", String(item.node.id === selected || inTheme ? 1 : quiet * depth));
       el.classList.toggle("is-selected", item.node.id === selected);
+      el.hidden = !visible[item.node.id];
       el.setAttribute("aria-pressed", item.node.id === selected ? "true" : "false");
+    });
+    themeDots.forEach(function (dot) {
+      if (!dot.pos) return;
+      var at = project(dot.pos, width, height);
+      dot.el.style.left = at.x + "px";
+      dot.el.style.top = at.y + "px";
+      dot.el.hidden = !visible[dot.id];
+      dot.el.classList.toggle("is-selected", view.cluster === dot.id);
     });
 
     var lookup = {};
@@ -293,37 +380,101 @@
 
   function apply(state, mode) {
     state = state || {};
-    if (state.node && !byId[state.node]) state = {};
-    if (state.cluster && !clusterById[state.cluster]) state = { node: state.node };
-    view = state;
-    selected = state.node || null;
-    renderDetail(state);
-    if (mode === "push" && !sameState(state, history.state || readState())) {
-      history.pushState(state, "", urlFor(state));
-    } else if (mode === "replace") {
-      history.replaceState(state, "", urlFor(state));
-    }
+    if (state.node && !byId[state.node]) state = Object.assign({}, state, { node: "" });
+    if (state.cluster && !clusterById[state.cluster]) state = Object.assign({}, state, { cluster: "" });
+    var previous = view;
+    view = {
+      view: state.view === "list" ? "list" : "",
+      filter: FILTERS.indexOf(state.filter) !== -1 ? state.filter : "",
+      node: state.node || "",
+      cluster: state.cluster || ""
+    };
+    if (view.node && view.cluster) view.cluster = "";
+    selected = view.node || null;
+    document.body.classList.toggle("is-list", view.view === "list");
+    document.getElementById("list").hidden = view.view !== "list";
+    document.querySelectorAll(".views button").forEach(function (button) {
+      button.classList.toggle("is-current", button.dataset.view === (view.view || "map"));
+    });
+    document.querySelectorAll(".filters button").forEach(function (button) {
+      button.classList.toggle("is-current", button.dataset.filter === view.filter);
+      button.setAttribute("aria-pressed", button.dataset.filter === view.filter ? "true" : "false");
+    });
+    document.getElementById("detail-back").hidden = !(view.node || view.cluster);
+    renderDetail(view.node || view.cluster ? view : {});
+    renderList();
+    if (mode === "push" && !sameState(view, previous)) history.pushState(view, "", urlFor(view));
+    else if (mode === "replace") history.replaceState(view, "", urlFor(view));
     paint();
-    if (state.node || state.cluster) aim(state);
+    if (view.node || view.cluster) aim(view);
     else if (mode === "push" || mode === "silent") animateCamera({ yaw: rest.yaw, pitch: rest.pitch, distance: rest.distance });
-    if (mode === "push" && (state.node || state.cluster)) {
+    if (mode === "push" && (view.node || view.cluster) && view.view !== "list") {
       document.getElementById("detail-label").focus();
     }
   }
 
-  function go(state, mode) {
-    apply(state, mode);
+  function go(changes, mode) {
+    apply(Object.assign({}, view, changes), mode);
+  }
+
+  function renderList() {
+    var list = document.getElementById("list");
+    list.replaceChildren();
+    var items = entries(view.filter, "list");
+    if (view.node && byId[view.node] && !items.some(function (item) { return item.id === view.node; })) {
+      items.unshift({ id: view.node, kind: "node", label: byId[view.node].label || view.node, node: byId[view.node] });
+    }
+    items.forEach(function (entry) {
+      var row = document.createElement("article");
+      row.className = "row" + ((view.node === entry.id || view.cluster === entry.id) ? " is-current" : "");
+      row.dataset.row = entry.id;
+      var title = document.createElement("button");
+      title.type = "button";
+      title.className = "row-title";
+      title.dataset.go = entry.id;
+      title.textContent = entry.label;
+      title.addEventListener("click", function () {
+        if (entry.kind === "theme") go({ cluster: entry.id, node: "" }, "push");
+        else go({ node: entry.id, cluster: "" }, "push");
+      });
+      row.appendChild(title);
+      if (entry.node) {
+        var meta = [publishText(entry.node.year), publishText(entry.node.role), publishText(entry.node.status)].filter(Boolean);
+        if (meta.length) {
+          var line = document.createElement("p");
+          line.className = "row-meta";
+          line.textContent = meta.join(" · ");
+          row.appendChild(line);
+        }
+      }
+      var links = document.createElement("ul");
+      links.className = "onward";
+      listLinks(entry.id).forEach(function (item) {
+        var li = document.createElement("li");
+        var button = document.createElement("button");
+        button.type = "button";
+        button.dataset.go = item.id;
+        button.textContent = item.label;
+        button.addEventListener("click", function () {
+          go({ node: item.id, cluster: "" }, "push");
+        });
+        li.appendChild(button);
+        links.appendChild(li);
+      });
+      row.appendChild(links);
+      list.appendChild(row);
+    });
   }
 
   function parentOf(state) {
     if (state.node && byId[state.node]) {
       var clusterId = byId[state.node].clusterId;
-      if (clusterId && clusterById[clusterId]) return { cluster: clusterId };
-      if (state.node !== ORIGIN_ID) return { node: ORIGIN_ID };
-      return {};
+      if (clusterId && clusterById[clusterId]) return { node: "", cluster: clusterId };
+      if (state.node !== ORIGIN_ID) return { node: ORIGIN_ID, cluster: "" };
+      return { node: "", cluster: "" };
     }
-    if (state.cluster) return { node: ORIGIN_ID };
-    return {};
+    if (state.cluster) return { node: ORIGIN_ID, cluster: "" };
+    return { node: "", cluster: "" };
   }
 
   function backOut() {
@@ -360,10 +511,32 @@
       });
       button.addEventListener("click", function (event) {
         event.stopPropagation();
-        go({ node: node.id }, "push");
+        go({ node: node.id, cluster: "" }, "push");
       });
       node.el = button;
       pointsEl.appendChild(button);
+    });
+    themeDots = (data.clusters || []).map(function (cluster) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "node is-theme";
+      button.dataset.themeId = cluster.id;
+      button.hidden = true;
+      button.setAttribute("aria-label", cluster.label || "Theme");
+      var dot = document.createElement("span");
+      dot.className = "dot";
+      button.appendChild(dot);
+      var name = document.createElement("span");
+      name.className = "name";
+      name.textContent = cluster.label || "";
+      button.appendChild(name);
+      button.addEventListener("pointerdown", function (event) { event.stopPropagation(); });
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        go({ cluster: cluster.id, node: "" }, "push");
+      });
+      pointsEl.appendChild(button);
+      return { id: cluster.id, pos: cluster.centroid, el: button };
     });
     statusEl.textContent = "";
     document.body.dataset.nodeCount = String(nodes.length);
@@ -429,6 +602,17 @@
   }, { passive: false });
 
   document.getElementById("detail-back").addEventListener("click", backOut);
+  document.querySelectorAll(".views button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      go({ view: button.dataset.view === "list" ? "list" : "" }, "push");
+    });
+  });
+  document.querySelectorAll(".filters button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var next = view.filter === button.dataset.filter ? "" : button.dataset.filter;
+      go({ filter: next }, "push");
+    });
+  });
 
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && (view.node || view.cluster)) backOut();
@@ -443,8 +627,9 @@
     isPublic: isPublic,
     project: project,
     ORIGIN_ID: ORIGIN_ID,
-    open: function (id) { apply(byId[id] ? { node: id } : {}, "silent"); },
-    onwardCount: function (id) { return onward({ node: id }).length; }
+    open: function (id) { go({ node: id, cluster: "" }, "silent"); },
+    entries: function (filter, which) { return entries(filter, which).map(function (entry) { return entry.id; }); },
+    linksFor: function (id) { return linksFor(id); }
   };
 
   fetch("public/map.json", { cache: "no-store" })

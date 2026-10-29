@@ -29,8 +29,20 @@
 <body>
 <div class="column">
 <h1 id="hero">Designing the intimacy between people and machines.</h1>
+<nav class="views" aria-label="View">
+  <button type="button" id="view-map" data-view="map">Map</button>
+  <span aria-hidden="true">·</span>
+  <button type="button" id="view-list" data-view="list">List</button>
+</nav>
+<nav class="filters" aria-label="Filter">
+  <button type="button" data-filter="project">Projects</button>
+  <button type="button" data-filter="theme">Themes</button>
+  <button type="button" data-filter="tool">Tools</button>
+  <button type="button" data-filter="client">Clients</button>
+  <button type="button" data-filter="idea">Ideas</button>
+</nav>
+<button type="button" id="detail-back" hidden>Back out</button>
 <section id="detail" hidden aria-labelledby="detail-label">
-  <button type="button" id="detail-back">Back out</button>
   <p id="detail-kind"></p>
   <h2 id="detail-label" tabindex="-1"></h2>
   <p id="detail-meta"></p>
@@ -38,6 +50,7 @@
   <p id="detail-patterns"></p>
   <ul id="detail-relations"></ul>
 </section>
+<div id="list" hidden></div>
 </div>
 
 <div id="stage">

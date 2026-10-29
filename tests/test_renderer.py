@@ -135,6 +135,45 @@ def test_onward_link_moves_and_back_out_steps_up(page, server):
     assert "Tyler Jackson" in page.locator("#detail-label").inner_text()
 
 
+def test_list_toggle_survives_reload_and_keeps_the_node(page, server):
+    page.goto(server + "/map.html?node=project:overmatch-ai", wait_until="networkidle")
+    page.wait_for_selector("body[data-ready='true']")
+    page.locator("#view-list").click()
+    page.wait_for_function("() => location.search.includes('view=list') && location.search.includes('node=')")
+    assert page.locator("body").get_attribute("class") == "is-list" or "is-list" in (page.locator("body").get_attribute("class") or "")
+    assert page.locator("#list [data-row='project:overmatch-ai']").get_attribute("class").find("is-current") != -1
+    page.reload(wait_until="networkidle")
+    page.wait_for_selector("body[data-ready='true']")
+    assert "view=list" in page.url
+    assert "overmatch-ai" in page.url
+    page.go_back()
+    page.wait_for_function("() => !location.search.includes('view=list')")
+    page.wait_for_selector("#detail:not([hidden])")
+    assert page.locator("#detail-label").inner_text() == "Overmatch AI"
+
+
+def test_filter_matches_across_map_and_list(page):
+    page.locator(".filters [data-filter='tool']").click()
+    page.wait_for_function("() => location.search.includes('filter=tool')")
+    listed = page.evaluate("() => window.MapView.entries('tool', 'list').slice().sort()")
+    page.locator("#view-list").click()
+    rows = page.locator("#list [data-row]").evaluate_all("els => els.map((el) => el.dataset.row).sort()")
+    assert rows == listed
+    page.locator("#view-map").click()
+    shown = page.locator("[data-node-id]:not([hidden])").evaluate_all("els => els.map((el) => el.dataset.nodeId).sort()")
+    assert shown == listed
+
+
+def test_every_list_row_has_an_onward_link(page, server):
+    for kind in ("project", "idea", "tool", "client", "theme"):
+        page.goto(server + "/map.html?view=list&filter=" + kind, wait_until="networkidle")
+        page.wait_for_selector("body[data-ready='true']")
+        missing = page.locator("#list [data-row]").evaluate_all(
+            "els => els.filter((row) => !row.querySelector('.onward [data-go]')).map((row) => row.dataset.row)"
+        )
+        assert missing == []
+
+
 def test_private_nodes_are_not_rendered(page):
     kept = page.evaluate(
         """() => window.MapView.isPublic({

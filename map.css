@@ -42,6 +42,105 @@ body { overflow: hidden; }
   letter-spacing: -0.015em;
 }
 
+.views,
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+  align-items: baseline;
+  margin: 1.25rem 0 0;
+  pointer-events: auto;
+}
+
+.filters { margin-top: 0.35rem; }
+
+.views button,
+.filters button,
+.row-title,
+#list .onward button,
+#detail-relations button,
+#detail-back {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--quiet);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.views button.is-current,
+.filters button.is-current { color: var(--ink); }
+
+.views button:focus-visible,
+.filters button:focus-visible,
+.row-title:focus-visible,
+#list .onward button:focus-visible,
+#detail-relations button:focus-visible,
+#detail-back:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+#list { display: none; }
+
+#list .row { margin: 0 0 2.25rem; }
+
+#list .row.is-current .row-title { text-decoration: underline; text-underline-offset: 0.18em; }
+
+.row-title {
+  color: var(--ink);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.row-title:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+
+.row-meta {
+  margin: 0.2rem 0 0;
+  color: var(--quiet);
+}
+
+#list .onward {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#list .onward li:not(:last-child)::after {
+  content: "·";
+  margin: 0 0.45rem;
+  color: var(--faint);
+}
+
+#list .onward button { color: var(--quiet); }
+
+#list .onward button:hover,
+#list .onward button:focus-visible { color: var(--ink); }
+
+body.is-list { overflow: auto; height: auto; min-height: 100%; }
+
+body.is-list .column {
+  position: relative;
+  width: min(38rem, 100%);
+  margin-inline: auto;
+  max-height: none;
+  padding: 10vh 1.5rem 16vh;
+  background: none;
+  pointer-events: auto;
+}
+
+body.is-list #stage { display: none; }
+
+body.is-list #detail { display: none !important; }
+
+body.is-list #list { display: block; margin-top: 2.75rem; }
+
 #stage {
   position: absolute;
   inset: 0;
@@ -187,13 +286,14 @@ body { overflow: hidden; }
 }
 
 #detail-back {
-  margin: 0 0 1.25rem;
+  margin: 1.5rem 0 0;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--quiet);
   font: inherit;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 #detail-back:hover,
@@ -221,6 +321,8 @@ body { overflow: hidden; }
     padding: 1.75rem 1.25rem 0;
     background: none;
   }
+
+  body.is-list .column { padding: 1.75rem 1.25rem 4rem; }
 
   #hero {
     max-width: 18rem;
