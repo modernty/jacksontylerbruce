@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>System</title>
+<meta name="description" content="Tokens and primitives for the map and the list.">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="primitives.css">
+<link rel="stylesheet" href="guide.css">
+<script src="fonts.js"></script>
+</head>
+<body>
+<article class="guide">
+<header>
+  <jtb-text variant="mono" class="kicker">Foundations</jtb-text>
+  <jtb-text variant="display" id="page-title">System</jtb-text>
+  <jtb-text variant="body" class="lead">Tokens and primitives for the map and the list.</jtb-text>
+  <ul class="contents">
+    <li><jtb-link variant="inline" href="#colour">Colour</jtb-link></li>
+    <li><jtb-link variant="inline" href="#type">Type</jtb-link></li>
+    <li><jtb-link variant="inline" href="#spacing">Spacing</jtb-link></li>
+    <li><jtb-link variant="inline" href="#grid">Grid</jtb-link></li>
+    <li><jtb-link variant="inline" href="#motion">Motion</jtb-link></li>
+    <li><jtb-link variant="inline" href="#depth">Depth</jtb-link></li>
+    <li><jtb-link variant="inline" href="#primitives">Primitives</jtb-link></li>
+  </ul>
+</header>
+
+<section class="section" id="colour">
+  <jtb-text variant="mono" class="kicker">01</jtb-text>
+  <h2><jtb-text variant="display" size="md">Colour</jtb-text></h2>
+  <jtb-text variant="body" class="lead">Paper and one ink. Tints are that ink mixed back into the paper.</jtb-text>
+  <div class="swatches">
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="paper"></div>
+      <figcaption>
+        <jtb-text variant="mono">Paper</jtb-text>
+        <jtb-text variant="mono" data-read="--paper"></jtb-text>
+      </figcaption>
+    </figure>
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="ink"></div>
+      <figcaption>
+        <jtb-text variant="mono">Ink</jtb-text>
+        <jtb-text variant="mono" data-read="--ink"></jtb-text>
+      </figcaption>
+    </figure>
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="ink-70"></div>
+      <figcaption>
+        <jtb-text variant="mono">Ink 70</jtb-text>
+        <jtb-text variant="mono" data-read="--ink-70"></jtb-text>
+      </figcaption>
+    </figure>
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="ink-40"></div>
+      <figcaption>
+        <jtb-text variant="mono">Ink 40</jtb-text>
+        <jtb-text variant="mono" data-read="--ink-40"></jtb-text>
+      </figcaption>
+    </figure>
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="ink-15"></div>
+      <figcaption>
+        <jtb-text variant="mono">Ink 15</jtb-text>
+        <jtb-text variant="mono" data-read="--ink-15"></jtb-text>
+      </figcaption>
+    </figure>
+    <figure class="swatch">
+      <div class="swatch-chip" data-swatch="ink-06"></div>
+      <figcaption>
+        <jtb-text variant="mono">Ink 06</jtb-text>
+        <jtb-text variant="mono" data-read="--ink-06"></jtb-text>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#type">Type</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="type">
+  <jtb-text variant="mono" class="kicker">02</jtb-text>
+  <h2><jtb-text variant="display" size="md">Type</jtb-text></h2>
+  <jtb-text variant="body" class="lead">Serif for display and body. Typewriter mono for labels and metadata.</jtb-text>
+  <div class="specimen">
+    <jtb-text variant="mono" class="meta" data-read="--text-display-size"></jtb-text>
+    <jtb-text variant="display">Designing the intimacy between people and machines.</jtb-text>
+  </div>
+  <div class="specimen">
+    <jtb-text variant="mono" class="meta">Title</jtb-text>
+    <jtb-text variant="display" size="md">Overmatch AI</jtb-text>
+  </div>
+  <div class="specimen">
+    <jtb-text variant="mono" class="meta" data-read="--text-body-size"></jtb-text>
+    <jtb-text variant="body">Body is the reading size, under a title or in a summary.</jtb-text>
+  </div>
+  <div class="specimen">
+    <jtb-text variant="mono" class="meta" data-read="--text-caption-size"></jtb-text>
+    <jtb-text variant="caption">Caption sits with a figure or a quiet note.</jtb-text>
+  </div>
+  <div class="specimen">
+    <jtb-text variant="mono" class="meta" data-read="--text-mono-size"></jtb-text>
+    <jtb-text variant="mono">May 2026–present · Design Lead</jtb-text>
+  </div>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#spacing">Spacing</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="spacing">
+  <jtb-text variant="mono" class="kicker">03</jtb-text>
+  <h2><jtb-text variant="display" size="md">Spacing</jtb-text></h2>
+  <jtb-text variant="body" class="lead">An 8 point grid, with a 4 point half step for optical alignment.</jtb-text>
+  <ul class="ruler">
+    <li><i data-space="half"></i><jtb-text variant="mono" data-read="--space-half"></jtb-text></li>
+    <li><i data-space="1"></i><jtb-text variant="mono" data-read="--space-1"></jtb-text></li>
+    <li><i data-space="2"></i><jtb-text variant="mono" data-read="--space-2"></jtb-text></li>
+    <li><i data-space="3"></i><jtb-text variant="mono" data-read="--space-3"></jtb-text></li>
+    <li><i data-space="4"></i><jtb-text variant="mono" data-read="--space-4"></jtb-text></li>
+    <li><i data-space="6"></i><jtb-text variant="mono" data-read="--space-6"></jtb-text></li>
+    <li><i data-space="8"></i><jtb-text variant="mono" data-read="--space-8"></jtb-text></li>
+    <li><i data-space="12"></i><jtb-text variant="mono" data-read="--space-12"></jtb-text></li>
+  </ul>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#grid">Grid</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="grid">
+  <jtb-text variant="mono" class="kicker">04</jtb-text>
+  <h2><jtb-text variant="display" size="md">Grid</jtb-text></h2>
+  <jtb-text variant="body" class="lead">Twelve columns. The reading measure is the list.</jtb-text>
+  <div class="grid-demo" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#motion">Motion</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="motion">
+  <jtb-text variant="mono" class="kicker">05</jtb-text>
+  <h2><jtb-text variant="display" size="md">Motion</jtb-text></h2>
+  <jtb-text variant="body" class="lead">One ease. Durations collapse when reduced motion is requested.</jtb-text>
+  <div class="motion">
+    <jtb-text variant="mono" data-read="--ease-quiet"></jtb-text>
+    <div class="motion-row">
+      <jtb-text variant="mono" data-read="--duration-quick"></jtb-text>
+      <div class="motion-track"><div class="motion-bar" data-pace="quick"></div></div>
+    </div>
+    <div class="motion-row">
+      <jtb-text variant="mono" data-read="--duration-slow"></jtb-text>
+      <div class="motion-track"><div class="motion-bar" data-pace="slow"></div></div>
+    </div>
+    <jtb-button variant="text" id="motion-play">Play</jtb-button>
+  </div>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#depth">Depth</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="depth">
+  <jtb-text variant="mono" class="kicker">06</jtb-text>
+  <h2><jtb-text variant="display" size="md">Depth</jtb-text></h2>
+  <jtb-text variant="body" class="lead">Haze and fog, not shadow. The focus ring is the ink.</jtb-text>
+  <div class="depths">
+    <div class="depth" data-depth="0"><jtb-text variant="mono">Paper</jtb-text></div>
+    <div class="depth" data-depth="1"><jtb-text variant="mono">Haze</jtb-text></div>
+    <div class="depth" data-depth="2"><jtb-text variant="mono">Fog</jtb-text></div>
+  </div>
+  <div class="states">
+    <jtb-button variant="text" data-state="focus">Focus</jtb-button>
+  </div>
+  <div class="onward-row">
+    <jtb-link variant="onward" href="#primitives">Primitives</jtb-link>
+  </div>
+</section>
+
+<section class="section" id="primitives">
+  <jtb-text variant="mono" class="kicker">07</jtb-text>
+  <h2><jtb-text variant="display" size="md">Primitives</jtb-text></h2>
+  <jtb-text variant="body" class="lead">The same elements the map and the list render.</jtb-text>
+
+  <div class="primitive" id="primitive-text">
+    <jtb-text variant="mono" class="kicker">Text</jtb-text>
+    <div class="specimen">
+      <jtb-text variant="display">Display</jtb-text>
+    </div>
+    <div class="specimen">
+      <jtb-text variant="body">Body</jtb-text>
+    </div>
+    <div class="specimen">
+      <jtb-text variant="caption">Caption</jtb-text>
+    </div>
+    <div class="specimen">
+      <jtb-text variant="mono">Mono label</jtb-text>
+    </div>
+  </div>
+
+  <div class="primitive" id="primitive-link">
+    <jtb-text variant="mono" class="kicker">Link</jtb-text>
+    <div class="states">
+      <jtb-link variant="inline" href="#colour">Inline</jtb-link>
+      <jtb-link variant="inline" href="#colour" data-state="hover">Hover</jtb-link>
+      <jtb-link variant="inline" href="#colour" data-state="focus">Focus</jtb-link>
+      <jtb-link variant="inline" href="#colour" disabled>Disabled</jtb-link>
+    </div>
+    <div class="states">
+      <jtb-link variant="onward" href="#colour">Onward</jtb-link>
+      <jtb-link variant="onward" href="#colour" data-state="hover">Hover</jtb-link>
+      <jtb-link variant="onward" href="#colour" data-state="focus">Focus</jtb-link>
+      <jtb-link variant="onward" href="#colour" disabled>Disabled</jtb-link>
+    </div>
+  </div>
+
+  <div class="primitive" id="primitive-button">
+    <jtb-text variant="mono" class="kicker">Button</jtb-text>
+    <div class="states">
+      <jtb-button variant="text">Text</jtb-button>
+      <jtb-button variant="text" data-state="hover">Hover</jtb-button>
+      <jtb-button variant="text" data-state="focus">Focus</jtb-button>
+      <jtb-button variant="text" disabled>Disabled</jtb-button>
+    </div>
+    <div class="states">
+      <jtb-button variant="ghost">Ghost</jtb-button>
+      <jtb-button variant="ghost" data-state="hover">Hover</jtb-button>
+      <jtb-button variant="ghost" data-state="focus">Focus</jtb-button>
+      <jtb-button variant="ghost" disabled>Disabled</jtb-button>
+    </div>
+  </div>
+
+  <div class="primitive" id="primitive-icon">
+    <jtb-text variant="mono" class="kicker">Icons</jtb-text>
+    <div class="icons">
+      <figure><jtb-icon name="arrow"></jtb-icon><jtb-text variant="mono">Arrow</jtb-text></figure>
+      <figure><jtb-icon name="back"></jtb-icon><jtb-text variant="mono">Back</jtb-text></figure>
+      <figure><jtb-icon name="close"></jtb-icon><jtb-text variant="mono">Close</jtb-text></figure>
+      <figure><jtb-icon name="plus"></jtb-icon><jtb-text variant="mono">Plus</jtb-text></figure>
+    </div>
+  </div>
+
+  <div class="primitive" id="primitive-divider">
+    <jtb-text variant="mono" class="kicker">Divider</jtb-text>
+    <jtb-divider></jtb-divider>
+  </div>
+
+  <div class="primitive" id="primitive-tag">
+    <jtb-text variant="mono" class="kicker">Tag</jtb-text>
+    <div class="states">
+      <jtb-tag>Projects</jtb-tag>
+      <jtb-tag data-state="hover">Hover</jtb-tag>
+      <jtb-tag data-state="focus">Focus</jtb-tag>
+      <jtb-tag aria-pressed="true">Pressed</jtb-tag>
+      <jtb-tag disabled>Disabled</jtb-tag>
+    </div>
+  </div>
+
+  <div class="primitive" id="primitive-counter">
+    <jtb-text variant="mono" class="kicker">Counter</jtb-text>
+    <div class="states">
+      <jtb-counter value="12" noun="project"></jtb-counter>
+    </div>
+  </div>
+
+  <div class="onward-row">
+    <jtb-link variant="onward" href="../map.html">Map</jtb-link>
+    <jtb-link variant="onward" href="../map.html?view=list">List</jtb-link>
+  </div>
+</section>
+</article>
+<script src="primitives.js"></script>
+<script src="guide.js"></script>
+</body>
+</html>

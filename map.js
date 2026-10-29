@@ -218,21 +218,21 @@
 
   function linkRow(item) {
     var li = document.createElement("li");
-    var button = document.createElement("button");
-    button.type = "button";
-    button.dataset.go = item.id;
-    var who = document.createElement("span");
-    who.className = "who";
-    who.textContent = item.label;
-    var why = document.createElement("span");
-    why.className = "why";
-    why.textContent = item.reason;
-    button.appendChild(who);
-    button.appendChild(why);
-    button.addEventListener("click", function () {
+    var link = document.createElement("jtb-link");
+    link.setAttribute("variant", "onward");
+    link.dataset.go = item.id;
+    link.textContent = item.label;
+    link.addEventListener("click", function () {
       go({ node: item.id, cluster: "" }, "push");
     });
-    li.appendChild(button);
+    li.appendChild(link);
+    if (item.reason) {
+      var why = document.createElement("jtb-text");
+      why.setAttribute("variant", "mono");
+      why.className = "why";
+      why.textContent = item.reason;
+      li.appendChild(why);
+    }
     return li;
   }
 
@@ -348,7 +348,8 @@
     if (anim) cancelAnimationFrame(anim);
     var from = { yaw: camera.yaw, pitch: camera.pitch, distance: camera.distance };
     var yaw = unwrap(from.yaw, target.yaw);
-    if (reduceMotion) {
+    var ms = tokenNumber("--duration-slow");
+    if (reduceMotion || !ms) {
       camera.yaw = yaw;
       camera.pitch = target.pitch;
       camera.distance = target.distance;
@@ -357,7 +358,7 @@
     }
     var start = performance.now();
     function frame(now) {
-      var t = Math.min(1, (now - start) / 720);
+      var t = Math.min(1, (now - start) / ms);
       var ease = 1 - Math.pow(1 - t, 3);
       camera.yaw = from.yaw + (yaw - from.yaw) * ease;
       camera.pitch = from.pitch + (target.pitch - from.pitch) * ease;
@@ -393,13 +394,15 @@
     selected = view.node || null;
     document.body.classList.toggle("is-list", view.view === "list");
     document.getElementById("list").hidden = view.view !== "list";
-    document.querySelectorAll(".views button").forEach(function (button) {
+    document.querySelectorAll(".views jtb-button").forEach(function (button) {
       button.classList.toggle("is-current", button.dataset.view === (view.view || "map"));
     });
-    document.querySelectorAll(".filters button").forEach(function (button) {
-      button.classList.toggle("is-current", button.dataset.filter === view.filter);
-      button.setAttribute("aria-pressed", button.dataset.filter === view.filter ? "true" : "false");
+    document.querySelectorAll(".filters jtb-tag").forEach(function (button) {
+      var on = button.dataset.filter === view.filter;
+      button.classList.toggle("is-current", on);
+      button.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    updateCounter();
     document.getElementById("detail-back").hidden = !(view.node || view.cluster);
     renderDetail(view.node || view.cluster ? view : {});
     renderList();
@@ -417,6 +420,30 @@
     apply(Object.assign({}, view, changes), mode);
   }
 
+  function updateCounter() {
+    var counter = document.getElementById("scope-count");
+    if (!counter) return;
+    var which = view.view === "list" ? "list" : "map";
+    var singular = {
+      project: "project",
+      theme: "theme",
+      tool: "tool",
+      client: "client",
+      idea: "idea"
+    }[view.filter] || (which === "list" ? "project" : "node");
+    counter.setAttribute("value", String(entries(view.filter, which).length));
+    counter.setAttribute("noun", singular);
+  }
+
+  function tokenNumber(name) {
+    var raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    var value = parseFloat(raw);
+    if (!raw || isNaN(value)) return 0;
+    if (raw.slice(-2) === "ms") return value;
+    if (raw.slice(-1) === "s") return value * 1000;
+    return value;
+  }
+
   function renderList() {
     var list = document.getElementById("list");
     list.replaceChildren();
@@ -428,8 +455,9 @@
       var row = document.createElement("article");
       row.className = "row" + ((view.node === entry.id || view.cluster === entry.id) ? " is-current" : "");
       row.dataset.row = entry.id;
-      var title = document.createElement("button");
-      title.type = "button";
+      var title = document.createElement("jtb-button");
+      title.setAttribute("variant", "text");
+      title.setAttribute("face", "display");
       title.className = "row-title";
       title.dataset.go = entry.id;
       title.textContent = entry.label;
@@ -441,7 +469,8 @@
       if (entry.node) {
         var meta = [publishText(entry.node.year), publishText(entry.node.role), publishText(entry.node.status)].filter(Boolean);
         if (meta.length) {
-          var line = document.createElement("p");
+          var line = document.createElement("jtb-text");
+          line.setAttribute("variant", "mono");
           line.className = "row-meta";
           line.textContent = meta.join(" · ");
           row.appendChild(line);
@@ -451,8 +480,8 @@
       links.className = "onward";
       listLinks(entry.id).forEach(function (item) {
         var li = document.createElement("li");
-        var button = document.createElement("button");
-        button.type = "button";
+        var button = document.createElement("jtb-link");
+        button.setAttribute("variant", "onward");
         button.dataset.go = item.id;
         button.textContent = item.label;
         button.addEventListener("click", function () {
@@ -501,7 +530,8 @@
       var dot = document.createElement("span");
       dot.className = "dot";
       dot.setAttribute("aria-hidden", "true");
-      var name = document.createElement("span");
+      var name = document.createElement("jtb-text");
+      name.setAttribute("variant", "mono");
       name.className = "name";
       name.textContent = node.id === ORIGIN_ID ? "Tyler" : (node.label || "");
       button.appendChild(dot);
@@ -526,7 +556,8 @@
       var dot = document.createElement("span");
       dot.className = "dot";
       button.appendChild(dot);
-      var name = document.createElement("span");
+      var name = document.createElement("jtb-text");
+      name.setAttribute("variant", "mono");
       name.className = "name";
       name.textContent = cluster.label || "";
       button.appendChild(name);
@@ -552,10 +583,15 @@
       paint();
       return;
     }
+    var ms = tokenNumber("--duration-settle");
+    if (!ms) {
+      paint();
+      return;
+    }
     var start = performance.now();
     function frame(time) {
       if (view.node || view.cluster || dragging) return;
-      var t = Math.min(1, (time - start) / 1600);
+      var t = Math.min(1, (time - start) / ms);
       var ease = 1 - Math.pow(1 - t, 3);
       camera.yaw = 0.2 + (rest.yaw - 0.2) * ease;
       camera.pitch = 0.05 + (rest.pitch - 0.05) * ease;
@@ -602,12 +638,12 @@
   }, { passive: false });
 
   document.getElementById("detail-back").addEventListener("click", backOut);
-  document.querySelectorAll(".views button").forEach(function (button) {
+  document.querySelectorAll(".views jtb-button").forEach(function (button) {
     button.addEventListener("click", function () {
       go({ view: button.dataset.view === "list" ? "list" : "" }, "push");
     });
   });
-  document.querySelectorAll(".filters button").forEach(function (button) {
+  document.querySelectorAll(".filters jtb-tag").forEach(function (button) {
     button.addEventListener("click", function () {
       var next = view.filter === button.dataset.filter ? "" : button.dataset.filter;
       go({ filter: next }, "push");
@@ -639,14 +675,22 @@
     var colors = {
       paper: resolvedColor("--paper"),
       ink: resolvedColor("--ink"),
-      haze: resolvedColor("--ink-08"),
-      fog: resolvedColor("--ink-16"),
-      line: resolvedColor("--ink-32")
+      ink70: resolvedColor("--ink-70"),
+      ink40: resolvedColor("--ink-40"),
+      ink15: resolvedColor("--ink-15"),
+      ink06: resolvedColor("--ink-06"),
+      haze: resolvedColor("--haze"),
+      fog: resolvedColor("--fog"),
+      line: resolvedColor("--line")
     };
     if (window.THREE && window.THREE.Color) {
       colors.three = {
         paper: new window.THREE.Color(colors.paper),
         ink: new window.THREE.Color(colors.ink),
+        ink70: new window.THREE.Color(colors.ink70),
+        ink40: new window.THREE.Color(colors.ink40),
+        ink15: new window.THREE.Color(colors.ink15),
+        ink06: new window.THREE.Color(colors.ink06),
         haze: new window.THREE.Color(colors.haze),
         fog: new window.THREE.Color(colors.fog),
         line: new window.THREE.Color(colors.line)

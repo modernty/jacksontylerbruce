@@ -304,7 +304,7 @@ The map itself is `map.html`. It reads `public/map.json`. From the repo root:
 python3 -m http.server 8000
 ```
 
-Then open <http://localhost:8000/map.html>. A node can be cited with `?node=` and its id. `?view=list` is the same map as a list; `?filter=` is shared by both views.
+Then open <http://localhost:8000/map.html>. A node can be cited with `?node=` and its id. `?view=list` is the same map as a list; `?filter=` is shared by both views. The tokens and primitives live at <http://localhost:8000/system/>.
 
 ## Deploying
 

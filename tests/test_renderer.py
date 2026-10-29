@@ -194,13 +194,39 @@ def _contrast(foreground, background):
     return (lighter + 0.05) / (darker + 0.05)
 
 
-def test_renderer_colours_come_from_the_tokens():
-    css = (ROOT / "map.css").read_text(encoding="utf-8")
-    hexes = {item.upper() for item in re.findall(r"#[0-9A-Fa-f]{3,8}", css)}
-    assert hexes == {"#FBFBF8", "#2E3A87"}
-    assert "rgba(" not in css and "rgb(" not in css
-    script = (ROOT / "map.js").read_text(encoding="utf-8")
-    assert re.search(r"#[0-9A-Fa-f]{3,8}|rgba?\(", script) is None
+def _token_block():
+    css = (ROOT / "system" / "tokens.css").read_text(encoding="utf-8")
+    block = re.search(r":root\s*\{([^}]+)\}", css).group(1)
+    return dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", block))
+
+
+def test_token_snapshot():
+    tokens = _token_block()
+    snapshot = json.loads((ROOT / "tests" / "snapshots" / "tokens.json").read_text(encoding="utf-8"))
+    assert tokens == snapshot
+    assert tokens["--paper"] == "#FBFBF8"
+    assert tokens["--ink"] == "#2E3A87"
+    assert "70%" in tokens["--ink-70"]
+    assert "40%" in tokens["--ink-40"]
+    assert "15%" in tokens["--ink-15"]
+    assert "6%" in tokens["--ink-06"]
+
+
+def test_no_raw_hex_outside_the_token_file():
+    pattern = re.compile(r"#[0-9A-Fa-f]{3,8}\b|%23[0-9A-Fa-f]{6}|rgba?\(", re.I)
+    skip_names = {"index.html", "404.html", "tokens.css"}
+    skip_roots = {".venv", ".git", "node_modules", "pipeline", "data", "public", "fonts", "tests"}
+    offenders = []
+    for path in ROOT.rglob("*"):
+        if not path.is_file() or path.suffix.lower() not in {".css", ".html", ".js"}:
+            continue
+        rel = path.relative_to(ROOT)
+        if rel.parts[0] in skip_roots or path.name in skip_names:
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if pattern.search(text):
+            offenders.append(str(rel))
+    assert offenders == []
 
 
 def test_ink_on_paper_meets_aa(page, server):
@@ -257,6 +283,79 @@ def test_ink_on_paper_meets_aa(page, server):
     assert "Courier Prime" in meta["font"]
     assert meta["transform"] == "uppercase"
     assert "Courier Prime" not in meta["title"]
+
+
+def test_system_renders_every_primitive(page, server):
+    page.goto(server + "/system/", wait_until="networkidle")
+    page.wait_for_function("() => document.fonts.check('16px \"Courier Prime\"')")
+    expect = [
+        "jtb-text[variant='display']",
+        "jtb-text[variant='body']",
+        "jtb-text[variant='caption']",
+        "jtb-text[variant='mono']",
+        "jtb-link[variant='inline']",
+        "jtb-link[variant='onward'] jtb-icon[name='arrow']",
+        "jtb-button[variant='text']",
+        "jtb-button[variant='ghost']",
+        "jtb-button[disabled]",
+        "jtb-icon[name='arrow']",
+        "jtb-icon[name='back']",
+        "jtb-icon[name='close']",
+        "jtb-icon[name='plus']",
+        "jtb-divider",
+        "jtb-tag",
+        "jtb-tag[disabled]",
+        "jtb-tag[aria-pressed='true']",
+        "jtb-counter",
+    ]
+    for selector in expect:
+        assert page.locator(selector).count() >= 1, selector
+        assert page.locator(selector).first.is_visible(), selector
+    assert "12 projects" in page.locator("jtb-counter").first.inner_text().casefold()
+    sections = page.locator("section")
+    for index in range(sections.count()):
+        assert sections.nth(index).locator("jtb-link[variant='onward']").count() >= 1
+    page.locator("jtb-link[href='../map.html']").click()
+    page.wait_for_selector("body[data-ready='true']")
+    assert page.url.endswith("/map.html") or "/map.html" in page.url
+
+
+def _focus_ring(page):
+    return page.evaluate(
+        """() => {
+          const el = document.activeElement;
+          if (!el || el === document.body || el === document.documentElement) return null;
+          const style = getComputedStyle(el);
+          return { outline: style.outlineStyle, width: style.outlineWidth };
+        }"""
+    )
+
+
+def test_keyboard_focus_is_visible(page, server):
+    page.goto(server + "/system/", wait_until="networkidle")
+    seen = 0
+    for _ in range(24):
+        page.keyboard.press("Tab")
+        ring = _focus_ring(page)
+        if not ring:
+            continue
+        assert ring["outline"] != "none"
+        assert ring["width"] != "0px"
+        seen += 1
+    assert seen >= 8
+
+    page.goto(server + "/map.html", wait_until="networkidle")
+    page.wait_for_selector("body[data-ready='true']")
+    seen = 0
+    for _ in range(8):
+        page.keyboard.press("Tab")
+        ring = _focus_ring(page)
+        if not ring:
+            continue
+        assert ring["outline"] != "none"
+        assert ring["width"] != "0px"
+        seen += 1
+    assert seen >= 3
 
 
 def test_private_nodes_are_not_rendered(page):
