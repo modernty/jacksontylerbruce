@@ -27,7 +27,9 @@ export function AxisStage({
 }) {
   const ref = useRef<HTMLElement>(null)
   const path = usePathname()
-  const focusHref = path.startsWith("/focus/") ? path : "/focus/ai"
+  const focusSlug = path.startsWith("/focus/") ? path.slice("/focus/".length) : "ai"
+  const focusHref = `/focus/${focusSlug}#focus`
+  const anchor = mode === "projects" ? "projects" : mode === "focus" ? "focus" : "axis"
   const svg = withMode(desktop, mode)
   const phone = withMode(mobile, mode)
 
@@ -40,10 +42,10 @@ export function AxisStage({
   }, [svg, cards])
 
   return (
-    <section className="tlw" ref={ref} data-mode={mode}>
+    <section className="tlw" id={anchor} ref={ref} data-mode={mode}>
       <nav className="seg">
-        <Link href="/timeline" className={mode === "timeline" ? "on" : undefined}>Timeline</Link>
-        <Link href="/timeline/projects" className={mode === "projects" ? "on" : undefined}>Projects</Link>
+        <Link href="/timeline#axis" className={mode === "timeline" ? "on" : undefined}>Timeline</Link>
+        <Link href="/timeline/projects#projects" className={mode === "projects" ? "on" : undefined}>Projects</Link>
         <Link href={focusHref} className={mode === "focus" ? "on" : undefined}>Focus</Link>
       </nav>
       {annotation ? <p className="note">{annotation}</p> : null}

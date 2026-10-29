@@ -84,7 +84,8 @@ html.pre .mode.on .rp,html.pre .mode.on .tk,html.pre .mode.on .pj,html.pre .yr,h
 .study .meta,.study .themes{font-size:12px;opacity:.6;margin-top:8px;font-family:var(--sans);letter-spacing:0}
 .study .themes{opacity:.85}
 .study section{margin-top:22px}
-.study h2{font-weight:600;font-size:15px;font-family:var(--sans);letter-spacing:0}
+.study h2{font-weight:600;font-size:15px;font-family:var(--sans);letter-spacing:0;scroll-margin-top:96px}
+.study h2.anchored,#answer.anchored{background:rgba(46,58,135,.06);box-shadow:inset 0 -1px 0 #2E3A87}
 .study p{font-size:16px;line-height:1.5;margin-top:8px;font-family:var(--sans);letter-spacing:0}
 .study .cta{margin-top:28px}
 .study .cta a{color:var(--ink);font-size:12px;font-weight:600;text-decoration:none;font-family:var(--sans);letter-spacing:0}

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { SectionAnchor } from "@/src/components/section-anchor"
 import { publishCatalog } from "@/src/content/publish"
 
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -16,13 +17,14 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   const org = project.orgLabel ?? client?.name ?? ""
   return (
     <section className="tlw">
+      <SectionAnchor />
       <article className="study">
         <h1>{project.name}</h1>
         <p className="meta">{[org, role?.title, role?.yearLabel].filter(Boolean).join(" · ")}</p>
         <p className="themes">{themes}</p>
         {project.sections.map((section) => (
-          <section id={section.id} key={section.id}>
-            <h2>{section.title}</h2>
+          <section key={section.id}>
+            <h2 id={section.id}>{section.title}</h2>
             <p>{section.body}</p>
           </section>
         ))}
