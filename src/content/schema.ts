@@ -49,9 +49,13 @@ export const ThemeSchema = z.object({
   name: z.string().min(1),
 })
 
+/** A place on the globe. "lived" means a month or more there. */
 export const PlaceSchema = z.object({
   id: z.string().regex(/^place:[a-z0-9-]+$/),
   name: z.string().min(1),
+  country: z.string().min(1),
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
   kind: z.enum(["lived", "traveled", "client"]),
 })
 
@@ -194,6 +198,7 @@ export type Project = z.infer<typeof ProjectSchema>
 export type Role = z.infer<typeof RoleSchema>
 export type Client = z.infer<typeof ClientSchema>
 export type Theme = z.infer<typeof ThemeSchema>
+export type Place = z.infer<typeof PlaceSchema>
 export type Section = z.infer<typeof SectionSchema>
 export type SectionItem = z.infer<typeof SectionItemSchema>
 export type Image = z.infer<typeof ImageSchema>

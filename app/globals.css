@@ -161,13 +161,52 @@ html[data-view=boring] .hero-work{display:none}
 .hero-work .input::placeholder{color:var(--ink)}
 .hero-work .voice{display:none}
 .hero-work .send{transition:opacity var(--motion-base) var(--motion-ease)}
+.about{--dock:min(480px,34vw);padding:120px 36px calc(200px + env(safe-area-inset-bottom));font-family:var(--sans);letter-spacing:0}
+.stage{display:flex;flex-direction:column;align-items:center}
+.stage-chat{width:min(540px,100%)}
+.stage-chat .chat{margin-top:0}
+.stage.collapsed .chat{display:none}
+.chat-toggle{all:unset;position:fixed;z-index:3;top:66px;left:36px;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--ink);opacity:.6}
+.chat-toggle:hover{opacity:1;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.chat-toggle:focus-visible{outline:1px solid var(--ink);outline-offset:4px;opacity:1}
+.stage-view{width:100%;max-width:1120px;margin-top:16px}
+.stage.docked{display:grid;grid-template-columns:var(--dock) 1fr;gap:56px;align-items:start;justify-items:stretch}
+.stage.docked .stage-chat{width:100%;text-align:left}
+.stage.docked .stage-view{position:sticky;top:96px;margin-top:0}
+body:has(.stage.docked) .hero-work{left:36px;right:auto;width:min(480px,34vw);padding:0}
+body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
+.travel{margin-top:0}
+.globe-svg{display:block;width:100%;height:auto;max-height:calc(100vh - 96px - 190px);touch-action:none;cursor:grab;user-select:none}
+.globe-svg:active{cursor:grabbing}
+.globe-svg .rim{fill:none;stroke:var(--ink);stroke-width:1.1}
+.globe-svg .ring{fill:none;stroke:var(--ink);stroke-width:1}
+.globe-svg .ring.back{stroke-dasharray:6 6;opacity:.35}
+.globe-svg .arc{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.3}
+.globe-svg .arc.back{opacity:.1}
+.globe-svg .borders{fill:none;stroke:var(--ink);stroke-width:.6;opacity:.16}
+.globe-svg .mark .ring{fill:var(--paper);stroke:var(--ink);stroke-width:1.3}
+.globe-svg .mark .dot,.globe-svg .dot{fill:var(--ink);stroke:none}
+.globe-svg .mark.back{opacity:.18}
+.globe-svg .pulse{fill:none;stroke:var(--ink);stroke-width:1;transform-box:fill-box;transform-origin:center;animation:globe-pulse 2.6s var(--motion-ease) infinite}
+@keyframes globe-pulse{from{transform:scale(1);opacity:.5}to{transform:scale(2.4);opacity:0}}
+.globe-svg .leader{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.7}
+.globe-svg .leader-end{fill:var(--ink)}
+.globe-svg .name{fill:var(--ink);font-family:var(--sans);font-weight:var(--fw-semibold);font-size:17px}
+.globe-svg .meta{fill:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
 @media(max-width:900px){
+  .about{padding:88px 16px calc(200px + env(safe-area-inset-bottom))}
+  .about{--dock:100%}
+  .stage.docked{display:flex;flex-direction:column;align-items:stretch}
+  .stage.docked .stage-view{position:static}
+  body:has(.stage.docked) .hero-work{left:0;right:0;width:auto;padding:0 16px}
+  .globe-svg{max-height:none}
   .work:has(.split){padding:88px 16px 64px}
   .split{grid-template-columns:1fr;gap:40px}
   .split .info{position:static}
 }
 @media(max-width:600px){
   .top-work{top:24px;left:16px;right:16px}
+  .chat-toggle{top:48px;left:16px}
   .top-work span.right{display:flex;gap:20px}
   .work{padding-top:28vh}
 }

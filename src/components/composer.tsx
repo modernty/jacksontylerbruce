@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
-import { PROJECT_ASK } from "./project-chat"
+import { CHAT_ASK } from "./chat-thread"
 
 function sessionId(): string {
   const key = "ask-session"
@@ -19,7 +19,9 @@ function sessionId(): string {
 
 export function Composer() {
   const router = useRouter()
-  const project = usePathname().startsWith("/work/")
+  const path = usePathname()
+  const project = path.startsWith("/work/")
+  const quiet = project || path === "/about"
   const params = useSearchParams()
   const shellRef = useRef<HTMLFormElement>(null)
   const pills = usePills()
@@ -44,9 +46,9 @@ export function Composer() {
     const input = shell?.querySelector<HTMLTextAreaElement>(".input")
     const q = input?.value.trim() ?? ""
     if (!q) return
-    if (project && input) {
-      // Project pages answer in their own column instead of routing to another view.
-      window.dispatchEvent(new CustomEvent(PROJECT_ASK, { detail: q }))
+    if (quiet && input) {
+      // Project and about pages answer in their own column instead of routing to another view.
+      window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: q }))
       input.value = ""
       input.dispatchEvent(new Event("input"))
       return
@@ -61,9 +63,9 @@ export function Composer() {
   }
 
   return (
-    <section className={project ? "hero hero-work" : "hero"}>
+    <section className={quiet ? "hero hero-work" : "hero"}>
       <div className="in">
-        {project ? null : (
+        {quiet ? null : (
           <>
             <h1>What are you looking for?</h1>
             <div className="cards">
@@ -85,7 +87,7 @@ export function Composer() {
             className="input"
             rows={1}
             maxLength={400}
-            placeholder={project ? "Let’s talk about it" : "Ask anything about my work…"}
+            placeholder={project ? "Let’s talk about it" : quiet ? "Ask me anything" : "Ask anything about my work…"}
             aria-label={project ? "Talk about this project" : "Ask anything about my work"}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {

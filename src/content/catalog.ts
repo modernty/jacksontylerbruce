@@ -1,7 +1,8 @@
 import "server-only"
+import placesFile from "@/content/places.json"
 import { mediaFor } from "./media"
 import { generateSections } from "./sections"
-import { CatalogSchema, type Catalog, type Client, type Project, type Role, type Theme } from "./schema"
+import { CatalogSchema, type Catalog, type Client, type Place, type Project, type Role, type Theme } from "./schema"
 
 const en = "\u2013"
 
@@ -388,6 +389,16 @@ const roles: Role[] = [
   }),
 ]
 
+type AuthoredPlace = { slug: string; name: string; country: string; lat: number; lng: number; kind: Place["kind"] }
+
+/** Home comes first, so the profile and the location answer always resolve to it. */
+const places: Place[] = (() => {
+  const all = (placesFile.places as AuthoredPlace[]).map(({ slug, ...place }) => ({ id: `place:${slug}`, ...place }))
+  const home = all.find((place) => place.id === `place:${placesFile.home}`)
+  if (!home) throw new Error("content/places.json: home is not in the list")
+  return [home, ...all.filter((place) => place !== home)]
+})()
+
 function relations(): Catalog["relations"] {
   const rows: Catalog["relations"] = [
     { id: "rel:profile-miami", from: "profile:tyler", to: "place:miami", kind: "located" },
@@ -418,7 +429,7 @@ export function loadCatalog(): Catalog {
       location: "Miami, FL",
       placeId: "place:miami",
     },
-    places: [{ id: "place:miami", name: "Miami, FL", kind: "lived" }],
+    places,
     themes,
     roles,
     clients,

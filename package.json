@@ -7,11 +7,12 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts src/design/*.test.ts",
+    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts src/design/*.test.ts src/globe/*.test.ts",
     "eval": "tsx --conditions=react-server evals/run.ts",
     "fonts": "node scripts/check-fonts.mjs",
     "tokens": "node scripts/tokens.mjs",
-    "assets": "node scripts/assets.mjs"
+    "assets": "node scripts/assets.mjs",
+    "borders": "node scripts/borders.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.0",
@@ -30,12 +31,15 @@
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/topojson-client": "^3.1.5",
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.5.4",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
+    "topojson-client": "^3.1.0",
     "tsx": "^4.23.15",
     "tw-animate-css": "^1.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "world-atlas": "^2.0.2"
   }
 }
