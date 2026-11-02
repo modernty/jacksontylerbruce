@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { bindTimeline } from "./behaviors"
 import type { TimelineCard } from "@/src/timeline/types"
@@ -25,6 +25,7 @@ export function AxisStage({
   annotation?: string
 }) {
   const ref = useRef<HTMLElement>(null)
+  const router = useRouter()
   const anchor = mode === "projects" ? "projects" : mode === "focus" ? "focus" : "axis"
   const svg = withMode(desktop, mode)
   const phone = withMode(mobile, mode)
@@ -33,30 +34,23 @@ export function AxisStage({
     const stage = ref.current
     if (!stage) return
     const controller = new AbortController()
-    bindTimeline(stage, cards, controller.signal)
+    bindTimeline(stage, cards, controller.signal, (href) => router.push(href))
     return () => controller.abort()
-  }, [svg, cards])
+  }, [svg, cards, router])
 
   return (
     <section className="tlw" id={anchor} ref={ref} data-mode={mode}>
-      <nav className="seg">
-        <Link href="/timeline#axis" className={mode === "timeline" ? "on" : undefined}>Timeline</Link>
-        <Link href="/timeline/projects#projects" className={mode === "projects" ? "on" : undefined}>Projects</Link>
-      </nav>
       {annotation ? <p className="note">{annotation}</p> : null}
-      <div className="d" tabIndex={0} aria-label="Career timeline, use arrow keys to step through projects">
+      <div className="d" tabIndex={0} aria-label="Career timeline. Arrow keys step through projects; Enter opens one.">
         <div dangerouslySetInnerHTML={{ __html: svg }} />
-        <div className="card" role="dialog" aria-live="polite">
-          <h3 />
-          <div className="meta" />
-          <div className="fo" />
-          <div className="sm" />
-          <div className="row">
-            <a href="/timeline">Open project →</a>
-            <div className="nav">
-              <button type="button" data-s="-1" aria-label="Previous project">←</button>
-              <button type="button" data-s="1" aria-label="Next project">→</button>
+        <div className="card-slot">
+          <div className="card" aria-live="polite">
+            <div className="card-head">
+              <h3 />
+              <span className="when" />
             </div>
+            <p className="fo" />
+            <p className="sm" />
           </div>
         </div>
       </div>

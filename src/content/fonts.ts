@@ -5,6 +5,7 @@ export function fontFaceCss(): string {
   if (/['"();\\<>]/.test(raw)) return ""
   const faces = [
     ["600", "semibold"],
+    ["500", "medium"],
     ["400", "regular"],
   ]
   return faces

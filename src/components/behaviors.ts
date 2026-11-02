@@ -180,7 +180,11 @@ function overlaps(a: Box, b: Box) {
   return a.left < b.right + 4 && b.left < a.right + 4 && a.top < b.bottom && b.top < a.bottom
 }
 
-export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: AbortSignal) {
+/**
+ * Hovering or focusing a project fills the card pinned under the timeline. Clicking a project, or
+ * pressing Enter on it, opens its page. Arrow keys step through projects.
+ */
+export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: AbortSignal, open: (href: string) => void) {
   const desk = stage.querySelector<HTMLElement>(".d")
   const card = stage.querySelector<HTMLElement>(".card")
   const timeline = desk?.querySelector<SVGGElement>("[data-m=timeline]")
@@ -188,11 +192,10 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
   let current = -1
   let hide = 0
   const title = card.querySelector("h3")
-  const meta = card.querySelector(".meta")
+  const when = card.querySelector(".when")
   const focus = card.querySelector(".fo")
   const summary = card.querySelector(".sm")
-  const link = card.querySelector("a")
-  if (!title || !meta || !focus || !summary || !link) return
+  if (!title || !when || !focus || !summary) return
 
   const placeThemes = () => {
     const active = timeline.querySelector<SVGGElement>(".pj.act")
@@ -244,50 +247,9 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     const el = timeline.querySelector<SVGGElement>(`.pj[data-i="${next}"]`)
     if (!project || !el) return
     title.textContent = project.t
-    meta.textContent = `${project.c} · ${project.d}`
-    focus.textContent = project.f
+    when.textContent = project.d
+    focus.textContent = project.f.split(" \u00b7 ").join(", ")
     summary.textContent = project.s
-    link.setAttribute("href", project.u)
-    const mark = el.getBoundingClientRect()
-    const host = desk.getBoundingClientRect()
-    const cardWidth = card.offsetWidth
-    const cardHeight = card.offsetHeight
-    const obstacles = [...timeline.querySelectorAll(".pj text:not(.fo):not(.fa), .co .w6")]
-      .map((node) => node.getBoundingClientRect())
-      .filter((rect) => rect.width > 0)
-    const left = mark.left - host.left
-    const right = mark.right - host.left
-    const top = mark.top - host.top
-    const bottom = mark.bottom - host.top
-    const viewport = document.documentElement.clientWidth
-    const composer = document.querySelector(".hero .in")?.getBoundingClientRect().top ?? window.innerHeight
-    const candidates = [
-      [left, bottom + 10],
-      [right - cardWidth, bottom + 10],
-      [right + 14, top - cardHeight / 2],
-      [left - cardWidth - 14, top - cardHeight / 2],
-      [left, top - cardHeight - 10],
-      [right - cardWidth, top - cardHeight - 10],
-    ]
-    let best = candidates[0]
-    let bestScore = Number.POSITIVE_INFINITY
-    for (const [x, y] of candidates) {
-      const absX = host.left + x
-      const absY = host.top + y
-      let score = 0
-      if (absX < 8 || absX + cardWidth > viewport - 8 || absY < 8 || absY + cardHeight > composer - 12) score += 1e6
-      for (const obstacle of obstacles) {
-        const overlapX = Math.max(0, Math.min(absX + cardWidth, obstacle.right) - Math.max(absX, obstacle.left))
-        const overlapY = Math.max(0, Math.min(absY + cardHeight, obstacle.bottom) - Math.max(absY, obstacle.top))
-        score += overlapX * overlapY
-      }
-      if (score < bestScore) {
-        bestScore = score
-        best = [x, y]
-      }
-    }
-    card.style.left = `${best[0]}px`
-    card.style.top = `${best[1]}px`
     card.classList.add("on")
   }
 
@@ -304,12 +266,10 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     node.addEventListener("mouseenter", () => show(Number(node.dataset.i)), { signal })
     node.addEventListener("mouseleave", leave, { signal })
     node.addEventListener("focus", () => show(Number(node.dataset.i)), { signal })
-    node.addEventListener("click", () => show(Number(node.dataset.i)), { signal })
-  })
-  card.addEventListener("mouseenter", () => window.clearTimeout(hide), { signal })
-  card.addEventListener("mouseleave", leave, { signal })
-  card.querySelectorAll<HTMLButtonElement>("button").forEach((button) => {
-    button.addEventListener("click", () => show(current + Number(button.dataset.s)), { signal })
+    node.addEventListener("click", () => {
+      const href = cards[Number(node.dataset.i)]?.u
+      if (href) open(href)
+    }, { signal })
   })
   document.addEventListener("keydown", (event) => {
     if (current < 0) {
@@ -327,6 +287,10 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     }
     if (event.key === "ArrowLeft") {
       show(current - 1)
+      event.preventDefault()
+    }
+    if (event.key === "Enter" && cards[current]) {
+      open(cards[current].u)
       event.preventDefault()
     }
     if (event.key === "Escape") {

@@ -7,6 +7,7 @@ import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
 import { CHAT_ASK } from "./chat-thread"
+import { inlineChat, quietPage } from "./chrome"
 
 function sessionId(): string {
   const key = "ask-session"
@@ -21,7 +22,8 @@ export function Composer() {
   const router = useRouter()
   const path = usePathname()
   const project = path.startsWith("/work/")
-  const quiet = project || path === "/about"
+  const quiet = quietPage(path)
+  const inline = inlineChat(path)
   const params = useSearchParams()
   const shellRef = useRef<HTMLFormElement>(null)
   const pills = usePills()
@@ -46,7 +48,7 @@ export function Composer() {
     const input = shell?.querySelector<HTMLTextAreaElement>(".input")
     const q = input?.value.trim() ?? ""
     if (!q) return
-    if (quiet && input) {
+    if (inline && input) {
       // Project and about pages answer in their own column instead of routing to another view.
       window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: q }))
       input.value = ""
@@ -87,7 +89,7 @@ export function Composer() {
             className="input"
             rows={1}
             maxLength={400}
-            placeholder={project ? "Let’s talk about it" : quiet ? "Ask me anything" : "Ask anything about my work…"}
+            placeholder={project ? "Let’s talk about it" : quiet ? "Ask anything" : "Ask anything about my work…"}
             aria-label={project ? "Talk about this project" : "Ask anything about my work"}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {

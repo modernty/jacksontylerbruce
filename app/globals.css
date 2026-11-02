@@ -18,7 +18,7 @@ form.shell{font:inherit;color:inherit}
 .send{background:var(--ink);opacity:.28}
 .cards{margin-top:12px;display:flex;gap:24px;justify-content:center}
 .cards a{white-space:nowrap;opacity:.55;padding-bottom:3px;border-bottom:1px solid var(--ink-hair);color:inherit;text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em}
-.tlw{box-sizing:border-box;height:100vh;padding:56px 0 230px;max-width:1120px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
+.tlw{box-sizing:border-box;height:100vh;padding:56px 0 96px;max-width:1120px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
 .m{display:none}
 @media(max-width:600px){
   .top{left:24px;right:24px;top:24px}
@@ -29,10 +29,6 @@ form.shell{font:inherit;color:inherit}
   .tlw{height:auto;display:block;padding:72px 0 calc(260px + env(safe-area-inset-bottom));max-width:330px}
   .m{display:block}
 }
-.seg{display:flex;justify-content:center;gap:28px;margin-bottom:28px}
-.seg a{cursor:pointer;font-family:var(--sans);font-size:13px;letter-spacing:.01em;color:var(--ink);opacity:.45;padding-bottom:5px;border-bottom:1px solid transparent;transition:opacity .3s,border-color .3s;text-decoration:none}
-.seg a.on{opacity:1;border-color:var(--ink)}
-.seg a:hover{opacity:.8}
 .mode{opacity:0;transform:translateY(8px);transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .mode.on{opacity:1;transform:none;pointer-events:auto}
 .d{position:relative}
@@ -50,20 +46,19 @@ form.shell{font:inherit;color:inherit}
 .co text{transition:opacity .28s var(--motion-ease-move)}
 .pv .co .w6{opacity:.5}
 .pj:focus-visible .w4{text-decoration:underline}
-.card{position:absolute;width:264px;background:var(--paper);border:1px solid var(--ink-hair);border-radius:14px;padding:16px 16px 12px;font-family:var(--sans);letter-spacing:0;color:var(--ink);opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s,left .3s var(--motion-ease-move),top .3s var(--motion-ease-move);pointer-events:none;box-shadow:0 8px 30px var(--ink-wash);z-index:5}
-.card.on{opacity:1;transform:none;pointer-events:auto}
-.card h3{font-weight:600;font-size:15px}
-.card .meta{font-size:12px;opacity:.6;margin-top:3px}
-.card .fo{font-size:12px;margin-top:10px}
-.card .sm{font-size:12px;opacity:.6;margin-top:6px;line-height:1.4}
-.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--ink-rule)}
-.card a{color:var(--ink);font-size:12px;font-weight:600;text-decoration:none}
-.card .nav{display:flex;gap:4px}
-.card button{all:unset;cursor:pointer;width:26px;height:26px;border-radius:50%;border:1px solid var(--ink-hair);display:grid;place-items:center;font-size:12px}
-.card button:hover{background:var(--ink-wash)}
+/* The project card hugs its content. Its slot holds the tallest card's space, so the timeline and
+   card centre as one group and hovering never shifts the timeline. */
+.card-slot{width:min(540px,100%);height:162px;margin:88px auto 0}
+.card{box-sizing:border-box;width:100%;padding:16px;border-radius:16px;transform:translateY(4px);background:color-mix(in srgb,var(--ink) 5%,var(--paper));font-family:var(--sans);letter-spacing:0;color:var(--ink);opacity:0;transition:opacity var(--motion-base) var(--motion-ease),transform var(--motion-base) var(--motion-ease);pointer-events:none}
+.card.on{opacity:1;transform:none}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.card h3{font-weight:var(--fw-medium);font-size:16px;line-height:22px}
+.card .when{font-size:16px;line-height:22px;white-space:nowrap}
+.card .fo{font-size:16px;line-height:22px;margin-top:0}
+.card .sm{font-size:15px;line-height:24px;margin-top:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .pr,.bl,.nowl{transform-box:fill-box}
-html.pre .seg,html.pre .hero h1,html.pre .shell,html.pre .cards{opacity:0}
+html.pre .hero h1,html.pre .shell,html.pre .cards{opacity:0}
 html.pre .mode.on .rp,html.pre .mode.on .tk,html.pre .mode.on .pj,html.pre .yr,html.pre .nowl,html.pre .nowt,html.pre .bl,html.pre .mpj{opacity:0}
 .input::placeholder{color:var(--ink-placeholder)}
 .shell{transition:border-radius .25s var(--motion-ease)}
@@ -170,10 +165,11 @@ html[data-view=boring] .hero-work{display:none}
 .chat-toggle:hover{opacity:1;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .chat-toggle:focus-visible{outline:1px solid var(--ink);outline-offset:4px;opacity:1}
 .stage-view{width:100%;max-width:1120px;margin-top:16px}
-.stage:not(.docked) .stage-view{display:flex;align-items:center;justify-content:center;min-height:calc(100svh - 264px);margin-top:0}
+/* Same height and centring docked or not, so docking only moves the globe sideways. */
+.stage .stage-view{display:flex;align-items:center;justify-content:center;min-height:calc(100svh - 264px);margin-top:0}
 .stage.docked{display:grid;grid-template-columns:var(--dock) 1fr;gap:56px;align-items:start;justify-items:stretch}
 .stage.docked .stage-chat{width:100%;text-align:left}
-.stage.docked .stage-view{position:sticky;top:96px;margin-top:0}
+.stage.docked .stage-view{position:sticky;top:120px}
 body:has(.stage.docked) .hero-work{left:36px;right:auto;width:min(480px,34vw);padding:0}
 body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
 .travel{margin-top:0;width:100%}
@@ -203,7 +199,7 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
   .about{padding:88px 16px calc(200px + env(safe-area-inset-bottom))}
   .about{--dock:100%}
   .stage.docked{display:flex;flex-direction:column;align-items:stretch}
-  .stage.docked .stage-view{position:static}
+  .stage.docked .stage-view{position:static;min-height:0}
   body:has(.stage.docked) .hero-work{left:0;right:0;width:auto;padding:0 16px}
   .globe-svg{max-height:none}
   .work:has(.split){padding:88px 16px 64px}

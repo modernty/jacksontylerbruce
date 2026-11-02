@@ -34,6 +34,7 @@ export const tokens = {
   },
   "weight": {
     "regular": 400,
+    "medium": 500,
     "semibold": 600
   },
   "track": {
