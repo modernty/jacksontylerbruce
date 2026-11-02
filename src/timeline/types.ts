@@ -10,6 +10,8 @@ export type ProjectMark = {
   name: string
   start: number
   end: number
+  /** Where the project's label stacks on the timeline: its role's start. */
+  anchor: number
   org: string
   lane: number
   focus: string

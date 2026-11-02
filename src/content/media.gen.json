@@ -84,101 +84,6 @@
     "height": 1800,
     "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABwAgCdASoHABAAA4BaJaACdH8GJ/gehMBPujoAAP7VFjM5NfqZoVa+g1cXEvWYiyucXRmnC3l/5naWsxKqRX+Awpp5nVnFSGLRLC0smw0JtZZ/iXQjW/VR6jWAAA=="
   },
-  "/assets/thumbs/jet-protocol.jpg": {
-    "width": 1100,
-    "height": 796,
-    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAAwAA4BaJZQAAudM2MRYAAD+9/u1s6og/BDLzLek+xRSCfiY6OeC3uRVWHLlQUk3pRhXBNG/wAAA"
-  },
-  "/assets/images/jet-protocol/01.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRioAAABXRUJQVlA4IB4AAAAwAQCdASoQAAsAA4BaJaQAA3AA/vNwOIeTGSAAAAA="
-  },
-  "/assets/images/jet-protocol/02.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAQCdASoQAAsAA4BaJaQAAudaNiKAAP75FGQma4F8zFB7gAA="
-  },
-  "/assets/images/jet-protocol/03.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoQAAsAA4BaJaQAA3AA/vNvgAA="
-  },
-  "/assets/images/jet-protocol/04.jpg": {
-    "width": 1800,
-    "height": 1460,
-    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAA0AA4BaJZQAAueM1+igAAD+9o9G/MLmP7w/fw74eI8RXEzQ1/GnUzywtly1PPFj13+aACJ2fYAA"
-  },
-  "/assets/images/jet-protocol/05.jpg": {
-    "width": 1800,
-    "height": 1460,
-    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAA0AA4BaJZwAAudBUgwxIAD+9o9G78xI1umAHhmRfrHdsGG5TrhKsZE+prb3eMzYwhWr7iPZF8AA"
-  },
-  "/assets/images/jet-protocol/06.jpg": {
-    "width": 1800,
-    "height": 1460,
-    "blur": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoQAA0AA4BaJQAAXOgK5rzgAAD+9o9qn9SDoo6GjElN9r6+EJXnUBjHI485bx1yTEY3jf5k4rot9ac6bmzKAAAA"
-  },
-  "/assets/images/jet-protocol/07.jpg": {
-    "width": 1800,
-    "height": 1666,
-    "blur": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAQCdASoQAA8AA4BaJZwAAudZyJl2AAD+9ojuWXV0mLkL+KJF5EgMAESAGqxAz4vjIbFqeBPJiKEK0NKEAA=="
-  },
-  "/assets/images/jet-protocol/08.jpg": {
-    "width": 1800,
-    "height": 1450,
-    "blur": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoQAA0AA4BaJZwAAudkyDFeAAD+930ltZFsteysWFW/QKE95YwshAAA"
-  },
-  "/assets/images/jet-protocol/09.jpg": {
-    "width": 1605,
-    "height": 1800,
-    "blur": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACQAQCdASoOABAAA4BaJaQAAtz5KtAA/vd8+XVbVB2urqATOOZzcfHjp4hQqAAA"
-  },
-  "/assets/images/jet-protocol/10.jpg": {
-    "width": 1800,
-    "height": 1686,
-    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACQAQCdASoQAA8AA4BaJaQAAudZtFAA/vd8M2rTYHA770qD7UG4AAAA"
-  },
-  "/assets/images/jet-protocol/11.jpg": {
-    "width": 1800,
-    "height": 1686,
-    "blur": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACQAQCdASoQAA8AA4BaJZwAAudVMbgA/vd8WcuExWY7Csg+eBwawYAoAAA="
-  },
-  "/assets/images/jet-protocol/12.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoQAAsAA4BaJaQAAudJ7MpAAP73e7V04sOX+cCOAAAAAA=="
-  },
-  "/assets/images/jet-protocol/13.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRioAAABXRUJQVlA4IB4AAAAwAQCdASoQAAsAA4BaJaQAA3AA/vJuIICD684AAAA="
-  },
-  "/assets/images/jet-protocol/14.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoQAAsAA4BaJaQAAudZGvIAAP75FxqzGH/L+PClAddSaAAA"
-  },
-  "/assets/images/jet-protocol/15.jpg": {
-    "width": 1800,
-    "height": 1280,
-    "blur": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoQAAsAA4BaJaQAAudF5jgAAP72hKFxpVmRhvFLKnmwAA=="
-  },
-  "/assets/images/jet-protocol/16.jpg": {
-    "width": 1800,
-    "height": 1169,
-    "blur": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAoAA4BaJYwAAug01snxAAD+wdsbcxqbRlq2gdknIHtqM+cL4N23l6/c4fJz9RtQ7bm1HczJjQJgYP6L0Q0gAAA="
-  },
-  "/assets/images/jet-protocol/17.jpg": {
-    "width": 1273,
-    "height": 1800,
-    "blur": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoLABAAA4BaJQAAStq6LXRoAAD+8OXwMRA4XVTG7Hcsh24uhg+o+izHDrZlCRVIQRsHKWRsKJrw1vkPJFBbk5/6mSCpWQAA"
-  },
-  "/assets/images/jet-protocol/18.jpg": {
-    "width": 1385,
-    "height": 1800,
-    "blur": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoMABAAA4BaJZwAAhrqWDhxgAD+9JVJgL+794fWSa7PZnSj/q/nP1bhyBmItep5oVLyUAAA"
-  },
   "/assets/thumbs/novart.jpg": {
     "width": 1100,
     "height": 726,
@@ -443,5 +348,100 @@
     "width": 1800,
     "height": 743,
     "blur": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAQCdASoQAAcAA4BaJaQAAujcjzCkAP7St7VF+XZdDt2qyf4ryX46ycal1Na//uk9AeTQ1nUTctH7apa3+GADPULZpa+xiNwAAA=="
+  },
+  "/assets/thumbs/jet-protocol.jpg": {
+    "width": 1100,
+    "height": 796,
+    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAAwAA4BaJZQAAudM2MRYAAD+9/u1s6og/BDLzLek+xRSCfiY6OeC3uRVWHLlQUk3pRhXBNG/wAAA"
+  },
+  "/assets/images/jet-protocol/01.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRioAAABXRUJQVlA4IB4AAAAwAQCdASoQAAsAA4BaJaQAA3AA/vNwOIeTGSAAAAA="
+  },
+  "/assets/images/jet-protocol/02.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAQCdASoQAAsAA4BaJaQAAudaNiKAAP75FGQma4F8zFB7gAA="
+  },
+  "/assets/images/jet-protocol/03.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoQAAsAA4BaJaQAA3AA/vNvgAA="
+  },
+  "/assets/images/jet-protocol/04.jpg": {
+    "width": 1800,
+    "height": 1460,
+    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAA0AA4BaJZQAAueM1+igAAD+9o9G/MLmP7w/fw74eI8RXEzQ1/GnUzywtly1PPFj13+aACJ2fYAA"
+  },
+  "/assets/images/jet-protocol/05.jpg": {
+    "width": 1800,
+    "height": 1460,
+    "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAA0AA4BaJZwAAudBUgwxIAD+9o9G78xI1umAHhmRfrHdsGG5TrhKsZE+prb3eMzYwhWr7iPZF8AA"
+  },
+  "/assets/images/jet-protocol/06.jpg": {
+    "width": 1800,
+    "height": 1460,
+    "blur": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoQAA0AA4BaJQAAXOgK5rzgAAD+9o9qn9SDoo6GjElN9r6+EJXnUBjHI485bx1yTEY3jf5k4rot9ac6bmzKAAAA"
+  },
+  "/assets/images/jet-protocol/07.jpg": {
+    "width": 1800,
+    "height": 1666,
+    "blur": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAQCdASoQAA8AA4BaJZwAAudZyJl2AAD+9ojuWXV0mLkL+KJF5EgMAESAGqxAz4vjIbFqeBPJiKEK0NKEAA=="
+  },
+  "/assets/images/jet-protocol/08.jpg": {
+    "width": 1800,
+    "height": 1450,
+    "blur": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoQAA0AA4BaJZwAAudkyDFeAAD+930ltZFsteysWFW/QKE95YwshAAA"
+  },
+  "/assets/images/jet-protocol/09.jpg": {
+    "width": 1605,
+    "height": 1800,
+    "blur": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACQAQCdASoOABAAA4BaJaQAAtz5KtAA/vd8+XVbVB2urqATOOZzcfHjp4hQqAAA"
+  },
+  "/assets/images/jet-protocol/10.jpg": {
+    "width": 1800,
+    "height": 1686,
+    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACQAQCdASoQAA8AA4BaJaQAAudZtFAA/vd8M2rTYHA770qD7UG4AAAA"
+  },
+  "/assets/images/jet-protocol/11.jpg": {
+    "width": 1800,
+    "height": 1686,
+    "blur": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACQAQCdASoQAA8AA4BaJZwAAudVMbgA/vd8WcuExWY7Csg+eBwawYAoAAA="
+  },
+  "/assets/images/jet-protocol/12.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoQAAsAA4BaJaQAAudJ7MpAAP73e7V04sOX+cCOAAAAAA=="
+  },
+  "/assets/images/jet-protocol/13.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRioAAABXRUJQVlA4IB4AAAAwAQCdASoQAAsAA4BaJaQAA3AA/vJuIICD684AAAA="
+  },
+  "/assets/images/jet-protocol/14.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoQAAsAA4BaJaQAAudZGvIAAP75FxqzGH/L+PClAddSaAAA"
+  },
+  "/assets/images/jet-protocol/15.jpg": {
+    "width": 1800,
+    "height": 1280,
+    "blur": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoQAAsAA4BaJaQAAudF5jgAAP72hKFxpVmRhvFLKnmwAA=="
+  },
+  "/assets/images/jet-protocol/16.jpg": {
+    "width": 1800,
+    "height": 1169,
+    "blur": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAoAA4BaJYwAAug01snxAAD+wdsbcxqbRlq2gdknIHtqM+cL4N23l6/c4fJz9RtQ7bm1HczJjQJgYP6L0Q0gAAA="
+  },
+  "/assets/images/jet-protocol/17.jpg": {
+    "width": 1273,
+    "height": 1800,
+    "blur": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoLABAAA4BaJQAAStq6LXRoAAD+8OXwMRA4XVTG7Hcsh24uhg+o+izHDrZlCRVIQRsHKWRsKJrw1vkPJFBbk5/6mSCpWQAA"
+  },
+  "/assets/images/jet-protocol/18.jpg": {
+    "width": 1385,
+    "height": 1800,
+    "blur": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoMABAAA4BaJZwAAhrqWDhxgAD+9JVJgL+794fWSa7PZnSj/q/nP1bhyBmItep5oVLyUAAA"
   }
 }

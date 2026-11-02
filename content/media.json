@@ -73,81 +73,8 @@
       ]
     },
     "jet-brand": {
-      "cover": "/assets/thumbs/jet-protocol.jpg",
-      "images": [
-        {
-          "src": "/assets/images/jet-protocol/01.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/02.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/03.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/04.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/05.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/06.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/07.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/08.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/09.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/10.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/11.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/12.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/13.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/14.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/15.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/16.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/17.jpg",
-          "alt": ""
-        },
-        {
-          "src": "/assets/images/jet-protocol/18.jpg",
-          "alt": ""
-        }
-      ]
+      "cover": null,
+      "images": []
     },
     "novart": {
       "cover": "/assets/thumbs/novart.jpg",
@@ -368,7 +295,7 @@
         }
       ]
     },
-    "defi-redesign": {
+    "fixed-rate-fixed-term": {
       "cover": "/assets/thumbs/jet-protocol.jpg",
       "images": [
         {

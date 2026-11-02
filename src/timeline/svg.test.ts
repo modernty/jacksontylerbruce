@@ -1,24 +1,40 @@
 import assert from "node:assert/strict"
-import { execFileSync } from "node:child_process"
 import { test } from "node:test"
 import { loadCatalog } from "@/src/content/catalog"
+import { employerPublicName } from "@/src/content/employer"
 import { toTimelineModel } from "./model"
 import { publicStage } from "./stage-data"
 import { desktopSvg, mobileSvg } from "./svg"
 
-test("the typescript timeline matches gen.py", () => {
-  const raw = execFileSync("python3", ["-c", `
-import importlib.util, json
-spec = importlib.util.spec_from_file_location("design_gen", "design/source/gen.py")
-mod = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(mod)
-model = mod.build()
-print(json.dumps({"desktop": mod.desktop(model), "mobile": mod.mobile(model)}))
-`], { encoding: "utf8", maxBuffer: 8_000_000 })
-  const expected = JSON.parse(raw) as { desktop: string; mobile: string }
-  const model = toTimelineModel(loadCatalog(), { includeFlagged: true })
-  assert.equal(desktopSvg(model), expected.desktop)
-  assert.equal(mobileSvg(model), expected.mobile)
+// The timeline used to match design/source/gen.py byte for byte. Projects now stack under their
+// role's left edge, a deliberate change from that mock, so these check the layout itself.
+test("each role's projects stack under its left edge, one row each", () => {
+  const model = toTimelineModel(loadCatalog(), { includeFlagged: false })
+  const svg = desktopSvg(model)
+  const label = (name: string) => {
+    const at = svg.indexOf(`aria-label="${name}"`)
+    assert.ok(at >= 0, name)
+    const match = svg.slice(at).match(/<text class="w4" x="([\d.]+)" y="([\d.]+)"/)
+    assert.ok(match, name)
+    return { x: Number(match[1]), y: Number(match[2]) }
+  }
+  const hue = label("USM Hue + Man")
+  const milan = label("USM: Milan")
+  assert.equal(milan.x, hue.x, "Milan stacks under Joba with Hue + Man")
+  assert.equal(milan.y - hue.y, 15)
+  const lazarus = ["Lazarus brand", "Model Playground", "ATLS"].map(label)
+  assert.ok(lazarus.every((point) => point.x === lazarus[0].x))
+  assert.deepEqual(lazarus.map((point) => point.y - lazarus[0].y), [0, 15, 30])
+  const jet = label("Fixed Rate Fixed Term")
+  assert.ok(jet.x < label("Novart").x, "Jet's project sits at Jet's start, before Nax's")
+  assert.ok(svg.includes(`>${employerPublicName().toUpperCase()}</tspan>`), "the current role reads the employer switch")
+  assert.ok(label("Loblaw / PC Health").x === label("Intuit").x)
+})
+
+test("the mobile timeline still renders every public project", () => {
+  const model = toTimelineModel(loadCatalog(), { includeFlagged: false })
+  const svg = mobileSvg(model)
+  for (const project of model.projects.filter((item) => item.onTimeline)) assert.ok(svg.includes(project.name), project.name)
 })
 
 test("public views omit flagged work and link real sections", () => {

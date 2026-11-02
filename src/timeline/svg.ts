@@ -5,7 +5,12 @@ import { tokens } from "@/src/design/tokens"
 const INK = tokens.color.ink
 const PAPER = tokens.color.paper
 
-function pill(x1: N, y1: N, x2: N, y2: N, cur: boolean, h = 12, sw = 1.5, op = 1): string {
+/** Every plain line (lanes, ticks, NOW) takes the hairline weight from the tokens. */
+function hairlines(svg: string): string {
+  return svg.replace(/<line /g, `<line stroke-width="${tokens.stroke.hair}" `)
+}
+
+function pill(x1: N, y1: N, x2: N, y2: N, cur: boolean, h = 12, sw: number = tokens.stroke.role, op = 1): string {
   const r = div(I(h), I(2))
   const rect =
     y1.v === y2.v
@@ -63,13 +68,13 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
   timeline.forEach((project, index) => {
     const name = project.name
     const lane = project.lane
-    const xx = add(locate(project.start), I(4))
-    let row = 0
+    // Each role's projects stack under its left edge, one row each, in start order.
+    const xx = add(locate(project.anchor), I(4))
+    const key = `${lane}:${fmt(xx)}`
+    const row = rows.get(key) ?? 0
+    rows.set(key, row + 1)
     const focus = model.names[project.themes[0]]
     const full = themeLine(model, name)
-    const widthGuess = add(add(mul(tw(name, F(11.5)), F(1.22)), I(8)), mul(tw(focus, I(11)), F(1.15))).v
-    while ((rows.get(`${lane}:${row}`) ?? -1e9) > xx.v - 6) row += 1
-    rows.set(`${lane}:${row}`, xx.v + widthGuess)
     const ly = add(add(lanes[lane], I(24)), mul(I(row), I(15)))
     let fx = add(add(add(xx, I(4)), mul(tw(name, F(11.5)), F(1.22))), I(8))
     let anchor = "start"
@@ -79,8 +84,8 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     }
     const laneTop = lanes[lane]
     timelineGroup.push(
-      `<line class="tk" data-t="${fmt(F(project.start))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, I(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
-        `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.start))}">` +
+      `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, I(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
+        `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.anchor))}">` +
         `<rect x="${fmt(xx)}" y="${fmt(sub(ly, I(11)))}" width="${fmt(add(mul(tw(name, F(11.5)), F(1.1)), I(8)))}" height="15" fill="transparent"/>` +
         `<text class="w4" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5">${name}</text>` +
         `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5" font-weight="600">${name}</text>` +
@@ -115,7 +120,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     const xb = locate(item.end)
     const current = item.end >= now
     projectGroup.push(
-      pill(xa, y, xb, y, current, 9, 1.2) +
+      pill(xa, y, xb, y, current, 9, tokens.stroke.projects) +
         `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(sub(y, I(10)))}" font-size="12.5" font-weight="600">${item.name}</text>` +
         `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(add(y, I(19)))}" font-size="10" opacity=".45">${item.org}</text>`,
     )
@@ -164,7 +169,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
       spots.push({ x: item.xa, y: yy })
       positions.set(item.name, spots)
       focusGroup.push(
-        pill(item.xa, yy, item.xb, yy, item.current, 7, 1.1) +
+        pill(item.xa, yy, item.xb, yy, item.current, 7, tokens.stroke.focus) +
           `<text x="${fmt(sub(item.xa, I(9)))}" y="${fmt(add(yy, F(3.5)))}" text-anchor="end" font-size="10">${item.name}</text>`,
       )
     }
@@ -182,7 +187,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
   }
   focusGroup.splice(1, 0, ...links)
   parts.push(...focusGroup, "</g></svg>")
-  return parts.join("")
+  return hairlines(parts.join(""))
 }
 
 function greedy(items: ProjectMark[], locate: (when: number) => N) {
@@ -259,7 +264,7 @@ export function mobileSvg(model: TimelineModel): string {
     const x = add(I(36), mul(I(index % 3), I(18)))
     const ya = locate(project.start)
     const yb = locate(project.end)
-    projectGroup.push(pill(x, ya, x, yb, project.end >= now, 9, 1.2))
+    projectGroup.push(pill(x, ya, x, yb, project.end >= now, 9, tokens.stroke.projects))
     const yy = Math.max(ya.v + 4, last + 26)
     last = yy
     projectGroup.push(
@@ -282,7 +287,7 @@ export function mobileSvg(model: TimelineModel): string {
     for (const project of matching) {
       focusGroup.push(
         `<text x="4" y="${fmt(add(yy, F(3.5)))}" font-size="10.5">${project.name}</text>` +
-          pill(locateX(project.start), yy, locateX(project.end), yy, project.end >= now, 8, 1.1),
+          pill(locateX(project.start), yy, locateX(project.end), yy, project.end >= now, 8, tokens.stroke.focus),
       )
       yy = add(yy, I(15))
     }
@@ -290,7 +295,7 @@ export function mobileSvg(model: TimelineModel): string {
   }
   parts.push(...focusGroup, "</g>")
   parts.push(...focusGroup, "</g></svg>")
-  return parts.join("")
+  return hairlines(parts.join(""))
 }
 
 export function yearSpan(start: number, end: number, now: number): string {

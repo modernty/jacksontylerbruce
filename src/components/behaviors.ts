@@ -30,7 +30,8 @@ export function loadIn() {
   }
   played = true
   const stage = document.querySelector<HTMLElement>(".tlw")
-  const mobile = matchMedia("(max-width: 600px)").matches
+  // Matches the CSS switch to the vertical timeline.
+  const mobile = matchMedia("(max-width: 768px)").matches
   const mode = stage?.dataset.mode
   const svg = document.querySelector(mobile ? ".m svg" : ".d svg")
   const motionRoot = document.querySelector(mobile ? ".m" : ".d .mode[data-m=timeline]")
@@ -181,23 +182,41 @@ function overlaps(a: Box, b: Box) {
 }
 
 /**
- * Hovering or focusing a project fills the card pinned under the timeline. Clicking a project, or
- * pressing Enter on it, opens its page. Arrow keys step through projects.
+ * Hovering or focusing a project fills the card under the graph, in the timeline and projects
+ * views alike. Clicking a project, or pressing Enter on it, opens its page. Arrow keys step through.
+ * The projects view draws names without hooks (the SVG matches the design generator byte for
+ * byte), so its names are made focusable here.
  */
 export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: AbortSignal, open: (href: string) => void) {
   const desk = stage.querySelector<HTMLElement>(".d")
   const card = stage.querySelector<HTMLElement>(".card")
-  const timeline = desk?.querySelector<SVGGElement>("[data-m=timeline]")
-  if (!desk || !card || !timeline || cards.length === 0) return
-  let current = -1
-  let hide = 0
+  const mode = stage.dataset.mode === "projects" ? "projects" : "timeline"
+  const group = desk?.querySelector<SVGGElement>(`[data-m=${mode}]`)
+  if (!desk || !card || !group || cards.length === 0) return
   const title = card.querySelector("h3")
   const when = card.querySelector(".when")
   const focus = card.querySelector(".fo")
   const summary = card.querySelector(".sm")
   if (!title || !when || !focus || !summary) return
 
-  const placeThemes = () => {
+  const byName = new Map(cards.map((item) => [item.t, item]))
+  const items: SVGElement[] =
+    mode === "timeline"
+      ? [...group.querySelectorAll<SVGGElement>(".pj")]
+      : [...group.querySelectorAll<SVGTextElement>('text[font-weight="600"]')].filter((node) => byName.has(node.textContent ?? ""))
+  if (mode === "projects") {
+    for (const node of items) {
+      node.classList.add("pjn")
+      node.setAttribute("tabindex", "0")
+      node.setAttribute("role", "button")
+      node.setAttribute("aria-label", node.textContent ?? "")
+    }
+  }
+  const nameOf = (node: Element) => node.getAttribute("aria-label") ?? node.textContent ?? ""
+  let current = -1
+  let hide = 0
+
+  const placeThemes = (timeline: SVGGElement) => {
     const active = timeline.querySelector<SVGGElement>(".pj.act")
     const full = active?.querySelector<SVGTextElement>(".fa")
     const name = active?.querySelector<SVGTextElement>(".w4")
@@ -237,15 +256,17 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
   }
 
   const show = (index: number) => {
-    const next = (index + cards.length) % cards.length
+    const next = (index + items.length) % items.length
+    const node = items[next]
+    const project = node ? byName.get(nameOf(node)) : undefined
+    if (!node || !project) return
     current = next
     window.clearTimeout(hide)
-    timeline.classList.add("pv")
-    timeline.querySelectorAll(".pj").forEach((node) => node.classList.toggle("act", Number((node as HTMLElement).dataset.i) === next))
-    placeThemes()
-    const project = cards[next]
-    const el = timeline.querySelector<SVGGElement>(`.pj[data-i="${next}"]`)
-    if (!project || !el) return
+    items.forEach((item) => item.classList.toggle("act", item === node))
+    if (mode === "timeline") {
+      group.classList.add("pv")
+      placeThemes(group)
+    }
     title.textContent = project.t
     when.textContent = project.d
     focus.textContent = project.f.split(" \u00b7 ").join(", ")
@@ -253,51 +274,47 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     card.classList.add("on")
   }
 
+  const clear = () => {
+    group.classList.remove("pv")
+    card.classList.remove("on")
+    items.forEach((item) => item.classList.remove("act"))
+    current = -1
+  }
   const leave = () => {
-    hide = window.setTimeout(() => {
-      timeline.classList.remove("pv")
-      card.classList.remove("on")
-      timeline.querySelectorAll(".pj").forEach((node) => node.classList.remove("act"))
-      current = -1
-    }, 180)
+    hide = window.setTimeout(clear, 180)
+  }
+  const openAt = (index: number) => {
+    const node = items[index]
+    const href = node ? byName.get(nameOf(node))?.u : undefined
+    if (href) open(href)
   }
 
-  timeline.querySelectorAll<SVGGElement>(".pj").forEach((node) => {
-    node.addEventListener("mouseenter", () => show(Number(node.dataset.i)), { signal })
+  items.forEach((node, index) => {
+    node.addEventListener("mouseenter", () => show(index), { signal })
     node.addEventListener("mouseleave", leave, { signal })
-    node.addEventListener("focus", () => show(Number(node.dataset.i)), { signal })
-    node.addEventListener("click", () => {
-      const href = cards[Number(node.dataset.i)]?.u
-      if (href) open(href)
-    }, { signal })
+    node.addEventListener("focus", () => show(index), { signal })
+    node.addEventListener("click", () => openAt(index), { signal })
   })
   document.addEventListener("keydown", (event) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0
     if (current < 0) {
-      if (!desk.contains(document.activeElement)) return
-      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return
-      const focused = document.activeElement?.closest(".pj")
-      const index = focused ? Number((focused as HTMLElement).dataset.i) : event.key === "ArrowRight" ? -1 : 0
-      show(index + (event.key === "ArrowRight" ? 1 : -1))
+      if (!step || !desk.contains(document.activeElement)) return
+      const focused = items.findIndex((item) => item === document.activeElement || item.contains(document.activeElement))
+      show(focused >= 0 ? focused + step : step > 0 ? 0 : items.length - 1)
       event.preventDefault()
       return
     }
-    if (event.key === "ArrowRight") {
-      show(current + 1)
+    if (step) {
+      show(current + step)
       event.preventDefault()
     }
-    if (event.key === "ArrowLeft") {
-      show(current - 1)
-      event.preventDefault()
-    }
-    if (event.key === "Enter" && cards[current]) {
-      open(cards[current].u)
+    if (event.key === "Enter") {
+      openAt(current)
       event.preventDefault()
     }
     if (event.key === "Escape") {
       window.clearTimeout(hide)
-      timeline.classList.remove("pv")
-      card.classList.remove("on")
-      current = -1
+      clear()
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
     }
   }, { signal })

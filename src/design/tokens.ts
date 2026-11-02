@@ -47,10 +47,10 @@ export const tokens = {
     "stack": "20px"
   },
   "stroke": {
-    "role": 1.5,
-    "projects": 1.2,
-    "focus": 1.1,
-    "hair": 1
+    "role": 0.75,
+    "projects": 0.6,
+    "focus": 0.55,
+    "hair": 0.5
   },
   "motion": {
     "ease": "cubic-bezier(.22,1,.36,1)",
