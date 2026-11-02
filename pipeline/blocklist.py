@@ -4,6 +4,8 @@ Digests are lowercase hex. The matcher hashes tokens; this module stores no sour
 BLOCKLIST is the full set. PUBLISHED is the subset checked on every public file.
 """
 
+from __future__ import annotations
+
 import hashlib
 import re
 

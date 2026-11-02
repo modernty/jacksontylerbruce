@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { bindTimeline } from "./behaviors"
 import type { TimelineCard } from "@/src/timeline/types"
@@ -26,9 +25,6 @@ export function AxisStage({
   annotation?: string
 }) {
   const ref = useRef<HTMLElement>(null)
-  const path = usePathname()
-  const focusSlug = path.startsWith("/focus/") ? path.slice("/focus/".length) : "ai"
-  const focusHref = `/focus/${focusSlug}#focus`
   const anchor = mode === "projects" ? "projects" : mode === "focus" ? "focus" : "axis"
   const svg = withMode(desktop, mode)
   const phone = withMode(mobile, mode)
@@ -46,7 +42,6 @@ export function AxisStage({
       <nav className="seg">
         <Link href="/timeline#axis" className={mode === "timeline" ? "on" : undefined}>Timeline</Link>
         <Link href="/timeline/projects#projects" className={mode === "projects" ? "on" : undefined}>Projects</Link>
-        <Link href={focusHref} className={mode === "focus" ? "on" : undefined}>Focus</Link>
       </nav>
       {annotation ? <p className="note">{annotation}</p> : null}
       <div className="d" tabIndex={0} aria-label="Career timeline, use arrow keys to step through projects">

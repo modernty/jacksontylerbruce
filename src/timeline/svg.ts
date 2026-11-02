@@ -1,7 +1,9 @@
 import { F, I, add, div, fmt, maxN, mul, sub, tw, type N } from "./num"
 import type { ProjectMark, TimelineModel } from "./types"
+import { tokens } from "@/src/design/tokens"
 
-const INK = "#2E3A87"
+const INK = tokens.color.ink
+const PAPER = tokens.color.paper
 
 function pill(x1: N, y1: N, x2: N, y2: N, cur: boolean, h = 12, sw = 1.5, op = 1): string {
   const r = div(I(h), I(2))
@@ -9,7 +11,7 @@ function pill(x1: N, y1: N, x2: N, y2: N, cur: boolean, h = 12, sw = 1.5, op = 1
     y1.v === y2.v
       ? `<rect x="${fmt(sub(x1, r))}" y="${fmt(sub(y1, r))}" width="${fmt(add(sub(x2, x1), I(h)))}" height="${h}" rx="${fmt(r)}"`
       : `<rect x="${fmt(sub(x1, r))}" y="${fmt(sub(y1, r))}" width="${h}" height="${fmt(add(sub(y2, y1), I(h)))}" rx="${fmt(r)}"`
-  let drawing = `${rect} class="pr" fill="#FBFBF8" stroke="${INK}" stroke-width="${fmt(F(sw))}" stroke-opacity="${op}"/>`
+  let drawing = `${rect} class="pr" fill="${PAPER}" stroke="${INK}" stroke-width="${fmt(F(sw))}" stroke-opacity="${op}"/>`
   const dot = h >= 12 ? F(2.6) : I(2)
   drawing += `<circle class="d0" cx="${fmt(x1)}" cy="${fmt(y1)}" r="${fmt(dot)}" fill="${INK}" fill-opacity="${op}"/>`
   if (!cur) {

@@ -1,10 +1,12 @@
 import "server-only"
+import { mediaFor } from "./media"
+import { generateSections } from "./sections"
 import { CatalogSchema, type Catalog, type Client, type Project, type Role, type Theme } from "./schema"
 
 const en = "\u2013"
 
 function section(id: string, title: string, body: string) {
-  return { id, title, body }
+  return { id, title, body, items: [] }
 }
 
 const themes: Theme[] = [
@@ -46,7 +48,7 @@ function role(
   }
 }
 
-const projects: Project[] = [
+const projects: Omit<Project, "media">[] = [
   {
     id: "project:usm-hue-man",
     slug: "usm-hue-man",
@@ -407,6 +409,7 @@ function relations(): Catalog["relations"] {
 }
 
 export function loadCatalog(): Catalog {
+  const publicNames = new Map(projects.filter((project) => !project.flagged).map((project) => [project.slug, project.name]))
   return CatalogSchema.parse({
     profile: {
       id: "profile:tyler",
@@ -419,7 +422,11 @@ export function loadCatalog(): Catalog {
     themes,
     roles,
     clients,
-    projects,
+    projects: projects.map((project) => ({
+      ...project,
+      sections: generateSections(project.slug, project.sections, publicNames),
+      media: mediaFor(project.slug, project.name),
+    })),
     relations: relations(),
   })
 }

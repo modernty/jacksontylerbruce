@@ -1,0 +1,493 @@
+{
+  "$description": "Authored media per project slug. `cover` drives the hero and generated plates; `images` is the gallery in order. Add `alt` per image as you write it. Run `npm run assets` after changes.",
+  "projects": {
+    "usm-hue-man": {
+      "cover": "/assets/thumbs/usm-hue-man.jpg",
+      "images": [
+        {
+          "src": "/assets/images/usm-hue-man/01.gif",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/usm-hue-man/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/usm-hue-man/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/usm-hue-man/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/usm-hue-man/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/usm-hue-man/06.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "corelogic": {
+      "cover": "/assets/thumbs/corelogic.jpg",
+      "images": [
+        {
+          "src": "/assets/images/corelogic/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/corelogic/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/corelogic/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/corelogic/04.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "nestle": {
+      "cover": "/assets/thumbs/nestle.jpg",
+      "images": [
+        {
+          "src": "/assets/images/nestle/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/nestle/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/nestle/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/nestle/04.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "jet-brand": {
+      "cover": "/assets/thumbs/jet-protocol.jpg",
+      "images": [
+        {
+          "src": "/assets/images/jet-protocol/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/06.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/07.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/08.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/09.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/10.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/11.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/12.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/13.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/14.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/15.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/16.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/17.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/18.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "novart": {
+      "cover": "/assets/thumbs/novart.jpg",
+      "images": [
+        {
+          "src": "/assets/images/novart/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/06.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/07.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/08.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/09.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/10.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/11.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/12.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/13.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/14.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/15.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/16.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/novart/17.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "chatter-brand": {
+      "cover": "/assets/thumbs/chatter-social.jpg",
+      "images": [
+        {
+          "src": "/assets/images/chatter-social/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/06.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "lazarus-brand": {
+      "cover": "/assets/thumbs/lazarus-ai-pubsec-brand.jpg",
+      "images": [
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/key-visual.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "model-playground": {
+      "cover": "/assets/thumbs/model-playground.jpg",
+      "images": [
+        {
+          "src": "/assets/images/model-playground/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/06.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/07.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/08.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/model-playground/09.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "atls": {
+      "cover": "/assets/thumbs/talent-management.jpg",
+      "images": [
+        {
+          "src": "/assets/images/talent-management/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/talent-management/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/talent-management/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/talent-management/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/talent-management/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/talent-management/06.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "intuit": {
+      "cover": "/assets/thumbs/intuit.png",
+      "images": [
+        {
+          "src": "/assets/images/intuit/01.png",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/intuit/02.png",
+          "alt": ""
+        }
+      ]
+    },
+    "fintech-terminal": {
+      "cover": "/assets/thumbs/urvin-finance.jpg",
+      "images": [
+        {
+          "src": "/assets/images/urvin-finance/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/urvin-finance/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/urvin-finance/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/urvin-finance/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/urvin-finance/05.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "defi-redesign": {
+      "cover": "/assets/thumbs/jet-protocol.jpg",
+      "images": [
+        {
+          "src": "/assets/images/jet-protocol/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/06.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/07.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/08.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/09.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/10.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/11.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/12.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/13.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/14.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/15.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/16.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/17.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/jet-protocol/18.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "chatter-app": {
+      "cover": "/assets/thumbs/chatter-social.jpg",
+      "images": [
+        {
+          "src": "/assets/images/chatter-social/01.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/02.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/03.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/04.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/05.jpg",
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/chatter-social/06.jpg",
+          "alt": ""
+        }
+      ]
+    },
+    "usm-milan": {
+      "cover": null,
+      "images": [],
+      "needs": "illustration"
+    },
+    "loblaw": {
+      "cover": null,
+      "images": [],
+      "needs": "illustration"
+    },
+    "overmatch-patterns": {
+      "cover": null,
+      "images": [],
+      "needs": "illustration"
+    }
+  }
+}

@@ -10,10 +10,35 @@ export const TITLES = [
 
 const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
 
+export const SectionItemSchema = z.object({
+  label: z.string().trim().min(1),
+  note: z.string().trim().optional(),
+  href: z.string().url().optional(),
+})
+
+/** A project section. Blank lines in body separate paragraphs. A section needs prose, items, or both. */
 export const SectionSchema = z.object({
   id: slug,
   title: z.string().trim().min(1),
-  body: z.string().trim().min(1),
+  body: z.string().trim(),
+  items: z.array(SectionItemSchema).default([]),
+}).refine((section) => section.body !== "" || section.items.length > 0, { message: "section is empty" })
+
+export const ImageSchema = z.object({
+  src: z.string().regex(/^\/(assets|media)\//),
+  alt: z.string().trim().min(1),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  blur: z.string().startsWith("data:image/"),
+  /** "work" is shipped work. "illustration" is a generated key visual and is never presented as shipped work. */
+  kind: z.enum(["work", "illustration"]),
+})
+
+export const MediaSchema = z.object({
+  cover: ImageSchema.nullable(),
+  /** The cover rendered as ink on paper, for plates and share cards. */
+  coverInk: z.string().nullable(),
+  images: z.array(ImageSchema),
 })
 
 export const ThemeSchema = z.object({
@@ -92,6 +117,7 @@ export const ProjectSchema = z.object({
   flagged: z.boolean(),
   orgLabel: z.string().optional(),
   aliases: z.array(z.string()),
+  media: MediaSchema,
 }).superRefine((project, ctx) => {
   const seen = new Set<string>()
   for (const section of project.sections) {
@@ -169,3 +195,6 @@ export type Role = z.infer<typeof RoleSchema>
 export type Client = z.infer<typeof ClientSchema>
 export type Theme = z.infer<typeof ThemeSchema>
 export type Section = z.infer<typeof SectionSchema>
+export type SectionItem = z.infer<typeof SectionItemSchema>
+export type Image = z.infer<typeof ImageSchema>
+export type Media = z.infer<typeof MediaSchema>

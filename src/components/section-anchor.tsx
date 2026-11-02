@@ -10,6 +10,9 @@ export function SectionAnchor() {
       if (!id) return
       const target = document.getElementById(id)
       if (!target) return
+      for (let node: HTMLElement | null = target; node; node = node.parentElement) {
+        if (node instanceof HTMLDetailsElement) node.open = true
+      }
       target.classList.add("anchored")
       target.scrollIntoView({ block: "start" })
     }

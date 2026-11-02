@@ -2,6 +2,7 @@ import { clientLabel, employerPublicName } from "@/src/content/employer"
 import type { Catalog } from "@/src/content/schema"
 import type { TimelineCard, TimelineModel } from "./types"
 import { yearSpan } from "./svg"
+import { tokens } from "@/src/design/tokens"
 
 export const NOW = 2026.83
 
@@ -39,7 +40,7 @@ export function toTimelineModel(catalog: Catalog, options: { includeFlagged?: bo
     })
   return {
     now: NOW,
-    ink: "#2E3A87",
+    ink: tokens.color.ink,
     roles: catalog.roles.filter((role) => role.listed).map((role) => ({
       name: (role.employer ? employerPublicName() : role.name).toUpperCase(),
       year: role.yearLabel,

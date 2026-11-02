@@ -56,7 +56,8 @@ export function publishCatalog(): PublicCatalog {
     relations,
     employer: employerPublicName(),
   }
-  const issues = textIssues(JSON.stringify(published))
+  // Blur placeholders are base64, not prose, and could hash-match a term by chance.
+  const issues = textIssues(JSON.stringify(published, (key, value) => (key === "blur" ? undefined : value)))
   if (issues.length) throw new Error(`public catalog failed checks: ${issues.join(", ")}`)
   cached = published
   return published

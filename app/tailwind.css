@@ -1,0 +1,20 @@
+/* Tailwind utilities for vendored components (assistant-ui elements). No preflight: globals.css owns the base styles. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source("../src");
+@import "tw-animate-css";
+@import "tw-shimmer";
+/* The shadcn colour names the vendored elements use, mapped onto the ink tokens so they stay one ink on paper. */
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-popover: var(--paper);
+  --color-border: var(--ink-hair);
+  --color-muted-foreground: var(--ink-meta);
+}
+/* The slice of preflight the vendored elements rely on, scoped to them so the rest of the site keeps its own base. */
+@layer base {
+  [data-slot] *, [data-slot] *::before, [data-slot] *::after { box-sizing: border-box; border: 0 solid; }
+  [data-slot] button { background: transparent; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+  [data-slot] svg { display: block; }
+}
