@@ -170,20 +170,26 @@ html[data-view=boring] .hero-work{display:none}
 .chat-toggle:hover{opacity:1;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .chat-toggle:focus-visible{outline:1px solid var(--ink);outline-offset:4px;opacity:1}
 .stage-view{width:100%;max-width:1120px;margin-top:16px}
+.stage:not(.docked) .stage-view{display:flex;align-items:center;justify-content:center;min-height:calc(100svh - 264px);margin-top:0}
 .stage.docked{display:grid;grid-template-columns:var(--dock) 1fr;gap:56px;align-items:start;justify-items:stretch}
 .stage.docked .stage-chat{width:100%;text-align:left}
 .stage.docked .stage-view{position:sticky;top:96px;margin-top:0}
 body:has(.stage.docked) .hero-work{left:36px;right:auto;width:min(480px,34vw);padding:0}
 body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
-.travel{margin-top:0}
+.travel{margin-top:0;width:100%}
 .globe-svg{display:block;width:100%;height:auto;max-height:calc(100vh - 96px - 190px);touch-action:none;cursor:grab;user-select:none}
 .globe-svg:active{cursor:grabbing}
-.globe-svg .rim{fill:none;stroke:var(--ink);stroke-width:1.1}
-.globe-svg .ring{fill:none;stroke:var(--ink);stroke-width:1}
-.globe-svg .ring.back{stroke-dasharray:6 6;opacity:.35}
+.globe-svg .rim{fill:none;stroke:var(--ink);stroke-width:1;opacity:0}
+.globe-svg .line{fill:none;stroke:var(--ink);stroke-width:1;opacity:0}
+.globe-svg .line.back{stroke-dasharray:6 6}
 .globe-svg .arc{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.3}
 .globe-svg .arc.back{opacity:.1}
-.globe-svg .borders{fill:none;stroke:var(--ink);stroke-width:.6;opacity:.16}
+.globe-svg .borders{fill:none;stroke:var(--ink);stroke-width:.6;opacity:0}
+.globe-svg .rim,.globe-svg .line,.globe-svg .borders{transition:opacity var(--motion-page) var(--motion-ease)}
+/* The sphere and the borders only appear while the pointer is over the globe, or a finger is on it. */
+.globe-svg.lit .rim,.globe-svg.lit .line{opacity:.22}
+.globe-svg.lit .line.back{opacity:.12}
+.globe-svg.lit .borders{opacity:.16}
 .globe-svg .mark .ring{fill:var(--paper);stroke:var(--ink);stroke-width:1.3}
 .globe-svg .mark .dot,.globe-svg .dot{fill:var(--ink);stroke:none}
 .globe-svg .mark.back{opacity:.18}

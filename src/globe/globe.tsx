@@ -88,6 +88,8 @@ export function Globe({ places, focusId, onHover }: GlobeProps) {
   const home = places.find((place) => place.home) ?? places[0]
   const [view, setView] = useState<View>(() => ({ lng: (home?.lng ?? 0) + 35, lat: 28 }))
   const [hovered, setHovered] = useState<string | null>(null)
+  // True while the pointer is over the sphere (or dragging it): the outline and borders show then.
+  const [lit, setLit] = useState(false)
   const svg = useRef<SVGSVGElement>(null)
   const state = useRef({ view, target: view, idleAt: 0, dragging: null as null | { x: number; y: number; view: View }, motion: true })
 
@@ -166,11 +168,14 @@ export function Globe({ places, focusId, onHover }: GlobeProps) {
     const local = toLocal(event)
     state.current.dragging = { x: local.x, y: local.y, view: state.current.target }
     state.current.idleAt = performance.now()
+    setLit(true)
   }
   const onPointerMove = (event: React.PointerEvent<SVGSVGElement>) => {
     const local = toLocal(event)
     const live = state.current
     live.idleAt = performance.now()
+    const over = Math.hypot(local.x - CX, local.y - CY) <= R * 1.04
+    if (over !== lit && !live.dragging) setLit(over)
     if (live.dragging) {
       const scale = 90 / R
       live.target = {
@@ -192,9 +197,11 @@ export function Globe({ places, focusId, onHover }: GlobeProps) {
       onHover?.(id)
     }
   }
-  const onPointerUp = () => {
+  const onPointerUp = (event?: React.PointerEvent<SVGSVGElement>) => {
     state.current.dragging = null
     state.current.idleAt = performance.now()
+    // A finger lifting off leaves nothing hovering, so the lines fade again.
+    if (event?.pointerType === "touch") setLit(false)
   }
 
   const ring = (points: { lat: number; lng: number }[]) => splitPath(points.map((point) => at(point)))
@@ -223,25 +230,26 @@ export function Globe({ places, focusId, onHover }: GlobeProps) {
   return (
     <svg
       ref={svg}
-      className="globe-svg"
+      className={lit ? "globe-svg lit" : "globe-svg"}
       viewBox={`0 0 ${W} ${H}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={() => {
         onPointerUp()
+        setLit(false)
         if (hovered) onHover?.(null)
         setHovered(null)
       }}
     >
       <circle className="rim" cx={CX} cy={CY} r={R} />
       <path className="borders" d={outlines} />
-      <path className="ring back" d={equator.back} />
+      <path className="line back" d={equator.back} />
       {arcs.map((arc) => <path key={`${arc.id}-back`} className="arc back" d={arc.back} />)}
       {ordered.map(({ place, spot }) => (
         <Mark key={place.id} place={place} at={spot} />
       ))}
-      <path className="ring" d={equator.front} />
+      <path className="line" d={equator.front} />
       {arcs.map((arc) => <path key={`${arc.id}-front`} className="arc" d={arc.front} />)}
       {named && namedAt?.front ? (
         <g className="callout">
