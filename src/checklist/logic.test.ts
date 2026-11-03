@@ -1,9 +1,11 @@
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
 import { test } from "node:test"
 import { addDays, dayKey, isMonday, weekStartMonday, weekdayIndex, zoneOffsetMinutes } from "./dates"
 import { PublicStreakRefused } from "./errors"
 import { normalizeItems } from "./items"
 import type { Item } from "./model"
+import { parsePublicStreakIds, publishedStreakRows } from "./publish-streak"
 import { publicStreakAllowed, publicStreakRows } from "./public"
 import { isSlipping, missedInWindow, streakEnding } from "./streaks"
 
@@ -80,4 +82,45 @@ test("public streaks drop Money, private tags, and inactive items", () => {
   assert.deepEqual(rows, [{ id: "a", label: "Item A", streak: 1 }])
   assert.throws(() => normalizeItems([items[1]]), PublicStreakRefused)
   assert.equal(normalizeItems([{ ...items[1], publicStreak: false }])[0]?.publicStreak, false)
+})
+
+test("the public streak widget publishes only allowlisted ids", () => {
+  const items = [
+    item({ id: "a", label: "Item A", category: "Body", order: 0, publicStreak: true }),
+    item({ id: "b", label: "Item B", category: "Money", order: 1, publicStreak: true, note: "rent note" }),
+    item({ id: "c", label: "Item C", category: "Mind", order: 2, publicStreak: true, tags: ["Private"] }),
+    item({ id: "e", label: "Item E", category: "Spirit", order: 4, publicStreak: true, active: false }),
+  ]
+  const today = "2026-11-02"
+  const done = (id: string, day: string) => id === "a" && day === today
+  assert.deepEqual([...parsePublicStreakIds(undefined)], [])
+  assert.deepEqual([...parsePublicStreakIds("  a, b ,, c ")], ["a", "b", "c"])
+  assert.deepEqual(publishedStreakRows(items, today, done, new Set()), [])
+  assert.deepEqual(publishedStreakRows(items, today, done, parsePublicStreakIds("a, b, c, e")).map((row) => row.id), ["a"])
+  const hidden = publishedStreakRows(items, today, done, parsePublicStreakIds("b, c"))
+  assert.deepEqual(hidden, [])
+  assert.equal(JSON.stringify(hidden).includes("rent note"), false)
+  const toggledOff = items.map((entry) => ({ ...entry, publicStreak: false }))
+  assert.deepEqual(publishedStreakRows(toggledOff, today, done, parsePublicStreakIds("a")), [
+    { id: "a", label: "Item A", streak: 1 },
+  ])
+  const widget = readFileSync("src/checklist/public-widget.tsx", "utf8")
+  assert.match(widget, /from "\.\/publish-streak"/)
+  assert.equal(/from "\.\/public"/.test(widget), false)
+})
+
+test("a missing public streak allowlist publishes nothing", () => {
+  const previous = process.env.CHECKLIST_PUBLIC_STREAK_IDS
+  const sample = [item({ id: "a", label: "Item A", category: "Body", publicStreak: true })]
+  delete process.env.CHECKLIST_PUBLIC_STREAK_IDS
+  try {
+    assert.deepEqual(publishedStreakRows(sample, "2026-11-02", () => true), [])
+    process.env.CHECKLIST_PUBLIC_STREAK_IDS = "a, z"
+    assert.deepEqual(publishedStreakRows(sample, "2026-11-02", () => true).map((row) => row.id), ["a"])
+    process.env.CHECKLIST_PUBLIC_STREAK_IDS = "   "
+    assert.deepEqual(publishedStreakRows(sample, "2026-11-02", () => true), [])
+  } finally {
+    if (previous === undefined) delete process.env.CHECKLIST_PUBLIC_STREAK_IDS
+    else process.env.CHECKLIST_PUBLIC_STREAK_IDS = previous
+  }
 })

@@ -5,7 +5,7 @@ export function isPrivateItem(item: Pick<Item, "tags">): boolean {
   return (item.tags ?? []).some((tag) => tag.trim().toLowerCase() === "private")
 }
 
-/** Money, and anything tagged private, can never publish a streak. */
+/** Money, and anything tagged private, cannot store a public streak. Listing an id is what publishes one. */
 export function publicStreakAllowed(item: Pick<Item, "category" | "tags">): boolean {
   if (item.category === "Money") return false
   if (isPrivateItem(item)) return false

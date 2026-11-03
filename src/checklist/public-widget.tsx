@@ -1,10 +1,10 @@
 import "server-only"
 import type { Item } from "./model"
-import { publicStreakRows } from "./public"
+import { publishedStreakRows } from "./publish-streak"
 
 /**
- * Streak counts for items the server allows to be public.
- * Not mounted on the public site.
+ * Streak counts for ids listed in CHECKLIST_PUBLIC_STREAK_IDS.
+ * The publicStreak toggle cannot publish a row. Not mounted on the public site.
  */
 export function PublicStreakWidget({
   items,
@@ -15,7 +15,7 @@ export function PublicStreakWidget({
   today: string
   doneOn: (itemId: string, day: string) => boolean
 }) {
-  const rows = publicStreakRows(items, today, doneOn)
+  const rows = publishedStreakRows(items, today, doneOn)
   if (rows.length === 0) return null
   return (
     <ul className="ck-public">
