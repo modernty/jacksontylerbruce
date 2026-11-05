@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { signOut } from "@/src/checklist/auth-actions"
 
 const LINKS = [
   ["/me/checklist", "Today", true],
@@ -22,8 +23,8 @@ export function ChecklistNav() {
           </Link>
         )
       })}
-      <form action="/me/checklist/logout" method="post">
-        <button type="submit">Log out</button>
+      <form action={signOut}>
+        <button type="submit">Sign out</button>
       </form>
     </nav>
   )

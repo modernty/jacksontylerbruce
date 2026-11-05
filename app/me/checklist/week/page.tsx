@@ -1,3 +1,4 @@
+import { requireChecklistPage } from "@/src/checklist/page-guard"
 import { SeedRefused, StorageNotConfigured } from "@/src/checklist/errors"
 import { checklistReady, loadChecklist } from "@/src/checklist/load"
 import { SeedMissing, StorageMissing } from "@/src/checklist/ui/storage"
@@ -6,6 +7,7 @@ import { WeekBoard } from "@/src/checklist/ui/week-board"
 export const dynamic = "force-dynamic"
 
 export default async function WeekPage({ searchParams }: { searchParams: Promise<{ week?: string }> }) {
+  if (await requireChecklistPage() === "unconfigured") return <StorageMissing />
   if (!checklistReady()) return <StorageMissing />
   const { week } = await searchParams
   try {

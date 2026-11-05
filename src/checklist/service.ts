@@ -1,14 +1,13 @@
 import "server-only"
+import { currentUser, type SessionUser } from "./auth"
 import { ChecklistInputError, PublicStreakRefused, SeedRefused, StorageFailed, StorageNotConfigured } from "./errors"
 import { dayKey, isMonday, weekStartMonday } from "./dates"
-import { denied, json, originOk, clientIp, privateHeaders } from "./http"
+import { denied, json, originOk } from "./http"
 import type { DayLog } from "./model"
-import { LOGIN_LIMIT, LOGIN_WINDOW_MS, takeToken } from "./rate-limit"
 import { dayPatchSchema, parseItems, parseWeek, blankWeek } from "./schema"
-import { clearSessionCookie, COOKIE_NAME, issueSession, passphrasesMatch, readCookie, sessionCookie, verifySession } from "./session"
 import { openStore, storageConfigured, type ChecklistStore } from "./store"
 
-export type Gate = { store?: ChecklistStore | null }
+export type Gate = { store?: ChecklistStore | null; user?: SessionUser | null }
 
 function resolveStore(gate?: Gate): ChecklistStore | null {
   if (gate && "store" in gate) return gate.store ?? null
@@ -16,10 +15,9 @@ function resolveStore(gate?: Gate): ChecklistStore | null {
   return openStore()
 }
 
-async function authorized(request: Request): Promise<boolean> {
-  const token = readCookie(request.headers.get("cookie"), COOKIE_NAME)
-  if (!token) return false
-  return verifySession(token, process.env.CHECKLIST_SESSION_SECRET ?? "")
+async function authorized(gate?: Gate): Promise<boolean> {
+  if (gate && "user" in gate) return Boolean(gate.user?.id)
+  return Boolean(await currentUser())
 }
 
 function storage(): Response {
@@ -35,8 +33,8 @@ function failure(error: unknown): Response {
   throw error
 }
 
-export async function itemsGet(request: Request, gate?: Gate): Promise<Response> {
-  if (!(await authorized(request))) return denied()
+export async function itemsGet(_request: Request, gate?: Gate): Promise<Response> {
+  if (!(await authorized(gate))) return denied()
   const store = resolveStore(gate)
   if (!store) return storage()
   try {
@@ -47,7 +45,7 @@ export async function itemsGet(request: Request, gate?: Gate): Promise<Response>
 }
 
 export async function itemsPut(request: Request, gate?: Gate): Promise<Response> {
-  if (!(await authorized(request))) return denied()
+  if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
   const store = resolveStore(gate)
   if (!store) return storage()
@@ -67,7 +65,7 @@ export async function itemsPut(request: Request, gate?: Gate): Promise<Response>
 }
 
 export async function daysPost(request: Request, gate?: Gate): Promise<Response> {
-  if (!(await authorized(request))) return denied()
+  if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
   const store = resolveStore(gate)
   if (!store) return storage()
@@ -100,7 +98,7 @@ export async function daysPost(request: Request, gate?: Gate): Promise<Response>
 }
 
 export async function weekGet(request: Request, gate?: Gate): Promise<Response> {
-  if (!(await authorized(request))) return denied()
+  if (!(await authorized(gate))) return denied()
   const store = resolveStore(gate)
   if (!store) return storage()
   const requested = new URL(request.url).searchParams.get("week")
@@ -115,7 +113,7 @@ export async function weekGet(request: Request, gate?: Gate): Promise<Response> 
 }
 
 export async function weekPut(request: Request, gate?: Gate): Promise<Response> {
-  if (!(await authorized(request))) return denied()
+  if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
   const store = resolveStore(gate)
   if (!store) return storage()
@@ -133,58 +131,3 @@ export async function weekPut(request: Request, gate?: Gate): Promise<Response> 
   }
 }
 
-export async function loginPost(request: Request): Promise<Response> {
-  const ip = clientIp(request)
-  const raw = await readPassphrase(request)
-  const secret = process.env.CHECKLIST_PASSPHRASE ?? ""
-  const sessionSecret = process.env.CHECKLIST_SESSION_SECRET ?? ""
-  const capped = raw.slice(0, 256)
-  const match = await passphrasesMatch(capped, secret || "*")
-  const local = takeToken(`login:${ip}`, LOGIN_LIMIT, LOGIN_WINDOW_MS)
-  const blocked = !local.ok
-  if (!originOk(request)) return loginRedirect("1")
-  if (blocked) return loginRedirect("rate", local.retryAfter || 600)
-  if (!secret || !sessionSecret) return loginRedirect("config")
-  if (!match || raw.length > 256) return loginRedirect("1")
-  const token = await issueSession(sessionSecret)
-  return new Response(null, {
-    status: 303,
-    headers: {
-      Location: "/me/checklist",
-      "Set-Cookie": sessionCookie(token),
-      ...privateHeaders,
-    },
-  })
-}
-
-export async function logoutPost(request: Request): Promise<Response> {
-  if (!(await authorized(request))) return denied()
-  if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
-  return new Response(null, {
-    status: 303,
-    headers: {
-      Location: "/me/checklist/login",
-      "Set-Cookie": clearSessionCookie(),
-      ...privateHeaders,
-    },
-  })
-}
-
-async function readPassphrase(request: Request): Promise<string> {
-  const type = request.headers.get("content-type") ?? ""
-  if (type.includes("application/json")) {
-    const body = (await request.json().catch(() => null)) as { passphrase?: unknown } | null
-    return typeof body?.passphrase === "string" ? body.passphrase : ""
-  }
-  const form = await request.formData().catch(() => null)
-  return String(form?.get("passphrase") ?? "")
-}
-
-function loginRedirect(error: string, retryAfter?: number): Response {
-  const headers: Record<string, string> = {
-    Location: `/me/checklist/login?error=${error}`,
-    ...privateHeaders,
-  }
-  if (retryAfter) headers["Retry-After"] = String(retryAfter)
-  return new Response(null, { status: 303, headers })
-}

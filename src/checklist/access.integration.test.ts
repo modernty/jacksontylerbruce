@@ -8,13 +8,10 @@ import sitemap from "../../app/sitemap"
 import { middleware } from "../../middleware"
 import { StorageNotConfigured } from "./errors"
 import type { Item } from "./model"
-import { resetRateLimits } from "./rate-limit"
-import { daysPost, itemsGet, itemsPut, loginPost } from "./service"
-import { issueSession, SESSION_SECONDS } from "./session"
+import { daysPost, itemsGet, itemsPut } from "./service"
 import { createMemoryStore, type ChecklistStore } from "./store"
 
-const SECRET = "test-session-secret-test-session-secret"
-const PASSPHRASE = "correct horse"
+const USER = { id: "user-a", email: "person@example.com" }
 
 function item(partial: Partial<Item> & Pick<Item, "id" | "label" | "category">): Item {
   return { order: 0, active: true, publicStreak: false, ...partial }
@@ -37,49 +34,31 @@ function trap(): ChecklistStore {
   return { listItems: boom, saveItems: boom, getDays: boom, saveDay: boom, getWeek: boom, saveWeek: boom }
 }
 
-function formRequest(passphrase: string, ip: string): Request {
-  const body = new URLSearchParams({ passphrase })
-  return new Request("https://example.com/me/checklist/api/session", {
-    method: "POST",
-    headers: {
-      origin: "https://example.com",
-      "content-type": "application/x-www-form-urlencoded",
-      "x-forwarded-for": ip,
-    },
-    body,
-  })
-}
-
 describe("checklist access", { concurrency: false }, () => {
   test("unauthenticated requests get no checklist data", async () => {
-    const previousSecret = process.env.CHECKLIST_SESSION_SECRET
-    const previousPass = process.env.CHECKLIST_PASSPHRASE
+    const previousUrl = process.env.SUPABASE_URL
+    const previousAnon = process.env.SUPABASE_ANON_KEY
+    const previousPublic = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     const previousSeed = process.env.CHECKLIST_SEED_JSON
     const previousNode = process.env.NODE_ENV
-    const previousUrl = process.env.SUPABASE_URL
-    const previousKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    process.env.CHECKLIST_SESSION_SECRET = SECRET
-    process.env.CHECKLIST_PASSPHRASE = PASSPHRASE
+    delete process.env.SUPABASE_URL
+    delete process.env.SUPABASE_ANON_KEY
+    delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     process.env.CHECKLIST_SEED_JSON = JSON.stringify([
       item({ id: "item-a", label: "Item A", category: "Body", publicStreak: true }),
     ])
-    delete process.env.SUPABASE_URL
-    delete process.env.SUPABASE_SERVICE_ROLE_KEY
-    resetRateLimits()
     try {
-      const api = new NextRequest("https://example.com/me/checklist/api/items")
-      const hidden = await middleware(api)
+      const hidden = await middleware(new NextRequest("https://example.com/me/checklist/api/items"))
       assert.equal(hidden.status, 404)
       assert.equal(await hidden.text(), "")
       assert.equal(hidden.headers.get("x-robots-tag")?.includes("noindex"), true)
 
-      const page = new NextRequest("https://example.com/me/checklist")
-      const redirect = await middleware(page)
+      const redirect = await middleware(new NextRequest("https://example.com/me/checklist"))
       assert.equal(redirect.status, 307)
       assert.equal(new URL(redirect.headers.get("location") ?? "", "https://example.com").pathname, "/me/checklist/login")
       assert.equal((await redirect.text()).includes("Item A"), false)
 
-      const missed = await itemsGet(new Request("https://example.com/me/checklist/api/items"), { store: trap() })
+      const missed = await itemsGet(new Request("https://example.com/me/checklist/api/items"), { user: null, store: trap() })
       assert.equal(missed.status, 404)
       assert.equal(await missed.text(), "")
 
@@ -87,16 +66,12 @@ describe("checklist access", { concurrency: false }, () => {
         method: "POST",
         headers: { origin: "https://example.com", "content-type": "application/json" },
         body: JSON.stringify({ date: "2026-11-02", itemId: "item-a", checked: true }),
-      }), { store: trap() })
+      }), { user: null, store: trap() })
       assert.equal(day.status, 404)
       assert.equal(await day.text(), "")
 
       setNodeEnv("production")
-      const token = await issueSession(SECRET)
-      const authed = new Request("https://example.com/me/checklist/api/items", {
-        headers: { cookie: `checklist_session=${token}` },
-      })
-      const unconfigured = await itemsGet(authed)
+      const unconfigured = await itemsGet(new Request("https://example.com/me/checklist/api/items"), { user: USER })
       assert.equal(unconfigured.status, 503)
       const body = await unconfigured.text()
       assert.equal(body, JSON.stringify({ error: "storage not configured" }))
@@ -105,72 +80,33 @@ describe("checklist access", { concurrency: false }, () => {
         throw new StorageNotConfigured()
       }, StorageNotConfigured)
     } finally {
-      restore("CHECKLIST_SESSION_SECRET", previousSecret)
-      restore("CHECKLIST_PASSPHRASE", previousPass)
+      restore("SUPABASE_URL", previousUrl)
+      restore("SUPABASE_ANON_KEY", previousAnon)
+      restore("NEXT_PUBLIC_SUPABASE_ANON_KEY", previousPublic)
       restore("CHECKLIST_SEED_JSON", previousSeed)
       setNodeEnv(previousNode)
-      restore("SUPABASE_URL", previousUrl)
-      restore("SUPABASE_SERVICE_ROLE_KEY", previousKey)
     }
   })
 
-  test("a signed session can read memory storage and cannot publish a refused streak", async () => {
-    const previousSecret = process.env.CHECKLIST_SESSION_SECRET
-    process.env.CHECKLIST_SESSION_SECRET = SECRET
-    try {
-      const store = createMemoryStore()
-      await store.saveItems([item({ id: "item-a", label: "Item A", category: "Mind" })])
-      const token = await issueSession(SECRET)
-      const headers = { cookie: `checklist_session=${token}`, origin: "https://example.com", "content-type": "application/json" }
-      const ok = await itemsGet(new Request("https://example.com/me/checklist/api/items", { headers }), { store })
-      assert.equal(ok.status, 200)
-      const listed = (await ok.json()) as { items: Item[] }
-      assert.deepEqual(listed.items.map((entry) => entry.label), ["Item A"])
+  test("a signed-in user can read their store and cannot publish a refused streak", async () => {
+    const store = createMemoryStore()
+    await store.saveItems([item({ id: "item-a", label: "Item A", category: "Mind" })])
+    const headers = { origin: "https://example.com", "content-type": "application/json" }
+    const ok = await itemsGet(new Request("https://example.com/me/checklist/api/items", { headers }), { user: USER, store })
+    assert.equal(ok.status, 200)
+    const listed = (await ok.json()) as { items: Item[] }
+    assert.deepEqual(listed.items.map((entry) => entry.label), ["Item A"])
 
-      const refused = await itemsPut(new Request("https://example.com/me/checklist/api/items", {
-        method: "PUT",
-        headers,
-        body: JSON.stringify({
-          items: [item({ id: "item-b", label: "Item B", category: "Money", publicStreak: true, note: "rent note" })],
-        }),
-      }), { store })
-      assert.equal(refused.status, 400)
-      assert.equal(await refused.text(), JSON.stringify({ error: "public streak refused" }))
-      assert.deepEqual((await store.listItems()).map((entry) => entry.id), ["item-a"])
-    } finally {
-      restore("CHECKLIST_SESSION_SECRET", previousSecret)
-    }
-  })
-
-  test("login sets an HttpOnly Secure SameSite=Strict cookie for 30 days", async () => {
-    const previousSecret = process.env.CHECKLIST_SESSION_SECRET
-    const previousPass = process.env.CHECKLIST_PASSPHRASE
-    process.env.CHECKLIST_SESSION_SECRET = SECRET
-    process.env.CHECKLIST_PASSPHRASE = PASSPHRASE
-    resetRateLimits()
-    try {
-      const ok = await loginPost(formRequest(PASSPHRASE, "203.0.113.10"))
-      assert.equal(ok.status, 303)
-      assert.equal(ok.headers.get("location"), "/me/checklist")
-      const cookie = ok.headers.get("set-cookie") ?? ""
-      assert.match(cookie, /HttpOnly/)
-      assert.match(cookie, /Secure/)
-      assert.match(cookie, /SameSite=Strict/)
-      assert.match(cookie, new RegExp(`Max-Age=${SESSION_SECONDS}`))
-      assert.equal(cookie.includes(PASSPHRASE), false)
-
-      const bad = await loginPost(formRequest("nope", "203.0.113.11"))
-      assert.equal(bad.headers.get("location"), "/me/checklist/login?error=1")
-      assert.equal(bad.headers.get("set-cookie"), null)
-
-      for (let attempt = 0; attempt < 8; attempt += 1) await loginPost(formRequest("nope", "203.0.113.12"))
-      const limited = await loginPost(formRequest(PASSPHRASE, "203.0.113.12"))
-      assert.equal(limited.headers.get("location"), "/me/checklist/login?error=rate")
-      assert.equal(limited.headers.get("set-cookie"), null)
-    } finally {
-      restore("CHECKLIST_SESSION_SECRET", previousSecret)
-      restore("CHECKLIST_PASSPHRASE", previousPass)
-    }
+    const refused = await itemsPut(new Request("https://example.com/me/checklist/api/items", {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        items: [item({ id: "item-b", label: "Item B", category: "Money", publicStreak: true, note: "rent note" })],
+      }),
+    }), { user: USER, store })
+    assert.equal(refused.status, 400)
+    assert.equal(await refused.text(), JSON.stringify({ error: "public streak refused" }))
+    assert.deepEqual((await store.listItems()).map((entry) => entry.id), ["item-a"])
   })
 
   test("the checklist stays out of the public site, sitemap, and robots allow list", async () => {
@@ -190,7 +126,7 @@ describe("checklist access", { concurrency: false }, () => {
     assert.deepEqual(hits, [])
   })
 
-  test("Supabase is server-only and the migration enables RLS without policies", () => {
+  test("Supabase data client stays server-only and the first migration has no policies", () => {
     const client = readFileSync("src/checklist/supabase.ts", "utf8")
     const store = readFileSync("src/checklist/store.ts", "utf8")
     assert.match(client, /import "server-only"/)

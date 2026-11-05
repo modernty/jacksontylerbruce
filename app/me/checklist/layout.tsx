@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { cookies } from "next/headers"
-import { COOKIE_NAME, verifySession } from "@/src/checklist/session"
+import { currentUser } from "@/src/checklist/auth"
+import { authConfigured } from "@/src/checklist/env"
 import { ChecklistNav } from "@/src/checklist/ui/nav"
 import "./checklist.css"
 
@@ -12,11 +12,10 @@ export const metadata: Metadata = {
 }
 
 export default async function ChecklistLayout({ children }: { children: React.ReactNode }) {
-  const token = (await cookies()).get(COOKIE_NAME)?.value
-  const authed = token ? await verifySession(token, process.env.CHECKLIST_SESSION_SECRET ?? "") : false
+  const user = authConfigured() ? await currentUser() : null
   return (
     <div className="ck">
-      {authed ? <ChecklistNav /> : null}
+      {user ? <ChecklistNav /> : null}
       <main>{children}</main>
     </div>
   )
