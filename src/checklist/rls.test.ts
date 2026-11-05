@@ -28,7 +28,7 @@ test("checklist rows are isolated to auth.uid for authenticated only", () => {
       if (action === "select" || action === "delete") assert.equal(/with check/i.test(policy), false)
     }
     assert.match(migration, new RegExp(`grant select, insert, update, delete on table public\\.${table} to authenticated`))
-    assert.match(migration, new RegExp(`revoke all on table public\\.${table} from anon`))
+    assert.match(migration, new RegExp(`revoke all on table public\\.${table} from public, anon`))
     assert.match(migration, new RegExp(`primary key \\(user_id,`))
   }
   assert.equal(/for (select|insert|update|delete) to anon/i.test(migration), false)
@@ -44,6 +44,14 @@ test("legacy claim is revoked from anon and the email stays out of app source", 
   assert.match(migration, /revoke all on function public\.claim_legacy_checklist\(\) from public/)
   assert.match(migration, /revoke all on function public\.claim_legacy_checklist\(\) from anon/)
   assert.match(migration, /grant execute on function public\.claim_legacy_checklist\(\) to authenticated/)
+  assert.match(migration, /email_confirmed_at/)
+  assert.match(migration, /from auth\.users/)
+  assert.match(migration, /checklist_legacy_day_logs/)
+  assert.match(migration, /on conflict \(user_id, id\) do update/)
+  assert.match(migration, /on conflict \(user_id, day\) do update/)
+  assert.match(migration, /on conflict \(user_id, week_start\) do update/)
+  assert.equal((migration.match(/delete from public\.checklist_legacy_/g) ?? []).length, 3)
+  assert.equal((migration.match(/where true/g) ?? []).length, 3)
   const app = [...sourceFiles("src"), ...sourceFiles("app")].map((file) => readFileSync(file, "utf8")).join("\n")
   assert.equal(app.includes("CHECKLIST_ALLOWED_EMAILS"), false)
   assert.equal(app.includes(migration.match(/distinct from '([^']+)'/)?.[1] ?? "missing-email"), false)

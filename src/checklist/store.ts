@@ -30,8 +30,8 @@ export async function openSessionStore(): Promise<ChecklistStore | null> {
   const db = await createAuthClient()
   const { data, error } = await db.auth.getUser()
   if (error || !data.user) return null
-  // Best-effort. The function no-ops unless the caller is the legacy owner.
-  await db.rpc("claim_legacy_checklist")
+  const { error: claimError } = await db.rpc("claim_legacy_checklist")
+  if (claimError) console.error("claim_legacy_checklist failed:", claimError.code, claimError.message)
   return createSupabaseStore(db, data.user.id)
 }
 
