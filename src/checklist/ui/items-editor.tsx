@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { CATEGORIES, type Category, type Item } from "../model"
 import { publicStreakAllowed } from "../public"
@@ -9,6 +10,7 @@ export function ItemsEditor({ items: initial }: { items: Item[] }) {
   const [label, setLabel] = useState("")
   const [category, setCategory] = useState<Category>("Body")
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
   const active = [...items].filter((item) => item.active).sort((a, b) => a.order - b.order)
   const inactive = items.filter((item) => !item.active)
 
@@ -56,7 +58,30 @@ export function ItemsEditor({ items: initial }: { items: Item[] }) {
   return (
     <section>
       <h1>Items</h1>
-      <p className="ck-kicker">Add, rename, reorder</p>
+      <p className="ck-kicker">Add, edit, reorder, archive</p>
+      {items.length === 0 ? (
+        <button
+          type="button"
+          className="ck-submit"
+          onClick={() => {
+            void fetch("/me/checklist/api/template", { method: "POST" }).then(async (response) => {
+              if (response.status === 404) {
+                window.location.assign("/me/checklist/login")
+                return
+              }
+              if (!response.ok) {
+                setError("Could not start.")
+                return
+              }
+              const body = (await response.json()) as { items: Item[] }
+              setItems(body.items)
+              router.refresh()
+            })
+          }}
+        >
+          Start from template
+        </button>
+      ) : null}
       {error ? <p className="ck-error" role="alert">{error}</p> : null}
       <form
         className="ck-add"
@@ -93,7 +118,7 @@ export function ItemsEditor({ items: initial }: { items: Item[] }) {
       ))}
       {inactive.length > 0 ? (
         <section>
-          <h2>Inactive</h2>
+          <h2>Archived</h2>
           {inactive.map((item) => (
             <div key={item.id} className="ck-actions">
               <span>{item.label}</span>
@@ -196,7 +221,7 @@ function ItemRow({
         <button type="button" className="ck-mini" disabled={first} onClick={() => onMove(-1)}>Up</button>
         <button type="button" className="ck-mini" disabled={last} onClick={() => onMove(1)}>Down</button>
         <button type="button" className="ck-mini" onClick={() => onPatch((current) => ({ ...current, active: false }))}>
-          Remove
+          Archive
         </button>
       </div>
     </div>

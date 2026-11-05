@@ -1,12 +1,14 @@
 import "server-only"
 import type { SupabaseClient } from "@supabase/supabase-js"
-import { ChecklistInputError, SeedRefused, StorageFailed, StorageNotConfigured } from "./errors"
+import { createAuthClient } from "./auth"
+import { ChecklistInputError, StorageFailed } from "./errors"
 import { isRealDate } from "./dates"
+import { authConfigured } from "./env"
 import { normalizeItems } from "./items"
 import type { Category, DayLog, Item, WeekTarget, WeekTargets } from "./model"
 import { withoutRefusedPublicStreak } from "./public"
 import { parseDay, parseItems, parseWeek } from "./schema"
-import { checklistSupabase, supabaseEnv } from "./supabase"
+import { TEMPLATE_ITEMS } from "./template"
 
 export type ChecklistStore = {
   listItems(): Promise<Item[]>
@@ -15,33 +17,30 @@ export type ChecklistStore = {
   saveDay(log: DayLog): Promise<DayLog>
   getWeek(weekStart: string): Promise<WeekTargets | null>
   saveWeek(week: WeekTargets): Promise<WeekTargets>
+  applyTemplate(): Promise<Item[]>
 }
-
-let devStore: ChecklistStore | null = null
-let remoteStore: ChecklistStore | null = null
 
 export function storageConfigured(): boolean {
-  if (supabaseEnv()) return true
-  return process.env.NODE_ENV !== "production"
+  return authConfigured()
 }
 
-export function openStore(): ChecklistStore {
-  if (supabaseEnv()) {
-    if (!remoteStore) remoteStore = createSupabaseStore(checklistSupabase())
-    return remoteStore
-  }
-  if (process.env.NODE_ENV === "production") throw new StorageNotConfigured()
-  if (!devStore) devStore = createMemoryStore()
-  return devStore
+/** Session client plus RLS. Returns null when nobody is signed in. */
+export async function openSessionStore(): Promise<ChecklistStore | null> {
+  if (!authConfigured()) return null
+  const db = await createAuthClient()
+  const { data, error } = await db.auth.getUser()
+  if (error || !data.user) return null
+  // Best-effort. The function no-ops unless the caller is the legacy owner.
+  await db.rpc("claim_legacy_checklist")
+  return createSupabaseStore(db, data.user.id)
 }
 
 export function createMemoryStore(): ChecklistStore {
-  let items: Item[] | null = null
+  let items: Item[] = []
   const days = new Map<string, DayLog>()
   const weeks = new Map<string, WeekTargets>()
   return {
     async listItems() {
-      if (items === null) items = readSeed() ?? []
       items = items.map((item) => withoutRefusedPublicStreak(item))
       return items
     },
@@ -66,10 +65,24 @@ export function createMemoryStore(): ChecklistStore {
       weeks.set(parsed.weekStart, parsed)
       return parsed
     },
+    async applyTemplate() {
+      if (items.length > 0) return items
+      items = normalizeItems(TEMPLATE_ITEMS.map((item) => ({ ...item })))
+      return items
+    },
   }
 }
 
+export function withUser<T extends object>(row: T, userId: string): T & { user_id: string } {
+  return { ...row, user_id: userId }
+}
+
+export function visibleTo<T extends { user_id?: string | null }>(rows: T[], userId: string): T[] {
+  return rows.filter((row) => row.user_id === userId)
+}
+
 type ItemRow = {
+  user_id?: string | null
   id: string
   label: string
   category: Category
@@ -82,6 +95,7 @@ type ItemRow = {
 }
 
 type DayRow = {
+  user_id?: string | null
   day: string
   checks: Record<string, boolean> | null
   spend: number | string | null
@@ -89,24 +103,18 @@ type DayRow = {
 }
 
 type WeekRow = {
+  user_id?: string | null
   week_start: string
   targets: WeekTarget[] | null
   sunday_review: string | null
 }
 
-export function createSupabaseStore(db: SupabaseClient): ChecklistStore {
+export function createSupabaseStore(db: SupabaseClient, userId: string): ChecklistStore {
   return {
     async listItems() {
-      const { data, error } = await db.from("checklist_items").select("id, label, category, sort_order, active, public_streak, note, tags, track").order("sort_order")
+      const { data, error } = await db.from("checklist_items").select("user_id, id, label, category, sort_order, active, public_streak, note, tags, track").eq("user_id", userId).order("sort_order")
       if (error) throw new StorageFailed()
-      const rows = (data ?? []) as ItemRow[]
-      if (rows.length === 0) {
-        const seeded = readSeed()
-        if (!seeded) return []
-        const { error: insertError } = await db.from("checklist_items").upsert(seeded.map(toItemRow))
-        if (insertError) throw new StorageFailed()
-        return seeded
-      }
+      const rows = visibleTo((data ?? []) as ItemRow[], userId)
       let items: Item[]
       try {
         items = parseItems(rows.map(fromItemRow))
@@ -115,19 +123,21 @@ export function createSupabaseStore(db: SupabaseClient): ChecklistStore {
       }
       const cleaned = items.map((item) => withoutRefusedPublicStreak(item))
       if (cleaned.some((item, index) => item.publicStreak !== items[index]?.publicStreak)) {
-        const { error: updateError } = await db.from("checklist_items").upsert(cleaned.map(toItemRow))
+        const { error: updateError } = await db.from("checklist_items").upsert(cleaned.map((item) => withUser(toItemRow(item), userId)), { onConflict: "user_id,id" })
         if (updateError) throw new StorageFailed()
       }
       return cleaned
     },
     async saveItems(next) {
       const items = normalizeItems(next)
-      const { error } = await db.from("checklist_items").upsert(items.map(toItemRow))
-      if (error) throw new StorageFailed()
+      if (items.length > 0) {
+        const { error } = await db.from("checklist_items").upsert(items.map((item) => withUser(toItemRow(item), userId)), { onConflict: "user_id,id" })
+        if (error) throw new StorageFailed()
+      }
       const ids = items.map((item) => item.id)
       const removal = ids.length === 0
-        ? db.from("checklist_items").delete().neq("id", "")
-        : db.from("checklist_items").delete().not("id", "in", `(${ids.map((id) => `"${id}"`).join(",")})`)
+        ? db.from("checklist_items").delete().eq("user_id", userId)
+        : db.from("checklist_items").delete().eq("user_id", userId).not("id", "in", `(${ids.map((id) => `"${id}"`).join(",")})`)
       const { error: deleteError } = await removal
       if (deleteError) throw new StorageFailed()
       return items
@@ -135,10 +145,10 @@ export function createSupabaseStore(db: SupabaseClient): ChecklistStore {
     async getDays(dates) {
       assertDates(dates)
       if (dates.length === 0) return []
-      const { data, error } = await db.from("checklist_day_logs").select("day, checks, spend, note").in("day", dates)
+      const { data, error } = await db.from("checklist_day_logs").select("user_id, day, checks, spend, note").eq("user_id", userId).in("day", dates)
       if (error) throw new StorageFailed()
       const byDay = new Map<string, DayLog>()
-      for (const row of (data ?? []) as DayRow[]) {
+      for (const row of visibleTo((data ?? []) as DayRow[], userId)) {
         const log = fromDayRow(row)
         if (log) byDay.set(log.date, log)
       }
@@ -146,39 +156,28 @@ export function createSupabaseStore(db: SupabaseClient): ChecklistStore {
     },
     async saveDay(log) {
       const parsed = assertDay(log)
-      const { error } = await db.from("checklist_day_logs").upsert(toDayRow(parsed))
+      const { error } = await db.from("checklist_day_logs").upsert(withUser(toDayRow(parsed), userId), { onConflict: "user_id,day" })
       if (error) throw new StorageFailed()
       return parsed
     },
     async getWeek(weekStart) {
-      const { data, error } = await db.from("checklist_week_targets").select("week_start, targets, sunday_review").eq("week_start", weekStart).maybeSingle()
+      const { data, error } = await db.from("checklist_week_targets").select("user_id, week_start, targets, sunday_review").eq("user_id", userId).eq("week_start", weekStart).maybeSingle()
       if (error) throw new StorageFailed()
-      if (!data) return null
+      if (!data || !visibleTo([data as WeekRow], userId).length) return null
       return fromWeekRow(data as WeekRow)
     },
     async saveWeek(week) {
       const parsed = parseWeek(week)
-      const { error } = await db.from("checklist_week_targets").upsert(toWeekRow(parsed))
+      const { error } = await db.from("checklist_week_targets").upsert(withUser(toWeekRow(parsed), userId), { onConflict: "user_id,week_start" })
       if (error) throw new StorageFailed()
       return parsed
     },
-  }
-}
-
-function readSeed(): Item[] | null {
-  const raw = process.env.CHECKLIST_SEED_JSON
-  if (!raw?.trim()) return null
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(raw)
-  } catch {
-    throw new SeedRefused()
-  }
-  try {
-    return normalizeItems(parseItems(parsed).map((item) => withoutRefusedPublicStreak(item)))
-  } catch (error) {
-    if (error instanceof SeedRefused) throw error
-    throw new SeedRefused()
+    async applyTemplate() {
+      const { data, error } = await db.from("checklist_items").select("user_id, id").eq("user_id", userId)
+      if (error) throw new StorageFailed()
+      if (visibleTo((data ?? []) as Array<{ user_id?: string | null; id: string }>, userId).length > 0) return this.listItems()
+      return this.saveItems(TEMPLATE_ITEMS.map((item) => ({ ...item })))
+    },
   }
 }
 
@@ -192,7 +191,7 @@ function assertDay(log: DayLog): DayLog {
   return parsed
 }
 
-function toItemRow(item: Item): ItemRow {
+function toItemRow(item: Item): Omit<ItemRow, "user_id"> {
   return {
     id: item.id,
     label: item.label,
@@ -221,7 +220,7 @@ function fromItemRow(row: ItemRow): Item {
   return item
 }
 
-function toDayRow(log: DayLog): DayRow {
+function toDayRow(log: DayLog): Omit<DayRow, "user_id"> {
   return {
     day: log.date,
     checks: log.checks,
@@ -245,7 +244,7 @@ function fromDayRow(row: DayRow): DayLog | null {
   }
 }
 
-function toWeekRow(week: WeekTargets): WeekRow {
+function toWeekRow(week: WeekTargets): Omit<WeekRow, "user_id"> {
   return {
     week_start: week.weekStart,
     targets: week.targets,

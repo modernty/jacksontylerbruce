@@ -3,7 +3,7 @@ import { addDays, dayKey, daysEnding, isMonday, weekStartMonday, weekdayIndex } 
 import type { DayLog, Item, SlippingItem, WeekTargets } from "./model"
 import { missedInWindow, streakEnding } from "./streaks"
 import { blankWeek } from "./schema"
-import { openStore, storageConfigured } from "./store"
+import { openSessionStore, storageConfigured, type ChecklistStore } from "./store"
 
 export type ChecklistView = {
   today: string
@@ -24,12 +24,20 @@ export function checklistReady(): boolean {
   return storageConfigured()
 }
 
-export async function loadChecklist(now = new Date(), requestedWeek?: string): Promise<ChecklistView> {
-  const store = openStore()
+export async function loadSignedInChecklist(requestedWeek?: string): Promise<
+  { status: "unconfigured" } | { status: "signed-out" } | { status: "ok"; view: ChecklistView }
+> {
+  if (!storageConfigured()) return { status: "unconfigured" }
+  const store = await openSessionStore()
+  if (!store) return { status: "signed-out" }
+  return { status: "ok", view: await loadChecklist(store, new Date(), requestedWeek) }
+}
+
+export async function loadChecklist(store: ChecklistStore, now = new Date(), requestedWeek?: string): Promise<ChecklistView> {
   const today = dayKey(now)
   const items = await store.listItems()
   const active = items.filter((item) => item.active).sort((a, b) => a.order - b.order)
-  const history = await readHistory(today, active.map((item) => item.id))
+  const history = await readHistory(store, today, active.map((item) => item.id))
   const streaks: Record<string, number> = {}
   const slipping: SlippingItem[] = []
   for (const item of active) {
@@ -58,8 +66,7 @@ export async function loadChecklist(now = new Date(), requestedWeek?: string): P
   }
 }
 
-async function readHistory(today: string, itemIds: string[]): Promise<Map<string, DayLog>> {
-  const store = openStore()
+async function readHistory(store: ChecklistStore, today: string, itemIds: string[]): Promise<Map<string, DayLog>> {
   const map = new Map<string, DayLog>()
   const chunk = 90
   const max = 730

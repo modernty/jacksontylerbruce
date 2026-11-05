@@ -8,12 +8,14 @@ import { CATEGORIES, type DayLog, type Item, type SlippingItem } from "../model"
 export function TodayBoard({
   today,
   items,
+  showTemplate,
   log,
   streaks,
   slipping,
 }: {
   today: string
   items: Item[]
+  showTemplate: boolean
   log: DayLog
   streaks: Record<string, number>
   slipping: SlippingItem[]
@@ -77,7 +79,10 @@ export function TodayBoard({
       <p className="ck-kicker">{formatDay(today, true)}</p>
       {error ? <p className="ck-error" role="alert">{error}</p> : null}
       {groups.length === 0 ? (
-        <p className="ck-empty">No items yet. <a href="/me/checklist/items">Add one</a>.</p>
+        <div className="ck-empty">
+          <p>No items yet. <a href="/me/checklist/items">Add one</a>.</p>
+          {showTemplate ? <TemplateButton /> : null}
+        </div>
       ) : groups.map((group) => (
         <section key={group.category} className="ck-group">
           <h2>{group.category}</h2>
@@ -119,5 +124,23 @@ export function TodayBoard({
         </section>
       ) : null}
     </section>
+  )
+}
+
+function TemplateButton() {
+  const router = useRouter()
+  return (
+    <button
+      type="button"
+      className="ck-submit"
+      onClick={() => {
+        void fetch("/me/checklist/api/template", { method: "POST" }).then((response) => {
+          if (response.status === 404) window.location.assign("/me/checklist/login")
+          else router.refresh()
+        })
+      }}
+    >
+      Start from template
+    </button>
   )
 }

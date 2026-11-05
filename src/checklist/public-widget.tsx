@@ -3,8 +3,8 @@ import type { Item } from "./model"
 import { publishedStreakRows } from "./publish-streak"
 
 /**
- * Streak counts for ids listed in CHECKLIST_PUBLIC_STREAK_IDS.
- * The publicStreak toggle cannot publish a row. Not mounted on the public site.
+ * Streak counts for this user's opted-in items.
+ * Money and private items are omitted. Not mounted on the public site.
  */
 export function PublicStreakWidget({
   items,

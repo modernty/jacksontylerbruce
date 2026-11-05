@@ -5,14 +5,14 @@ import { dayKey, isMonday, weekStartMonday } from "./dates"
 import { denied, json, originOk } from "./http"
 import type { DayLog } from "./model"
 import { dayPatchSchema, parseItems, parseWeek, blankWeek } from "./schema"
-import { openStore, storageConfigured, type ChecklistStore } from "./store"
+import { openSessionStore, storageConfigured, type ChecklistStore } from "./store"
 
 export type Gate = { store?: ChecklistStore | null; user?: SessionUser | null }
 
-function resolveStore(gate?: Gate): ChecklistStore | null {
+async function resolveStore(gate?: Gate): Promise<ChecklistStore | null> {
   if (gate && "store" in gate) return gate.store ?? null
   if (!storageConfigured()) return null
-  return openStore()
+  return openSessionStore()
 }
 
 async function authorized(gate?: Gate): Promise<boolean> {
@@ -35,7 +35,7 @@ function failure(error: unknown): Response {
 
 export async function itemsGet(_request: Request, gate?: Gate): Promise<Response> {
   if (!(await authorized(gate))) return denied()
-  const store = resolveStore(gate)
+  const store = await resolveStore(gate)
   if (!store) return storage()
   try {
     return json({ items: await store.listItems() })
@@ -47,7 +47,7 @@ export async function itemsGet(_request: Request, gate?: Gate): Promise<Response
 export async function itemsPut(request: Request, gate?: Gate): Promise<Response> {
   if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
-  const store = resolveStore(gate)
+  const store = await resolveStore(gate)
   if (!store) return storage()
   let body: unknown
   try {
@@ -67,7 +67,7 @@ export async function itemsPut(request: Request, gate?: Gate): Promise<Response>
 export async function daysPost(request: Request, gate?: Gate): Promise<Response> {
   if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
-  const store = resolveStore(gate)
+  const store = await resolveStore(gate)
   if (!store) return storage()
   let body: unknown
   try {
@@ -99,7 +99,7 @@ export async function daysPost(request: Request, gate?: Gate): Promise<Response>
 
 export async function weekGet(request: Request, gate?: Gate): Promise<Response> {
   if (!(await authorized(gate))) return denied()
-  const store = resolveStore(gate)
+  const store = await resolveStore(gate)
   if (!store) return storage()
   const requested = new URL(request.url).searchParams.get("week")
   if (requested && !isMonday(requested)) return json({ error: "invalid week" }, 400)
@@ -115,7 +115,7 @@ export async function weekGet(request: Request, gate?: Gate): Promise<Response> 
 export async function weekPut(request: Request, gate?: Gate): Promise<Response> {
   if (!(await authorized(gate))) return denied()
   if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
-  const store = resolveStore(gate)
+  const store = await resolveStore(gate)
   if (!store) return storage()
   let body: unknown
   try {
@@ -126,6 +126,18 @@ export async function weekPut(request: Request, gate?: Gate): Promise<Response> 
   const payload = body && typeof body === "object" && "week" in body ? (body as { week: unknown }).week : body
   try {
     return json({ week: await store.saveWeek(parseWeek(payload)) })
+  } catch (error) {
+    return failure(error)
+  }
+}
+
+export async function templatePost(request: Request, gate?: Gate): Promise<Response> {
+  if (!(await authorized(gate))) return denied()
+  if (!originOk(request)) return json({ error: "cross-site request refused" }, 403)
+  const store = await resolveStore(gate)
+  if (!store) return storage()
+  try {
+    return json({ items: await store.applyTemplate() })
   } catch (error) {
     return failure(error)
   }

@@ -31,7 +31,7 @@ function trap(): ChecklistStore {
   const boom = async () => {
     throw new Error("store should not be read")
   }
-  return { listItems: boom, saveItems: boom, getDays: boom, saveDay: boom, getWeek: boom, saveWeek: boom }
+  return { listItems: boom, saveItems: boom, getDays: boom, saveDay: boom, getWeek: boom, saveWeek: boom, applyTemplate: boom }
 }
 
 describe("checklist access", { concurrency: false }, () => {
@@ -126,16 +126,22 @@ describe("checklist access", { concurrency: false }, () => {
     assert.deepEqual(hits, [])
   })
 
-  test("Supabase data client stays server-only and the first migration has no policies", () => {
-    const client = readFileSync("src/checklist/supabase.ts", "utf8")
+  test("the app does not use the service role or an email allowlist", () => {
     const store = readFileSync("src/checklist/store.ts", "utf8")
-    assert.match(client, /import "server-only"/)
     assert.match(store, /import "server-only"/)
-    assert.match(client, /SUPABASE_URL/)
-    assert.match(client, /SUPABASE_SERVICE_ROLE_KEY/)
-    assert.equal(client.includes("NEXT_PUBLIC"), false)
-    assert.equal(store.includes("NEXT_PUBLIC"), false)
+    assert.match(store, /user_id/)
+    assert.match(store, /claim_legacy_checklist/)
+    assert.equal(store.includes("SUPABASE_SERVICE_ROLE_KEY"), false)
     assert.equal(store.includes("@upstash/redis"), false)
+    const app = [...files("src"), ...files("app")]
+      .filter((file) => !file.endsWith(".test.ts"))
+      .map((file) => readFileSync(file, "utf8"))
+      .join("\n")
+    assert.equal(app.includes("SUPABASE_SERVICE_ROLE_KEY"), false)
+    assert.equal(app.includes("CHECKLIST_ALLOWED_EMAILS"), false)
+    assert.equal(app.includes("CHECKLIST_PASSPHRASE"), false)
+    assert.equal(app.includes("CHECKLIST_SESSION_SECRET"), false)
+    assert.equal(app.includes("CHECKLIST_PUBLIC_STREAK_IDS"), false)
     for (const file of [...files("src/checklist/ui"), ...files("app/me")]) {
       const text = readFileSync(file, "utf8")
       assert.equal(/@supabase\/supabase-js|from ["'][^"']*supabase["']|from ["'][^"']*store["']/.test(text), false, file)
