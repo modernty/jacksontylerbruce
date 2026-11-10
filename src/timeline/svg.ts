@@ -25,12 +25,6 @@ function pill(x1: N, y1: N, x2: N, y2: N, cur: boolean, h = 12, sw: number = tok
   return drawing
 }
 
-function themeLine(model: TimelineModel, name: string): string {
-  const project = model.projects.find((item) => item.name === name)
-  const keys = project ? project.themes : []
-  return keys.map((key) => model.names[key]).join(" · ")
-}
-
 function lanesFor(count: number): N[] {
   if (count > 1) {
     const step = div(I(220), I(Math.max(count, 2) - 1))
@@ -73,24 +67,14 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     const key = `${lane}:${fmt(xx)}`
     const row = rows.get(key) ?? 0
     rows.set(key, row + 1)
-    const focus = model.names[project.themes[0]]
-    const full = themeLine(model, name)
     const ly = add(add(lanes[lane], I(24)), mul(I(row), I(15)))
-    let fx = add(add(add(xx, I(4)), mul(tw(name, F(11.5)), F(1.22))), I(8))
-    let anchor = "start"
-    if (add(fx, mul(tw(full, I(11)), F(1.15))).v > width - 4) {
-      fx = sub(xx, I(6))
-      anchor = "end"
-    }
     const laneTop = lanes[lane]
     timelineGroup.push(
       `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, I(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
         `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.anchor))}">` +
         `<rect x="${fmt(xx)}" y="${fmt(sub(ly, I(11)))}" width="${fmt(add(mul(tw(name, F(11.5)), F(1.1)), I(8)))}" height="15" fill="transparent"/>` +
         `<text class="w4" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5">${name}</text>` +
-        `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5" font-weight="600">${name}</text>` +
-        `<text class="fo" x="${fmt(fx)}" y="${fmt(ly)}" text-anchor="${anchor}" font-size="11">${focus}</text>` +
-        `<text class="fa" x="${fmt(fx)}" y="${fmt(ly)}" text-anchor="${anchor}" font-size="11">${full}</text></g>`,
+        `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5" font-weight="600">${name}</text></g>`,
     )
   })
   for (const role of model.roles) {

@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
-import { CHAT_ASK, ChatThread, sessionId } from "./chat-thread"
+import { useRouter } from "next/navigation"
+import { ABOUT_OPEN, CHAT_ASK, ChatThread, follow, sessionId, type Go } from "./chat-thread"
 
 const SLIDE_MS = 700
 const FADE_MS = 360
 const EASE = "cubic-bezier(.22,1,.36,1)"
-const OPEN_KEY = "about-chat-open"
 
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches
 
@@ -25,11 +25,12 @@ export function AboutStage({ places, title }: { places: GlobePlace[]; title: str
   const chat = useRef<HTMLDivElement>(null)
   const lastRect = useRef<DOMRect | null>(null)
   const docked = active && open
+  const router = useRouter()
 
   const setOpen = useCallback((next: boolean) => {
     setOpenState(next)
     try {
-      sessionStorage.setItem(OPEN_KEY, next ? "1" : "0")
+      sessionStorage.setItem(ABOUT_OPEN, next ? "1" : "0")
     } catch {
       // Not remembered, still applied.
     }
@@ -37,7 +38,7 @@ export function AboutStage({ places, title }: { places: GlobePlace[]; title: str
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(OPEN_KEY) === "0") setOpenState(false)
+      if (sessionStorage.getItem(ABOUT_OPEN) === "0") setOpenState(false)
     } catch {
       // Open by default.
     }
@@ -104,13 +105,14 @@ export function AboutStage({ places, title }: { places: GlobePlace[]; title: str
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ q, sessionId: sessionId() }),
       })
-      const data = (await response.json()) as { answer?: string; placeId?: string | null; error?: string }
+      const data = (await response.json()) as { answer?: string; placeId?: string | null; error?: string; go?: Go }
       if (data.placeId) setFocus(data.placeId)
+      if (data.go) follow(data.go, q, router)
       return data.answer ?? data.error ?? "Something went wrong. Try asking again."
     } catch {
       return "I couldn't reach the site just now. Try asking again."
     }
-  }, [])
+  }, [router])
 
   return (
     <div className={docked ? "stage docked" : active ? "stage collapsed" : "stage"}>

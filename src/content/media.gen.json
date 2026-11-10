@@ -304,6 +304,26 @@
     "height": 1163,
     "blur": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAQCdASoQAAoAA4BaJaQAAtz9cmVAAP5vd56vouJEnqessScYkB8EYgAAAA=="
   },
+  "/assets/thumbs/whitelist.jpg": {
+    "width": 1100,
+    "height": 767,
+    "blur": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAQCdASoQAAsAA4BaJZwAAu0dYmtKoAD++AIhiIyWyf6c1PxESMbcXKPNudDlqV7II4kBWTz86OY3pDgAAA=="
+  },
+  "/assets/images/whitelist/01.jpg": {
+    "width": 1800,
+    "height": 1164,
+    "blur": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAACwAQCdASoQAAoAA4BaJaQAAp1b0EUAAP74unN+fdpcUyghrEfxGZuMMTt6PAMZgAA="
+  },
+  "/assets/images/whitelist/02.jpg": {
+    "width": 1800,
+    "height": 1164,
+    "blur": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoQAAoAA4BaJaQAAlxXl8UwQAD++BVoWT3UBXZ8gP47gvU6iB01/Q97m65IrU402AAAAA=="
+  },
+  "/assets/images/whitelist/03.jpg": {
+    "width": 1800,
+    "height": 1164,
+    "blur": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACwAQCdASoQAAoAA4BaJaQAAn/bLgeQAP738VgRSh891GfhCK3tlq5wZI2VKRGA1e7pCWAA"
+  },
   "/assets/thumbs/intuit.png": {
     "width": 402,
     "height": 874,

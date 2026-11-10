@@ -175,12 +175,6 @@ export function bindComposer(shell: HTMLFormElement, signal: AbortSignal) {
   fit()
 }
 
-type Box = { left: number; right: number; top: number; bottom: number; width: number; height: number }
-
-function overlaps(a: Box, b: Box) {
-  return a.left < b.right + 4 && b.left < a.right + 4 && a.top < b.bottom && b.top < a.bottom
-}
-
 /**
  * Hovering or focusing a project fills the card under the graph, in the timeline and projects
  * views alike. Clicking a project, or pressing Enter on it, opens its page. Arrow keys step through.
@@ -188,6 +182,7 @@ function overlaps(a: Box, b: Box) {
  * byte), so its names are made focusable here.
  */
 export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: AbortSignal, open: (href: string) => void) {
+  bindPhone(stage, cards, signal, open)
   const desk = stage.querySelector<HTMLElement>(".d")
   const card = stage.querySelector<HTMLElement>(".card")
   const mode = stage.dataset.mode === "projects" ? "projects" : "timeline"
@@ -216,43 +211,19 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
   let current = -1
   let hide = 0
 
-  const placeThemes = (timeline: SVGGElement) => {
-    const active = timeline.querySelector<SVGGElement>(".pj.act")
-    const full = active?.querySelector<SVGTextElement>(".fa")
-    const name = active?.querySelector<SVGTextElement>(".w4")
-    if (!full || !name) return
-    if (!full.dataset.x) {
-      full.dataset.x = full.getAttribute("x") ?? ""
-      full.dataset.a = full.getAttribute("text-anchor") ?? "start"
-    }
-    timeline.querySelectorAll(".hd2").forEach((node) => node.classList.remove("hd2"))
+  // A chevron after the hovered name says it opens; it is drawn where the name actually ends.
+  const pointAt = (node: SVGElement | null) => {
+    group.querySelectorAll(".chev").forEach((item) => item.remove())
+    const name = node && (mode === "timeline" ? node.querySelector<SVGTextElement>(".w4") : (node as SVGTextElement))
+    if (!name || !name.parentNode) return
     const box = name.getBBox()
-    const others = [...timeline.querySelectorAll(".pj:not(.act) .w4, .co .w6, .rp rect")].filter((node) => node.getBoundingClientRect().width > 0)
-    const candidates: [number, number, string][] = [
-      [box.x + box.width + 8, box.y + box.height - 2, "start"],
-      [Number(full.dataset.x), box.y + box.height - 2, full.dataset.a || "start"],
-      [box.x, box.y + box.height + 11, "start"],
-      [box.x, box.y - 3, "start"],
-      [box.x - 8, box.y + box.height - 2, "end"],
-    ]
-    let best: { score: number; x: number; y: number; anchor: string; hits: Element[] } | null = null
-    for (const [x, y, anchor] of candidates) {
-      full.setAttribute("x", String(x))
-      full.setAttribute("y", String(y))
-      full.setAttribute("text-anchor", anchor)
-      const rect = full.getBoundingClientRect()
-      const hits = others.filter((node) => overlaps(rect, node.getBoundingClientRect()))
-      const score = hits.filter((node) => node.tagName === "rect").length * 100 + hits.length
-      if (!best || score < best.score) best = { score, x, y, anchor, hits }
-      if (!score) break
-    }
-    if (!best) return
-    full.setAttribute("x", String(best.x))
-    full.setAttribute("y", String(best.y))
-    full.setAttribute("text-anchor", best.anchor)
-    for (const hit of best.hits) {
-      if (hit.tagName !== "rect") hit.closest(".pj")?.classList.add("hd2")
-    }
+    const x = box.x + box.width + 5
+    const y = box.y + box.height / 2
+    const chevron = document.createElementNS("http://www.w3.org/2000/svg", "path")
+    chevron.setAttribute("class", "chev")
+    chevron.setAttribute("d", `M${x.toFixed(1)} ${(y - 3.5).toFixed(1)}l3.5 3.5-3.5 3.5`)
+    chevron.setAttribute("aria-hidden", "true")
+    name.parentNode.insertBefore(chevron, name.nextSibling)
   }
 
   const show = (index: number) => {
@@ -263,10 +234,8 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     current = next
     window.clearTimeout(hide)
     items.forEach((item) => item.classList.toggle("act", item === node))
-    if (mode === "timeline") {
-      group.classList.add("pv")
-      placeThemes(group)
-    }
+    if (mode === "timeline") group.classList.add("pv")
+    pointAt(node)
     title.textContent = project.t
     when.textContent = project.d
     focus.textContent = project.f.split(" \u00b7 ").join(", ")
@@ -276,6 +245,7 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
 
   const clear = () => {
     group.classList.remove("pv")
+    pointAt(null)
     card.classList.remove("on")
     items.forEach((item) => item.classList.remove("act"))
     current = -1
@@ -318,4 +288,32 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
     }
   }, { signal })
+}
+
+/**
+ * The vertical timeline has no hover, so its project names are links: a tap, or Enter, opens the
+ * project. Both the timeline and projects views are wired, so switching views needs no rebinding.
+ */
+function bindPhone(stage: HTMLElement, cards: TimelineCard[], signal: AbortSignal, open: (href: string) => void) {
+  const phone = stage.querySelector<HTMLElement>(".m")
+  if (!phone) return
+  const hrefs = new Map(cards.map((item) => [item.t, item.u]))
+  const names = [
+    ...phone.querySelectorAll<SVGTextElement>("[data-m=timeline] .mpj"),
+    ...phone.querySelectorAll<SVGTextElement>('[data-m=projects] text[font-weight="600"]'),
+  ]
+  for (const node of names) {
+    const href = hrefs.get(node.textContent ?? "")
+    if (!href) continue
+    node.classList.add("mpn")
+    node.setAttribute("tabindex", "0")
+    node.setAttribute("role", "link")
+    node.setAttribute("aria-label", `Open ${node.textContent}`)
+    node.addEventListener("click", () => open(href), { signal })
+    node.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return
+      event.preventDefault()
+      open(href)
+    }, { signal })
+  }
 }

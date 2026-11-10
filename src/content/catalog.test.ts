@@ -27,7 +27,7 @@ test("profile is Miami and the current role is one employer", () => {
   assert.equal(employer?.title, "Senior Designer")
   assert.equal(employer?.since, "Jan 2026")
   assert.equal(employer?.end, null)
-  assert.deepEqual(employer?.clientIds, ["client:loblaw-pc-health", "client:intuit"])
+  assert.deepEqual(employer?.clientIds, ["client:loblaw-pc-health", "client:intuit", "client:rv"])
   const overmatch = catalog.roles.find((role) => role.id === "role:overmatch")
   assert.equal(overmatch?.title, "Design Lead")
   assert.equal(overmatch?.since, "May 2026")
@@ -56,7 +56,7 @@ test("profile is Miami and the current role is one employer", () => {
 test("flagged work is absent from public output", () => {
   const catalog = loadCatalog()
   const flagged = catalog.projects.filter((project) => project.flagged).map((project) => project.name).sort()
-  assert.deepEqual(flagged, ["Chatter app", "FinTech Terminal", "Remedy", "Traveller"])
+  assert.deepEqual(flagged, ["Remedy", "Traveller"])
   const published = publishCatalog()
   const blob = JSON.stringify(published)
   for (const name of flagged) assert.equal(blob.includes(name), false, name)

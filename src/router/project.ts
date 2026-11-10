@@ -5,10 +5,11 @@ import { containsBlocked, textIssues } from "@/src/content/guard"
 import { publishCatalog } from "@/src/content/publish"
 import type { Project, Section } from "@/src/content/schema"
 import { annotationAllowed, factBlob } from "./check"
+import { routeQuestion, type Go } from "./navigate"
 import { ASK_TIMEOUT_MS, MAX_CHARS, costUsd, counterFromEnv, memoryCounter, recordSpend, spendRatio, underLimit, type Counter } from "./limits"
 
 /** One reply in a project conversation. sectionId names the section it was drawn from. */
-export type ProjectReply = { answer: string; sectionId: string | null; source: "model" | "section" | "decline" }
+export type ProjectReply = { answer: string; sectionId: string | null; source: "model" | "section" | "decline" | "route"; go?: Go; view?: "images" }
 
 const ProjectAsk = z.object({
   slug: z.string().min(1).max(80),
@@ -121,13 +122,16 @@ export async function handleProjectAsk(raw: unknown, ctx: { ip: string }, deps: 
   const question = q.trim()
   if (!question) return { status: 400, body: { error: "Ask a question." } }
   if (question.length > MAX_CHARS) return { status: 400, body: { error: "Question is capped at 400 characters." } }
-  const project = publishCatalog().projects.find((item) => item.slug === slug)
+  const catalog = publishCatalog()
+  const project = catalog.projects.find((item) => item.slug === slug)
   if (!project) return { status: 404, body: { error: "Unknown project." } }
   const now = deps.now ?? Date.now()
   const counter = deps.counter ?? counterFromEnv(deps.env)
   const allowed = await underLimit(ctx.ip || "local", now, counter).catch(() => underLimit(ctx.ip || "local", now, memoryCounter))
   if (!allowed) return { status: 429, body: { error: "Too many questions. Try again in a few minutes." } }
   if (containsBlocked(question) || textIssues(question).includes("blocked term")) return { status: 200, body: decline() }
+  const route = routeQuestion(question, catalog, { page: "project", slug })
+  if (route) return { status: 200, body: { ...route, sectionId: null, source: "route" } }
   const env = deps.env ?? process.env
   const model = deps.model !== undefined ? deps.model : env.ANTHROPIC_API_KEY && spendRatio(now, env) < 1 ? claude : null
   return { status: 200, body: await answerProject(project, question, model) }

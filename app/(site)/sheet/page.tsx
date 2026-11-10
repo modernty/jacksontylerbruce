@@ -26,7 +26,10 @@ export default async function SheetPage({ searchParams }: { searchParams: Promis
             <Link key={pill.href + pill.label} href={pill.href}>{pill.label}</Link>
           ))}
         </div>
-        <p className="cta"><Link href={copy.cta.href}>{copy.cta.label}</Link></p>
+        <p className="cta">
+          <Link href={copy.cta.href}>{copy.cta.label}</Link>
+          {key === "availability" ? <a href={catalog.profile.linkedin} target="_blank" rel="noreferrer">LinkedIn →</a> : null}
+        </p>
       </article>
     </section>
   )

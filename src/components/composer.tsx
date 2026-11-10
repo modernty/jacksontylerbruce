@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
-import { CHAT_ASK } from "./chat-thread"
+import { CHAT_ASK, handOffToAbout } from "./chat-thread"
 import { inlineChat, quietPage } from "./chrome"
 
 function sessionId(): string {
@@ -60,7 +60,8 @@ export function Composer() {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ q, sessionId: sessionId() }),
     })
-    const data = (await response.json()) as { href?: string }
+    const data = (await response.json()) as { href?: string; handoff?: boolean }
+    if (data.handoff) handOffToAbout(q)
     if (data.href) router.push(data.href)
   }
 

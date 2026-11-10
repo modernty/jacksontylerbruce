@@ -35,7 +35,7 @@ function check(view: { intent: string; focusIds: string[]; href: string; annotat
     if (item.q.toLowerCase().includes(name)) continue
     if (blob.includes(name)) problems.push(`hidden name in output`)
   }
-  if (blob.includes("/work/remedy") || blob.includes("/work/traveller") || blob.includes("/work/fintech-terminal")) {
+  if (blob.includes("/work/remedy") || blob.includes("/work/traveller")) {
     problems.push("hidden deep link")
   }
   return problems

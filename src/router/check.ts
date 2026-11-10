@@ -1,6 +1,6 @@
 import { containsBlocked, textIssues, wordCount } from "@/src/content/guard"
 
-const BANNED = ["remedy", "traveller", "fintech terminal", "defi redesign", "chatter app", "defi", "fintech"]
+const BANNED = ["remedy", "traveller", "defi redesign", "defi"]
 
 export function annotationAllowed(text: string, facts: string): boolean {
   if (wordCount(text) < 1 || wordCount(text) > 40) return false

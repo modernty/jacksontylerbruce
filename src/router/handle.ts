@@ -1,3 +1,4 @@
+import { aboutTravel } from "./navigate"
 import "server-only"
 import { z } from "zod"
 import { sheetAnswer, followUpsFor } from "@/src/content/answers"
@@ -49,6 +50,10 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
   if (blocked(question)) {
     const hidden = decline()
     return { status: 200, body: hidden }
+  }
+  // The globe answers travel questions, so they go to About and the question goes with them.
+  if (aboutTravel(question)) {
+    return { status: 200, body: { intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/about", annotation: "", followUps: [], confidence: 0.9, source: "keyword", handoff: true } }
   }
   const env = deps.env ?? process.env
   const caller = deps.routeModel ?? (env.ANTHROPIC_API_KEY ? modelRoute : null)

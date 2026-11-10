@@ -1,7 +1,7 @@
 import "server-only"
 import { loadCatalog } from "@/src/content/catalog"
 import { employerPublicName } from "@/src/content/employer"
-import { publishCatalog } from "@/src/content/publish"
+import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import { containsBlocked } from "@/src/content/guard"
 import type { Project, Role, Theme } from "@/src/content/schema"
 import {
@@ -53,7 +53,7 @@ export function keywordRoute(question: string): ViewSpec {
     return view({ intent: "decline", focusIds: [], filter: "sheet", href: "/sheet?topic=decline#answer", confidence: 0.98 })
   }
 
-  const projects = catalog.projects.filter((project) => mentionsProject(q, project))
+  const projects = mentionedProjects(q, catalog)
   if (projects.length >= 2) {
     const ids = projects.slice(0, 4).map((project) => project.id)
     return view({
@@ -121,6 +121,13 @@ export function keywordRoute(question: string): ViewSpec {
     return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic#answer", confidence: 0.9 })
   }
   return view({ intent: "off_topic", focusIds: [], filter: "sheet", href: "/sheet?topic=off_topic#answer", confidence: 0.35 })
+}
+
+/** The public projects a question names. "Chatter brand" names Chatter brand, not both it and Chatter. */
+export function mentionedProjects(question: string, catalog: PublicCatalog): PublicCatalog["projects"] {
+  const q = normalize(question)
+  const hits = catalog.projects.filter((project) => mentionsProject(q, project))
+  return hits.filter((project) => !hits.some((other) => other !== project && hasPhrase(q, normalize(other.name)) && hasPhrase(normalize(other.name), normalize(project.name))))
 }
 
 function mentionsProject(q: string, project: Project): boolean {

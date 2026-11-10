@@ -88,10 +88,10 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
     const facts = [catalog.profile.location, ...open.flatMap((role) => [role.name, role.title, role.since ?? role.yearLabel])]
     const roles = open.map((role) => `${role.name} (${role.title}, ${role.since ?? role.yearLabel})`).join("; ")
     return {
-      title: "Open roles",
-      body: roles ? `Open roles: ${roles}. Based in ${catalog.profile.location}.` : `Based in ${catalog.profile.location}.`,
+      title: "Get in touch",
+      body: `Write to ${catalog.profile.email}, or find me on LinkedIn.${roles ? ` Current roles: ${roles}.` : ""} Based in ${catalog.profile.location}.`,
       facts,
-      cta: timeline,
+      cta: { label: "Email me →", href: `mailto:${catalog.profile.email}` },
     }
   }
   if (topic === "process") {

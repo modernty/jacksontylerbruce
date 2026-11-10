@@ -55,8 +55,32 @@ export function sessionId(): string {
 
 export type Asker = (question: string) => Promise<string>
 
+/** Where a reply sends the visitor. */
+export type Go = { href: string; handoff?: boolean }
+
+const ABOUT_CHAT = "about-chat"
+export const ABOUT_OPEN = "about-chat-open"
+const MOVE_MS = 700
+
+/** Leaves a question unanswered in the About conversation, which answers it when the page opens. */
+export function handOffToAbout(question: string) {
+  const id = load(ABOUT_CHAT).reduce((max, item) => Math.max(max, item.id + 1), 0)
+  record(ABOUT_CHAT, { id, question, answer: null })
+  try {
+    sessionStorage.setItem(ABOUT_OPEN, "1")
+  } catch {
+    // The conversation opens by default.
+  }
+}
+
+/** Moves on once the reply has started, so the visitor sees why the page is changing. */
+export function follow(go: Go, question: string, router: { push: (href: string) => void; back: () => void }) {
+  if (go.handoff) handOffToAbout(question)
+  window.setTimeout(() => (go.href === "back" ? router.back() : router.push(go.href)), MOVE_MS)
+}
+
 /** Posts JSON and reads one text field from the reply, with plain-language failures. */
-export async function askJson(url: string, body: Record<string, unknown>, field: string): Promise<string> {
+export async function askJson(url: string, body: Record<string, unknown>, field: string, onReply?: (data: Record<string, unknown>) => void): Promise<string> {
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -64,6 +88,7 @@ export async function askJson(url: string, body: Record<string, unknown>, field:
       body: JSON.stringify({ ...body, sessionId: sessionId() }),
     })
     const data = (await response.json()) as Record<string, unknown>
+    onReply?.(data)
     const text = data[field] ?? data.error
     return typeof text === "string" && text ? text : "Something went wrong. Try asking again."
   } catch {

@@ -6,9 +6,10 @@ import type { Place } from "@/src/content/schema"
 import { REGIONS } from "@/src/globe/regions"
 import { keywordRoute } from "./keyword"
 import { MAX_CHARS, counterFromEnv, memoryCounter, underLimit, type Counter } from "./limits"
+import { routeQuestion, type Go } from "./navigate"
 
 /** One reply about Tyler. placeId names a place the globe should turn to, when there is one. */
-export type AboutReply = { answer: string; placeId: string | null }
+export type AboutReply = { answer: string; placeId: string | null; go?: Go }
 
 const AboutAsk = z.object({ q: z.string(), sessionId: z.string().min(1).max(80) })
 
@@ -101,5 +102,6 @@ export async function handleAboutAsk(raw: unknown, ctx: { ip: string }, deps: { 
   const allowed = await underLimit(ctx.ip || "local", now, counter).catch(() => underLimit(ctx.ip || "local", now, memoryCounter))
   if (!allowed) return { status: 429, body: { error: "Too many questions. Try again in a few minutes." } }
   if (containsBlocked(question)) return { status: 200, body: { answer: "I only talk about my public work and where I've been.", placeId: null } }
-  return { status: 200, body: answerAbout(question) }
+  const route = routeQuestion(question, publishCatalog(), { page: "about" })
+  return { status: 200, body: route ? { answer: route.answer, placeId: null, go: route.go } : answerAbout(question) }
 }

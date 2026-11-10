@@ -20,12 +20,16 @@ const plex = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jacksontylerbruce.com"),
   title: "Tyler Jackson — Designer",
   description: "A timeline of the work, with one question to one view.",
+  openGraph: { title: "Tyler Jackson — Designer", description: "A timeline of the work, with one question to one view.", type: "website" },
+  twitter: { card: "summary_large_image" },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const faces = fontFaceCss()
+  const { profile } = loadCatalog()
   return (
     <html lang="en" className={`pre ${plex.variable}`}>
       <head>
@@ -33,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ViewModeProvider>
-          <TopBar location={loadCatalog().profile.location} />
+          <TopBar location={profile.location} email={profile.email} linkedin={profile.linkedin} />
           <PillsProvider>
             {children}
             <Suspense fallback={null}>

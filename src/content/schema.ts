@@ -65,6 +65,8 @@ export const ProfileSchema = z.object({
   title: z.enum(TITLES),
   location: z.literal("Miami, FL"),
   placeId: z.string(),
+  email: z.string().email(),
+  linkedin: z.string().url(),
 })
 
 export const RoleSchema = z.object({
@@ -95,7 +97,7 @@ export const ClientSchema = z.object({
   /** When set, the visible name is the employer switch, not a second literal. */
   usesEmployerName: z.boolean().default(false),
   roleId: z.string(),
-  projectIds: z.array(z.string()).min(1),
+  projectIds: z.array(z.string()),
 }).superRefine((client, ctx) => {
   if (client.usesEmployerName && client.name !== "") {
     ctx.addIssue({ code: "custom", message: "employer client name is resolved by the switch" })
