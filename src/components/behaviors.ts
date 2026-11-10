@@ -193,6 +193,10 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
   const summary = card.querySelector(".sm")
   const link = card.querySelector("a")
   if (!title || !meta || !focus || !summary || !link) return
+  const setOpen = (open: boolean) => {
+    card.classList.toggle("on", open)
+    card.inert = !open
+  }
 
   const placeThemes = () => {
     const active = timeline.querySelector<SVGGElement>(".pj.act")
@@ -288,13 +292,13 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     }
     card.style.left = `${best[0]}px`
     card.style.top = `${best[1]}px`
-    card.classList.add("on")
+    setOpen(true)
   }
 
   const leave = () => {
     hide = window.setTimeout(() => {
       timeline.classList.remove("pv")
-      card.classList.remove("on")
+      setOpen(false)
       timeline.querySelectorAll(".pj").forEach((node) => node.classList.remove("act"))
       current = -1
     }, 180)
@@ -305,6 +309,12 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     node.addEventListener("mouseleave", leave, { signal })
     node.addEventListener("focus", () => show(Number(node.dataset.i)), { signal })
     node.addEventListener("click", () => show(Number(node.dataset.i)), { signal })
+    node.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return
+      event.preventDefault()
+      const href = cards[Number(node.dataset.i)]?.u
+      if (href) link.click()
+    }, { signal })
   })
   card.addEventListener("mouseenter", () => window.clearTimeout(hide), { signal })
   card.addEventListener("mouseleave", leave, { signal })
@@ -332,7 +342,7 @@ export function bindTimeline(stage: HTMLElement, cards: TimelineCard[], signal: 
     if (event.key === "Escape") {
       window.clearTimeout(hide)
       timeline.classList.remove("pv")
-      card.classList.remove("on")
+      setOpen(false)
       current = -1
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
     }

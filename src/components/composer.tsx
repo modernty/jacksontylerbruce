@@ -52,7 +52,7 @@ export function Composer() {
   }
 
   return (
-    <section className="hero">
+    <section className="hero" aria-label="Ask about the work">
       <div className="in">
         <h1>What are you looking for?</h1>
         <div className="cards">
@@ -88,7 +88,7 @@ export function Composer() {
                 <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
               </svg>
             </button>
-            <button className="ib send" type="submit" title="Send">
+            <button className="ib send" type="submit" title="Send" aria-label="Send">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FBFBF8" strokeWidth="2">
                 <path d="M12 19V5M6 11l6-6 6 6" />
               </svg>

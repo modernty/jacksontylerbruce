@@ -2,13 +2,28 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useId, useRef } from "react"
 import { bindTimeline } from "./behaviors"
 import type { TimelineCard } from "@/src/timeline/types"
 
 export function withMode(svg: string, mode: "timeline" | "projects" | "focus"): string {
   return svg.replace(/class="mode(?: on)?" data-m="(timeline|projects|focus)"/g, (_match, name: string) => {
     return `class="mode${name === mode ? " on" : ""}" data-m="${name}"`
+  })
+}
+
+function escapeAttr(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;")
+}
+
+/** Mobile project labels become links to their case study, with a row-tall tap target. */
+export function linkMobile(svg: string, cards: TimelineCard[]): string {
+  const hrefs = new Map(cards.map((card) => [card.t, card.u]))
+  return svg.replace(/<text class="mpj"([^>]*) y="([\d.]+)"([^>]*)>([^<]+)<\/text>/g, (match, before: string, y: string, after: string, name: string) => {
+    const href = hrefs.get(name.replace(/&amp;/g, "&"))
+    if (!href) return match
+    const top = (Number(y) - 10).toFixed(1)
+    return `<a class="mpl" href="${escapeAttr(href)}" aria-label="${escapeAttr(name)}"><rect x="150" y="${top}" width="192" height="13" fill="transparent"/>${match}</a>`
   })
 }
 
@@ -31,7 +46,8 @@ export function AxisStage({
   const focusHref = `/focus/${focusSlug}#focus`
   const anchor = mode === "projects" ? "projects" : mode === "focus" ? "focus" : "axis"
   const svg = withMode(desktop, mode)
-  const phone = withMode(mobile, mode)
+  const phone = linkMobile(withMode(mobile, mode), cards)
+  const cardTitle = useId()
 
   useEffect(() => {
     const stage = ref.current
@@ -49,10 +65,10 @@ export function AxisStage({
         <Link href={focusHref} className={mode === "focus" ? "on" : undefined}>Focus</Link>
       </nav>
       {annotation ? <p className="note">{annotation}</p> : null}
-      <div className="d" tabIndex={0} aria-label="Career timeline, use arrow keys to step through projects">
+      <div className="d" role="group" tabIndex={0} aria-label="Career timeline, use arrow keys to step through projects">
         <div dangerouslySetInnerHTML={{ __html: svg }} />
-        <div className="card" role="dialog" aria-live="polite">
-          <h3 />
+        <div className="card" role="dialog" aria-labelledby={cardTitle} aria-live="polite" inert>
+          <h3 id={cardTitle} />
           <div className="meta" />
           <div className="fo" />
           <div className="sm" />
