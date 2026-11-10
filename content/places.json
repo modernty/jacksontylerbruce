@@ -1,5 +1,5 @@
 {
-  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use. The first entry is home and must stay Miami, FL. Coordinates are city centres, to four decimals.",
+  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10). The first entry is home and must stay Miami, FL. Coordinates are city centres, to four decimals.",
   "home": "miami",
   "places": [
     {
@@ -424,6 +424,22 @@
       "country": "India",
       "lat": 15.2993,
       "lng": 74.124,
+      "kind": "traveled"
+    },
+    {
+      "slug": "stockholm",
+      "name": "Stockholm",
+      "country": "Sweden",
+      "lat": 59.3293,
+      "lng": 18.0686,
+      "kind": "traveled"
+    },
+    {
+      "slug": "copenhagen",
+      "name": "Copenhagen",
+      "country": "Denmark",
+      "lat": 55.6761,
+      "lng": 12.5683,
       "kind": "traveled"
     }
   ]

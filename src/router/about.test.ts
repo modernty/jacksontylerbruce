@@ -6,12 +6,12 @@ import { answerAbout } from "./about"
 const ask = (q: string) => answerAbout(q)
 
 test("travel and location questions answer from the places content", () => {
-  assert.match(ask("Where has Tyler travelled?").answer, /53 places across 18 countries/)
+  assert.match(ask("Where has Tyler travelled?").answer, /55 places across 20 countries/)
   assert.equal(ask("Where are you based?").answer, "I'm based in Miami, FL.")
   const lived = ask("Where have you lived?")
   assert.match(lived.answer, /Medellín/)
   assert.match(lived.answer, /Home is Miami, FL\.$/)
-  assert.match(ask("How many countries have you been to?").answer, /^53 places across 18 countries: United States/)
+  assert.match(ask("How many countries have you been to?").answer, /^55 places across 20 countries: United States/)
 })
 
 test("countries, cities and short forms turn the globe to the right place", () => {
@@ -38,7 +38,7 @@ test("regions answer with their countries and cities", () => {
 
 test("names match whole words only, and unknown places get an honest no", () => {
   assert.notEqual(ask("What was your goal?").placeId, "place:goa")
-  assert.equal(ask("Have you been to Brazil?").answer, "Not yet. Brazil isn't one of the 18 countries I've been to.")
+  assert.equal(ask("Have you been to Brazil?").answer, "Not yet. Brazil isn't one of the 20 countries I've been to.")
   assert.match(ask("What's your favourite colour?").answer, /Ask me about a country, a city or a part of the world/)
 })
 

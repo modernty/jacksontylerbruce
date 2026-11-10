@@ -8,7 +8,7 @@ export const REGIONS = [
     countries: ["Mexico", "Costa Rica", "El Salvador", "Dominican Republic", "Puerto Rico", "Jamaica", "Bahamas", "Cayman Islands"],
   },
   { id: "south-america", name: "South America", words: ["south america", "latin america"], countries: ["Colombia"] },
-  { id: "europe", name: "Europe", words: ["europe", "european"], countries: ["United Kingdom", "France", "Spain", "Italy", "Germany", "Switzerland"] },
+  { id: "europe", name: "Europe", words: ["europe", "european"], countries: ["United Kingdom", "France", "Spain", "Italy", "Germany", "Switzerland", "Sweden", "Denmark"] },
   { id: "south-asia", name: "South Asia", words: ["south asia", "asia"], countries: ["India"] },
   { id: "east-asia", name: "East Asia", words: ["east asia", "asia"], countries: ["Japan"] },
 ] as const

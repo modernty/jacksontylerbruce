@@ -8,8 +8,8 @@ test("places hold the confirmed travel list with home first", () => {
   assert.equal(places[0]?.id, "place:miami")
   assert.equal(places[0]?.name, profile.location)
   assert.equal(profile.placeId, places[0]?.id)
-  assert.equal(places.length, 53)
-  assert.equal(new Set(places.map((place) => place.country)).size, 18)
+  assert.equal(places.length, 55)
+  assert.equal(new Set(places.map((place) => place.country)).size, 20)
   assert.equal(new Set(places.map((place) => place.id)).size, places.length)
 })
 
@@ -25,6 +25,8 @@ test("every place has plausible coordinates for its country", () => {
     Spain: [36, 44, -10, 4.5],
     Switzerland: [45.8, 47.9, 5.9, 10.5],
     Japan: [30, 46, 129, 146],
+    Sweden: [55, 69.1, 11, 24.2],
+    Denmark: [54.5, 57.8, 8, 15.2],
   }
   for (const place of loadCatalog().places) {
     const box = bounds[place.country]
