@@ -106,7 +106,7 @@ export async function modelRoute(question: string, client?: ModelClient): Promis
         },
         { signal },
       )
-    recordSpend(costUsd(message.usage?.input_tokens ?? 0, message.usage?.output_tokens ?? 0))
+    await recordSpend(costUsd(message.usage?.input_tokens ?? 0, message.usage?.output_tokens ?? 0)).catch(() => undefined)
     const tool = message.content.find((block) => block.type === "tool_use" && block.name === "show_view")
     if (!tool || tool.type !== "tool_use") return sheet()
     const parsed = ShowView.safeParse(tool.input)

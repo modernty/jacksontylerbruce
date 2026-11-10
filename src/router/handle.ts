@@ -4,7 +4,8 @@ import { sheetAnswer, followUpsFor } from "@/src/content/answers"
 import { containsBlocked } from "@/src/content/guard"
 import { keywordRoute, withQuestion } from "./keyword"
 import { modelRoute, type ModelCaller } from "./llm"
-import { counterFromEnv, MAX_CHARS, memoryCounter, spendRatio, underLimit, type Counter } from "./limits"
+import { MAX_CHARS, spendRatio, underLimit } from "./limits"
+import { memoryStore, storeFromEnv, type Store } from "./store"
 import type { ViewSpec } from "./types"
 
 const AskBody = z.object({
@@ -14,7 +15,7 @@ const AskBody = z.object({
 
 export type AskDeps = {
   now?: number
-  counter?: Counter
+  store?: Store
   routeModel?: ModelCaller
   blocked?: (text: string) => boolean
   env?: NodeJS.ProcessEnv
@@ -40,8 +41,8 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
   const question = parsed.data.q
   if (question.length > MAX_CHARS) return { status: 400, body: { error: "Question is capped at 400 characters." } }
   const now = ctx.now ?? deps.now ?? Date.now()
-  const counter = deps.counter ?? counterFromEnv(deps.env)
-  const allowed = await underLimit(ctx.ip || "local", now, counter).catch(async () => underLimit(ctx.ip || "local", now, memoryCounter))
+  const store = deps.store ?? storeFromEnv(deps.env)
+  const allowed = await underLimit(ctx.ip || "local", now, store).catch(async () => underLimit(ctx.ip || "local", now, memoryStore))
   if (!allowed) {
     return { status: 429, body: { error: "Too many questions.", href: "/sheet?topic=decline#answer" } }
   }
@@ -53,7 +54,7 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
   const env = deps.env ?? process.env
   const caller = deps.routeModel ?? (env.ANTHROPIC_API_KEY ? modelRoute : null)
   let routed = keywordRoute(question)
-  if (caller && spendRatio(now, env) < 1) {
+  if (caller && (await spendRatio(now, env, store).catch(() => 0)) < 1) {
     try {
       routed = await caller(question)
     } catch {
