@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { TrackOnMount } from "@/src/components/analytics"
 import { SectionAnchor } from "@/src/components/section-anchor"
 import { publishCatalog } from "@/src/content/publish"
 
@@ -18,6 +19,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   return (
     <section className="tlw">
       <SectionAnchor />
+      <TrackOnMount name="project_opened" props={{ slug: project.slug }} />
       <article className="study">
         <h1>{project.name}</h1>
         <p className="meta">{[org, role?.title, role?.yearLabel].filter(Boolean).join(" · ")}</p>

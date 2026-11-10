@@ -7,12 +7,13 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts",
+    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts src/analytics/*.test.ts",
     "eval": "tsx --conditions=react-server evals/run.ts",
     "fonts": "node scripts/check-fonts.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.0",
+    "@vercel/analytics": "^2.0.1",
     "next": "^15.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

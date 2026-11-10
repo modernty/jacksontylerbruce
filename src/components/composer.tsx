@@ -1,8 +1,10 @@
 "use client"
 
+import { track } from "@vercel/analytics"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
@@ -47,7 +49,8 @@ export function Composer() {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ q, sessionId: sessionId() }),
     })
-    const data = (await response.json()) as { href?: string }
+    const data = (await response.json()) as { href?: string; intent?: string; source?: string }
+    track("ask_submitted", { status: response.status, intent: data.intent ?? "none", source: data.source ?? "none" })
     if (data.href) router.push(data.href)
   }
 
@@ -56,8 +59,14 @@ export function Composer() {
       <div className="in">
         <h1>What are you looking for?</h1>
         <div className="cards">
-          {shown.map((pill) => (
-            <Link key={pill.href + pill.label} href={pill.href}>{pill.label}</Link>
+          {shown.map((pill, index) => (
+            <Link
+              key={pill.href + pill.label}
+              href={pill.href}
+              onClick={() => track("suggestion_clicked", { position: index + 1, target: targetPath(pill.href) })}
+            >
+              {pill.label}
+            </Link>
           ))}
         </div>
         <form
