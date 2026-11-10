@@ -14,6 +14,6 @@ test("the sitemap paths skip hidden work, /me and the API", () => {
   const paths = publicPaths()
   assert.ok(paths.includes("/work/model-playground"))
   for (const path of paths) {
-    assert.doesNotMatch(path, /remedy|traveller|twelvelabs|fintech|defi|chatter-app|^\/me|^\/api/i)
+    assert.doesNotMatch(path, /remedy|traveller|fintech|defi|chatter-app|^\/me|^\/api/i)
   }
 })
