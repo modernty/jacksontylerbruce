@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { IBM_Plex_Mono } from "next/font/google"
 import { Suspense } from "react"
+import { SiteAnalytics } from "@/src/components/analytics"
 import { Composer } from "@/src/components/composer"
 import { PillsProvider } from "@/src/components/pills"
 import { fontFaceCss } from "@/src/content/fonts"
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Composer />
           </Suspense>
         </PillsProvider>
+        <SiteAnalytics />
       </body>
     </html>
   )
