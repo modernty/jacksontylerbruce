@@ -5,6 +5,7 @@ import { SiteAnalytics } from "@/src/components/analytics"
 import { Composer } from "@/src/components/composer"
 import { PillsProvider } from "@/src/components/pills"
 import { fontFaceCss } from "@/src/content/fonts"
+import { HERO, SITE_NAME, indexable, siteUrl } from "@/src/site/seo"
 import "./globals.css"
 
 const plex = IBM_Plex_Mono({
@@ -15,9 +16,15 @@ const plex = IBM_Plex_Mono({
   variable: "--plex",
 })
 
+const live = indexable()
+
 export const metadata: Metadata = {
-  title: "Tyler Jackson — Designer",
-  description: "A timeline of the work, with one question to one view.",
+  metadataBase: new URL(siteUrl()),
+  title: SITE_NAME,
+  description: HERO,
+  robots: live ? { index: true, follow: true } : { index: false, follow: false },
+  openGraph: { type: "website", siteName: SITE_NAME, title: SITE_NAME, description: HERO, url: "/" },
+  twitter: { card: "summary_large_image", title: SITE_NAME, description: HERO },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
