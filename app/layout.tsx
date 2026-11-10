@@ -27,12 +27,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {faces ? <style dangerouslySetInnerHTML={{ __html: faces }} /> : null}
       </head>
       <body>
-        <div className="top">
+        <header className="top">
           <span>Tyler Jackson — Designer</span>
           <span>Index — 2026</span>
-        </div>
+        </header>
         <PillsProvider>
-          {children}
+          <main>{children}</main>
           <Suspense fallback={null}>
             <Composer />
           </Suspense>
