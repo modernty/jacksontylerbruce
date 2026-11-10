@@ -77,6 +77,8 @@ function sheet(intent: Intent = "off_topic"): ViewSpec {
 export async function modelRoute(question: string, client?: ModelClient): Promise<ViewSpec> {
   const key = process.env.ANTHROPIC_API_KEY
   if (!key && !client) return { ...keywordRoute(question), source: "keyword" }
+  const guarded = keywordRoute(question)
+  if (guarded.intent === "decline") return guarded
   try {
     const signal = AbortSignal.timeout(ASK_TIMEOUT_MS)
     const message = client
@@ -91,6 +93,8 @@ export async function modelRoute(question: string, client?: ModelClient): Promis
             "Location answers use the sheet. Use only ids from the index.",
             "annotation is under 40 words and uses only the index.",
             "off_topic when the question is not about the work. decline for hidden, private, or disallowed asks.",
+            "project: the first focusId is that project's id. role: the role id. compare: when two or more projects are named, list every named project id.",
+            "availability for hiring, full-time, freelance, or contact asks.",
             "Index:",
             indexText(),
           ].join("\n"),
@@ -105,18 +109,19 @@ export async function modelRoute(question: string, client?: ModelClient): Promis
     if (!tool || tool.type !== "tool_use") return sheet()
     const parsed = ShowView.safeParse(tool.input)
     if (!parsed.success) return sheet()
-    return hydrate(parsed.data)
+    return hydrate(parsed.data, question)
   } catch (error) {
     if (client) throw error
     return { ...keywordRoute(question), source: "keyword" }
   }
 }
 
-function hydrate(input: z.infer<typeof ShowView>): ViewSpec {
+function hydrate(input: z.infer<typeof ShowView>, question: string): ViewSpec {
   const catalog = publishCatalog()
   const ids = new Set(publicFocusIds(catalog))
   if (input.focusIds.some((id) => !ids.has(id))) return sheet()
-  const base = authoredFor(input.intent, input.focusIds)
+  const base = authoredFor(input.intent, input.focusIds, question)
+  if (!base) return { ...keywordRoute(question), source: "keyword" }
   const annotation = annotationAllowed(input.annotation, factText(catalog)) ? input.annotation.trim() : base.annotation
   return {
     intent: input.intent,
@@ -130,13 +135,14 @@ function hydrate(input: z.infer<typeof ShowView>): ViewSpec {
   }
 }
 
-function authoredFor(intent: Intent, focusIds: string[]): Pick<ViewSpec, "filter" | "href" | "annotation"> {
+/** Authored copy for the chosen view, or null when the model named an intent without its entity. */
+function authoredFor(intent: Intent, focusIds: string[], question: string): Pick<ViewSpec, "filter" | "href" | "annotation"> | null {
   const catalog = publishCatalog()
   const project = catalog.projects.find((item) => item.id === focusIds[0])
   const theme = catalog.themes.find((item) => item.id === focusIds[0])
   const role = catalog.roles.find((item) => item.id === focusIds[0])
   if (intent === "project" && project) {
-    return { filter: "work", href: sectionHref(project), annotation: project.summary }
+    return { filter: "work", href: sectionHref(project, question), annotation: project.summary }
   }
   if (intent === "focus" && theme) {
     return { filter: "focus", href: `/focus/${theme.slug}#focus`, annotation: focusAnnotation(theme, catalog) }
@@ -147,6 +153,8 @@ function authoredFor(intent: Intent, focusIds: string[]): Pick<ViewSpec, "filter
   if (intent === "projects") {
     return { filter: "projects", href: "/timeline/projects#projects", annotation: projectsAnnotation(catalog) }
   }
+  if (intent === "project" || intent === "focus" || intent === "role") return null
+  if (intent === "compare" && focusIds.length < 2) return null
   if (intent === "compare") {
     return { filter: "timeline", href: `/timeline?focus=${focusIds.join(",")}#axis`, annotation: compareAnnotation(catalog, focusIds) }
   }
