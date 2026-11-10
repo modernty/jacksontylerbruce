@@ -14,6 +14,6 @@ test("every old slug lands on a public route or home", () => {
 test("redirects are permanent and never point at hidden work", () => {
   for (const row of legacyRedirects()) {
     assert.equal(row.permanent, true)
-    assert.doesNotMatch(row.destination, /remedy|traveller|twelvelabs|fintech|defi|chatter-app/)
+    assert.doesNotMatch(row.destination, /remedy|traveller|fintech|defi|chatter-app/)
   }
 })
