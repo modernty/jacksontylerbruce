@@ -22,5 +22,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pytest pydantic
+      - run: pip install pytest pydantic numpy
       - run: pytest tests/test_design_source.py tests/test_content.py -q
