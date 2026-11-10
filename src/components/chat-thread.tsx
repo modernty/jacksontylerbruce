@@ -1,28 +1,55 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { MessagePair } from "@/src/components/assistant-ui/elements/message-pair"
 
 /** The composer sends this on pages that hold a conversation, instead of routing to another view. */
 export const CHAT_ASK = "chat:ask"
+/** Clears one conversation, named by its store key, so it starts again empty. */
+export const CHAT_RESET = "chat:reset"
+
+/** Empties a conversation and tells its thread to start over. */
+export function resetChat(key: string) {
+  try {
+    sessionStorage.removeItem(key)
+  } catch {
+    // Nothing kept to clear.
+  }
+  window.dispatchEvent(new CustomEvent(CHAT_RESET, { detail: key }))
+}
 
 const WORD_MS = 45
 const WAITING = "…"
 
-type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean }
+/** Extra structure a reply can carry: project slugs to list, and what the reply asked the visitor for. */
+/** What a reply opens beside the chat besides projects: the globe or the timeline. */
+export type Panel = "globe" | "timeline"
+export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel }
+
+type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean } & ReplyExtra
 
 /**
  * Each conversation lives in session storage while the tab is open, so it survives switching
  * views, reloading and visiting other pages. Text only, capped, so it stays small.
  */
-type Stored = { id: number; question: string; answer: string | null }
+type Stored = { id: number; question: string; answer: string | null } & ReplyExtra
 const MAX_TURNS = 50
 
 function load(key: string): Stored[] {
   try {
     const parsed: unknown = JSON.parse(sessionStorage.getItem(key) ?? "[]")
     return Array.isArray(parsed)
-      ? parsed.filter((item): item is Stored => typeof item?.id === "number" && typeof item?.question === "string" && (typeof item?.answer === "string" || item?.answer === null))
+      ? parsed
+        .filter((item): item is Stored => typeof item?.id === "number" && typeof item?.question === "string" && (typeof item?.answer === "string" || item?.answer === null))
+        .map((item) => ({
+          id: item.id,
+          question: item.question,
+          answer: item.answer,
+          projects: Array.isArray(item.projects) ? item.projects.filter((slug): slug is string => typeof slug === "string") : undefined,
+          expects: item.expects === "category" ? "category" : undefined,
+          panel: item.panel === "globe" || item.panel === "timeline" ? item.panel : undefined,
+          roles: Array.isArray(item.roles) ? item.roles.filter((id): id is string => typeof id === "string") : undefined,
+        }))
       : []
   } catch {
     return []
@@ -53,19 +80,27 @@ export function sessionId(): string {
   }
 }
 
-export type Asker = (question: string) => Promise<string>
+/** Answers one question. `last` is what the previous reply asked for, so a short answer like "brand" reads in context. */
+export type Asker = (question: string, last?: ReplyExtra) => Promise<string | ({ answer: string } & ReplyExtra)>
 
-/** Where a reply sends the visitor. */
-export type Go = { href: string; handoff?: boolean }
+/** Where a reply sends the visitor. handoff continues on About; chat continues in the main conversation. */
+export type Go = { href: string; handoff?: boolean; chat?: boolean }
 
 const ABOUT_CHAT = "about-chat"
+/** The main conversation, at /chat. */
+export const HOME_CHAT = "home-chat"
 export const ABOUT_OPEN = "about-chat-open"
 const MOVE_MS = 700
 
+/** Leaves a question unanswered in a conversation, which answers it when its page opens. */
+export function handOff(key: string, question: string) {
+  const id = load(key).reduce((max, item) => Math.max(max, item.id + 1), 0)
+  record(key, { id, question, answer: null })
+}
+
 /** Leaves a question unanswered in the About conversation, which answers it when the page opens. */
 export function handOffToAbout(question: string) {
-  const id = load(ABOUT_CHAT).reduce((max, item) => Math.max(max, item.id + 1), 0)
-  record(ABOUT_CHAT, { id, question, answer: null })
+  handOff(ABOUT_CHAT, question)
   try {
     sessionStorage.setItem(ABOUT_OPEN, "1")
   } catch {
@@ -76,6 +111,7 @@ export function handOffToAbout(question: string) {
 /** Moves on once the reply has started, so the visitor sees why the page is changing. */
 export function follow(go: Go, question: string, router: { push: (href: string) => void; back: () => void }) {
   if (go.handoff) handOffToAbout(question)
+  if (go.chat) handOff(HOME_CHAT, question)
   window.setTimeout(() => (go.href === "back" ? router.back() : router.push(go.href)), MOVE_MS)
 }
 
@@ -101,7 +137,23 @@ export async function askJson(url: string, body: Record<string, unknown>, field:
  * them with `ask`, and keeps them under `storeKey` for the session. `onActive` reports whether
  * there is a conversation yet, so a page can change layout once one starts.
  */
-export function ChatThread({ storeKey, ask, label, onActive }: { storeKey: string; ask: Asker; label: string; onActive?: (active: boolean) => void }) {
+export function ChatThread({
+  storeKey,
+  ask,
+  label,
+  onActive,
+  after,
+  renderAnswer,
+}: {
+  storeKey: string
+  ask: Asker
+  label: string
+  onActive?: (active: boolean) => void
+  /** Renders under a finished answer, from the structure the reply carried. */
+  after?: (turn: { id: number } & ReplyExtra) => ReactNode
+  /** Renders a finished answer in place of its plain words, e.g. with project names as links. */
+  renderAnswer?: (turn: { id: number; answer: string } & ReplyExtra) => ReactNode
+}) {
   const [turns, setTurns] = useState<Turn[]>([])
   const nextId = useRef(0)
   const last = useRef<HTMLDivElement>(null)
@@ -112,10 +164,12 @@ export function ChatThread({ storeKey, ask, label, onActive }: { storeKey: strin
     async (id: number, question: string) => {
       record(storeKey, { id, question, answer: null })
       setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words: [WAITING], shown: 1, pending: true } : turn)))
-      const answer = await ask(question)
-      record(storeKey, { id, question, answer })
+      const previous = load(storeKey).filter((item) => item.id < id && item.answer !== null).pop()
+      const reply = await ask(question, previous ? { projects: previous.projects, expects: previous.expects } : undefined)
+      const { answer, projects, roles, expects, panel } = typeof reply === "string" ? { answer: reply, projects: undefined, roles: undefined, expects: undefined, panel: undefined } : reply
+      record(storeKey, { id, question, answer, projects, roles, expects, panel })
       const words = answer.split(/\s+/).filter(Boolean)
-      setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words, shown: reduce.current ? words.length : 0, pending: false } : turn)))
+      setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words, shown: reduce.current ? words.length : 0, pending: false, projects, roles, expects, panel } : turn)))
     },
     [storeKey, ask],
   )
@@ -127,7 +181,7 @@ export function ChatThread({ storeKey, ask, label, onActive }: { storeKey: strin
     nextId.current = stored.reduce((max, item) => Math.max(max, item.id + 1), 0)
     setTurns(stored.map((item) => {
       const words = item.answer ? item.answer.split(/\s+/).filter(Boolean) : []
-      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null }
+      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null, projects: item.projects, roles: item.roles, expects: item.expects, panel: item.panel }
     }))
     for (const item of stored) if (item.answer === null) void run(item.id, item.question)
 
@@ -139,8 +193,17 @@ export function ChatThread({ storeKey, ask, label, onActive }: { storeKey: strin
       setTurns((all) => [...all, { id, question, words: [], shown: 0, pending: true }])
       void run(id, question)
     }
+    const onReset = (event: Event) => {
+      if ((event as CustomEvent<string>).detail !== storeKey) return
+      nextId.current = 0
+      setTurns([])
+    }
     window.addEventListener(CHAT_ASK, onAsk)
-    return () => window.removeEventListener(CHAT_ASK, onAsk)
+    window.addEventListener(CHAT_RESET, onReset)
+    return () => {
+      window.removeEventListener(CHAT_ASK, onAsk)
+      window.removeEventListener(CHAT_RESET, onReset)
+    }
   }, [run, storeKey])
 
   const active = turns.length > 0
@@ -179,7 +242,9 @@ export function ChatThread({ storeKey, ask, label, onActive }: { storeKey: strin
             className="max-w-none gap-4 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
+            final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: turn.panel }) : undefined}
           />
+          {after && !turn.pending && turn.shown >= turn.words.length ? after(turn) : null}
         </div>
       ))}
     </section>

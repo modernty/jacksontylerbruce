@@ -2,8 +2,8 @@ import "server-only"
 import type { PublicCatalog } from "@/src/content/publish"
 import { mentionedProjects } from "./keyword"
 
-/** Where a question should take the visitor. handoff replays the question on the About chat. */
-export type Go = { href: string; handoff?: boolean }
+/** Where a question should take the visitor. handoff replays the question on the About chat; chat replays it in the main conversation. */
+export type Go = { href: string; handoff?: boolean; chat?: boolean }
 
 /** A reply that moves the visitor, or changes the view, instead of answering where they are. */
 export type Route = { answer: string; go?: Go; view?: "images" }
@@ -47,7 +47,7 @@ export function routeQuestion(question: string, catalog: PublicCatalog, here: He
   if (named && others.length === 1 && wanted) return { answer: `Taking you to ${named.name}.`, go: { href: `/work/${named.slug}` } }
 
   if (here.page === "project" && TRAVEL.test(q)) return { answer: "Let's look at the globe.", go: { href: "/about", handoff: true } }
-  if (ALL_WORK.test(q)) return { answer: "Here's all of the work.", go: { href: "/timeline/projects#projects" } }
+  if (ALL_WORK.test(q)) return { answer: "Let's look through the work.", go: { href: "/chat", chat: true } }
   if (TIMELINE.test(q)) return { answer: "Here's the timeline.", go: { href: "/timeline#axis" } }
   if (BACK.test(q)) return { answer: "Taking you back.", go: { href: "back" } }
 

@@ -12,6 +12,8 @@ import type { ViewSpec } from "./types"
 const AskBody = z.object({
   q: z.string(),
   sessionId: z.string().min(1).max(80),
+  // Set by the conversation: what it last listed or has open, in public names and ids only.
+  context: z.string().max(600).optional(),
 })
 
 export type AskDeps = {
@@ -57,11 +59,17 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
     return { status: 200, body: { intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/about", annotation: "", followUps: [], confidence: 0.9, source: "keyword", handoff: true } }
   }
   const env = deps.env ?? process.env
-  const caller = deps.routeModel ?? (env.ANTHROPIC_API_KEY ? modelRoute : null)
+  const context = parsed.data.context
+  const caller: ModelCaller | null = deps.routeModel ?? (env.ANTHROPIC_API_KEY ? (q: string, c?: string) => modelRoute(q, undefined, c) : null)
   let routed = keywordRoute(question)
-  if (caller && (await spendRatio(now, env, store).catch(() => 0)) < 1) {
+  // Rules first: a confident match answers without the model, which is faster and free. The model
+  // takes what the rules can't place, and can't overrule a match by calling it off topic.
+  const confident = routed.intent !== "off_topic" && routed.confidence >= 0.9
+  if (caller && !confident && (await spendRatio(now, env, store).catch(() => 0)) < 1) {
+    const ruled = routed
     try {
-      routed = await caller(question)
+      const modelled = await caller(question, context)
+      routed = modelled.intent === "off_topic" && ruled.intent !== "off_topic" ? ruled : modelled
     } catch {
       routed = { ...keywordRoute(question), source: "keyword" }
     }

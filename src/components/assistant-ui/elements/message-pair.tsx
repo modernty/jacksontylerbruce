@@ -2,7 +2,7 @@
 
 // Vendored from assistant-ui elements. Colours changed to the ink tokens: fresh words arrive as a light ink tint and settle to ink.
 
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { CopyIcon, RefreshCwIcon } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ghostButton, paper } from "./surfaces";
@@ -19,6 +19,8 @@ export interface MessagePairProps extends Omit<
   variant?: "bubble" | "flat";
   onCopy?: () => void;
   onRegenerate?: () => void;
+  /** Shown in place of the words once streaming ends, e.g. the same text with links in it. */
+  final?: ReactNode;
 }
 
 export function MessagePair({
@@ -29,6 +31,7 @@ export function MessagePair({
   variant = "bubble",
   onCopy,
   onRegenerate,
+  final,
   className,
   ...props
 }: MessagePairProps) {
@@ -52,8 +55,9 @@ export function MessagePair({
         {userMessage}
       </p>
       <div className="group/message flex flex-col items-start">
-        <p className="min-h-[4.25rem] text-sm leading-relaxed">
-          {shown.map((word, index) => {
+        {/* A div, not a p: a rendered answer can hold a list. */}
+        <div className="min-h-[4.25rem] text-sm leading-relaxed">
+          {!streaming && final ? final : shown.map((word, index) => {
             const fresh = streaming && shown.length - 1 - index < 2;
 
             return (
@@ -78,7 +82,7 @@ export function MessagePair({
               className="-mb-0.5 ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-full bg-[var(--ink)] motion-reduce:animate-none"
             />
           )}
-        </p>
+        </div>
         {(onCopy || onRegenerate) && (
           <div className="flex items-center gap-1 pt-1 opacity-0 transition-opacity group-focus-within/message:opacity-100 group-hover/message:opacity-100 motion-reduce:transition-none">
             {onCopy && (

@@ -1,0 +1,16 @@
+# Keep secrets and licensed fonts off Vercel CLI uploads (mirrors .gitignore).
+.env
+.env.*
+*.otf
+*.woff
+*.woff2
+!fonts/courier-prime-regular.woff2
+node_modules
+.next
+.venv
+__pycache__
+.pytest_cache
+*.tsbuildinfo
+data/engine/models
+design/source/resume-timeline.svg
+.claude

@@ -85,7 +85,7 @@ export function keywordRoute(question: string): ViewSpec {
     })
   }
 
-  if (/\b(where (are|do) you|where are you based|located|location|time zone|timezone|which city|where do you live|based)\b/.test(q)) {
+  if (/\b(where (are|is|do|does) (you|tyler|he)|where are you based|located|location|time zone|timezone|which city|where do you live|based|hometown|grow up|grew up)\b/.test(q)) {
     return view({ intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/sheet?topic=location#answer", confidence: 0.92 })
   }
   if (/\bwhy\b.*\bhire\b|\bshould i hire\b|\bhire you\b/.test(q)) {

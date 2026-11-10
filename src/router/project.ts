@@ -6,7 +6,7 @@ import { publishCatalog } from "@/src/content/publish"
 import type { Project, Section } from "@/src/content/schema"
 import { annotationAllowed, factBlob } from "./check"
 import { routeQuestion, type Go } from "./navigate"
-import { ASK_TIMEOUT_MS, MAX_CHARS, costUsd, recordSpend, spendRatio, underLimit } from "./limits"
+import { ASK_TIMEOUT_MS, DEFAULT_MODEL, MAX_CHARS, costUsd, recordSpend, spendRatio, underLimit } from "./limits"
 import { memoryStore, storeFromEnv, type Store } from "./store"
 
 /** One reply in a project conversation. sectionId names the section it was drawn from. */
@@ -81,8 +81,10 @@ type ModelClient = (system: string, question: string) => Promise<string>
 async function claude(system: string, question: string): Promise<string> {
   const message = await new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }).messages.create(
     {
-      model: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
+      model: process.env.ANTHROPIC_MODEL || DEFAULT_MODEL,
       max_tokens: 160,
+      // Haiku 5.5 thinks by default; a 160-token grounded answer has no room for it.
+      thinking: { type: "disabled" },
       system,
       messages: [{ role: "user", content: question }],
     },

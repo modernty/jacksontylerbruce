@@ -4,9 +4,11 @@ import { Suspense } from "react"
 import { SiteAnalytics } from "@/src/components/analytics"
 import { Composer } from "@/src/components/composer"
 import { PillsProvider } from "@/src/components/pills"
+import { ProjectTabs } from "@/src/components/project-tabs"
 import { TopBar } from "@/src/components/top-bar"
 import { ViewModeProvider } from "@/src/components/view-mode"
 import { loadCatalog } from "@/src/content/catalog"
+import { publishCatalog } from "@/src/content/publish"
 import { fontFaceCss } from "@/src/content/fonts"
 import { HERO, SITE_NAME, indexable, siteUrl } from "@/src/site/seo"
 import "./tokens.css"
@@ -35,6 +37,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const faces = fontFaceCss()
   const { profile } = loadCatalog()
+  const names = Object.fromEntries(publishCatalog().projects.map((project) => [project.slug, project.name]))
   return (
     <html lang="en" className={`pre ${plex.variable}`}>
       <head>
@@ -43,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ViewModeProvider>
           <TopBar location={profile.location} email={profile.email} linkedin={profile.linkedin} />
+          <ProjectTabs names={names} />
           <PillsProvider>
             {children}
             <Suspense fallback={null}>

@@ -8,7 +8,7 @@ import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
-import { CHAT_ASK, handOffToAbout } from "./chat-thread"
+import { CHAT_ASK, HOME_CHAT, handOff, handOffToAbout } from "./chat-thread"
 import { inlineChat, quietPage } from "./chrome"
 
 function sessionId(): string {
@@ -49,12 +49,13 @@ export function Composer() {
     const shell = shellRef.current
     const input = shell?.querySelector<HTMLTextAreaElement>(".input")
     const q = input?.value.trim() ?? ""
-    if (!q) return
-    if (inline && input) {
+    if (!q || !input) return
+    // Sent: the composer empties at once, wherever the answer appears.
+    input.value = ""
+    input.dispatchEvent(new Event("input"))
+    if (inline) {
       // Project and about pages answer in their own column instead of routing to another view.
       window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: q }))
-      input.value = ""
-      input.dispatchEvent(new Event("input"))
       return
     }
     const response = await fetch("/api/ask", {
@@ -65,6 +66,12 @@ export function Composer() {
     const data = (await response.json()) as { href?: string; handoff?: boolean; intent?: string; source?: string }
     track("ask_submitted", { status: response.status, intent: data.intent ?? "none", source: data.source ?? "none" })
     if (data.handoff) handOffToAbout(q)
+    // Work lists are answered in the conversation, which lists the projects to preview.
+    if (data.intent === "projects" || data.intent === "focus") {
+      handOff(HOME_CHAT, q)
+      router.push("/chat")
+      return
+    }
     if (data.href) router.push(data.href)
   }
 
@@ -99,7 +106,7 @@ export function Composer() {
             className="input"
             rows={1}
             maxLength={400}
-            placeholder={project ? "Let’s talk about it" : quiet ? "Ask anything" : "Ask anything about my work…"}
+            placeholder={project ? "Let’s talk about it" : path === "/chat" ? "Ask about the work" : quiet ? "Ask anything" : "Ask anything about my work…"}
             aria-label={project ? "Talk about this project" : "Ask anything about my work"}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {

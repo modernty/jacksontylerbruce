@@ -7,6 +7,7 @@ export const DAY_LIMIT = 50
 export const MAX_CHARS = 400
 export const MAX_TOKENS = 300
 export const ASK_TIMEOUT_MS = 8000
+export const DEFAULT_MODEL = "claude-haiku-5-5"
 const MICROS = 1_000_000
 
 function bucket(ip: string, now: number, size: number, name: string): string {
@@ -36,7 +37,7 @@ export async function spendRatio(now = Date.now(), env: Env = process.env, store
 }
 
 export function costUsd(inputTokens: number, outputTokens: number, env: Env = process.env): number {
-  const inputRate = Number(env.USD_PER_MILLION_INPUT ?? "1")
-  const outputRate = Number(env.USD_PER_MILLION_OUTPUT ?? "5")
+  const inputRate = Number(env.USD_PER_MILLION_INPUT ?? "0.1")
+  const outputRate = Number(env.USD_PER_MILLION_OUTPUT ?? "0.5")
   return (inputTokens * inputRate + outputTokens * outputRate) / 1_000_000
 }

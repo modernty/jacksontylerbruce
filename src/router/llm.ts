@@ -5,10 +5,11 @@ import { factText, followUpsFor, sectionHref, sheetAnswer, focusAnnotation, role
 import { publishCatalog, publicFocusIds } from "@/src/content/publish"
 import { annotationAllowed } from "./check"
 import { keywordRoute } from "./keyword"
-import { ASK_TIMEOUT_MS, MAX_TOKENS, costUsd, recordSpend } from "./limits"
+import { ASK_TIMEOUT_MS, DEFAULT_MODEL, MAX_TOKENS, costUsd, recordSpend } from "./limits"
 import { FILTERS, INTENTS, type Intent, type ViewSpec } from "./types"
 
-export type ModelCaller = (question: string) => Promise<ViewSpec>
+/** context, when given, says what the conversation last showed, so the model can resolve "that one". */
+export type ModelCaller = (question: string, context?: string) => Promise<ViewSpec>
 
 type Usage = { input_tokens?: number; output_tokens?: number }
 type ModelClient = {
@@ -74,7 +75,8 @@ function sheet(intent: Intent = "off_topic"): ViewSpec {
   }
 }
 
-export async function modelRoute(question: string, client?: ModelClient): Promise<ViewSpec> {
+export async function modelRoute(question: string, client?: ModelClient, context?: string): Promise<ViewSpec> {
+  const content = context ? `${context}\n\nVisitor: ${question.slice(0, 400)}` : question.slice(0, 400)
   const key = process.env.ANTHROPIC_API_KEY
   if (!key && !client) return { ...keywordRoute(question), source: "keyword" }
   const guarded = keywordRoute(question)
@@ -82,10 +84,10 @@ export async function modelRoute(question: string, client?: ModelClient): Promis
   try {
     const signal = AbortSignal.timeout(ASK_TIMEOUT_MS)
     const message = client
-      ? await client.create({ max_tokens: MAX_TOKENS, messages: [{ role: "user", content: question.slice(0, 400) }] }, { signal })
+      ? await client.create({ max_tokens: MAX_TOKENS, messages: [{ role: "user", content }] }, { signal })
       : await new Anthropic({ apiKey: key }).messages.create(
         {
-          model: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
+          model: process.env.ANTHROPIC_MODEL || DEFAULT_MODEL,
           max_tokens: MAX_TOKENS,
           system: [
             "You route a design portfolio. Call show_view exactly once.",
@@ -97,12 +99,13 @@ export async function modelRoute(question: string, client?: ModelClient): Promis
             "project: the first focusId is that project's id. role: the role id. compare: when two or more projects are named, list every named project id.",
             "availability for hiring, full-time, freelance, or contact asks.",
             "focus when the question asks for a theme's work (for example \"show me finance work\") and names no project.",
+            "The visitor may be mid-conversation: a Conversation line says what was last listed or open. Resolve \"that one\", \"the second one\" or \"it\" against it. A question on a new subject is a new question; route it on its own.",
             "Index:",
             indexText(),
           ].join("\n"),
           tools: [toolSchema()],
           tool_choice: { type: "tool", name: "show_view" },
-          messages: [{ role: "user", content: question.slice(0, 400) }],
+          messages: [{ role: "user", content }],
         },
         { signal },
       )

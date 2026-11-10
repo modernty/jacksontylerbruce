@@ -25,7 +25,8 @@ export function legacyRedirects(): Redirect[] {
     rows.push({ source: `/${slug}`, destination, permanent: true })
     rows.push({ source: "/404.html", has: [{ type: "query", key: "p", value: slug }], destination, permanent: true })
   }
-  for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*", "/assets/:path*"]) {
+  // /assets is not redirected: the images live there, at the same paths the old site used.
+  for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*"]) {
     rows.push({ source, destination: "/", permanent: true })
   }
   return rows

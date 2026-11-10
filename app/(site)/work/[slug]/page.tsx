@@ -6,6 +6,7 @@ import { SectionAnchor } from "@/src/components/section-anchor"
 import { WorkView } from "@/src/components/work-view"
 import { publishCatalog } from "@/src/content/publish"
 import type { Section } from "@/src/content/schema"
+import { Grain } from "@/src/plates/grain"
 import { MediaFrame } from "@/src/plates/media-frame"
 
 function find(slug: string) {
@@ -116,8 +117,16 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                 <MediaFrame key={image.src} image={image} index={index} total={images.length} priority={index === 0} sizes="(max-width: 900px) 100vw, 60vw" />
               ))}
             </section>
-          ) : null
+          ) : (
+            <section className="media" aria-label={`${project.name} image`}>
+              <figure className="frame">
+                <Grain slug={project.slug} label={project.name} />
+              </figure>
+            </section>
+          )
         }
+        hasImages={images.length > 0}
+        names={Object.fromEntries(catalog.projects.map((item) => [item.slug, item.name]))}
         cta={<p className="cta"><Link href="/timeline">Back to the timeline →</Link></p>}
       />
     </main>

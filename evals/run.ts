@@ -3,7 +3,9 @@ import { textIssues, wordCount } from "@/src/content/guard"
 import { publicFocusIds } from "@/src/content/publish"
 import { keywordRoute } from "@/src/router/keyword"
 import { modelRoute } from "@/src/router/llm"
-import { CASES } from "./cases"
+import { handleChatAsk } from "@/src/router/chat"
+import { MemoryStore } from "@/src/router/store"
+import { CASES, CONVERSATIONS } from "./cases"
 
 const ids = new Set(publicFocusIds())
 const hidden = ["remedy", "traveller", "fintech", "defi", "chatter app"]
@@ -53,8 +55,26 @@ const keywordRows = CASES.map((item) => {
   return { q: item.q, problems: check(view, item) }
 })
 
+/** Runs each conversation turn through the chat route; with a key in env, the model routes what the rules leave. */
+async function conversationRows(env: NodeJS.ProcessEnv) {
+  const rows = []
+  for (const item of CONVERSATIONS) {
+    const reply = await handleChatAsk({ q: item.q, sessionId: "eval", ...item.state }, { ip: "eval" }, { store: new MemoryStore(), env })
+    const body = reply.body as { projects?: string[]; roles?: string[]; panel?: string; expects?: string; go?: unknown; error?: string }
+    const problems: string[] = []
+    if (reply.status !== 200) problems.push(`status ${reply.status}: ${body.error ?? ""}`)
+    if (item.want.panel !== body.panel) problems.push(`panel ${body.panel ?? "none"}, want ${item.want.panel ?? "none"}`)
+    if (item.want.projects && JSON.stringify(item.want.projects) !== JSON.stringify(body.projects)) problems.push(`projects ${JSON.stringify(body.projects ?? [])}, want ${JSON.stringify(item.want.projects)}`)
+    if (item.want.roles && JSON.stringify(item.want.roles) !== JSON.stringify(body.roles)) problems.push(`roles ${JSON.stringify(body.roles ?? [])}, want ${JSON.stringify(item.want.roles)}`)
+    if ((item.want.expects ?? null) !== (body.expects ?? null)) problems.push(`expects ${body.expects ?? "none"}, want ${item.want.expects ?? "none"}`)
+    if (item.want.go && !body.go) problems.push("no go")
+    rows.push({ q: `${item.q}  [${Object.keys(item.state).join(", ")}]`, problems })
+  }
+  return rows
+}
+
 async function main() {
-  const keywordFailures = report("keyword", keywordRows)
+  const keywordFailures = report("keyword", keywordRows) + report("conversation", await conversationRows({ NODE_ENV: "test" }))
   let llmRate = 1
   let llmRan = false
   if (process.env.EVAL_LLM === "1") {
@@ -64,8 +84,13 @@ async function main() {
       const llmRows = []
       for (const item of CASES) {
         const view = await modelRoute(item.q)
-        llmRows.push({ q: item.q, problems: check(view, item) })
+        const problems = check(view, item)
+        // modelRoute falls back to keyword routing on any error; that is not a model pass.
+        if (view.source === "keyword" && item.intent !== "decline") problems.push("model failed, keyword fallback answered")
+        llmRows.push({ q: item.q, problems })
       }
+      const conversation = await conversationRows(process.env)
+      llmRows.push(...conversation)
       const llmFailures = report("llm", llmRows)
       llmRan = true
       llmRate = (llmRows.length - llmFailures) / llmRows.length

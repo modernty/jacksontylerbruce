@@ -20,7 +20,7 @@ test("a project page sends travel to the globe and other projects to their pages
   assert.deepEqual(onProject("Where has Tyler travelled?")?.go, { href: "/about", handoff: true })
   assert.deepEqual(onProject("Have you been to Japan?")?.go, { href: "/about", handoff: true })
   assert.deepEqual(onProject("Take me to Model Playground")?.go, { href: "/work/model-playground" })
-  assert.deepEqual(onProject("Show me all of your projects")?.go, { href: "/timeline/projects#projects" })
+  assert.deepEqual(onProject("Show me all of your projects")?.go, { href: "/chat", chat: true })
   assert.deepEqual(onProject("Take me to the timeline")?.go, { href: "/timeline#axis" })
   assert.deepEqual(onProject("Go back")?.go, { href: "back" })
 })

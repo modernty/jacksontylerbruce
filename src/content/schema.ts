@@ -79,6 +79,11 @@ export const RoleSchema = z.object({
   end: z.number().nullable(),
   yearLabel: z.string().min(1),
   since: z.string().optional(),
+  /** One or two sentences on the role, as on the resume. */
+  summary: z.string().optional(),
+  /** Team and company size, as Tyler states them ("Team of 4", "Series A, 40 people"). Shown when set. */
+  team: z.string().optional(),
+  company: z.string().optional(),
   lane: z.number().int().min(0).max(2),
   clientIds: z.array(z.string()).min(1),
   aliases: z.array(z.string()),

@@ -384,11 +384,21 @@ const clients: Client[] = [
 ]
 
 const roles: Role[] = [
-  role("role:joba", "Joba Studio", "Designer", 2019.35, 2021.55, `2019${en}21`, 0, ["client:joba"], ["joba", "joba studio"]),
-  role("role:soul-machines", "Soul Machines", "Designer", 2021.6, 2022.55, `2021${en}22`, 1, ["client:soul-machines"], ["soul machines", "soul"]),
-  role("role:urvin", "Urvin Finance", "Designer", 2022.1, 2022.7, "2022", 2, ["client:urvin"], ["urvin"]),
-  role("role:jet", "Jet Protocol", "Designer", 2022.78, 2023.8, `2022${en}23`, 0, ["client:jet"], ["jet protocol"]),
-  role("role:nax", "Nax Group", "Designer", 2023.1, 2023.65, "2023", 1, ["client:nax"], ["nax", "nax group"]),
+  role("role:joba", "Joba Studio", "Designer", 2019.35, 2021.55, `2019${en}21`, 0, ["client:joba"], ["joba", "joba studio"], {
+    summary: "Led design across environmental, product and web projects. Reported directly to the CEO and Creative Director, running project execution and growing the designers around me.",
+  }),
+  role("role:soul-machines", "Soul Machines", "Designer", 2021.6, 2022.55, `2021${en}22`, 1, ["client:soul-machines"], ["soul machines", "soul"], {
+    summary: "Sole designer on web and mobile experiences featuring AI digital humans for enterprise clients including Nestlé and CoreLogic. Designed conversational interfaces that streamlined customer service and specialised workflows.",
+  }),
+  role("role:urvin", "Urvin Finance", "Designer", 2022.1, 2022.7, "2022", 2, ["client:urvin"], ["urvin"], {
+    summary: "Designed and researched a fintech platform born from the GameStop and Robinhood market events. Shipped charting tools, social features, news feeds and educational content focused on market transparency.",
+  }),
+  role("role:jet", "Jet Protocol", "Designer", 2022.78, 2023.8, `2022${en}23`, 0, ["client:jet"], ["jet protocol"], {
+    summary: "Led product design and a brand refresh for a DeFi platform on Solana. Designed the end-to-end trading experience, from lending and borrowing to trading and governance, making complex blockchain functionality accessible.",
+  }),
+  role("role:nax", "Nax Group", "Designer", 2023.1, 2023.65, "2023", 1, ["client:nax"], ["nax", "nax group"], {
+    summary: "Led product design for an art lending platform that let collectors borrow against their collections to grow their portfolios. Designed the core experience bridging fine art and financial services.",
+  }),
   role("role:chatter", "Chatter Social", "Design Director", 2023.78, 2025.7, `2023${en}25`, 2, ["client:chatter"], ["chatter social", "chatter"]),
   role("role:lazarus", "Lazarus AI", "Design Lead", 2024.13, 2026.56, `2024${en}26`, 0, ["client:lazarus"], ["lazarus", "lazarus ai"]),
   role("role:employer", "", "Senior Designer", 2026.04, null, `2026${en}`, 2, ["client:loblaw-pc-health", "client:intuit", "client:rv"], ["current role", "current employer"], {
