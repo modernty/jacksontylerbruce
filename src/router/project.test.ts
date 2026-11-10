@@ -3,12 +3,12 @@ import { test } from "node:test"
 import { textIssues } from "@/src/content/guard"
 import { loadCatalog } from "@/src/content/catalog"
 import { publishCatalog } from "@/src/content/publish"
-import { MemoryCounter } from "./limits"
+import { MemoryStore } from "./store"
 import { answerProject, handleProjectAsk, type ProjectReply } from "./project"
 
 const project = (slug: string) => publishCatalog().projects.find((item) => item.slug === slug)!
 const ask = (slug: string, q: string, model: Parameters<typeof answerProject>[2] = null) =>
-  handleProjectAsk({ slug, q, sessionId: "test" }, { ip: "1.1.1.1" }, { counter: new MemoryCounter(), model })
+  handleProjectAsk({ slug, q, sessionId: "test" }, { ip: "1.1.1.1" }, { store: new MemoryStore(), model })
 
 test("questions draw from the matching generated section", async () => {
   const role = (await ask("chatter-brand", "What was your role?")).body as ProjectReply
@@ -47,10 +47,10 @@ test("hidden or unknown projects are not answerable", async () => {
 test("bad input and rate limits are refused", async () => {
   assert.equal((await handleProjectAsk({ slug: "novart" }, { ip: "x" })).status, 400)
   assert.equal((await ask("novart", "x".repeat(401))).status, 400)
-  const counter = new MemoryCounter()
+  const store = new MemoryStore()
   let last = 0
   for (let index = 0; index < 11; index += 1) {
-    last = (await handleProjectAsk({ slug: "novart", q: "Why?", sessionId: "s" }, { ip: "9.9.9.9" }, { counter, model: null })).status
+    last = (await handleProjectAsk({ slug: "novart", q: "Why?", sessionId: "s" }, { ip: "9.9.9.9" }, { store, model: null })).status
   }
   assert.equal(last, 429)
 })

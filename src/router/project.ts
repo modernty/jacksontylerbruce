@@ -6,7 +6,8 @@ import { publishCatalog } from "@/src/content/publish"
 import type { Project, Section } from "@/src/content/schema"
 import { annotationAllowed, factBlob } from "./check"
 import { routeQuestion, type Go } from "./navigate"
-import { ASK_TIMEOUT_MS, MAX_CHARS, costUsd, counterFromEnv, memoryCounter, recordSpend, spendRatio, underLimit, type Counter } from "./limits"
+import { ASK_TIMEOUT_MS, MAX_CHARS, costUsd, recordSpend, spendRatio, underLimit } from "./limits"
+import { memoryStore, storeFromEnv, type Store } from "./store"
 
 /** One reply in a project conversation. sectionId names the section it was drawn from. */
 export type ProjectReply = { answer: string; sectionId: string | null; source: "model" | "section" | "decline" | "route"; go?: Go; view?: "images" }
@@ -87,7 +88,7 @@ async function claude(system: string, question: string): Promise<string> {
     },
     { signal: AbortSignal.timeout(ASK_TIMEOUT_MS) },
   )
-  recordSpend(costUsd(message.usage?.input_tokens ?? 0, message.usage?.output_tokens ?? 0))
+  void recordSpend(costUsd(message.usage?.input_tokens ?? 0, message.usage?.output_tokens ?? 0))
   return message.content.map((block) => (block.type === "text" ? block.text : "")).join("").trim()
 }
 
@@ -113,7 +114,7 @@ export async function answerProject(project: Project, question: string, model?: 
   }
 }
 
-export type ProjectAskDeps = { counter?: Counter; model?: ModelClient | null; env?: NodeJS.ProcessEnv; now?: number }
+export type ProjectAskDeps = { store?: Store; model?: ModelClient | null; env?: NodeJS.ProcessEnv; now?: number }
 
 export async function handleProjectAsk(raw: unknown, ctx: { ip: string }, deps: ProjectAskDeps = {}): Promise<{ status: number; body: unknown }> {
   const parsed = ProjectAsk.safeParse(raw)
@@ -126,13 +127,14 @@ export async function handleProjectAsk(raw: unknown, ctx: { ip: string }, deps: 
   const project = catalog.projects.find((item) => item.slug === slug)
   if (!project) return { status: 404, body: { error: "Unknown project." } }
   const now = deps.now ?? Date.now()
-  const counter = deps.counter ?? counterFromEnv(deps.env)
-  const allowed = await underLimit(ctx.ip || "local", now, counter).catch(() => underLimit(ctx.ip || "local", now, memoryCounter))
+  const store = deps.store ?? storeFromEnv(deps.env)
+  const allowed = await underLimit(ctx.ip || "local", now, store).catch(() => underLimit(ctx.ip || "local", now, memoryStore))
   if (!allowed) return { status: 429, body: { error: "Too many questions. Try again in a few minutes." } }
   if (containsBlocked(question) || textIssues(question).includes("blocked term")) return { status: 200, body: decline() }
   const route = routeQuestion(question, catalog, { page: "project", slug })
   if (route) return { status: 200, body: { ...route, sectionId: null, source: "route" } }
   const env = deps.env ?? process.env
-  const model = deps.model !== undefined ? deps.model : env.ANTHROPIC_API_KEY && spendRatio(now, env) < 1 ? claude : null
+  const underCap = env.ANTHROPIC_API_KEY ? (await spendRatio(now, env, store).catch(() => 0)) < 1 : false
+  const model = deps.model !== undefined ? deps.model : underCap ? claude : null
   return { status: 200, body: await answerProject(project, question, model) }
 }

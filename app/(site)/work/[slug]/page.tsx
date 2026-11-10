@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { TrackOnMount } from "@/src/components/analytics"
 import { SectionAnchor } from "@/src/components/section-anchor"
 import { WorkView } from "@/src/components/work-view"
 import { publishCatalog } from "@/src/content/publish"
@@ -71,6 +72,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   return (
     <main className="work">
       <SectionAnchor />
+      <TrackOnMount name="project_opened" props={{ slug: project.slug }} />
       <WorkView
         slug={project.slug}
         head={

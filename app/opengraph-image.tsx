@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og"
 import { tokens } from "@/src/design/tokens"
+import { SITE_NAME } from "@/src/site/seo"
 
-export const alt = "Tyler Jackson, Designer, Miami, FL"
+export const alt = `${SITE_NAME}, Miami, FL`
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 

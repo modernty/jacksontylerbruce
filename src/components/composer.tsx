@@ -1,8 +1,10 @@
 "use client"
 
+import { track } from "@vercel/analytics"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
@@ -60,20 +62,27 @@ export function Composer() {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ q, sessionId: sessionId() }),
     })
-    const data = (await response.json()) as { href?: string; handoff?: boolean }
+    const data = (await response.json()) as { href?: string; handoff?: boolean; intent?: string; source?: string }
+    track("ask_submitted", { status: response.status, intent: data.intent ?? "none", source: data.source ?? "none" })
     if (data.handoff) handOffToAbout(q)
     if (data.href) router.push(data.href)
   }
 
   return (
-    <section className={quiet ? "hero hero-work" : "hero"}>
+    <section className={quiet ? "hero hero-work" : "hero"} aria-label="Ask about the work">
       <div className="in">
         {quiet ? null : (
           <>
             <h1>What are you looking for?</h1>
             <div className="cards">
-              {shown.map((pill) => (
-                <Link key={pill.href + pill.label} href={pill.href}>{pill.label}</Link>
+              {shown.map((pill, index) => (
+                <Link
+                  key={pill.href + pill.label}
+                  href={pill.href}
+                  onClick={() => track("suggestion_clicked", { position: index + 1, target: targetPath(pill.href) })}
+                >
+                  {pill.label}
+                </Link>
               ))}
             </div>
           </>
@@ -106,7 +115,7 @@ export function Composer() {
                 <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
               </svg>
             </button>
-            <button className="ib send" type="submit" title="Send">
+            <button className="ib send" type="submit" title="Send" aria-label="Send">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paper)" strokeWidth="2">
                 <path d="M12 19V5M6 11l6-6 6 6" />
               </svg>

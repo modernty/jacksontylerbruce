@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next"
-import { publishCatalog } from "@/src/content/publish"
+import { indexable, publicPaths, siteUrl } from "@/src/site/seo"
 
-const SITE = "https://jacksontylerbruce.com"
+export const dynamic = "force-dynamic"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["/timeline", "/timeline/projects", "/about", ...publishCatalog().projects.map((project) => `/work/${project.slug}`)]
-  return pages.map((path) => ({ url: `${SITE}${path}` }))
+  if (!indexable()) return []
+  const base = siteUrl()
+  return publicPaths().map((path) => ({ url: `${base}${path}` }))
 }

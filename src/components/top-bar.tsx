@@ -11,7 +11,7 @@ export function TopBar({ location, email, linkedin }: { location: string; email:
   const project = path.startsWith("/work/")
   if (quietPage(path)) {
     return (
-      <div className="top top-work">
+      <header className="top top-work">
         <Link href="/timeline#axis">Jackson, <em>Tyler</em> Bruce</Link>
         <span className="right">
           {project ? <BoringToggle /> : null}
@@ -21,13 +21,13 @@ export function TopBar({ location, email, linkedin }: { location: string; email:
           </span>
           <Link href="/about" className="place">{location}</Link>
         </span>
-      </div>
+      </header>
     )
   }
   return (
-    <div className="top">
+    <header className="top">
       <span>Tyler Jackson — Designer</span>
       <span>Index — 2026</span>
-    </div>
+    </header>
   )
 }

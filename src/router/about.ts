@@ -5,7 +5,8 @@ import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Place } from "@/src/content/schema"
 import { REGIONS } from "@/src/globe/regions"
 import { keywordRoute } from "./keyword"
-import { MAX_CHARS, counterFromEnv, memoryCounter, underLimit, type Counter } from "./limits"
+import { MAX_CHARS, underLimit } from "./limits"
+import { memoryStore, storeFromEnv, type Store } from "./store"
 import { routeQuestion, type Go } from "./navigate"
 
 /** One reply about Tyler. placeId names a place the globe should turn to, when there is one. */
@@ -91,15 +92,15 @@ export function answerAbout(question: string, catalog: PublicCatalog = publishCa
   return { answer: routed.annotation, placeId: null }
 }
 
-export async function handleAboutAsk(raw: unknown, ctx: { ip: string }, deps: { counter?: Counter; now?: number } = {}): Promise<{ status: number; body: unknown }> {
+export async function handleAboutAsk(raw: unknown, ctx: { ip: string }, deps: { store?: Store; now?: number } = {}): Promise<{ status: number; body: unknown }> {
   const parsed = AboutAsk.safeParse(raw)
   if (!parsed.success) return { status: 400, body: { error: "Expected {q, sessionId}." } }
   const question = parsed.data.q.trim()
   if (!question) return { status: 400, body: { error: "Ask a question." } }
   if (question.length > MAX_CHARS) return { status: 400, body: { error: "Question is capped at 400 characters." } }
   const now = deps.now ?? Date.now()
-  const counter = deps.counter ?? counterFromEnv()
-  const allowed = await underLimit(ctx.ip || "local", now, counter).catch(() => underLimit(ctx.ip || "local", now, memoryCounter))
+  const store = deps.store ?? storeFromEnv()
+  const allowed = await underLimit(ctx.ip || "local", now, store).catch(() => underLimit(ctx.ip || "local", now, memoryStore))
   if (!allowed) return { status: 429, body: { error: "Too many questions. Try again in a few minutes." } }
   if (containsBlocked(question)) return { status: 200, body: { answer: "I only talk about my public work and where I've been.", placeId: null } }
   const route = routeQuestion(question, publishCatalog(), { page: "about" })
