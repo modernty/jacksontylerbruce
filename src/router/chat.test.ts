@@ -24,7 +24,7 @@ test("asking for the work answers in one sentence: three recent projects from tw
   assert.ok(new Set(picked.map((project) => project?.roleId)).size <= 2)
   // The newest project always leads.
   assert.equal(reply.projects[0], byRecent(catalog.projects)[0]?.slug)
-  assert.equal(reply.answer, `My most recent projects include work from ${employerPublicName()} and Lazarus AI: Intuit, Loblaw / PC Health and Whitelist. Pick one to preview it, or I can group the rest by type: product design, brand or spatial.`)
+  assert.equal(reply.answer, `My most recent projects include work from ${employerPublicName()} and Lazarus AI: Intuit, Loblaw / PC Health and Whitelist. Select one to view, or I can group the rest by type: product design, brand or spatial.`)
   assert.equal(reply.expects, "category")
   assert.ok(!reply.answer.includes("\n"))
   const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug)
@@ -34,7 +34,7 @@ test("asking for the work answers in one sentence: three recent projects from tw
 test("a type, after the offer, lists that group", () => {
   const brand = answerChat("brand", "category")
   assert.deepEqual(names(brand?.projects), ["Lazarus brand", "Chatter brand", "Jet brand"])
-  assert.equal(brand?.answer, "My brand work, most recent first: Lazarus brand, Chatter brand and Jet brand. Pick one to preview it.")
+  assert.equal(brand?.answer, "My brand work, most recent first: Lazarus brand, Chatter brand and Jet brand. Select one to view.")
   const spatial = answerChat("the exhibitions please", "category")
   assert.deepEqual(names(spatial?.projects), ["USM: Milan", "USM Hue + Man"])
   const product = answerChat("Product design", "category")

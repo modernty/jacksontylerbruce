@@ -113,7 +113,7 @@ function allWork(catalog: PublicCatalog): ChatReply {
   const { companies, projects } = recentPicks(catalog)
   const from = companies.length ? ` from ${joinNames(companies)}` : ""
   return {
-    answer: `My most recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Pick one to preview it, or I can group the rest by type: ${typeList()}.`,
+    answer: `My most recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Select one to view, or I can group the rest by type: ${typeList()}.`,
     projects: projects.map((project) => project.slug),
     expects: "category",
   }
@@ -122,7 +122,7 @@ function allWork(catalog: PublicCatalog): ChatReply {
 /** A group of projects as one sentence, newest first. */
 function sentence(lead: string, found: Project[]): ChatReply {
   const ordered = byRecent(found)
-  return { answer: `${lead} ${joinNames(ordered.map((project) => project.name))}. Pick one to preview it.`, projects: ordered.map((project) => project.slug) }
+  return { answer: `${lead} ${joinNames(ordered.map((project) => project.name))}. Select one to view.`, projects: ordered.map((project) => project.slug) }
 }
 
 function byDiscipline(key: Discipline, catalog: PublicCatalog): ChatReply {

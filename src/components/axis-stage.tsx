@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { bindTimeline } from "./behaviors"
+import { HOME_CHAT, handOff } from "./chat-thread"
+import { StarterPrompts } from "./starter-prompts"
 import type { TimelineCard } from "@/src/timeline/types"
 
 export function withMode(svg: string, mode: "timeline" | "projects" | "focus"): string {
@@ -30,6 +32,12 @@ export function AxisStage({
   const svg = withMode(desktop, mode)
   const phone = withMode(mobile, mode)
 
+  // The same starting questions as the conversation; picking one asks it there.
+  const ask = (question: string) => {
+    handOff(HOME_CHAT, question)
+    router.push("/chat")
+  }
+
   useEffect(() => {
     const stage = ref.current
     if (!stage) return
@@ -42,6 +50,7 @@ export function AxisStage({
     <section className="tlw" id={anchor} ref={ref} data-mode={mode}>
       {annotation ? <p className="note">{annotation}</p> : null}
       <div className="d" tabIndex={0} aria-label="Career timeline. Arrow keys step through projects; Enter opens one.">
+        {mode === "timeline" ? <StarterPrompts className="tl-prompts" onPick={ask} /> : null}
         <div dangerouslySetInnerHTML={{ __html: svg }} />
         <div className="card-slot">
           <div className="card" aria-live="polite">
@@ -54,6 +63,7 @@ export function AxisStage({
           </div>
         </div>
       </div>
+      {mode === "timeline" ? <StarterPrompts className="tl-prompts tl-prompts-m" onPick={ask} /> : null}
       <div className={mode === "focus" ? "m mf" : "m"} dangerouslySetInnerHTML={{ __html: phone }} />
     </section>
   )

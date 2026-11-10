@@ -36,6 +36,10 @@ form.shell{font:inherit;color:inherit}
 .mode{opacity:0;transform:translateY(8px);transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .mode.on{opacity:1;transform:none;pointer-events:auto}
 .d{position:relative}
+/* The starting questions above the timeline, the same bubbles as the conversation. */
+.prompts.tl-prompts{margin:0 0 32px}
+.prompts.tl-prompts-m{display:none}
+@media(max-width:768px){.prompts.tl-prompts-m{display:flex}}
 .pj{cursor:pointer;outline:none}
 .pj .w6,.co .w4{opacity:0}
 .pj .w4{opacity:.7}
@@ -260,12 +264,15 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
 /* Paper behind the name bar and tabs, so scrolled messages fade out under them. */
 .conversation::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:120px;background:linear-gradient(var(--paper) 72%,color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
 .conv-empty{padding-top:22vh}
+/* The empty conversation: the composer joins the title and prompts instead of waiting at the bottom. */
+body:has(.conv-empty) .hero-work{top:calc(var(--empty-bottom,60vh) + 28px);bottom:auto}
+body:has(.conv-empty) .hero-work::before{display:none}
 .conv-empty h1{margin:0;font-weight:var(--fw-medium)}
-/* Starter prompts look like the visitor's own chat bubbles: they fill the line, then wrap. */
-.conv-empty .cards{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px;margin-top:20px}
-.conv-empty .cards button{all:unset;cursor:pointer;box-sizing:border-box;white-space:nowrap;padding:8px 14px;border:1px solid var(--ink-rule);border-radius:16px;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:24px;transition:background var(--motion-quick) var(--motion-ease),border-color var(--motion-quick) var(--motion-ease)}
-.conv-empty .cards button:hover{background:var(--ink-wash);border-color:var(--ink-hair)}
-.conv-empty .cards button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* Starter prompts (the conversation and the timeline) look like the visitor's own chat bubbles: they fill the line, then wrap. */
+.prompts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px;margin:20px 0 0}
+.prompts button{all:unset;cursor:pointer;box-sizing:border-box;white-space:nowrap;padding:8px 14px;border:1px solid var(--ink-rule);border-radius:16px;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:24px;transition:background var(--motion-quick) var(--motion-ease),border-color var(--motion-quick) var(--motion-ease)}
+.prompts button:hover{background:var(--ink-wash);border-color:var(--ink-hair)}
+.prompts button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 /* Project names inside a reply: underlined words in the sentence, each one opens its preview. */
 .chat-link{all:unset;cursor:pointer;font:inherit;color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--ink) 45%,transparent)}
 .chat-link:hover,.chat-link[aria-pressed=true]{text-decoration-color:var(--ink)}

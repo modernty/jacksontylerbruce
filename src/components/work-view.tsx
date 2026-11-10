@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { track } from "@vercel/analytics"
 import { IntroStream } from "./intro-stream"
+import type { CareerEntry } from "@/src/content/career"
 import { ProjectChat } from "./project-chat"
 import { useViewMode } from "./view-mode"
 
@@ -46,6 +47,8 @@ type Pieces = {
   hasImages: boolean
   /** Every public project's name by slug, so answers can open other projects as tabs. */
   names: Record<string, string>
+  /** Career entries by role id, for resume-style answers in this tab. */
+  careers: Record<string, CareerEntry>
   cta: ReactNode
 }
 
@@ -62,7 +65,7 @@ const galleryIcon = (
 )
 
 /** One project, two ways to read it: a conversation in one column, or boring view's info beside photos. */
-export function WorkView({ slug, head, leadIds, lead, meta, sections, media, hasImages, names, cta }: Pieces) {
+export function WorkView({ slug, head, leadIds, lead, meta, sections, media, hasImages, names, careers, cta }: Pieces) {
   const { boring } = useViewMode()
   const [more, setMore] = useState(false)
   const [gallery, setGallery] = useState(false)
@@ -135,7 +138,7 @@ export function WorkView({ slug, head, leadIds, lead, meta, sections, media, has
           {anchors}
           <IntroStream id={slug} paragraphs={lead}>{after}</IntroStream>
         </div>
-        <ProjectChat slug={slug} names={names} onImages={openGallery} />
+        <ProjectChat slug={slug} names={names} careers={careers} hasImages={hasImages} onImages={openGallery} />
       </article>
       {gallery ? (
         <>

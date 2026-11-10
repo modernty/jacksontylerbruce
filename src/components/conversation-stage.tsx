@@ -3,13 +3,15 @@
 import { track } from "@vercel/analytics"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import type { CareerEntry } from "@/src/content/career"
 import type { Image as MediaImage } from "@/src/content/schema"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
-import { CHAT_ASK, ChatThread, HOME_CHAT, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
+import { chatAnswer } from "./chat-answer"
+import { StarterPrompts, askHere } from "./starter-prompts"
+import { ChatThread, HOME_CHAT, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null }
@@ -20,25 +22,7 @@ type Shown = ({ kind: "project" } & Picked) | { kind: Panel }
 
 const PREVIEW_KEY = "home-chat-preview"
 const SCROLL_KEY = "home-chat-scroll"
-const STARTERS = ["Show me recent projects", "Show me brand work", "Walk me through your career"]
 
-/**
- * Finds each listed project's name in the answer, as a whole word, taking the last time it
- * appears so a company name that starts the same way ("Chatter Social") stays plain text.
- */
-export function linkRanges(text: string, names: { slug: string; name: string }[]): { start: number; end: number; slug: string }[] {
-  const ranges: { start: number; end: number; slug: string }[] = []
-  const word = (char: string | undefined) => !!char && /[\p{L}\p{N}]/u.test(char)
-  for (const { slug, name } of [...names].sort((a, b) => b.name.length - a.name.length)) {
-    let at = text.lastIndexOf(name)
-    while (at >= 0 && (word(text[at - 1]) || word(text[at + name.length]))) at = text.lastIndexOf(name, at - 1)
-    if (at < 0) continue
-    const end = at + name.length
-    if (ranges.some((range) => at < range.end && end > range.start)) continue
-    ranges.push({ start: at, end, slug })
-  }
-  return ranges.sort((a, b) => a.start - b.start)
-}
 
 function readShown(): Shown | null {
   try {
@@ -68,9 +52,29 @@ function keepShown(picked: Shown | null) {
 export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: string; careers: CareerEntry[] }) {
   const router = useRouter()
   const bySlug = useRef(new Map(previews.map((item) => [item.slug, item])))
-  const byRole = useRef(new Map(careers.map((item) => [item.id, item])))
+  const byRole = useRef(Object.fromEntries(careers.map((item) => [item.id, item])))
+  const names = useRef(Object.fromEntries(previews.map((item) => [item.slug, item.name])))
   const [shown, setShownState] = useState<Shown | null>(null)
   const [active, setActive] = useState(false)
+  const emptyRef = useRef<HTMLDivElement>(null)
+
+  // Before the first question the composer sits right under the prompts, as part of the
+  // opening; once the conversation starts it goes back to the bottom of the screen.
+  useEffect(() => {
+    const empty = emptyRef.current
+    if (active || !empty) return
+    const root = document.documentElement
+    const place = () => root.style.setProperty("--empty-bottom", `${Math.round(empty.getBoundingClientRect().bottom)}px`)
+    place()
+    const observer = new ResizeObserver(place)
+    observer.observe(empty)
+    window.addEventListener("resize", place)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", place)
+      root.style.removeProperty("--empty-bottom")
+    }
+  }, [active])
   const picked = shown?.kind === "project" ? shown : null
   // Read when a question is sent, so the server knows which project "that" means.
   const openRef = useRef<string | undefined>(undefined)
@@ -137,7 +141,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
         if (projects?.length === 1) setPicked({ slug: projects[0], list: projects })
         if (data.panel === "globe" || data.panel === "timeline") setShown({ kind: data.panel })
         if (data.go) follow(data.go, q, router)
-        const roles = data.roles?.filter((id) => byRole.current.has(id))
+        const roles = data.roles?.filter((id) => id in byRole.current)
         return { answer: data.answer ?? data.error ?? "Something went wrong. Try asking again.", projects, roles, expects: data.expects, panel: data.panel }
       } catch {
         return "I couldn't reach the site just now. Try asking again."
@@ -210,15 +214,9 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
             </button>
           </div>
         ) : (
-          <div className="conv-empty">
+          <div className="conv-empty" ref={emptyRef}>
             <h1>What would you like to see?</h1>
-            <p className="cards">
-              {STARTERS.map((label) => (
-                <button key={label} type="button" onClick={() => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: label }))}>
-                  {label}
-                </button>
-              ))}
-            </p>
+            <StarterPrompts onPick={askHere} />
           </div>
         )}
         <ChatThread
@@ -226,81 +224,9 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           ask={ask}
           label="Conversation about the work"
           onActive={setActive}
-          renderAnswer={(turn) => {
-            const list = turn.projects ?? []
-            const roles = (turn.roles ?? []).flatMap((id) => byRole.current.get(id) ?? [])
-            if (roles.length) {
-              // Resume style. Two text styles only: the role facts in Medium, the summary in Regular.
-              return (
-                <>
-                  {turn.answer}
-                  <ol className="career">
-                    {roles.map((role) => {
-                      const named = role.projects.flatMap((slug) => bySlug.current.get(slug) ?? [])
-                      return (
-                        <li key={role.id}>
-                          <p className="career-facts">
-                            <span>{role.name}</span>
-                            <span>{role.title}</span>
-                            <span>{role.dates}</span>
-                            {role.sizes ? <span>{role.sizes}</span> : null}
-                          </p>
-                          {role.summary || named.length ? (
-                            <p className="career-summary">
-                              {role.summary}
-                              {named.length ? (
-                                <>
-                                  {role.summary ? " " : ""}
-                                  Projects:{" "}
-                                  {named.map((item, index) => (
-                                    <span key={item.slug}>
-                                      {index ? (index === named.length - 1 ? " and " : ", ") : ""}
-                                      <button type="button" className="chat-link" aria-pressed={picked?.slug === item.slug} onClick={() => pick(item.slug, role.projects)}>
-                                        {item.name}
-                                      </button>
-                                    </span>
-                                  ))}
-                                  .
-                                </>
-                              ) : null}
-                            </p>
-                          ) : null}
-                        </li>
-                      )
-                    })}
-                  </ol>
-                </>
-              )
-            }
-            if (turn.panel) {
-              const kind = turn.panel
-              return [
-                turn.answer,
-                " ",
-                <button key="view" type="button" className="chat-link" aria-pressed={panel === kind} onClick={() => setShown({ kind })}>
-                  {kind === "globe" ? "See the globe" : "See the timeline"}
-                </button>,
-              ]
-            }
-            if (!list.length) return null
-            const names = list.flatMap((slug) => {
-              const item = bySlug.current.get(slug)
-              return item ? [{ slug, name: item.name }] : []
-            })
-            const parts: ReactNode[] = []
-            let from = 0
-            for (const range of linkRanges(turn.answer, names)) {
-              parts.push(turn.answer.slice(from, range.start))
-              parts.push(
-                <button key={range.slug} type="button" className="chat-link" aria-pressed={picked?.slug === range.slug} onClick={() => pick(range.slug, list)}>
-                  {turn.answer.slice(range.start, range.end)}
-                </button>,
-              )
-              from = range.end
-            }
-            parts.push(turn.answer.slice(from))
-            return parts
-          }}
+          renderAnswer={(turn) =>
+            chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind) => setShown({ kind }), current: picked?.slug ?? panel ?? undefined })
+          }
         />
       </div>
       {panel ? (

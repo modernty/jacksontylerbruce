@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { useRouter } from "next/navigation"
+import { ABOUT_STARTERS, StarterPrompts, askHere } from "./starter-prompts"
 import { ABOUT_OPEN, CHAT_ASK, ChatThread, follow, sessionId, type Go } from "./chat-thread"
 
 const SLIDE_MS = 700
@@ -127,6 +128,7 @@ export function AboutStage({ places, title }: { places: GlobePlace[]; title: str
             Show chat
           </button>
         ) : null}
+        {active ? null : <StarterPrompts className="about-prompts" items={ABOUT_STARTERS} onPick={askHere} />}
         <ChatThread storeKey="about-chat" ask={ask} label="Conversation about Tyler" onActive={onActive} />
       </div>
       <div className="stage-view" ref={view}>

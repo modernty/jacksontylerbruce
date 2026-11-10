@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { TrackOnMount } from "@/src/components/analytics"
 import { SectionAnchor } from "@/src/components/section-anchor"
 import { WorkView } from "@/src/components/work-view"
+import { careerEntries } from "@/src/content/career"
 import { publishCatalog } from "@/src/content/publish"
 import type { Section } from "@/src/content/schema"
 import { Grain } from "@/src/plates/grain"
@@ -82,7 +83,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             {external.length ? (
               <p className="links">
                 {external.map((item) => (
-                  <a key={item.href} href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+                  <a key={item.label} href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
                 ))}
               </p>
             ) : null}
@@ -127,6 +128,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         }
         hasImages={images.length > 0}
         names={Object.fromEntries(catalog.projects.map((item) => [item.slug, item.name]))}
+        careers={Object.fromEntries(careerEntries(catalog).map((entry) => [entry.id, entry]))}
         cta={<p className="cta"><Link href="/timeline">Back to the timeline →</Link></p>}
       />
     </main>
