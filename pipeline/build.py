@@ -1,4 +1,4 @@
-"""Build public/map.json from the typed seed.
+"""Build data/engine/map.json from the typed seed.
 
 One command, from the repo root:
 
@@ -38,7 +38,7 @@ from pipeline.schema import MapDocument
 from pipeline.text import plain_text, render, text_hash
 
 ROOT = Path(__file__).resolve().parents[1]
-MAP_PATH = ROOT / "public" / "map.json"
+MAP_PATH = ROOT / "data" / "engine" / "map.json"
 NODES_PATH = ROOT / "data" / "engine" / "nodes.json"
 CACHE_PATH = ROOT / "data" / "engine" / "embedding-cache.json"
 EMBEDDINGS_PATH = ROOT / "data" / "engine" / "embeddings.bin"

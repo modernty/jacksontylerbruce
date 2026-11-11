@@ -28,7 +28,7 @@
     {
       "id": "labs",
       "label": "Labs and side projects",
-      "prompt": "What are verystrongopinion, traveller, and the semantic idea map?",
+      "prompt": "What labs and side projects are on the site?",
       "placeholder": true
     }
   ]

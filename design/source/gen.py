@@ -40,10 +40,8 @@ THEMES = {
     "USM Milan": ["Spatial", "Material", "Identity"],
     "ATLS": ["AI", "Trust"],
     "Loblaw": ["Systems"],
-    "Remedy": ["AI", "Trust", "Systems"],
     "Intuit": ["Finance"],
     "Overmatch patterns": ["AI", "Trust", "Systems"],
-    "Traveller": ["Arch", "Systems"],
 }
 
 
@@ -89,10 +87,8 @@ def build():
         ("USM Milan", 2024.9, 2025.35, "Joba × USM", 1, "Spatial"),
         ("ATLS", 2025.4, 2026.4, "Lazarus AI", 0, "AI"),
         ("Loblaw", 2026.04, NOW, employer, 1, "Systems"),
-        ("Remedy", 2026.1, 2026.6, employer, 1, "AI"),
         ("Intuit", 2026.45, NOW, "Intuit", 1, "AI"),
         ("Overmatch patterns", 2026.4, NOW, "Overmatch AI", 2, "AI"),
-        ("Traveller", 2026.5, NOW, "Side project", 2, "Systems"),
     ]
     rows = []
     for name, start, end, org, lane, focus in projects:

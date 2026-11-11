@@ -49,7 +49,6 @@ const SOURCES: Record<string, { inventory?: string; copy?: string }> = {
   whitelist: { inventory: "whitelist", copy: "whitelist" },
   loblaw: { inventory: "loblaw" },
   intuit: { inventory: "intuit" },
-  traveller: { inventory: "traveller" },
 }
 
 const records = new Map((inventory as Inventory[]).map((item) => [item.slug, item]))

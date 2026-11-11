@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { projectCard, resolveView } from "../ask/src/registry.js";
 import { buildTimeline } from "../ask/src/timeline.js";
 
-const map = JSON.parse(readFileSync(new URL("../public/map.json", import.meta.url), "utf8"));
+const map = JSON.parse(readFileSync(new URL("../data/engine/map.json", import.meta.url), "utf8"));
 const catalog = { nodes: map.nodes };
 const failures = [];
 const check = (condition, message) => {

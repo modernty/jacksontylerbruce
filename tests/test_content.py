@@ -40,7 +40,7 @@ def test_seed_validates_and_counts_real_nodes():
 
     public = export_public(catalog)
     assert len(public["entities"]) >= 20
-    assert len(public["projects"]) == 19
+    assert len(public["projects"]) == 18
     assert len(public["ideas"]) == 18
     assert len(public["tools"]) == 21
     assert public["origin"]["id"] == "origin:tyler"
@@ -85,7 +85,7 @@ def _flag_hits(value, path=""):
 def test_committed_content_is_public_only():
     root = CONTENT_DIR.parent
     paths = list(CONTENT_DIR.glob("*.json"))
-    paths.append(root / "public" / "map.json")
+    paths.append(root / "data" / "engine" / "map.json")
     paths.append(root / "data" / "engine" / "nodes.json")
     hits = []
     for path in paths:
@@ -173,7 +173,7 @@ def test_tyler_role_and_date_answers():
         assert project.teamSize == 1
 
     loblaw = projects["project:loblaw"]
-    assert loblaw.summary == "A mobile health chat assistant codenamed Remedy."
+    assert loblaw.summary == "Public work for this client during the current role."
     assert loblaw.role == "Senior Product Designer"
     assert loblaw.year == "2026–present"
     assert loblaw.start == "2026-01"
@@ -192,7 +192,7 @@ def test_tyler_role_and_date_answers():
     own = _by_id(catalog.clients)["client:own"]
     assert own.visible is True
     assert own.confidential is False
-    for slug in ("verystrongopinion", "traveller", "idea-map"):
+    for slug in ("verystrongopinion", "idea-map"):
         project = projects[f"project:{slug}"]
         assert project.visible is True
         assert project.confidential is False

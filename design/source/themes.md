@@ -18,10 +18,8 @@ Themes: AI · Trust in AI · Systems · Architecture · Spatial · Material · I
 | USM Milan (2025) | Spatial, Material, Identity | Immersive Haller Soft Panel installation; awarded for event branding. |
 | ATLS Talent Mgmt (2025–26) | AI, Trust in AI | Agentic matching with rationale at every level and constraint toggles. |
 | Loblaw (2026–) | Systems | Public project for this client on the current role. |
-| Remedy (2026) | AI, Trust in AI, Systems | Health chat with consent, citations, red-flag escalation, and handoff components. |
 | Intuit (2026) | Finance | A client under the current role. Finance work; public detail is still thin. |
 | Overmatch patterns (2026–) | AI, Trust in AI, Systems | AI tooling patterns; themes inferred from the role brief. |
-| Traveller (2026–) | Architecture, Systems | Own full-stack trip platform (Supabase, Anthropic API). |
 
 Considered and merged: Interfaces (into AI and Systems), Exhibition (into Spatial), Conversational (into AI), Brand (renamed Identity).
 Not timeline-plotted: Whitelist (AI, Trust in AI, Architecture), a strong fit if it's added as a project.

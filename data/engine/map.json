@@ -187,7 +187,6 @@
         "project:corelogic",
         "project:idea-map",
         "project:nestle",
-        "project:traveller",
         "project:usm-hueman",
         "project:usm-milan-2025",
         "project:usm-venice-2025",
@@ -375,16 +374,6 @@
     },
     {
       "from": "client:own",
-      "id": "client:client:own:project:traveller",
-      "kind": "client",
-      "reason": "client: Tyler (own work)",
-      "similarity": 0.761266,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "client:own",
       "id": "client:client:own:project:verystrongopinion",
       "kind": "client",
       "reason": "client: Tyler (own work)",
@@ -465,16 +454,6 @@
     },
     {
       "from": "project:idea-map",
-      "id": "client:project:idea-map:project:traveller",
-      "kind": "client",
-      "reason": "same client: Tyler (own work)",
-      "similarity": 0.775367,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "project:idea-map",
       "id": "client:project:idea-map:project:verystrongopinion",
       "kind": "client",
       "reason": "same client: Tyler (own work)",
@@ -541,16 +520,6 @@
       "similarity": 0.819735,
       "source": "computed",
       "to": "project:whitelist",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "client:project:traveller:project:verystrongopinion",
-      "kind": "client",
-      "reason": "same client: Tyler (own work)",
-      "similarity": 0.679232,
-      "source": "computed",
-      "to": "project:verystrongopinion",
       "weight": 1.0
     },
     {
@@ -641,16 +610,6 @@
       "similarity": 0.73747,
       "source": "computed",
       "to": "project:idea-map",
-      "weight": 1.0
-    },
-    {
-      "from": "discipline:code",
-      "id": "discipline:discipline:code:project:traveller",
-      "kind": "discipline",
-      "reason": "discipline: Code",
-      "similarity": 0.699245,
-      "source": "computed",
-      "to": "project:traveller",
       "weight": 1.0
     },
     {
@@ -985,16 +944,6 @@
     },
     {
       "from": "discipline:web",
-      "id": "discipline:discipline:web:project:traveller",
-      "kind": "discipline",
-      "reason": "discipline: Web",
-      "similarity": 0.715274,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "discipline:web",
       "id": "discipline:discipline:web:project:urvin",
       "kind": "discipline",
       "reason": "discipline: Web",
@@ -1245,16 +1194,6 @@
     },
     {
       "from": "project:idea-map",
-      "id": "discipline:project:idea-map:project:traveller",
-      "kind": "discipline",
-      "reason": "same discipline: Code",
-      "similarity": 0.775367,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "project:idea-map",
       "id": "discipline:project:idea-map:project:verystrongopinion",
       "kind": "discipline",
       "reason": "same discipline: Code; same discipline: IC craft",
@@ -1391,16 +1330,6 @@
       "similarity": 0.773509,
       "source": "computed",
       "to": "project:talent-management",
-      "weight": 1.0
-    },
-    {
-      "from": "project:lazarus-brand",
-      "id": "discipline:project:lazarus-brand:project:traveller",
-      "kind": "discipline",
-      "reason": "same discipline: Web",
-      "similarity": 0.658482,
-      "source": "computed",
-      "to": "project:traveller",
       "weight": 1.0
     },
     {
@@ -1641,26 +1570,6 @@
       "similarity": 0.819735,
       "source": "computed",
       "to": "project:whitelist",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "discipline:project:traveller:project:urvin",
-      "kind": "discipline",
-      "reason": "same discipline: Web",
-      "similarity": 0.701497,
-      "source": "computed",
-      "to": "project:urvin",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "discipline:project:traveller:project:verystrongopinion",
-      "kind": "discipline",
-      "reason": "same discipline: Code",
-      "similarity": 0.679232,
-      "source": "computed",
-      "to": "project:verystrongopinion",
       "weight": 1.0
     },
     {
@@ -2712,16 +2621,6 @@
       "source": "computed",
       "to": "project:idea-map",
       "weight": 0.394206
-    },
-    {
-      "from": "client:own",
-      "id": "semantic:client:own:project:traveller",
-      "kind": "semantic",
-      "reason": "nearest neighbours by embedding similarity (0.76)",
-      "similarity": 0.761266,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 0.380633
     },
     {
       "from": "client:soul-machines",
@@ -4165,16 +4064,6 @@
     },
     {
       "from": "project:idea-map",
-      "id": "semantic:project:idea-map:project:traveller",
-      "kind": "semantic",
-      "reason": "shared themes: map, made",
-      "similarity": 0.775367,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 0.387684
-    },
-    {
-      "from": "project:idea-map",
       "id": "semantic:project:idea-map:project:verystrongopinion",
       "kind": "semantic",
       "reason": "shared themes: made",
@@ -4257,7 +4146,7 @@
       "from": "project:model-playground",
       "id": "semantic:project:model-playground:project:talent-management",
       "kind": "semantic",
-      "reason": "shared themes: defense, on-prem",
+      "reason": "shared themes: on-prem",
       "similarity": 0.820314,
       "source": "computed",
       "to": "project:talent-management",
@@ -4332,26 +4221,6 @@
       "source": "computed",
       "to": "project:whitelist",
       "weight": 0.409868
-    },
-    {
-      "from": "project:traveller",
-      "id": "semantic:project:traveller:tool:claude",
-      "kind": "semantic",
-      "reason": "nearest neighbours by embedding similarity (0.76)",
-      "similarity": 0.75978,
-      "source": "computed",
-      "to": "tool:claude",
-      "weight": 0.37989
-    },
-    {
-      "from": "project:traveller",
-      "id": "semantic:project:traveller:tool:cursor",
-      "kind": "semantic",
-      "reason": "nearest neighbours by embedding similarity (0.76)",
-      "similarity": 0.761574,
-      "source": "computed",
-      "to": "tool:cursor",
-      "weight": 0.380787
     },
     {
       "from": "project:urvin",
@@ -4985,16 +4854,6 @@
     },
     {
       "from": "project:idea-map",
-      "id": "tool:project:idea-map:project:traveller",
-      "kind": "tool",
-      "reason": "same tool: Cursor",
-      "similarity": 0.775367,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "project:idea-map",
       "id": "tool:project:idea-map:project:verystrongopinion",
       "kind": "tool",
       "reason": "same tool: Next.js",
@@ -5035,16 +4894,6 @@
     },
     {
       "from": "project:loblaw",
-      "id": "tool:project:loblaw:project:traveller",
-      "kind": "tool",
-      "reason": "same tool: Vercel",
-      "similarity": 0.732575,
-      "source": "computed",
-      "to": "project:traveller",
-      "weight": 1.0
-    },
-    {
-      "from": "project:loblaw",
       "id": "tool:project:loblaw:project:verystrongopinion",
       "kind": "tool",
       "reason": "same tool: Vercel",
@@ -5071,76 +4920,6 @@
       "similarity": 0.760692,
       "source": "computed",
       "to": "tool:vercel",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:project:verystrongopinion",
-      "kind": "tool",
-      "reason": "same tool: Supabase; same tool: Vercel",
-      "similarity": 0.679232,
-      "source": "computed",
-      "to": "project:verystrongopinion",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:claude",
-      "kind": "tool",
-      "reason": "uses tool: Claude (Anthropic API)",
-      "similarity": 0.75978,
-      "source": "computed",
-      "to": "tool:claude",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:cursor",
-      "kind": "tool",
-      "reason": "uses tool: Cursor",
-      "similarity": 0.761574,
-      "source": "computed",
-      "to": "tool:cursor",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:notion",
-      "kind": "tool",
-      "reason": "uses tool: Notion",
-      "similarity": 0.731217,
-      "source": "computed",
-      "to": "tool:notion",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:supabase",
-      "kind": "tool",
-      "reason": "uses tool: Supabase",
-      "similarity": 0.751911,
-      "source": "computed",
-      "to": "tool:supabase",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:vercel",
-      "kind": "tool",
-      "reason": "uses tool: Vercel",
-      "similarity": 0.742826,
-      "source": "computed",
-      "to": "tool:vercel",
-      "weight": 1.0
-    },
-    {
-      "from": "project:traveller",
-      "id": "tool:project:traveller:tool:vite",
-      "kind": "tool",
-      "reason": "uses tool: Vite",
-      "similarity": 0.74038,
-      "source": "computed",
-      "to": "tool:vite",
       "weight": 1.0
     },
     {
@@ -5315,7 +5094,6 @@
       "label": "Tyler (own work)",
       "projectIds": [
         "project:idea-map",
-        "project:traveller",
         "project:verystrongopinion"
       ],
       "slug": "own"
@@ -5369,7 +5147,6 @@
       "label": "Code",
       "projectIds": [
         "project:idea-map",
-        "project:traveller",
         "project:verystrongopinion"
       ],
       "slug": "code"
@@ -5483,7 +5260,6 @@
       "label": "Web",
       "projectIds": [
         "project:lazarus-brand",
-        "project:traveller",
         "project:urvin"
       ],
       "slug": "web"
@@ -5692,9 +5468,7 @@
       "id": "tool:claude",
       "kind": "tool",
       "label": "Claude (Anthropic API)",
-      "projectIds": [
-        "project:traveller"
-      ],
+      "projectIds": [],
       "slug": "claude"
     },
     {
@@ -5702,8 +5476,7 @@
       "kind": "tool",
       "label": "Cursor",
       "projectIds": [
-        "project:idea-map",
-        "project:traveller"
+        "project:idea-map"
       ],
       "slug": "cursor"
     },
@@ -5753,9 +5526,7 @@
       "id": "tool:notion",
       "kind": "tool",
       "label": "Notion",
-      "projectIds": [
-        "project:traveller"
-      ],
+      "projectIds": [],
       "slug": "notion"
     },
     {
@@ -5795,7 +5566,6 @@
       "kind": "tool",
       "label": "Supabase",
       "projectIds": [
-        "project:traveller",
         "project:verystrongopinion"
       ],
       "slug": "supabase"
@@ -5815,7 +5585,6 @@
       "label": "Vercel",
       "projectIds": [
         "project:loblaw",
-        "project:traveller",
         "project:verystrongopinion"
       ],
       "slug": "vercel"
@@ -5824,9 +5593,7 @@
       "id": "tool:vite",
       "kind": "tool",
       "label": "Vite",
-      "projectIds": [
-        "project:traveller"
-      ],
+      "projectIds": [],
       "slug": "vite"
     },
     {
@@ -5918,7 +5685,6 @@
       "label": "2026",
       "projectIds": [
         "project:loblaw",
-        "project:traveller",
         "project:verystrongopinion"
       ],
       "slug": "2026"
@@ -6788,7 +6554,6 @@
     {
       "archived": false,
       "body": "",
-      "clusterId": null,
       "confidential": false,
       "id": "origin:tyler",
       "label": "Tyler Jackson, Designer / Design Director",
@@ -7115,7 +6880,7 @@
       ],
       "role": "Senior Designer",
       "slug": "loblaw",
-      "summary": "A mobile health chat assistant codenamed Remedy.",
+      "summary": "Public work for this client during the current role.",
       "textHash": "161894d87fc674827b877e4d70670397428b44c2e9b81e7c95b03859d0d3063c",
       "toolIds": [
         "tool:figma",
@@ -7129,7 +6894,7 @@
         {
           "id": "summary",
           "title": "Summary",
-          "body": "A mobile health chat assistant codenamed Remedy."
+          "body": "Public work for this client during the current role."
         },
         {
           "id": "metrics",
@@ -7171,7 +6936,7 @@
       ],
       "role": "Design Lead",
       "slug": "model-playground",
-      "summary": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system.",
+      "summary": "A shared system for prompting foundation models and making the results legible.",
       "textHash": "3abe9b35f36d3e5e93a4116679991c19dd84cafdb25b4d216e0490e2fb364198",
       "toolIds": [],
       "type": "project",
@@ -7182,7 +6947,7 @@
         {
           "id": "summary",
           "title": "Summary",
-          "body": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system."
+          "body": "A shared system for prompting foundation models and making the results legible."
         }
       ]
     },
@@ -7332,7 +7097,6 @@
       "clusterId": "cluster:b8537985",
       "clusterMembership": "core",
       "confidential": false,
-      "demo": "https://www.linkedin.com/posts/lazarus-ai_talentmanagement-federalgovernment-dod-ugcPost-7342930978916491265-lggZ",
       "disciplineIds": [
         "discipline:product",
         "discipline:systems"
@@ -7353,7 +7117,7 @@
         -0.672788
       ],
       "slug": "talent-management",
-      "summary": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives.",
+      "summary": "Agentic matching that shows a rationale at every level, with constraint toggles.",
       "textHash": "97be9412a0a2efa9e9b6f9d27b0149214b808d5929513e153c57e49565dce3bd",
       "toolIds": [],
       "type": "project",
@@ -7363,59 +7127,12 @@
         {
           "id": "summary",
           "title": "Summary",
-          "body": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives."
+          "body": "Agentic matching that shows a rationale at every level, with constraint toggles."
         },
         {
           "id": "metrics",
           "title": "Metrics",
           "body": "Site: cut cycle times from months to minutes, 'over 100,000% faster' (Lazarus claim)"
-        }
-      ]
-    },
-    {
-      "archived": false,
-      "body": "",
-      "clientIds": [
-        "client:own"
-      ],
-      "clusterId": "cluster:d43435df",
-      "clusterMembership": "core",
-      "confidential": false,
-      "disciplineIds": [
-        "discipline:code",
-        "discipline:web"
-      ],
-      "featured": false,
-      "id": "project:traveller",
-      "ideaIds": [],
-      "label": "Traveller (trip platform)",
-      "patternIdeaIds": [],
-      "pos": [
-        -0.311184,
-        0.196524,
-        -0.084249
-      ],
-      "role": "Made",
-      "slug": "traveller",
-      "summary": "A personal trip-planning microsite and map, plus stay research.",
-      "textHash": "0f7756a5576e5843777d21253d99b37509b416ea58e74007e9c1929de910805b",
-      "toolIds": [
-        "tool:vite",
-        "tool:vercel",
-        "tool:supabase",
-        "tool:claude",
-        "tool:notion",
-        "tool:cursor"
-      ],
-      "type": "project",
-      "visible": true,
-      "weight": 1.0,
-      "year": "2026",
-      "sections": [
-        {
-          "id": "summary",
-          "title": "Summary",
-          "body": "A personal trip-planning microsite and map, plus stay research."
         }
       ]
     },

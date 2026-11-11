@@ -7,7 +7,7 @@ export function CatalogProvider({ children }) {
   const [state, setState] = useState({ status: "loading", catalog: { nodes: [] } });
   useEffect(() => {
     let cancel = false;
-    fetch("/public/map.json")
+    fetch("/data/engine/map.json")
       .then((response) => {
         if (!response.ok) throw new Error("map");
         return response.json();

@@ -100,6 +100,8 @@ test("blocklist matches the python digests", () => {
   assert.equal(parsed.safe, false)
   assert.equal(containsBlocked("Tyler is based in Medellín."), false)
   assert.equal(containsBlocked("Design Lead at Overmatch AI"), false)
+  assert.equal(containsBlocked("Remedy"), true)
+  assert.equal(containsBlocked("Traveller"), true)
 })
 
 test("the voice guide's hype words are flagged", () => {

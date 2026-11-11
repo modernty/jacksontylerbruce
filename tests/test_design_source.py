@@ -16,12 +16,12 @@ def test_employer_clients_and_no_pc_health_app():
     employer = module.employer_public_name()
     names = [project["name"] for project in model["projects"]]
     assert "PC Health app" not in names
+    assert "Remedy" not in names
+    assert "Traveller" not in names
     assert "Loblaw" in names
     loblaw = next(project for project in model["projects"] if project["name"] == "Loblaw")
-    remedy = next(project for project in model["projects"] if project["name"] == "Remedy")
     intuit = next(project for project in model["projects"] if project["name"] == "Intuit")
     assert loblaw["org"] == employer
-    assert remedy["org"] == employer
     assert intuit["org"] == "Intuit"
     assert loblaw["themes"] == ["Systems"]
     assert loblaw["lane"] == 1

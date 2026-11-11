@@ -1,22 +1,13 @@
 [
   {
     "id": "project:overmatch-ai",
-    "notionId": null,
     "type": "project",
     "slug": "overmatch-ai",
     "name": "Overmatch AI",
     "summary": "Sample work in progress: product patterns in exploration at Overmatch AI.",
-    "body": null,
     "year": "May 2026–present",
     "start": "2026-05",
-    "end": null,
     "role": "Design Lead",
-    "ledOrMade": null,
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 4,
     "clientIds": [
       "client:overmatch-ai"
@@ -31,7 +22,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "status": "in progress",
     "featured": true,
     "visuals": "NEEDS TYLER",
@@ -58,17 +48,9 @@
     "slug": "novart",
     "name": "Novart",
     "summary": "An art-as-collateral lending platform. The redesign added two upfront gates (location, minimum collateral), then a short form and a dashboard with action items, offer status and lender messaging.",
-    "body": null,
     "year": "2023",
-    "start": null,
-    "end": null,
     "role": "Sr. UI/UX Designer",
     "ledOrMade": "NEEDS TYLER",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 1,
     "clientIds": [
       "client:nax-group"
@@ -84,7 +66,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -111,8 +92,6 @@
     "teamSize": 1,
     "teamNote": "solo",
     "demo": "https://apps.apple.com/app/id6470361217",
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:chatter"
@@ -154,17 +133,10 @@
     "slug": "usm-milan-2025",
     "name": "USM: Connected by our Dreams (Milan Design Week 2025)",
     "summary": "An immersive installation introducing the USM Haller Soft Panel at Spotti Milano, Milan Design Week 2025, with Joba Studio.",
-    "body": null,
     "year": "2025",
-    "start": null,
-    "end": null,
     "role": "Lead designer",
     "ledOrMade": "Led",
-    "teamSize": null,
-    "teamNote": null,
     "demo": "https://www.jobastudio.com/clients/usm-connected-by-our-dreams",
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:usm",
@@ -197,7 +169,6 @@
     ],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -215,17 +186,11 @@
     "slug": "nestle",
     "name": "Nestlé Digital Baking Coach",
     "summary": "Ruth, a digital person, guides chocolate chip cookie baking, finds recipes from ingredients on hand, and supports in-experience shopping.",
-    "body": null,
     "year": "2021–2022",
-    "start": null,
-    "end": null,
     "role": "Solo designer",
     "ledOrMade": "NEEDS TYLER",
     "teamSize": 1,
     "teamNote": "solo",
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 1,
     "clientIds": [
       "client:nestle",
@@ -242,7 +207,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -259,18 +223,10 @@
     "type": "project",
     "slug": "talent-management",
     "name": "Talent Management",
-    "summary": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives.",
-    "body": null,
+    "summary": "Agentic matching that shows a rationale at every level, with constraint toggles.",
     "year": "NEEDS TYLER (2025?)",
-    "start": null,
-    "end": null,
     "role": "NEEDS TYLER",
     "ledOrMade": "NEEDS TYLER",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": "https://www.linkedin.com/posts/lazarus-ai_talentmanagement-federalgovernment-dod-ugcPost-7342930978916491265-lggZ",
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:lazarus"
@@ -295,7 +251,7 @@
       {
         "id": "summary",
         "title": "Summary",
-        "body": "An on-prem ATLS deployment for Defense/Federal assignment: ranked, scored candidate–position matches with rationale at every level, constraint toggles and side-by-side comparisons. Since adapted for a Federal org matching agents to mission objectives."
+        "body": "Agentic matching that shows a rationale at every level, with constraint toggles."
       },
       {
         "id": "metrics",
@@ -311,17 +267,9 @@
     "slug": "intuit",
     "name": "Intuit",
     "summary": "Exploring a ChatGPT integration that lets clients invoice and track balances, connected to Intuit Wallet.",
-    "body": null,
     "year": "NEEDS TYLER",
-    "start": null,
-    "end": null,
     "role": "NEEDS TYLER",
     "ledOrMade": "NEEDS TYLER",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:intuit"
@@ -332,7 +280,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -350,17 +297,9 @@
     "slug": "usm-hueman",
     "name": "USM: Hue+Man Design Miami",
     "summary": "HUE+MAN, a global design competition and traveling installation expanding access for BIPOC creatives, shown at Design Miami. Joba Studio with USM.",
-    "body": null,
     "year": "2020",
-    "start": null,
-    "end": null,
     "role": "NEEDS TYLER",
     "ledOrMade": "NEEDS TYLER",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:usm",
@@ -378,7 +317,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -395,18 +333,12 @@
     "type": "project",
     "slug": "loblaw",
     "name": "Loblaw Canada",
-    "summary": "A mobile health chat assistant codenamed Remedy.",
-    "body": null,
+    "summary": "Public work for this client during the current role.",
     "year": "2026–present",
     "start": "2026-01",
-    "end": null,
     "role": "Senior Product Designer",
     "ledOrMade": "Made",
     "teamSize": "NEEDS TYLER",
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:loblaw"
@@ -437,7 +369,7 @@
       {
         "id": "summary",
         "title": "Summary",
-        "body": "A mobile health chat assistant codenamed Remedy."
+        "body": "Public work for this client during the current role."
       },
       {
         "id": "metrics",
@@ -453,17 +385,9 @@
     "slug": "whitelist",
     "name": "Whitelist",
     "summary": "A mobile-first ATLS field tool that identifies drone tech as hostile or mission-compliant, with verifiable reasoning from research, production data and OSINT. Carries Model Playground patterns to mobile, with phone-to-desktop continuity.",
-    "body": null,
     "year": "NEEDS TYLER (2025–26)",
-    "start": null,
-    "end": null,
     "role": "NEEDS TYLER",
     "ledOrMade": "NEEDS TYLER",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:lazarus"
@@ -507,15 +431,10 @@
     "summary": "Complete redesign of a Solana DeFi lending platform: variable-rate lending, fixed-term markets, Orca LP integration, multiple trading modes, and a refined brand.",
     "body": "A complete redesign, led end to end.",
     "year": "2022–2023",
-    "start": null,
-    "end": null,
     "role": "Solo designer",
     "ledOrMade": "Led",
     "teamSize": 1,
     "teamNote": "solo",
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:jet"
@@ -555,17 +474,9 @@
     "slug": "urvin",
     "name": "Urvin Finance",
     "summary": "A retail-investor Terminal SaaS. Led News, Education and early data/chart explorations; supported communities, auth and data. Built an education microsite on Webflow CMS and tested with Sprig.",
-    "body": null,
     "year": "2022",
-    "start": null,
-    "end": null,
     "role": "Led News, Education, early data/chart work",
     "ledOrMade": "Both",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 1,
     "clientIds": [
       "client:urvin"
@@ -585,7 +496,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -603,17 +513,10 @@
     "slug": "lazarus-brand",
     "name": "Lazarus AI Brand Identity",
     "summary": "Identity for a stealth foundation-model company: a minimal site, a verbal identity (Cool, Capable, Critical, Premium, Inevitable), wireframe and dithered textures, one Neon Ember Orange accent, monochrome discipline, and an atomic library with chamfered chips and custom icons.",
-    "body": null,
     "year": "NEEDS TYLER",
-    "start": null,
-    "end": null,
     "role": "Led",
     "ledOrMade": "Led",
-    "teamSize": null,
     "teamNote": "Directed 6+ designers",
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:lazarus"
@@ -632,7 +535,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -649,18 +551,11 @@
     "type": "project",
     "slug": "model-playground",
     "name": "Model Playground",
-    "summary": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system.",
-    "body": null,
+    "summary": "A shared system for prompting foundation models and making the results legible.",
     "year": "2024–2025",
-    "start": null,
-    "end": null,
     "role": "Design Lead",
     "ledOrMade": "Led and made",
     "teamSize": "NEEDS TYLER",
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:lazarus"
@@ -688,7 +583,7 @@
       {
         "id": "summary",
         "title": "Summary",
-        "body": "Where enterprise buyers (Defense, Public Sector, Insurance, Healthcare, Finance) prompt foundation models, orchestrate demos and assemble tools. Built as a flexible architecture: users request input/output representations and the system reshapes. Serves sales, design pattern testing and on-prem deployments on one shared design system."
+        "body": "A shared system for prompting foundation models and making the results legible."
       }
     ]
   },
@@ -699,17 +594,11 @@
     "slug": "corelogic",
     "name": "CoreLogic Discovery Center",
     "summary": "A Texas Discovery Center experience: risk visualization from national to property level (churn, hazards, liens) on a 6×3 angled video wall, touch table and desktop, with Cora, a digital person, as chief of staff.",
-    "body": null,
     "year": "2021–2022",
-    "start": null,
-    "end": null,
     "role": "Solo designer",
     "ledOrMade": "NEEDS TYLER",
     "teamSize": 1,
     "teamNote": "solo",
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:corelogic",
@@ -728,7 +617,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -741,22 +629,14 @@
   },
   {
     "id": "project:usm-venice-2025",
-    "notionId": null,
     "type": "project",
     "slug": "usm-venice-2025",
     "name": "USM Venice show 2025",
     "summary": "NEEDS TYLER",
-    "body": null,
     "year": "2025",
-    "start": null,
-    "end": null,
     "role": "NEEDS TYLER",
     "ledOrMade": "NEEDS TYLER",
     "teamSize": "NEEDS TYLER",
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
     "weight": 2,
     "clientIds": [
       "client:usm"
@@ -767,7 +647,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": []
@@ -779,17 +658,10 @@
     "slug": "verystrongopinion",
     "name": "verystrongopinion (habit tracker)",
     "summary": "A personal habit tracker with weather context. Uses Aeonik Pro type on an IBM Carbon type scale.",
-    "body": null,
     "year": "2026",
-    "start": null,
-    "end": null,
     "role": "Made",
     "ledOrMade": "Made",
-    "teamSize": null,
-    "teamNote": null,
     "demo": "https://verystrongopinion.vercel.app",
-    "url": null,
-    "preview": null,
     "weight": 1,
     "clientIds": [
       "client:own"
@@ -809,7 +681,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [
@@ -821,72 +692,16 @@
     ]
   },
   {
-    "id": "project:traveller",
-    "notionId": "4062280f-d03d-8137-bcc2-ca1c383f5db0",
-    "type": "project",
-    "slug": "traveller",
-    "name": "Traveller (trip platform)",
-    "summary": "A personal trip-planning microsite and map, plus stay research.",
-    "body": null,
-    "year": "2026",
-    "start": null,
-    "end": null,
-    "role": "Made",
-    "ledOrMade": "Made",
-    "teamSize": null,
-    "teamNote": null,
-    "demo": null,
-    "url": null,
-    "preview": null,
-    "weight": 1,
-    "clientIds": [
-      "client:own"
-    ],
-    "toolIds": [
-      "tool:vite",
-      "tool:vercel",
-      "tool:supabase",
-      "tool:claude",
-      "tool:notion",
-      "tool:cursor"
-    ],
-    "ideaIds": [],
-    "disciplineIds": [
-      "discipline:code",
-      "discipline:web"
-    ],
-    "awards": [],
-    "aliases": [],
-    "archived": false,
-    "metrics": null,
-    "visible": true,
-    "confidential": false,
-    "sections": [
-      {
-        "id": "summary",
-        "title": "Summary",
-        "body": "A personal trip-planning microsite and map, plus stay research."
-      }
-    ]
-  },
-  {
     "id": "project:idea-map",
     "notionId": "4062280f-d03d-81da-8724-de44a5acbdc3",
     "type": "project",
     "slug": "idea-map",
     "name": "Semantic idea map (this portfolio)",
     "summary": "A 3D semantic map of projects, ideas and tools with Tyler as the origin. It replaces the current static site (jacksontylerbruce.com).",
-    "body": null,
     "year": "2026–2027",
-    "start": null,
-    "end": null,
     "role": "Made (solo, directing coding agents)",
     "ledOrMade": "Made",
-    "teamSize": null,
-    "teamNote": null,
     "demo": "https://jacksontylerbruce.com",
-    "url": null,
-    "preview": null,
     "weight": 3,
     "clientIds": [
       "client:own"
@@ -906,7 +721,6 @@
     "awards": [],
     "aliases": [],
     "archived": false,
-    "metrics": null,
     "visible": true,
     "confidential": false,
     "sections": [

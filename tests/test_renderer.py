@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-MAP = json.loads((ROOT / "public" / "map.json").read_text(encoding="utf-8"))
+MAP = json.loads((ROOT / "data" / "engine" / "map.json").read_text(encoding="utf-8"))
 CHROME = "/usr/bin/google-chrome"
 
 
