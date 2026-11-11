@@ -68,6 +68,7 @@ export function indexText(): string {
     ...catalog.themes.map((theme) => `${theme.id} | ${theme.name}`),
     ...catalog.places.map((place) => `${place.id} | ${place.name} | ${place.kind}`),
     `fact | ${EDUCATION}`,
+    `fact | Origin: From ${catalog.profile.location}. Located: Based in ${catalog.profile.location}. These are different questions.`,
   ]
   return lines.join("\n")
 }
@@ -110,6 +111,7 @@ export async function modelRoute(question: string, client?: ModelClient, context
             "Views are the timeline, the project row, a focus, a case study, and a sheet. There is no map.",
             "Location answers use the sheet. Use only ids from the index.",
             "location covers where Tyler is based and where he has traveled; include the place ids.",
+            "Where he is from and where he is located are different. From: \"From Miami.\" Located: \"Based in Miami.\" Never answer a from question with \"Based in Miami.\" where-now is only where he is right now or what time it is for him, not from and not located.",
             "annotation is under 40 words and uses only the index. No subject: never \"I\", \"he\", \"we\" or \"Tyler\". Lead with the verb or the idea (\"Look wider.\", \"Depth.\"). When the subject is a project, the project is the subject. Answer directly and never end on a question. Calm and grounded, no hype or buzzwords. Say \"designer\", never \"architect\".",
             "off_topic when the question is not about the work. decline for hidden, private, or disallowed asks.",
             "project: the first focusId is that project's id. role: the role id. compare: when two or more projects are named, list every named project id.",

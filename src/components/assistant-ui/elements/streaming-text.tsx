@@ -15,6 +15,7 @@ export function StreamingText({
   segments,
   count,
   streaming,
+  tint = true,
   className,
   ...props
 }: Omit<
@@ -24,6 +25,8 @@ export function StreamingText({
   segments: Segment[];
   count: number;
   streaming: boolean;
+  /** Fresh words arrive in placeholder ink and settle. Off, they arrive in their final colour. */
+  tint?: boolean;
 }) {
   const words = useMemo(
     () =>
@@ -47,7 +50,7 @@ export function StreamingText({
       {...props}
     >
       {shown.map(({ word, mono: isMono }, i) => {
-        const fresh = streaming && shown.length - 1 - i < 2;
+        const fresh = tint && streaming && shown.length - 1 - i < 2;
         return (
           <span
             key={i}

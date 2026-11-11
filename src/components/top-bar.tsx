@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { quietPage } from "./chrome"
-import { HOME_CHAT, handOff } from "./chat-thread"
+import { HOME_CHAT, closeHomePanel, handOff } from "./chat-thread"
 import { CONTACT_EVENT } from "./mailto"
 import { askHere } from "./starter-prompts"
 import { BoringToggle } from "./view-mode"
@@ -17,7 +17,16 @@ export function TopBar({ location, email, linkedin }: { location: string; email:
   if (quietPage(path)) {
     return (
       <header className="top top-work">
-        <Link href="/chat">Jackson, <em>Tyler</em> Bruce</Link>
+        <Link
+          href="/chat"
+          onClick={(event) => {
+            // The name puts the conversation back on its own. The chat stays; the panel beside it closes.
+            if (path === "/chat") event.preventDefault()
+            closeHomePanel()
+          }}
+        >
+          Jackson, <em>Tyler</em> Bruce
+        </Link>
         <span className="right">
           {project ? <BoringToggle /> : null}
           <span className={project ? "contact on-project" : "contact"}>
@@ -73,7 +82,7 @@ export function TopBar({ location, email, linkedin }: { location: string; email:
   // Every other page (the 404, for one) carries the same name, and nothing else.
   return (
     <header className="top top-work">
-      <Link href="/chat">Jackson, <em>Tyler</em> Bruce</Link>
+      <Link href="/chat" onClick={() => closeHomePanel()}>Jackson, <em>Tyler</em> Bruce</Link>
     </header>
   )
 }

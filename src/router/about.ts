@@ -24,10 +24,28 @@ const COUNTRY_ALIASES: Record<string, string> = { uk: "United Kingdom", england:
 
 const where = (place: Place) => (place.kind === "lived" ? "Lived there for a while" : "Travelled there")
 
+/**
+ * Origin and current place are different questions.
+ * "Where is he from" is "From Miami." "Where is he located" is "Based in Miami."
+ * A "from" inside some other question ("a project from Joba") is left alone.
+ */
+export function homeLine(question: string, location: string): string | null {
+  const q = fold(question)
+  const him = /\b(tyler|he|him|his|you|your)\b/.test(q)
+  if (/\bwhere\b/.test(q) && /\bfrom\b/.test(q) && !/\b(lived|worked|travel)/.test(q)) return `From ${location}.`
+  if (him && /\blocated\b/.test(q)) return `Based in ${location}.`
+  return null
+}
+
 /** Grounded answers about where Tyler is, has lived and has travelled, from the places content. */
 export function answerAbout(question: string, catalog: PublicCatalog = publishCatalog()): AboutReply {
   const q = fold(question)
   const { places, profile } = catalog
+  const line = homeLine(question, profile.location)
+  if (line) {
+    const here = places.find((place) => place.id === profile.placeId) ?? places[0]
+    return { answer: line, placeId: here?.id ?? null }
+  }
   const qa = qaReply(question)
   if (qa) {
     // A place answer turns the globe home.
@@ -86,7 +104,10 @@ export function answerAbout(question: string, catalog: PublicCatalog = publishCa
       placeId: homeId,
     }
   }
-  if (/\b(where|based|located|from)\b/.test(q)) {
+  if (/\bwhere\b/.test(q) && /\bfrom\b/.test(q) && !/\b(lived|worked|travel)/.test(q)) {
+    return { answer: `From ${profile.location}.`, placeId: homeId }
+  }
+  if (/\b(where|based|located)\b/.test(q)) {
     return { answer: `Based in ${profile.location}.`, placeId: homeId }
   }
   const routed = keywordRoute(question)

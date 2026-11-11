@@ -160,7 +160,7 @@ body:has(.sheet) .cards{display:none}
 .top-work span.right{display:flex;gap:28px;align-items:center}
 /* The disclaimer, small, at the very bottom of every page, under the composer. */
 .disclaimer{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom));z-index:11;margin:0;padding:0 16px;text-align:center;font-family:var(--sans);font-size:var(--fs-micro);line-height:16px;letter-spacing:0;color:var(--ink);opacity:.5;pointer-events:none}
-/* On the empty conversation, Contact sits inside the composer instead. */
+/* The empty conversation has no Contact control. */
 body:has(.conv-empty) .top-work .mail-link{display:none}
 .top-work span.contact{display:flex;gap:20px;align-items:center}
 /* Email, LinkedIn and the globe (About) as icons; the label is for screen readers and the tooltip. */
@@ -182,6 +182,8 @@ html[data-view=boring] .hero-work{display:none}
 .hero-work{bottom:calc(48px + env(safe-area-inset-bottom))}
 .hero-work .in{max-width:min(540px,calc(100vw - 32px))}
 .hero-work .shell{margin-top:0;box-shadow:none;border-color:var(--ink);background:var(--paper);min-height:56px;padding-left:20px}
+/* In the conversation the composer is a surface, slightly darker than the paper, with no outline. */
+body:has(.conv) .hero-work .shell{border-color:transparent;background:color-mix(in srgb,var(--ink) 5%,var(--paper))}
 .hero-work .shell .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .hero-work .shell .row .g{margin-left:auto}
 /* Tall: the empty conversation, or a note to Tyler. Text on top, actions along the bottom. */
@@ -194,7 +196,6 @@ html[data-view=boring] .hero-work{display:none}
 .email-pill.on{opacity:1;padding:0 12px;border:1px solid var(--ink);border-radius:var(--radius-pill)}
 .email-pill:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .hero-work .input{font-size:var(--fs-body)}
-.hero-work .input::placeholder{color:var(--ink)}
 .hero-work .voice{display:none}
 .hero-work .send{transition:opacity var(--motion-base) var(--motion-ease)}
 /* About is exactly one screen tall: the globe fits inside it, and a long conversation scrolls in its own column. */
@@ -276,16 +277,41 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
 .conv-chat .chat{margin-top:0;padding-top:0;border-top:0}
 /* Paper behind the name bar and tabs, so scrolled messages fade out under them. */
 .conversation::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:120px;background:linear-gradient(var(--paper) 72%,color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
-.conv-empty{padding-top:22vh}
-/* The empty conversation: the composer joins the title and prompts instead of waiting at the bottom. */
-body:has(.conv-empty) .hero-work{top:var(--empty-bottom,60vh);bottom:auto}
-/* Holds the composer's place in the empty state, so the prompts sit under it. */
-.composer-slot{height:var(--composer-h,112px);margin-top:24px}
-.conv-empty .prompts{margin-top:20px}
+/* The greeting, composer, and quick start sit in the middle of the window. Equal padding keeps
+   that middle clear of the top bar and the disclaimer. safe center lets a short window scroll.
+   Once a question is in the feed it sits at the top, and the answer streams in under it. */
+.conversation:has(.conv-empty),.conversation:has(.chat){display:flex;flex-direction:column;justify-content:safe center;box-sizing:border-box;min-height:100svh;padding-top:80px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+.conversation:has(.chat:not(.held)){justify-content:flex-start;padding-top:132px;padding-bottom:calc(200px + env(safe-area-inset-bottom))}
+/* A chat from the first line: the greeting, composer, and quick start are flush left. */
+.conv-empty{padding-top:0;text-align:left;transition:opacity var(--motion-page) var(--motion-ease)}
+.conv-empty.leaving{opacity:0;pointer-events:none}
+/* The greeting streams, then the composer rises into the column. Quick start arrives with it. */
+body:has(.conv-empty) .hero-work{top:var(--empty-bottom,60vh);bottom:auto;opacity:0}
+body:has(.conv-empty) .hero-work .in{pointer-events:none}
+body:has(.conv-empty.ready) .hero-work{opacity:1;transition:opacity var(--motion-page) var(--motion-ease)}
+body:has(.conv-empty.ready) .hero-work .in{pointer-events:auto}
+/* Holds the composer's place once it has arrived, so quick start sits under it. Collapsed while the greeting is still streaming. */
+.composer-slot{height:var(--composer-h,56px);margin-top:24px}
+.conv-empty .quick{margin-top:20px}
+.conv-empty .quick-label{margin:0 0 8px;font-size:var(--fs-small);line-height:20px;color:var(--ink);opacity:.6}
+.conv-empty .prompts{margin:0;justify-content:flex-start}
+/* Quick start, and the suggestions under an answer, are lines of text with a dotted underline. */
+.conv-empty .quick-links,.conversation .follow-ups .prompts{flex-direction:column;align-items:flex-start;gap:6px}
+.conv-empty .quick-links button,.conversation .follow-ups .prompts button{min-height:0;padding:0;gap:0;border:0;border-radius:0;background:none;white-space:normal;text-align:left;font-size:var(--fs-text);line-height:24px;color:var(--ink);text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--ink) 60%,transparent)}
+.conv-empty .quick-links button::after,.conversation .follow-ups .prompts button::after{display:none}
+.conv-empty .quick-links button:hover,.conversation .follow-ups .prompts button:hover{background:none;color:var(--ink);text-decoration-color:var(--ink)}
+.conv-empty:not(.ready) .quick{opacity:0;visibility:hidden;pointer-events:none}
+.conv-empty.ready .quick{animation:welcome-in var(--motion-page) var(--motion-ease) both}
+.conversation .chat.held{display:none}
+.conversation .chat.arrive{animation:welcome-in var(--motion-page) var(--motion-ease)}
+@keyframes welcome-in{from{opacity:0}to{opacity:1}}
+/* The question and its answer match the greeting: 18px on a 26px line. */
+.conversation .chat [data-slot=message-pair]>p,
+.conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:18px;line-height:26px}
 body:has(.conv-empty) .hero-work::before{display:none}
-.conv-empty h1{margin:0;font-size:var(--fs-display);line-height:36px;letter-spacing:-.02em;font-weight:var(--fw-medium)}
-@media(max-width:600px){.conv-empty h1{font-size:var(--fs-display-small);line-height:34px}}
-.conv-intro{margin:0 0 20px;font-size:var(--fs-text);line-height:24px}
+.conv-empty .stream p{margin:0;font-weight:var(--fw-regular,400);text-wrap:wrap}
+.conv-empty .stream p.emphasis{font-weight:var(--fw-medium)}
+.conv-empty .stream p+p{margin-top:12px}
 /* Starter prompts are pills on the light ink wash, each with a send arrow; they fill the line, then wrap. */
 .prompts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
 .prompts button{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 16px;border-radius:var(--radius-pill);background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-text);line-height:24px;white-space:nowrap;transition:background var(--motion-quick) var(--motion-ease)}
@@ -380,6 +406,7 @@ body:has(.conv-empty) .hero-work::before{display:none}
   .preview-close{top:8px;right:10px}
   /* The composer is pinned to the chat column and glides with it, so the two never come apart. */
   body:has(.conv) .hero-work{--col:min(540px,calc(100vw - 72px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+  body:has(.conv-empty.ready) .hero-work{transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move),opacity var(--motion-page) var(--motion-ease)}
   body:has(.conv) .hero-work .in{max-width:none;margin:0}
   body:has(.conv.previewing) .hero-work{left:max(36px,calc((100vw - min(1056px,calc(100vw - 72px))) / 2));width:min(440px,36vw)}
   .work-stage.galleried .column{margin-left:max(0px,calc((100% - var(--pair)) / 2));width:var(--side)}
@@ -443,7 +470,7 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .ib::after,.top-work a::after,.boring::after,.email-pill::after,.preview-close::after,.tab-close::after,.work-actions .btn::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%)}
 .prompts button{min-height:44px}
 /* Type polish: headings break evenly, paragraphs avoid a lone last word, and the clock's digits keep their width. */
-h1,h2,h3,.conv-intro{text-wrap:balance}
+h1,h2,h3{text-wrap:balance}
 p{text-wrap:pretty}
 .chat{font-variant-numeric:tabular-nums}
 

@@ -10,7 +10,10 @@
       "answer": "A soy sauce bottle. Air in one side, sauce out the other.",
       "view": null,
       "pill": true,
-      "followUps": []
+      "followUps": [
+        "What inspires him?",
+        "What tool could he not live without?"
+      ]
     },
     {
       "key": "day-in-life",
@@ -23,7 +26,8 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "Walk me through his process."
+        "Walk me through his process.",
+        "How does he start a project?"
       ]
     },
     {
@@ -38,7 +42,9 @@
       "answer": "Winston. A French Bulldog. Chief of morale.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "What's a day like for him?"
+      ]
     },
     {
       "key": "eli5",
@@ -66,7 +72,11 @@
       "answer": "Rem Koolhaas, SANAA, Zaha Hadid Architects, Le Corbusier, Valerio Olgiati, Tadao Ando, Chris Precht, Bjarke Ingels, and more.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "What inspires him?",
+        "What's his hot take on design?",
+        "What's the best-designed thing he's ever used?"
+      ]
     },
     {
       "key": "favorite-tool",
@@ -77,7 +87,10 @@
       "answer": "Figma for the work. Claude for thinking out loud.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "What's he building for fun?",
+        "How does he start a project?"
+      ]
     },
     {
       "key": "hot-take",
@@ -89,7 +102,10 @@
       "answer": "Design is a craft at risk. Microwave culture rushes past the time it takes to observe a problem and solve it with intent.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "How does he start a project?",
+        "Why should I hire him over someone else?"
+      ]
     },
     {
       "key": "how-start",
@@ -101,7 +117,10 @@
       "answer": "Inside the problem. Time with the people it's for, before any screen.",
       "view": null,
       "pill": true,
-      "followUps": []
+      "followUps": [
+        "Walk me through his process.",
+        "Show me an example."
+      ]
     },
     {
       "key": "inspiration",
@@ -113,7 +132,10 @@
       "answer": "Architecture, contemporary art, and the way people actually use things.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "Who are his favorite designers or studios?",
+        "What's the best-designed thing he's ever used?"
+      ]
     },
     {
       "key": "is-this-ai",
@@ -139,7 +161,10 @@
       "answer": "TouchDesigner experiments, motion, generative work.",
       "view": null,
       "pill": true,
-      "followUps": []
+      "followUps": [
+        "What tool could he not live without?",
+        "Is this site AI?"
+      ]
     },
     {
       "key": "three-words",
@@ -148,7 +173,9 @@
       "answer": "Grounded. Curious. Deliberate.",
       "view": null,
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "What's his hot take on design?"
+      ]
     },
     {
       "key": "where-lived",
@@ -160,7 +187,10 @@
       "answer": "Medellín, Tulum, Costa Rica, and more. Living inside a place changes how a problem looks.",
       "view": "globe",
       "pill": false,
-      "followUps": []
+      "followUps": [
+        "Where is Tyler right now?",
+        "Show me everywhere he's lived."
+      ]
     },
     {
       "key": "where-now",
@@ -174,7 +204,8 @@
       "view": "globe",
       "pill": true,
       "followUps": [
-        "Show me everywhere he's lived."
+        "Show me everywhere he's lived.",
+        "Where is Tyler from?"
       ]
     },
     {
@@ -189,7 +220,8 @@
       "pill": false,
       "followUps": [
         "Show me a project that proves it.",
-        "How do I start a project with him?"
+        "How do I start a project with him?",
+        "Walk me through his career."
       ]
     }
   ]

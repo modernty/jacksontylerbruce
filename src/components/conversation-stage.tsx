@@ -3,15 +3,16 @@
 import { track } from "@vercel/analytics"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { CareerEntry } from "@/src/content/career"
 import type { Image as MediaImage } from "@/src/content/schema"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
 import { chatAnswer } from "./chat-answer"
+import { IntroStream } from "./intro-stream"
 import { StarterPrompts, askHere } from "./starter-prompts"
-import { ChatThread, readLines, HOME_CHAT, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
+import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, CHAT_CLOSE_PANEL, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null }
@@ -21,13 +22,65 @@ type Picked = { slug: string; list: string[] }
 /** only narrows the globe to one kind of place, e.g. the places lived. */
 type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
-const PREVIEW_KEY = "home-chat-preview"
 const SCROLL_KEY = "home-chat-scroll"
+const WELCOME = [
+  "Welcome",
+  "One craft, many mediums. Every project starts with one core idea and time spent inside the problem.",
+  "How can I help you?",
+]
+/** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
+const HANDOFF_MS = 320
+
+/**
+ * The empty conversation is already the thread. The greeting streams in, then the composer and
+ * the quick-start pills take their place under it. Remounting (a new conversation) plays it again.
+ */
+function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | null>; leaving: boolean }) {
+  const [finished, setFinished] = useState(false)
+  const [ready, setReady] = useState(false)
+  const finish = useCallback(() => setFinished(true), [])
+
+  useEffect(() => {
+    if (!finished) return
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+    const hold = window.setTimeout(() => setReady(true), reduce ? 0 : HANDOFF_MS)
+    return () => window.clearTimeout(hold)
+  }, [finished])
+
+  // The composer lives in the page chrome. Keep it out of reach until it is on screen.
+  useEffect(() => {
+    const hero = document.querySelector<HTMLElement>(".hero-work")
+    if (!hero) return
+    if (ready) hero.removeAttribute("inert")
+    else hero.setAttribute("inert", "")
+    return () => hero.removeAttribute("inert")
+  }, [ready])
+
+  return (
+    <div className={leaving ? "conv-empty ready leaving" : ready ? "conv-empty ready" : "conv-empty"}>
+      <IntroStream
+        id="home-welcome"
+        paragraphs={WELCOME}
+        remember={false}
+        heading
+        textClassName="min-h-0 max-w-none text-[18px] leading-[26px] tracking-[-0.01em]"
+        tint={false}
+        emphasis={2}
+        onDone={finish}
+      />
+      <div className="composer-slot" ref={slotRef} aria-hidden="true" />
+      <div className="quick">
+        <p className="quick-label">Quick start</p>
+        <StarterPrompts className="quick-links" links onPick={askHere} />
+      </div>
+    </div>
+  )
+}
 
 
 function readShown(): Shown | null {
   try {
-    const parsed = JSON.parse(sessionStorage.getItem(PREVIEW_KEY) ?? "null") as Partial<Shown & Picked> | null
+    const parsed = JSON.parse(sessionStorage.getItem(HOME_PREVIEW) ?? "null") as Partial<Shown & Picked> | null
     if (!parsed) return null
     if (parsed.kind === "globe" || parsed.kind === "timeline") return { kind: parsed.kind }
     return typeof parsed.slug === "string" && Array.isArray(parsed.list) ? { kind: "project", slug: parsed.slug, list: parsed.list } : null
@@ -38,8 +91,8 @@ function readShown(): Shown | null {
 
 function keepShown(picked: Shown | null) {
   try {
-    if (picked) sessionStorage.setItem(PREVIEW_KEY, JSON.stringify(picked))
-    else sessionStorage.removeItem(PREVIEW_KEY)
+    if (picked) sessionStorage.setItem(HOME_PREVIEW, JSON.stringify(picked))
+    else sessionStorage.removeItem(HOME_PREVIEW)
   } catch {
     // The preview still shows, it just is not restored.
   }
@@ -57,13 +110,36 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   const names = useRef(Object.fromEntries(previews.map((item) => [item.slug, item.name])))
   const [shown, setShownState] = useState<Shown | null>(null)
   const [active, setActive] = useState(false)
+  const [reveal, setReveal] = useState(false)
+  const [arrive, setArrive] = useState(false)
   const slotRef = useRef<HTMLDivElement>(null)
+  const onActive = useCallback((next: boolean, restored: boolean) => {
+    setActive(next)
+    if (!next) {
+      setReveal(false)
+      setArrive(false)
+      return
+    }
+    // A conversation already in this session is shown at once. A new question fades the greeting first.
+    if (restored) setReveal(true)
+  }, [])
 
-  // Before the first question the composer sits in the opening, between the title and the
-  // prompts, in a slot its own height; once the conversation starts it goes back to the bottom.
+  useEffect(() => {
+    if (!active || reveal) return
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+    const hold = window.setTimeout(() => {
+      setReveal(true)
+      setArrive(true)
+    }, reduce ? 0 : HANDOFF_MS)
+    return () => window.clearTimeout(hold)
+  }, [active, reveal])
+
+  // Before the first question the composer sits under the welcome, in a slot its own height.
+  // It stays there while the greeting fades, then returns to the bottom once the exchange is shown.
+  const docked = !active || !reveal
   useEffect(() => {
     const slot = slotRef.current
-    if (active || !slot) return
+    if (!docked || !slot) return
     const root = document.documentElement
     const shell = document.querySelector<HTMLElement>(".hero-work .shell")
     const place = () => {
@@ -83,7 +159,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
       root.style.removeProperty("--empty-bottom")
       root.style.removeProperty("--composer-h")
     }
-  }, [active])
+  }, [docked])
   const picked = shown?.kind === "project" ? shown : null
   // Read when a question is sent, so the server knows which project "that" means.
   const openRef = useRef<string | undefined>(undefined)
@@ -127,6 +203,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
       window.removeEventListener("scroll", onScroll)
     }
   }, [])
+
+  useEffect(() => {
+    const onClose = () => setShown(null)
+    window.addEventListener(CHAT_CLOSE_PANEL, onClose)
+    return () => window.removeEventListener(CHAT_CLOSE_PANEL, onClose)
+  }, [setShown])
 
   useEffect(() => {
     if (!shown) return
@@ -218,28 +300,27 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   return (
     <div className={open ? "conv previewing" : "conv"}>
       <div className="conv-chat">
-        {active ? (
+        {active && reveal ? (
           <div className="conv-tools">
             <button type="button" className="btn ghost with-icon" onClick={startOver}>
-              New conversation
+              New chat
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
                 <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
               </svg>
             </button>
           </div>
         ) : (
-          <div className="conv-empty">
-            <p className="conv-intro">One craft, many mediums. Every project starts with one core idea and time spent inside the problem.</p>
-            <h1>Where would you like to start?</h1>
-            <div className="composer-slot" ref={slotRef} aria-hidden="true" />
-            <StarterPrompts onPick={askHere} />
-          </div>
+          <Opening slotRef={slotRef} leaving={active && !reveal} />
         )}
         <ChatThread
           storeKey={HOME_CHAT}
           ask={ask}
           label="Conversation about the work"
-          onActive={setActive}
+          onActive={onActive}
+          hold={active && !reveal}
+          concealed={!reveal}
+          tint={false}
+          arrive={arrive}
           renderAnswer={(turn) =>
             chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind, only) => setShown({ kind, only }), current: picked?.slug ?? panel ?? undefined })
           }

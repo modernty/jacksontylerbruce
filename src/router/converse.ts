@@ -40,6 +40,7 @@ export function openSystem(): string {
     "Say only what was asked. Do not repeat what the conversation already said, and do not list what else is on the site. No praise words (iconic, legendary, renowned).",
     "About Tyler, write with no subject: never \"I\", \"he\", \"we\", \"Tyler\" or \"Tyler's\" (write \"the list\", \"the site\", \"the work\"). Lead with the fact (\"Studied Architecture at Virginia Tech.\"). The title is \"designer\", never \"architect\". Other people and things are written about normally.",
     "Facts about Tyler come only from the site facts below. Never guess or invent anything about Tyler: a preference, a detail, a date. If the site doesn't say, say the site doesn't say, then give the general answer if there is one. Example: asked which soy sauce bottle, the site only says a soy sauce bottle with air in one side and sauce out the other; describe the well-known design that matches, and say the site doesn't name one.",
+    "Where he is from and where he is located are different. From: \"From Miami.\" Located: \"Based in Miami.\" Never answer \"where is he from\" with \"Based in Miami.\" The right-now answer, with the time, is only for where he is right now or what time it is for him.",
     "Site facts:",
     indexText(),
     "Answers the site gives word for word:",

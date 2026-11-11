@@ -71,9 +71,8 @@ export function Composer({ email }: { email: string }) {
       window.removeEventListener(CONTACT_EVENT, onContact)
     }
   }, [])
-  // Tall, with Contact inside, only while the conversation is empty or a note is being written.
-  // Once the first message is sent it goes back to one line, and Contact goes back to the top bar.
-  const tall = quiet && ((path === "/chat" && !started) || emailing)
+  // A note to Tyler uses the tall composer. The chat itself stays one line.
+  const tall = quiet && emailing
 
   useEffect(() => {
     const shell = shellRef.current

@@ -1,5 +1,5 @@
 import "server-only"
-import { answerAbout } from "./about"
+import { answerAbout, homeLine } from "./about"
 import { qaReply, type QaReply } from "./qa"
 import { z } from "zod"
 import { careerEntries } from "@/src/content/career"
@@ -147,13 +147,14 @@ function allWork(catalog: PublicCatalog): ChatReply {
     answer: `Recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Select one to view, or pick a type to see the rest: ${typeList()}.`,
     projects: projects.map((project) => project.slug),
     expects: "category",
+    followUps: ["How does he start a project?", "Walk me through his career."],
   }
 }
 
 /** A group of projects as one sentence, newest first. */
 function sentence(lead: string, found: Project[]): ChatReply {
   const ordered = byRecent(found)
-  return { answer: `${lead} ${joinNames(ordered.map((project) => project.name))}. Select one to view.`, projects: ordered.map((project) => project.slug) }
+  return { answer: `${lead} ${joinNames(ordered.map((project) => project.name))}. Select one to view.`, projects: ordered.map((project) => project.slug), followUps: ["Walk me through his career."] }
 }
 
 function byDiscipline(key: Discipline, catalog: PublicCatalog): ChatReply {
@@ -191,12 +192,18 @@ export function answerChat(question: string, expects: "category" | undefined, ca
   if (discipline && work) return byDiscipline(discipline, catalog)
   if (ALL_WORK.test(q)) return allWork(catalog)
   const named = mentionedProjects(question, catalog)
-  if (named.length === 1) return { answer: `Here's ${named[0].name}. ${named[0].summary}`, projects: [named[0].slug] }
+  if (named.length === 1) return { answer: `Here's ${named[0].name}. ${named[0].summary}`, projects: [named[0].slug], followUps: suggest(question, ["How does he start a project?", "Walk me through his career."]) }
   const routed = keywordRoute(question)
   if (routed.intent === "focus" && routed.focusIds[0]) return byTheme(routed.focusIds[0], catalog)
   // Not an answer to the offer: a new question, so the main router takes it. The offer is a hint
   // about what the visitor might say next, never a lock on the conversation.
   return null
+}
+
+/** The next thing a visitor might ask, leaving out the question they just asked. One to three. */
+function suggest(question: string, ideas: string[]): string[] {
+  const asked = question.trim().toLowerCase()
+  return ideas.filter((idea) => idea.trim().toLowerCase() !== asked).slice(0, 3)
 }
 
 function qaToChat({ answer, panel, followUps, contact }: Pick<QaReply, "answer" | "panel" | "followUps" | "contact">): ChatReply {
@@ -245,6 +252,14 @@ type Routed = { annotation?: string; href?: string; intent?: string; handoff?: b
 
 /** A route from the site router, as a reply in the conversation. */
 function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
+  // Origin and current place stay distinct even when a route points at the right-now answer.
+  const line = homeLine(q, catalog.profile.location)
+  if (line) {
+    const followUps = line.startsWith("From")
+      ? suggest(q, ["Where is Tyler located?", "Where is Tyler right now?"])
+      : suggest(q, ["Where is Tyler from?", "Show me everywhere he's lived."])
+    return { answer: line, panel: "globe", followUps }
+  }
   const entry = body.qaKey ? QA.find((item) => item.key === body.qaKey) : undefined
   if (entry) {
     return qaToChat({ answer: resolveTokens(entry.answer), ...(entry.view ? { panel: entry.view } : {}), ...(entry.followUps.length ? { followUps: entry.followUps } : {}) })
@@ -256,21 +271,24 @@ function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
   // Places answer from the places content, the same as About.
   if (panel === "globe") {
     const place = answerAbout(q, catalog)
-    return { answer: place.answer.startsWith("The globe covers") ? GLOBE_LEAD : place.answer, panel, ...(place.only ? { placeKind: place.only } : {}) }
+    const followUps = place.only === "lived"
+      ? suggest(q, ["Where is Tyler right now?", "Where has he lived and worked from?"])
+      : suggest(q, ["Where is Tyler right now?", "Show me everywhere he's lived."])
+    return { answer: place.answer.startsWith("The globe covers") ? GLOBE_LEAD : place.answer, panel, followUps, ...(place.only ? { placeKind: place.only } : {}) }
   }
-  if (panel === "timeline") return { answer, panel }
+  if (panel === "timeline") return { answer, panel, followUps: suggest(q, ["Show me your projects."]) }
   // The career is answered in the conversation, as a resume: each role, its dates and what it was.
   if (body.intent === "career") {
-    return { answer: "The career, most recent first. The timeline is open beside it.", roles: careerEntries(catalog).map((entry) => entry.id), panel: "timeline" }
+    return { answer: "The career, most recent first. The timeline is open beside it.", roles: careerEntries(catalog).map((entry) => entry.id), panel: "timeline", followUps: suggest(q, ["Show me your projects.", "How does he start a project?"]) }
   }
   const focusIds = body.focusIds ?? []
   if (body.intent === "role") {
     const role = catalog.roles.find((item) => focusIds.includes(item.id))
-    if (role) return { answer: `Time at ${role.name}.`, roles: [role.id] }
+    if (role) return { answer: `Time at ${role.name}.`, roles: [role.id], followUps: suggest(q, ["Walk me through his career."]) }
   }
   if (body.intent === "project") {
     const project = catalog.projects.find((item) => focusIds.includes(item.id))
-    if (project) return { answer, projects: [project.slug] }
+    if (project) return { answer, projects: [project.slug], followUps: suggest(q, ["How does he start a project?", "Walk me through his career."]) }
   }
   if (body.intent === "decline" || body.intent === "off_topic" || !body.href) return { answer }
   return { answer, go: { href: body.href, handoff: body.handoff } }
@@ -302,7 +320,7 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
       if (view.intent !== "off_topic" && view.intent !== "decline") return { ...fromRoute(view, q, catalog), source: "site" }
       return null
     }
-    return { answer: out.text, source: "open", ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
+    return { answer: out.text, source: "open", followUps: suggest(q, ["Show me your projects.", "How does he start a project?"]), ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
   }
 
   if (!blocked(q)) {
@@ -325,23 +343,26 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
     if (aboutTravel(q) || /\b(everywhere|where all)\b.*\b(lived|been|travell?ed)\b/i.test(q)) {
       // An answer about places lived shows only those on the globe.
       const place = answerAbout(q, catalog)
-      return { status: 200, body: { answer: place.answer, panel: "globe", ...(place.only ? { placeKind: place.only } : {}) } }
+      const followUps = place.only === "lived"
+        ? suggest(q, ["Where is Tyler right now?", "Where has he lived and worked from?"])
+        : suggest(q, ["Where is Tyler right now?", "Show me everywhere he's lived."])
+      return { status: 200, body: { answer: place.answer, panel: "globe", followUps, ...(place.only ? { placeKind: place.only } : {}) } }
     }
     const slug = pickFromList(q, listed.filter((item) => catalog.projects.some((project) => project.slug === item)))
     if (slug) {
       const project = catalog.projects.find((item) => item.slug === slug)
-      if (project) return { status: 200, body: { answer: `Here's ${project.name}. ${project.summary}`, projects: [project.slug] } }
+      if (project) return { status: 200, body: { answer: `Here's ${project.name}. ${project.summary}`, projects: [project.slug], followUps: suggest(q, ["How does he start a project?", "Walk me through his career."]) } }
     }
     const opened = open ? catalog.projects.find((project) => project.slug === open) : undefined
     if (opened && ABOUT_OPEN.test(fold(q)) && !mentionedProjects(q, catalog).length && !ALL_WORK.test(fold(q))) {
       const reply = await handleProjectAsk({ slug: opened.slug, q, sessionId }, ctx, { store: deps.store, env: deps.env, now: deps.now })
       const body = reply.body as { answer?: string; source?: string }
-      if (reply.status === 200 && body.answer && body.source !== "route") return { status: 200, body: { answer: body.answer, projects: [opened.slug] } }
+      if (reply.status === 200 && body.answer && body.source !== "route") return { status: 200, body: { answer: body.answer, projects: [opened.slug], followUps: suggest(q, ["How does he start a project?", "Show me your projects."]) } }
     }
     // Where Tyler worked, answered with only the roles asked about; the whole history opens the timeline.
     const asksTheme = !mentionedRoles(q, catalog).length && !!themeIn(fold(q), catalog) && THEME_WORK.test(fold(q))
     const career = ALL_WORK.test(fold(q)) || asksTheme ? null : careerReply(q, catalog)
-    if (career) return { status: 200, body: career }
+    if (career) return { status: 200, body: { ...career, followUps: suggest(q, ["Show me your projects.", "How does he start a project?"]) } }
     const answered = answerChat(q, expects, catalog)
     if (answered) return { status: 200, body: answered }
   }

@@ -1,5 +1,5 @@
 import { QA, type QaEntry } from "@/src/content/qa"
-import { personalReply } from "./personal"
+import { EDUCATION, personalReply } from "./personal"
 
 /** An answer from the Q&A. Matched questions skip the model. */
 export type QaReply = { answer: string; key?: string; panel?: "globe"; followUps?: string[]; contact?: boolean }
@@ -14,7 +14,7 @@ export const ASK_DIRECTLY = "That's one to ask him directly."
 // dog?" and "Does he have a dog?" read the same.
 const SUBJECT = new Set(["he", "him", "his", "hes", "tyler", "tylers", "you", "your", "youre", "yours", "jackson"])
 // Verb forms change with the subject ("are you", "is he"), so they fold too.
-const SYNONYMS: Record<string, string> = { travelled: "traveled", located: "based", favourite: "favorite", are: "is", do: "does", have: "has" }
+const SYNONYMS: Record<string, string> = { travelled: "traveled", favourite: "favorite", are: "is", do: "does", have: "has" }
 
 /** Lowercase words with no accents, apostrophes or punctuation. */
 function words(text: string): string[] {
@@ -82,7 +82,10 @@ export function qaReply(message: string, now: Date = new Date()): QaReply | null
     }
   }
   const fact = personalReply(message)
-  if (fact) return { answer: fact }
-  if (personal(message)) return { answer: ASK_DIRECTLY, contact: true }
+  if (fact) {
+    const followUps = fact === EDUCATION ? ["Walk me through his career.", "Who are his favorite designers or studios?"] : ["Where is Tyler from?"]
+    return { answer: fact, followUps }
+  }
+  if (personal(message)) return { answer: ASK_DIRECTLY, contact: true, followUps: ["How do I start a project with him?"] }
   return null
 }

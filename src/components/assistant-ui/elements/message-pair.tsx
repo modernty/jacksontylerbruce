@@ -16,6 +16,8 @@ export interface MessagePairProps extends Omit<
   words: readonly string[];
   visibleWords: number;
   streaming: boolean;
+  /** Fresh words arrive in placeholder ink and settle. Off, they arrive in their final colour. */
+  tint?: boolean;
   variant?: "bubble" | "flat";
   onCopy?: () => void;
   onRegenerate?: () => void;
@@ -30,6 +32,7 @@ export function MessagePair({
   words,
   visibleWords,
   streaming,
+  tint = true,
   variant = "bubble",
   onCopy,
   onRegenerate,
@@ -66,7 +69,7 @@ export function MessagePair({
               {status}
             </span>
           ) : !streaming && final ? final : shown.map((word, index) => {
-            const fresh = streaming && shown.length - 1 - index < 2;
+            const fresh = tint && streaming && shown.length - 1 - index < 2;
 
             return (
               <span

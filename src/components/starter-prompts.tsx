@@ -17,7 +17,7 @@ export const IMAGES_STARTER = "Show the images"
 /** Asks a question in the conversation on this page. */
 export const askHere = (question: string) => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: question }))
 
-export function StarterPrompts({ onPick, className, items = STARTERS }: { onPick: (question: string) => void; className?: string; items?: readonly string[] }) {
+export function StarterPrompts({ onPick, className, items = STARTERS, links = false }: { onPick: (question: string) => void; className?: string; items?: readonly string[]; links?: boolean }) {
   // The first visit's pills rotate after hydration, so the server and client agree on the first render.
   const [shown, setShown] = useState(items)
   useEffect(() => {
@@ -28,9 +28,11 @@ export function StarterPrompts({ onPick, className, items = STARTERS }: { onPick
       {shown.map((label) => (
         <button key={label} type="button" onClick={() => onPick(label)}>
           {label}
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-            <path d="M7 11.5v-9M3 6.5l4-4 4 4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          {links ? null : (
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M7 11.5v-9M3 6.5l4-4 4 4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
         </button>
       ))}
     </p>

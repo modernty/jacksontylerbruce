@@ -8,6 +8,19 @@ import { CONTACT_EVENT } from "./mailto"
 export const CHAT_ASK = "chat:ask"
 /** Clears one conversation, named by its store key, so it starts again empty. */
 export const CHAT_RESET = "chat:reset"
+/** Closes the panel beside the home chat. The conversation stays. */
+export const CHAT_CLOSE_PANEL = "chat:close-panel"
+export const HOME_PREVIEW = "home-chat-preview"
+
+/** Drops the open preview and tells the chat, if it is on screen, to close it. */
+export function closeHomePanel() {
+  try {
+    sessionStorage.removeItem(HOME_PREVIEW)
+  } catch {
+    // The panel still closes on this page.
+  }
+  window.dispatchEvent(new Event(CHAT_CLOSE_PANEL))
+}
 
 /** Empties a conversation and tells its thread to start over. */
 export function resetChat(key: string) {
@@ -150,11 +163,24 @@ export function ChatThread({
   onActive,
   after,
   renderAnswer,
+  hold = false,
+  tint = true,
+  arrive = false,
+  concealed = false,
 }: {
   storeKey: string
   ask: Asker
   label: string
-  onActive?: (active: boolean) => void
+  /** `restored` is true when the turns were already in this session, not just sent. */
+  onActive?: (active: boolean, restored: boolean) => void
+  /** Keep the answer from streaming, and the thread out of sight, until the handoff is ready. */
+  hold?: boolean
+  /** Fresh answer words arrive in their final colour instead of settling from a light tint. */
+  tint?: boolean
+  /** Fade the thread in once, when it takes the greeting's place. */
+  arrive?: boolean
+  /** Hide the thread until the greeting has faded, including the frame before the handoff starts. */
+  concealed?: boolean
   /** Renders under a finished answer, from the structure the reply carried. */
   after?: (turn: { id: number } & ReplyExtra) => ReactNode
   /** Renders a finished answer in place of its plain words, e.g. with project names as links. */
@@ -165,6 +191,8 @@ export function ChatThread({
   const last = useRef<HTMLDivElement>(null)
   const reduce = useRef(false)
   const restoring = useRef(true)
+  const restored = useRef(false)
+  const seen = useRef(false)
 
   const run = useCallback(
     async (id: number, question: string) => {
@@ -187,6 +215,7 @@ export function ChatThread({
     reduce.current = matchMedia("(prefers-reduced-motion: reduce)").matches
     // Bring back the conversation as it stood, without replaying the reveal.
     const stored = load(storeKey)
+    restored.current = stored.length > 0
     nextId.current = stored.reduce((max, item) => Math.max(max, item.id + 1), 0)
     setTurns(stored.map((item) => {
       const words = item.answer ? item.answer.split(/\s+/).filter(Boolean) : []
@@ -198,6 +227,7 @@ export function ChatThread({
       const question = (event as CustomEvent<string>).detail.trim()
       if (!question) return
       restoring.current = false
+      restored.current = false
       const id = nextId.current++
       setTurns((all) => [...all, { id, question, words: [], shown: 0, pending: true }])
       void run(id, question)
@@ -205,6 +235,7 @@ export function ChatThread({
     const onReset = (event: Event) => {
       if ((event as CustomEvent<string>).detail !== storeKey) return
       nextId.current = 0
+      restored.current = false
       setTurns([])
     }
     window.addEventListener(CHAT_ASK, onAsk)
@@ -217,30 +248,41 @@ export function ChatThread({
 
   const active = turns.length > 0
   useEffect(() => {
-    onActive?.(active)
+    onActive?.(active, restored.current)
   }, [active, onActive])
 
   const revealing = turns.some((turn) => !turn.pending && turn.shown < turn.words.length)
   useEffect(() => {
-    if (!revealing) return
+    if (!revealing || hold || concealed) return
     const timer = window.setInterval(() => {
       setTurns((all) => all.map((turn) => (!turn.pending && turn.shown < turn.words.length ? { ...turn, shown: turn.shown + 1 } : turn)))
     }, WORD_MS)
     return () => window.clearInterval(timer)
-  }, [revealing])
+  }, [revealing, hold, concealed])
 
   // Keep the newest turn above the composer: when it is added, when its answer arrives, and once it has fully revealed.
   const newest = turns[turns.length - 1]
   const stage = newest ? `${turns.length}:${newest.pending}:${newest.shown >= newest.words.length}` : ""
   useEffect(() => {
     // A restored conversation waits where it is; only new questions pull the page down.
+    // The first message stays at the top of the feed while its answer streams in underneath.
+    if (hold || concealed || turns.length === 0) return
+    if (!seen.current) {
+      seen.current = true
+      if (storeKey === HOME_CHAT && !restoring.current) window.scrollTo(0, 0)
+      return
+    }
     if (restoring.current) return
+    if (storeKey === HOME_CHAT && turns.length < 2) return
     if (stage) last.current?.scrollIntoView({ behavior: reduce.current ? "auto" : "smooth", block: "end" })
-  }, [stage])
+  }, [stage, hold, concealed, turns.length])
+  useEffect(() => {
+    if (turns.length === 0) seen.current = false
+  }, [turns.length])
 
   if (turns.length === 0) return null
   return (
-    <section className="chat" aria-label={label} aria-live="polite">
+    <section className={hold || concealed ? "chat held" : arrive ? "chat arrive" : "chat"} aria-label={label} aria-live="polite">
       {turns.map((turn, index) => (
         <div key={turn.id} ref={index === turns.length - 1 ? last : undefined}>
           <MessagePair
@@ -248,6 +290,7 @@ export function ChatThread({
             words={turn.words}
             visibleWords={turn.shown}
             streaming={turn.pending || turn.shown < turn.words.length}
+            tint={tint}
             status={turn.pending && turn.status ? STATUS_LABEL[turn.status] : undefined}
             className="max-w-none gap-4 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
