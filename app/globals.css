@@ -467,16 +467,6 @@ p{text-wrap:pretty}
   .globe-svg{max-height:calc(100svh - 340px)}
 }
 
-/* The globe is the picture, so its panel takes the room: the pair widens to the window, the globe
-   fills the panel's full height, and the caption sits over its lower left corner instead of under it. */
-@media(min-width:769px){
-  .conversation:has(.preview.view-globe){--pair:min(1440px,calc(100vw - 72px))}
-  body:has(.preview.view-globe) .hero-work{left:max(36px,calc((100vw - min(1440px,calc(100vw - 72px))) / 2))}
-  .preview.view-globe .frame{flex:1;min-height:0}
-  .preview.view-globe .preview-info{position:absolute;left:0;bottom:0;max-width:240px;pointer-events:none}
-  .preview.view-globe .preview-info h2{margin-top:0}
-}
-
 /* Accent. Ink stays black for text and rules; blue marks what can be acted on and what is active. */
 ::selection{background:var(--accent-soft);color:var(--ink)}
 .input{caret-color:var(--accent)}
