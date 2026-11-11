@@ -6,6 +6,7 @@ import { textIssues } from "@/src/content/guard"
 import { loadCatalog } from "@/src/content/catalog"
 import { employerPublicName } from "@/src/content/employer"
 import { publishCatalog } from "@/src/content/publish"
+import { careerReply } from "./career"
 import { answerChat, handleChatAsk } from "./chat"
 import { MemoryStore } from "./store"
 
@@ -24,7 +25,7 @@ test("asking for the work answers in one sentence: three recent projects from tw
   assert.ok(new Set(picked.map((project) => project?.roleId)).size <= 2)
   // The newest project always leads.
   assert.equal(reply.projects[0], byRecent(catalog.projects)[0]?.slug)
-  assert.equal(reply.answer, `My most recent projects include work from ${employerPublicName()} and Lazarus AI: Intuit, Loblaw / PC Health and Whitelist. Select one to view, or I can group the rest by type: product design, brand or spatial.`)
+  assert.equal(reply.answer, `Recent projects include work from Overmatch AI and ${employerPublicName()}: Overmatch AI, Intuit and Loblaw / PC Health. Select one to view, or pick a type to see the rest: product design, brand or spatial.`)
   assert.equal(reply.expects, "category")
   assert.ok(!reply.answer.includes("\n"))
   const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug)
@@ -33,8 +34,8 @@ test("asking for the work answers in one sentence: three recent projects from tw
 
 test("a type, after the offer, lists that group", () => {
   const brand = answerChat("brand", "category")
-  assert.deepEqual(names(brand?.projects), ["Lazarus brand", "Chatter brand", "Jet brand"])
-  assert.equal(brand?.answer, "My brand work, most recent first: Lazarus brand, Chatter brand and Jet brand. Select one to view.")
+  assert.deepEqual(names(brand?.projects), ["LZR 2.0", "Lazarus brand"])
+  assert.equal(brand?.answer, "Brand work, most recent first: LZR 2.0 and Lazarus brand. Select one to view.")
   const spatial = answerChat("the exhibitions please", "category")
   assert.deepEqual(names(spatial?.projects), ["USM: Milan", "USM Hue + Man"])
   const product = answerChat("Product design", "category")
@@ -79,20 +80,45 @@ test("a theme or one named project lists just those", () => {
   assert.deepEqual(answerChat("Tell me about Novart", undefined)?.projects, ["novart"])
 })
 
-test("other questions go to the main router: career lists the roles, the timeline opens by name, others say where to go", async () => {
+test("career lists the roles and opens the timeline, the timeline opens by name, others say where to go", async () => {
   assert.equal(answerChat("Walk me through your career", undefined), null)
   const reply = await handleChatAsk({ q: "Walk me through your career", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   assert.equal(reply.status, 200)
   // Career comes back as roles, newest first, listed in the conversation like a resume.
   const roles = "roles" in reply.body ? reply.body.roles ?? [] : []
   assert.equal(roles[roles.length - 1], "role:joba")
-  assert.ok(!("panel" in reply.body) || !reply.body.panel)
+  // The whole career also opens the timeline beside the chat.
+  assert.ok("panel" in reply.body && reply.body.panel === "timeline", JSON.stringify(reply.body))
   const one = await handleChatAsk({ q: "What did you do at Soul Machines?", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   assert.deepEqual("roles" in one.body ? one.body.roles : null, ["role:soul-machines"], JSON.stringify(one.body))
   const drawn = await handleChatAsk({ q: "Take me to the timeline", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   assert.ok("panel" in drawn.body && drawn.body.panel === "timeline", JSON.stringify(drawn.body))
-  const elsewhere = await handleChatAsk({ q: "How do you work?", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  const elsewhere = await handleChatAsk({ q: "Tell me about your design process", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   assert.ok("go" in elsewhere.body && elsewhere.body.go?.href, JSON.stringify(elsewhere.body))
+})
+
+test("Notion Q&A rows answer without the model, with their view and follow-ups", async () => {
+  const where = await chat("Where is Tyler located?")
+  assert.ok("panel" in where.body && where.body.panel === "globe", JSON.stringify(where.body))
+  assert.match("answer" in where.body ? where.body.answer : "", /^Miami\. \d{1,2}:\d{2} [AP]M there\.$/)
+  assert.deepEqual("followUps" in where.body ? where.body.followUps : null, ["Show me everywhere he's lived."])
+  assert.equal(answerChat("Does Tyler have a dog?", undefined)?.answer, "Winston. A French Bulldog. Chief of morale.")
+  assert.equal(answerChat("Explain his work like I'm five.", undefined)?.followUps?.[0], "Show me an example.")
+  const personal = answerChat("Is he married?", undefined)
+  assert.equal(personal?.answer, "That's one to ask him directly.")
+  assert.equal(personal?.contact, true)
+  // Work questions are not personal.
+  assert.notEqual(answerChat("Show me your projects", undefined)?.answer, "That's one to ask him directly.")
+})
+
+test("an answer about places lived narrows the globe to them; other place answers show everything", async () => {
+  const lived = await chat("Show me everywhere he's lived.")
+  assert.ok("panel" in lived.body && lived.body.panel === "globe")
+  assert.equal(lived.body.placeKind, "lived")
+  assert.match(lived.body.answer, /^Lived in Miami, FL/)
+  const travelled = await chat("Which countries has he been to?")
+  assert.ok("panel" in travelled.body && travelled.body.panel === "globe")
+  assert.equal(travelled.body.placeKind, undefined)
 })
 
 test("blocked asks never list work", async () => {
@@ -126,4 +152,40 @@ test("career entries read like the resume: month dates, newest first, summaries 
   assert.equal(entries.find((entry) => entry.id === "role:employer")?.dates, "Jan 2026 \u2013 Now")
   assert.equal(entries[entries.length - 1]?.id, "role:joba")
   for (const entry of entries) assert.deepEqual(textIssues(entry.summary), [], entry.id)
+})
+
+test("career questions show only the roles they ask about", async () => {
+  const ask = async (q: string) => {
+    const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+    return "roles" in reply.body ? reply.body.roles : null
+  }
+  assert.deepEqual(await ask(`Where was Tyler working before Overmatch and ${employerPublicName()}?`), ["role:lazarus"])
+  assert.deepEqual(await ask("Where did you work after Joba Studio?"), ["role:soul-machines"])
+  assert.deepEqual(await ask("Where are you working now?"), ["role:overmatch", "role:employer"])
+  assert.deepEqual(await ask("What was your first job?"), ["role:joba"])
+  assert.deepEqual(await ask("Where were you working in 2021?"), ["role:soul-machines", "role:joba"])
+  assert.deepEqual(await ask("How long were you at Chatter Social?"), ["role:chatter"])
+  // The whole history: every role, with the timeline beside the chat.
+  const resume = await handleChatAsk({ q: "Can I see your resume?", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  assert.ok("panel" in resume.body && resume.body.panel === "timeline")
+  assert.equal("roles" in resume.body ? resume.body.roles?.length : 0, catalog.roles.length)
+  // Project and work questions are not career questions.
+  assert.equal(await ask("Show me brand work"), null)
+  assert.equal(careerReply("Tell me about Jet Protocol", catalog), null)
+})
+
+test("the AI starter lists the AI work, not the career", async () => {
+  const reply = await handleChatAsk({ q: "Experience designing for AI", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  const projects = "projects" in reply.body ? reply.body.projects ?? [] : []
+  assert.ok(projects.length > 0, JSON.stringify(reply.body))
+  for (const slug of projects) assert.ok(catalog.projects.find((project) => project.slug === slug)?.themeIds.includes("theme:ai"), slug)
+  assert.ok(!("roles" in reply.body) || !reply.body.roles?.length)
+  // Naming the company keeps it a career question.
+  const role = await handleChatAsk({ q: "What did you do at Lazarus AI?", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  assert.deepEqual("roles" in role.body ? role.body.roles : null, ["role:lazarus"])
+})
+
+test("height and weight get Tyler's answer in both conversations", () => {
+  assert.equal(answerChat("How tall is Tyler?", undefined)?.answer, "6'2\". 200 lbs.")
+  assert.equal(answerChat("how much does he weigh", undefined)?.answer, "6'2\". 200 lbs.")
 })

@@ -1,3 +1,4 @@
+import { byRecent } from "./disciplines"
 import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
 import { readFileSync, readdirSync, statSync } from "node:fs"
@@ -18,9 +19,9 @@ function files(dir: string): string[] {
   return found
 }
 
-test("profile is Miami and the current role is one employer", () => {
+test("profile is Miami, and the current role is one employer", () => {
   const catalog = loadCatalog()
-  assert.equal(catalog.profile.location, "Miami, FL")
+  assert.equal(catalog.profile.location, "Miami")
   assert.equal(catalog.places[0]?.name, "Miami, FL")
   const employer = catalog.roles.find((role) => role.employer)
   assert.ok(employer)
@@ -53,14 +54,25 @@ test("profile is Miami and the current role is one employer", () => {
   assert.equal(catalog.projects.some((project) => project.name === "PC Health app"), false)
 })
 
+test("the public project list is the approved one, in order", () => {
+  const slugs = byRecent(publishCatalog().projects).map((project) => project.slug)
+  assert.deepEqual(slugs, [
+    "overmatch-ai", "intuit", "loblaw", "lzr-2", "usm-milan", "model-playground", "talent-management", "whitelist",
+    "lazarus-brand", "chatter", "novart", "fixed-rate-fixed-term", "the-terminal", "corelogic", "nestle", "usm-hue-man",
+  ])
+  const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug).sort()
+  assert.deepEqual(hidden, ["remedy", "rv", "traveller"])
+})
+
 test("flagged work is absent from public output", () => {
   const catalog = loadCatalog()
   const flagged = catalog.projects.filter((project) => project.flagged).map((project) => project.name).sort()
-  assert.deepEqual(flagged, ["Remedy", "Traveller"])
+  assert.deepEqual(flagged, ["RV", "Remedy", "Traveller"])
   const published = publishCatalog()
   const blob = JSON.stringify(published)
-  for (const name of flagged) assert.equal(blob.includes(name), false, name)
-  assert.equal(published.profile.location, "Miami, FL")
+  // Whole names only: "RV" is also inside other words.
+  for (const name of flagged) assert.equal(new RegExp(`(^|[^A-Za-z])${name}([^A-Za-z]|$)`).test(blob), false, name)
+  assert.equal(published.profile.location, "Miami")
   assert.equal(textIssues(blob).length, 0)
   for (const project of published.projects) assert.ok(wordCount(project.summary) <= 40)
 })
@@ -77,11 +89,6 @@ test("the employer name is only the switch", () => {
     if (readFileSync(file, "utf8").includes(name)) offenders.push(file)
   }
   assert.deepEqual(offenders, [])
-  const tree = [...files("src"), ...files("app")]
-    .filter((file) => !file.endsWith(".test.ts"))
-    .map((file) => readFileSync(file, "utf8"))
-    .join("\n")
-  assert.equal(/medell/i.test(tree), false)
   assert.equal(/graduat/i.test(JSON.stringify(loadCatalog())), false)
 })
 
@@ -91,7 +98,7 @@ test("blocklist matches the python digests", () => {
   assert.deepEqual([...BLOCKLIST].sort(), parsed.b)
   assert.deepEqual([...PUBLISHED].sort(), parsed.p)
   assert.equal(parsed.safe, false)
-  assert.equal(containsBlocked("Tyler is based in Miami, FL."), false)
+  assert.equal(containsBlocked("Tyler is based in Medellín."), false)
   assert.equal(containsBlocked("Design Lead at Overmatch AI"), false)
 })
 

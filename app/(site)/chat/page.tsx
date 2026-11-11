@@ -1,3 +1,4 @@
+import { isHome } from "@/src/content/home"
 import type { Metadata } from "next"
 import { ConversationStage, type ProjectPreview } from "@/src/components/conversation-stage"
 import { careerEntries } from "@/src/content/career"
@@ -6,7 +7,7 @@ import type { GlobePlace } from "@/src/globe/types"
 import { publicStage } from "@/src/timeline/stage-data"
 
 export const metadata: Metadata = {
-  title: "Conversation — Tyler Jackson",
+  title: "Conversation",
   description: "Ask about Tyler Jackson's work and preview the projects.",
 }
 
@@ -20,11 +21,11 @@ export default function ChatPage() {
       slug: project.slug,
       name: project.name,
       summary: project.summary,
-      meta: [org === project.name ? "" : org, role?.title, role?.yearLabel].filter(Boolean).join(" · "),
+      meta: [org === project.name ? "" : org, role?.title, project.circa ?? role?.yearLabel].filter(Boolean).join(" · "),
       cover: project.media.cover,
     }
   })
-  const places: GlobePlace[] = catalog.places.map((place) => ({ ...place, home: place.id === catalog.profile.placeId }))
+  const places: GlobePlace[] = catalog.places.map((place) => ({ ...place, home: isHome(place, catalog.profile) }))
   return (
     <main className="conversation">
       <ConversationStage previews={previews} places={places} timeline={publicStage().mobile} careers={careerEntries(catalog)} />

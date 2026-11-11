@@ -6,11 +6,14 @@ import { regionOf } from "./regions"
 import { distance, greatCircle, project, splitPath, type Projected, type View } from "./sphere"
 import type { GlobePlace, GlobeProps } from "./types"
 
-const W = 1200
-const H = 600
-const CX = 600
-const CY = 300
-const R = 232
+/**
+ * Two framings of the same globe. Wide leaves a broad margin for the callout (the About page);
+ * panel is nearly square with a much larger sphere, for the preview beside the chat.
+ */
+const LAYOUTS = {
+  wide: { W: 1200, H: 600, CX: 600, CY: 300, R: 232 },
+  panel: { W: 900, H: 780, CX: 555, CY: 390, R: 340 },
+} as const
 const SPIN = 4
 const IDLE_MS = 4000
 const HIT = 14
@@ -84,7 +87,8 @@ function Mark({ place, at }: { place: GlobePlace; at: Projected }) {
  * A see-through line globe: outline, equator and faint country borders, places marked in the
  * timeline's language, faint arcs joining the regions of the world, and a callout on a leader.
  */
-export function Globe({ places, focusId, onHover }: GlobeProps) {
+export function Globe({ places, focusId, onHover, fit = "wide" }: GlobeProps) {
+  const { W, H, CX, CY, R } = LAYOUTS[fit]
   const home = places.find((place) => place.home) ?? places[0]
   const [view, setView] = useState<View>(() => ({ lng: (home?.lng ?? 0) + 35, lat: 28 }))
   const [hovered, setHovered] = useState<string | null>(null)

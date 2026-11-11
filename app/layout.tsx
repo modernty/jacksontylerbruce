@@ -27,7 +27,7 @@ const live = indexable()
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: SITE_NAME,
+  title: { default: SITE_NAME, template: `%s — ${SITE_NAME}` },
   description: HERO,
   robots: live ? { index: true, follow: true } : { index: false, follow: false },
   openGraph: { type: "website", siteName: SITE_NAME, title: SITE_NAME, description: HERO, url: "/" },
@@ -49,8 +49,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ProjectTabs names={names} />
           <PillsProvider>
             {children}
+            <p className="disclaimer">This is a working demo. Contact for more information.</p>
             <Suspense fallback={null}>
-              <Composer />
+              <Composer email={profile.email} />
             </Suspense>
           </PillsProvider>
         </ViewModeProvider>

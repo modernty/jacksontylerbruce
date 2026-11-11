@@ -11,7 +11,7 @@ const ask = (slug: string, q: string, model: Parameters<typeof answerProject>[2]
   handleProjectAsk({ slug, q, sessionId: "test" }, { ip: "1.1.1.1" }, { store: new MemoryStore(), model })
 
 test("questions draw from the matching generated section", async () => {
-  const role = (await ask("chatter-brand", "What was your role?")).body as ProjectReply
+  const role = (await ask("fixed-rate-fixed-term", "What was your role?")).body as ProjectReply
   assert.equal(role.sectionId, "role")
   const why = (await ask("novart", "Why did this project exist?")).body as ProjectReply
   assert.equal(why.sectionId, "context")
@@ -24,9 +24,9 @@ test("questions draw from the matching generated section", async () => {
 })
 
 test("a topic the project has not written up says so instead of repeating the intro", async () => {
-  const reply = (await ask("chatter-brand", "What was the outcome?")).body as ProjectReply
+  const reply = (await ask("lzr-2", "What was the outcome?")).body as ProjectReply
   assert.equal(reply.sectionId, null)
-  assert.match(reply.answer, /^I haven't written up the outcome for Chatter brand yet\. Ask me about the /)
+  assert.match(reply.answer, /^The outcome for LZR 2\.0 isn't written up yet\./)
   assert.deepEqual(textIssues(reply.answer), [])
 })
 
@@ -34,7 +34,7 @@ test("a model answer that fails the checks falls back to the section", async () 
   const invented = async () => "I led Remedy at a Fortune 500 shop."
   const reply = await answerProject(project("novart"), "What did you do?", invented)
   assert.equal(reply.source, "section")
-  const grounded = async () => "I redesigned the flow as two gates before a short form."
+  const grounded = async () => "Redesigned the flow as two gates before a short form."
   assert.equal((await answerProject(project("novart"), "What did you do?", grounded)).source, "model")
 })
 

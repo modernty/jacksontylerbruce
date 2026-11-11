@@ -1,0 +1,189 @@
+{
+  "source": "https://app.notion.com/p/40e2280fd03d81108891f863fb6cb5cd",
+  "note": "Project facts from the Notion intake pages, keyed by the site's slug (site ids never change). order: 1 = most recent. circa shows in the spec block. glance, standard, role and context give the model grounded detail. Anything under a page's Confidentiality, notes to self, and To fill fields are left out.",
+  "synced": "2026-11-11",
+  "projects": {
+    "intuit": {
+      "notionId": "intuit-wallet-gpt-integration",
+      "order": 2,
+      "circa": "2026",
+      "glance": "Finance, dissolved into conversation.",
+      "standard": "Invoicing has always required a destination. Here it has none. Invoice, payment, and wallet fold into a single conversation inside ChatGPT. Language is reduced to the threshold of understanding. Information appears only where the user arrives. The interface recedes. The transaction remains.",
+      "role": "Design and coded prototype. Flow, microcopy, voice. Worked with Intuit leadership.",
+      "context": [
+        "Intuit Wallet and QuickBooks invoicing, inside ChatGPT.",
+        "Seven touchpoints: creation prompt, preview and send, confirmation, sign-up, Wallet setup, payment notice, revenue card.",
+        "Benefits appear at send, not before. \"View in QuickBooks\" is the only link-out. The revenue card shows the total and the weekly change, nothing else.",
+        "The coded prototype, including voice, won sign-off for a larger effort."
+      ]
+    },
+    "loblaw": {
+      "notionId": "loblaw-pc-health",
+      "order": 3,
+      "circa": "2026",
+      "glance": "The grocer as a front door to care.",
+      "standard": "Health care is a maze. PC Health places a front door inside a loyalty app. Nurses and dietitians on call. Health goals paid in points. A national network, compressed into one device.",
+      "role": "Senior product designer. Design and prototype.",
+      "context": [
+        "PC Health is Loblaw's health and wellness app for iOS and Android, launched October 2020.",
+        "Free chat with a care team of registered nurses, dietitians and care navigators. Health goals earn PC Optimum points. A marketplace of health products and services.",
+        "2026 scope: new features, an app redesign, and Labs concepts for agentic personal health and commerce."
+      ]
+    },
+    "rv": {
+      "notionId": "rv",
+      "order": 4,
+      "circa": "2026",
+      "role": "Senior product designer.",
+      "context": [
+        "Scope: app and platform redesign, new features, AI and agentic concepts."
+      ]
+    },
+    "usm-milan": {
+      "notionId": "usm-milan",
+      "order": 6,
+      "circa": "Apr 2025",
+      "glance": "Connected by Our Dreams. USM Haller, softened, in Milan.",
+      "standard": "A system of steel tubes and chrome balls, unchanged since 1965. Here it receives a soft surface. Connected by Our Dreams stages USM Haller at Spotti, Milan, and debuts the Haller Soft Panel. Rigid frame. Soft skin. Same grammar.",
+      "role": "Designer on the installation. 3D and rendering.",
+      "context": [
+        "USM's Milan Design Week 2025 installation, designed by Joba Studio.",
+        "Spotti Showroom, Viale Piave 27, Porta Venezia. April 7 to 13, 2025.",
+        "The debut of the USM Haller Soft Panel."
+      ]
+    },
+    "model-playground": {
+      "notionId": "model-playground",
+      "order": 7,
+      "circa": "2025",
+      "glance": "A room to test the models before trusting them.",
+      "context": [
+        "Where Lazarus's models, RikAI and ATLS, are tested. A customer demo tool and an internal tool in one."
+      ]
+    },
+    "talent-management": {
+      "notionId": "talent-management",
+      "order": 8,
+      "circa": "2025",
+      "context": [
+        "An AI agent workflow at Lazarus, built as a customer use case and pitch concept."
+      ]
+    },
+    "whitelist": {
+      "notionId": "whitelist",
+      "order": 9,
+      "circa": "2024–25"
+    },
+    "lazarus-brand": {
+      "notionId": "lazarus-brand",
+      "order": 10,
+      "circa": "2024",
+      "glance": "An identity for AI that has to be trusted. A refresh, extended into a system.",
+      "standard": "Regulated industries refuse the black box. The identity is built as its opposite: legible, exact, accountable. A brand for systems that must show their reasoning.",
+      "role": "Design Director. Owned design across the company.",
+      "context": [
+        "Lazarus AI, founded 2017 in Boston. AI for insurance, healthcare, banking and government. The pitch: explainable AI, every answer traceable.",
+        "Scope: a refresh. Color and type system, guidelines, design system, applications."
+      ]
+    },
+    "chatter": {
+      "notionId": "chatter",
+      "order": 11,
+      "circa": "2023–24",
+      "glance": "Social, rebuilt around groups. Live, not scrolled.",
+      "standard": "The feed isolates. Chatter inverts it. Every post belongs to a group, not a timeline. Rooms run live. RocketChats lift one voice above the room. The community, not the individual, is the unit of the network.",
+      "role": "Founding designer. App, brand, and system from zero to launch.",
+      "context": [
+        "A group-first social network on iPhone. Live rooms, short video, and RocketChats: paid messages that rise above the room.",
+        "Public launch July 2024, announced by Davido."
+      ]
+    },
+    "novart": {
+      "notionId": "novart",
+      "order": 12,
+      "circa": "2023",
+      "glance": "An art marketplace, in a pocket.",
+      "role": "Product designer.",
+      "context": [
+        "Built at Nax Group, a venture studio for products founded in 2018."
+      ]
+    },
+    "fixed-rate-fixed-term": {
+      "notionId": "fixed-rate-fixed-term",
+      "order": 13,
+      "circa": "2022–23",
+      "glance": "A bond market, on-chain. Fixed rate. Fixed term.",
+      "standard": "DeFi lending floats. Fixed Rate fixes it. Rate and term are set in an open order book, not by a pool. Lenders and borrowers meet as makers and takers. Autoroll carries a position past maturity. The mechanism is complex. The surface must not be.",
+      "role": "Lead product designer.",
+      "context": [
+        "Jet Protocol: lending and borrowing on Solana. Launch markets: 1-day and 30-day, in USDC and SOL.",
+        "Maker and taker orders. Autoroll renews loans at maturity. Relaunched as Fixed Rate in June 2023."
+      ]
+    },
+    "the-terminal": {
+      "notionId": "the-terminal",
+      "order": 14,
+      "circa": "2022",
+      "glance": "Professional market data. For everyone else.",
+      "standard": "Professional market data has always sat behind a paywall and a desk. The Terminal removes both. Data, analysis, and discussion share one surface. A platform funded by the community it serves.",
+      "role": "Product designer.",
+      "context": [
+        "Urvin Finance, founded 2021. Funded by about 2,000 community backers on Wefunder."
+      ]
+    },
+    "corelogic": {
+      "notionId": "soul-machines-corelogic",
+      "order": 15,
+      "circa": "2021–22",
+      "glance": "A digital human for real estate.",
+      "role": "Interface and web experience.",
+      "context": [
+        "Soul Machines builds Digital People: AI faces animated live by a Digital Brain. CoreLogic: property data and analytics."
+      ]
+    },
+    "nestle": {
+      "notionId": "soul-machines-nestle",
+      "order": 16,
+      "circa": "2021",
+      "glance": "Ruth. A digital human who helps you bake.",
+      "standard": "A customer line, given a face. Ruth began as the answer to baking questions phoned in to Nestlé. She now answers them directly: expression, voice, recipe, in real time. The Toll House kitchen, rendered as a person.",
+      "role": "Interface and web experience for Ruth.",
+      "context": [
+        "Ruth, the Nestlé Toll House cookie coach, debuted February 2021 on the web."
+      ]
+    },
+    "usm-hue-man": {
+      "notionId": "usm-hue-man",
+      "order": 17,
+      "circa": "2020",
+      "role": "Lead designer. 3D and rendering.",
+      "context": [
+        "Built on the USM Haller modular system, with Joba Studio."
+      ]
+    },
+    "lzr-2": {
+      "notionId": "lzr-2-website",
+      "order": 5,
+      "circa": "2025–26",
+      "glance": "One company. Three readers. One argument.",
+      "standard": "AI for regulated industries is sold against suspicion. LZR 2.0 restates Lazarus for three readers: the practitioner, the buyer, the researcher. Each arrives with a different doubt. Each is answered in turn. Explainability is the organizing idea.",
+      "role": "Design Director.",
+      "context": [
+        "Lazarus AI, founded 2017 in Boston. AI for insurance, healthcare, banking and government. Models: RikAI and ATLS, explainable by design.",
+        "LZR 2.0 is the phase from August 2025: website and product marketing. Homepage, product pages, research and benchmark pages, for ML practitioners, enterprise buyers and researchers."
+      ]
+    },
+    "overmatch-ai": {
+      "notionId": "overmatch-ai",
+      "order": 1,
+      "circa": "2026–now",
+      "role": "Lead / founding designer.",
+      "context": [
+        "Scope: product and platform UI, brand identity, website."
+      ]
+    }
+  },
+  "notOnSite": {
+    "rv": "Order 4. Hidden on the site until its Notion page has a Glance and Confidentiality."
+  }
+}

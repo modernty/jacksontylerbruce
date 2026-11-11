@@ -64,7 +64,7 @@ export const ProfileSchema = z.object({
   id: z.literal("profile:tyler"),
   name: z.string().min(1),
   title: z.enum(TITLES),
-  location: z.literal("Miami, FL"),
+  location: z.literal("Miami"),
   placeId: z.string(),
   email: z.string().email(),
   linkedin: z.string().url(),
@@ -130,6 +130,10 @@ export const ProjectSchema = z.object({
   orgLabel: z.string().optional(),
   aliases: z.array(z.string()),
   media: MediaSchema,
+  /** Sort position from the Notion intake. 1 is the most recent. */
+  order: z.number().int().min(1).optional(),
+  /** The approximate date shown in the spec block, e.g. "2024" or "Apr 2025". */
+  circa: z.string().min(1).optional(),
 }).superRefine((project, ctx) => {
   const seen = new Set<string>()
   for (const section of project.sections) {

@@ -43,11 +43,11 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" font-family="Aeonik Pro" fill="${INK}">`,
   ]
   parts.push(
-    `<line class="nowl" x1="${fmt(x1)}" y1="30" x2="${fmt(x1)}" y2="${height - 16}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="10" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>`,
+    `<line class="nowl" x1="${fmt(x1)}" y1="30" x2="${fmt(x1)}" y2="${height - 16}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="12" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>`,
   )
   for (let year = 2019; year < 2027; year += 1) {
     parts.push(
-      `<text class="yr" x="${fmt(locate(year))}" y="${height - 4}" text-anchor="middle" font-size="10" opacity=".4">${year}</text>`,
+      `<text class="yr" x="${fmt(locate(year))}" y="${height - 4}" text-anchor="middle" font-size="12" opacity=".4">${year}</text>`,
     )
   }
   const lanes = [I(78), I(170), I(262)]
@@ -73,8 +73,8 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
       `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, I(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
         `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.anchor))}">` +
         `<rect x="${fmt(xx)}" y="${fmt(sub(ly, I(11)))}" width="${fmt(add(mul(tw(name, F(11.5)), F(1.1)), I(8)))}" height="15" fill="transparent"/>` +
-        `<text class="w4" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5">${name}</text>` +
-        `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="11.5" font-weight="600">${name}</text></g>`,
+        `<text class="w4" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="13">${name}</text>` +
+        `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="13" font-weight="600">${name}</text></g>`,
     )
   })
   for (const role of model.roles) {
@@ -83,7 +83,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     const current = role.end == null
     const xb = current ? x1 : locate(role.end as number)
     const label = (weight: number, cls: string) =>
-      `<text class="${cls}" font-size="12.5" font-weight="${weight}"><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(26)))}">${role.name}</tspan><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(12)))}">${role.year}</tspan></text>`
+      `<text class="${cls}" font-size="14" font-weight="${weight}"><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(26)))}">${role.name}</tspan><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(12)))}">${role.year}</tspan></text>`
     timelineGroup.push(
       `<g class="rp" data-t="${fmt(F(role.start))}" data-cur="${current ? 1 : 0}">${pill(xa, y, xb, y, current)}<g class="co">${label(600, "w6")}${label(400, "w4")}</g></g>`,
     )
@@ -105,8 +105,8 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
     const current = item.end >= now
     projectGroup.push(
       pill(xa, y, xb, y, current, 9, tokens.stroke.projects) +
-        `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(sub(y, I(10)))}" font-size="12.5" font-weight="600">${item.name}</text>` +
-        `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(add(y, I(19)))}" font-size="10" opacity=".45">${item.org}</text>`,
+        `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(sub(y, I(10)))}" font-size="14" font-weight="600">${item.name}</text>` +
+        `<text x="${fmt(sub(xa, I(4)))}" y="${fmt(add(y, I(19)))}" font-size="12" opacity=".45">${item.org}</text>`,
     )
   }
   parts.push(...projectGroup, "</g>")
@@ -145,7 +145,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
   for (const block of blocks) {
     focusGroup.push(
       `<line x1="${fmt(sub(x0, I(40)))}" y1="${fmt(sub(y, I(7)))}" x2="${fmt(x1)}" y2="${fmt(sub(y, I(7)))}" stroke="${INK}" stroke-opacity=".1"/>` +
-        `<text x="${fmt(sub(x0, I(140)))}" y="${fmt(add(y, F(3.5)))}" font-size="11" font-weight="600" letter-spacing=".06em">${block.label}</text>`,
+        `<text x="${fmt(sub(x0, I(140)))}" y="${fmt(add(y, F(3.5)))}" font-size="12" font-weight="600" letter-spacing=".06em">${block.label}</text>`,
     )
     for (const item of block.items) {
       const yy = add(y, mul(I(item.row), rowH))
@@ -154,7 +154,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340): st
       positions.set(item.name, spots)
       focusGroup.push(
         pill(item.xa, yy, item.xb, yy, item.current, 7, tokens.stroke.focus) +
-          `<text x="${fmt(sub(item.xa, I(9)))}" y="${fmt(add(yy, F(3.5)))}" text-anchor="end" font-size="10">${item.name}</text>`,
+          `<text x="${fmt(sub(item.xa, I(9)))}" y="${fmt(add(yy, F(3.5)))}" text-anchor="end" font-size="12">${item.name}</text>`,
       )
     }
     y = add(y, add(mul(I(block.count), rowH), I(9)))
@@ -211,10 +211,10 @@ export function mobileSvg(model: TimelineModel): string {
     `<svg viewBox="0 0 ${width} ${height}" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Aeonik Pro" fill="${INK}">`,
   ]
   for (let year = 2019; year < 2027; year += 1) {
-    parts.push(`<text class="yr" x="4" y="${fmt(add(locate(year), I(3)))}" font-size="9" opacity=".4">'${String(year).slice(2)}</text>`)
+    parts.push(`<text class="yr" x="4" y="${fmt(add(locate(year), I(3)))}" font-size="11" opacity=".4">'${String(year).slice(2)}</text>`)
   }
   parts.push(
-    `<line class="nowl" x1="4" y1="${fmt(y1)}" x2="${width - 4}" y2="${fmt(y1)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="4" y="${fmt(add(y1, I(14)))}" font-size="9" font-weight="600">NOW</text>`,
+    `<line class="nowl" x1="4" y1="${fmt(y1)}" x2="${width - 4}" y2="${fmt(y1)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="4" y="${fmt(add(y1, I(14)))}" font-size="11" font-weight="600">NOW</text>`,
   )
   const timelineGroup: string[] = ['<g class="mode on" data-m="timeline">']
   const lanes = [I(36), I(56), I(76)]
@@ -227,7 +227,7 @@ export function mobileSvg(model: TimelineModel): string {
     timelineGroup.push(
       `<g class="rp" data-t="${fmt(F(role.start))}" data-cur="${current ? 1 : 0}">${pill(x, ya, x, yb, current)}` +
         `<g class="co"><line x1="${fmt(add(x, I(8)))}" y1="${fmt(ya)}" x2="${fmt(sub(labelX, I(4)))}" y2="${fmt(ya)}" stroke="${INK}" stroke-opacity=".2"/>` +
-        `<text font-size="11.5" font-weight="600"><tspan x="${fmt(labelX)}" y="${fmt(add(ya, I(4)))}">${role.name}</tspan>` +
+        `<text font-size="13" font-weight="600"><tspan x="${fmt(labelX)}" y="${fmt(add(ya, I(4)))}">${role.name}</tspan>` +
         `<tspan dx="6" font-weight="400" opacity=".75">${role.year}</tspan></text></g></g>`,
     )
   }
@@ -237,7 +237,7 @@ export function mobileSvg(model: TimelineModel): string {
     const yy = Math.max(locate(project.start).v + 16, last + 13)
     last = yy
     timelineGroup.push(
-      `<text class="mpj" data-t="${fmt(F(project.start))}" x="${width - 4}" y="${fmt(F(yy))}" text-anchor="end" font-size="10.5" opacity=".6">${project.name}</text>`,
+      `<text class="mpj" data-t="${fmt(F(project.start))}" x="${width - 4}" y="${fmt(F(yy))}" text-anchor="end" font-size="12" opacity=".6">${project.name}</text>`,
     )
   }
   parts.push(...timelineGroup, "</g>")
@@ -253,8 +253,8 @@ export function mobileSvg(model: TimelineModel): string {
     last = yy
     projectGroup.push(
       `<line x1="${fmt(add(x, I(6)))}" y1="${fmt(ya)}" x2="${fmt(sub(labelX, I(4)))}" y2="${fmt(sub(F(yy), I(4)))}" stroke="${INK}" stroke-opacity=".2"/>` +
-        `<text x="${fmt(labelX)}" y="${fmt(F(yy))}" font-size="11.5" font-weight="600">${project.name}</text>` +
-        `<text x="${fmt(labelX)}" y="${fmt(add(F(yy), I(12)))}" font-size="9.5" opacity=".45">${project.org}</text>`,
+        `<text x="${fmt(labelX)}" y="${fmt(F(yy))}" font-size="13" font-weight="600">${project.name}</text>` +
+        `<text x="${fmt(labelX)}" y="${fmt(add(F(yy), I(12)))}" font-size="11" opacity=".45">${project.org}</text>`,
     )
   })
   parts.push(...projectGroup, "</g>")
@@ -263,14 +263,14 @@ export function mobileSvg(model: TimelineModel): string {
   let yy = add(y0, I(4))
   for (const [key, label] of model.focus) {
     focusGroup.push(
-      `<text x="4" y="${fmt(add(yy, I(8)))}" font-size="10" font-weight="600" letter-spacing=".06em">${label}</text>` +
+      `<text x="4" y="${fmt(add(yy, I(8)))}" font-size="12" font-weight="600" letter-spacing=".06em">${label}</text>` +
         `<line x1="4" y1="${fmt(add(yy, I(13)))}" x2="${width - 4}" y2="${fmt(add(yy, I(13)))}" stroke="${INK}" stroke-opacity=".1"/>`,
     )
     yy = add(yy, I(28))
     const matching = model.projects.filter((project) => project.themes.includes(key)).sort((a, b) => a.start - b.start)
     for (const project of matching) {
       focusGroup.push(
-        `<text x="4" y="${fmt(add(yy, F(3.5)))}" font-size="10.5">${project.name}</text>` +
+        `<text x="4" y="${fmt(add(yy, F(3.5)))}" font-size="12">${project.name}</text>` +
           pill(locateX(project.start), yy, locateX(project.end), yy, project.end >= now, 8, tokens.stroke.focus),
       )
       yy = add(yy, I(15))

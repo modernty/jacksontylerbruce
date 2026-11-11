@@ -11,14 +11,15 @@ import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
 import { chatAnswer } from "./chat-answer"
 import { StarterPrompts, askHere } from "./starter-prompts"
-import { ChatThread, HOME_CHAT, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
+import { ChatThread, readLines, HOME_CHAT, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null }
 
 type Picked = { slug: string; list: string[] }
 /** What sits beside the chat: a project preview, or a view the answer called for. */
-type Shown = ({ kind: "project" } & Picked) | { kind: Panel }
+/** only narrows the globe to one kind of place, e.g. the places lived. */
+type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
 const PREVIEW_KEY = "home-chat-preview"
 const SCROLL_KEY = "home-chat-scroll"
@@ -56,23 +57,31 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   const names = useRef(Object.fromEntries(previews.map((item) => [item.slug, item.name])))
   const [shown, setShownState] = useState<Shown | null>(null)
   const [active, setActive] = useState(false)
-  const emptyRef = useRef<HTMLDivElement>(null)
+  const slotRef = useRef<HTMLDivElement>(null)
 
-  // Before the first question the composer sits right under the prompts, as part of the
-  // opening; once the conversation starts it goes back to the bottom of the screen.
+  // Before the first question the composer sits in the opening, between the title and the
+  // prompts, in a slot its own height; once the conversation starts it goes back to the bottom.
   useEffect(() => {
-    const empty = emptyRef.current
-    if (active || !empty) return
+    const slot = slotRef.current
+    if (active || !slot) return
     const root = document.documentElement
-    const place = () => root.style.setProperty("--empty-bottom", `${Math.round(empty.getBoundingClientRect().bottom)}px`)
+    const shell = document.querySelector<HTMLElement>(".hero-work .shell")
+    const place = () => {
+      if (shell) root.style.setProperty("--composer-h", `${shell.offsetHeight}px`)
+      root.style.setProperty("--empty-bottom", `${Math.round(slot.getBoundingClientRect().top)}px`)
+    }
     place()
     const observer = new ResizeObserver(place)
-    observer.observe(empty)
+    observer.observe(slot)
+    // The title and intro above the slot can change height (fonts, wrapping), which moves it.
+    if (slot.parentElement) observer.observe(slot.parentElement)
+    if (shell) observer.observe(shell)
     window.addEventListener("resize", place)
     return () => {
       observer.disconnect()
       window.removeEventListener("resize", place)
       root.style.removeProperty("--empty-bottom")
+      root.style.removeProperty("--composer-h")
     }
   }, [active])
   const picked = shown?.kind === "project" ? shown : null
@@ -129,22 +138,24 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   }, [shown, setShown])
 
   const ask: Asker = useCallback(
-    async (q: string, last?: ReplyExtra) => {
+    async (q: string, last?: ReplyExtra, more?) => {
       try {
         const response = await fetch("/api/ask/chat", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ q, sessionId: sessionId(), expects: last?.expects, listed: last?.projects, open: openRef.current }),
+          body: JSON.stringify({ q, sessionId: sessionId(), expects: last?.expects, listed: last?.projects, open: openRef.current, history: more?.history }),
         })
-        const data = (await response.json()) as { answer?: string; error?: string; go?: Go } & ReplyExtra
+        type Reply = { answer?: string; error?: string; go?: Go } & ReplyExtra
+        // An answer the model works on streams its status first, one JSON line at a time.
+        const data = response.headers.get("content-type")?.includes("ndjson") ? await readLines<Reply>(response, more?.onStatus) : ((await response.json()) as Reply)
         const projects = data.projects?.filter((slug) => bySlug.current.has(slug))
         if (projects?.length === 1) setPicked({ slug: projects[0], list: projects })
-        if (data.panel === "globe" || data.panel === "timeline") setShown({ kind: data.panel })
+        if (data.panel === "globe" || data.panel === "timeline") setShown({ kind: data.panel, only: data.placeKind })
         if (data.go) follow(data.go, q, router)
         const roles = data.roles?.filter((id) => id in byRole.current)
-        return { answer: data.answer ?? data.error ?? "Something went wrong. Try asking again.", projects, roles, expects: data.expects, panel: data.panel }
+        return { answer: data.answer ?? data.error ?? "Something went wrong. Try asking again.", projects, roles, expects: data.expects, panel: data.panel, followUps: data.followUps, contact: data.contact, source: data.source, sources: data.sources, nudge: data.nudge, placeKind: data.placeKind }
       } catch {
-        return "I couldn't reach the site just now. Try asking again."
+        return "The site couldn't be reached just now. Try asking again."
       }
     },
     [router, setPicked, setShown],
@@ -173,6 +184,9 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
 
   const close = () => setShown(null)
   const panel = shown && shown.kind !== "project" ? shown.kind : null
+  // An answer about places lived shows only those; home always stays.
+  const livedOnly = shown?.kind === "globe" && shown.only === "lived"
+  const globePlaces = livedOnly ? places.filter((place) => place.kind === "lived" || place.home) : places
   const open = !!preview || !!panel
 
   const arrow = (
@@ -214,8 +228,10 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
             </button>
           </div>
         ) : (
-          <div className="conv-empty" ref={emptyRef}>
-            <h1>What would you like to see?</h1>
+          <div className="conv-empty">
+            <p className="conv-intro">One craft, many mediums. Every project starts with one core idea and time spent inside the problem.</p>
+            <h1>Where would you like to start?</h1>
+            <div className="composer-slot" ref={slotRef} aria-hidden="true" />
             <StarterPrompts onPick={askHere} />
           </div>
         )}
@@ -225,7 +241,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           label="Conversation about the work"
           onActive={setActive}
           renderAnswer={(turn) =>
-            chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind) => setShown({ kind }), current: picked?.slug ?? panel ?? undefined })
+            chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind, only) => setShown({ kind, only }), current: picked?.slug ?? panel ?? undefined })
           }
         />
       </div>
@@ -235,17 +251,20 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           <aside className={`preview view-${panel}`} aria-label={panel === "globe" ? "Places" : "Career timeline"}>
             {closeButton}
             <div className="frame">
-              {panel === "globe" ? <Travel places={places} /> : <div className="panel-timeline" dangerouslySetInnerHTML={{ __html: timeline }} />}
+              {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : <div className="panel-timeline" dangerouslySetInnerHTML={{ __html: timeline }} />}
             </div>
             <div className="preview-info">
               <h2>{panel === "globe" ? "Places" : "Career"}</h2>
-              <p className="summary">{panel === "globe" ? "Where Tyler has lived and travelled. Drag the globe to turn it." : "Each role and the projects under it, from 2019 at the top to now."}</p>
-              <div className="preview-actions">
-                <button type="button" className="btn with-icon open" onClick={() => openPage(panel === "globe" ? "/about" : "/timeline#axis", panel)}>
-                  {panel === "globe" ? "Open About" : "Open the timeline"}
-                  {arrow}
-                </button>
-              </div>
+              <p className="summary">{panel === "globe" ? (livedOnly ? "Places lived. Drag the globe to turn it." : "Places lived and travelled. Drag the globe to turn it.") : "Each role and the projects under it, from 2019 at the top to now."}</p>
+              {/* Places stay in the conversation: the globe has no page of its own to open. */}
+              {panel === "timeline" ? (
+                <div className="preview-actions">
+                  <button type="button" className="btn with-icon open" onClick={() => openPage("/timeline#axis", panel)}>
+                    Open the timeline
+                    {arrow}
+                  </button>
+                </div>
+              ) : null}
             </div>
           </aside>
         </>
@@ -292,7 +311,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                   Previous project
                 </button>
               ) : null}
-              <button type="button" className="btn with-icon open" onClick={() => openFull(preview.slug)}>
+              <button type="button" className="btn primary with-icon open" onClick={() => openFull(preview.slug)}>
                 Open full project
                 <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
                   <path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />

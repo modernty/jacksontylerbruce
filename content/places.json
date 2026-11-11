@@ -1,5 +1,5 @@
 {
-  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10). The first entry is home and must stay Miami, FL. Coordinates are city centres, to four decimals.",
+  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10, Columbus 2026-11-11). Tyler is based in Miami; Miami is listed first in the catalog. Coordinates are city centres, to four decimals.",
   "home": "miami",
   "places": [
     {
@@ -48,6 +48,14 @@
       "country": "United States",
       "lat": 41.8781,
       "lng": -87.6298,
+      "kind": "traveled"
+    },
+    {
+      "slug": "columbus",
+      "name": "Columbus, OH",
+      "country": "United States",
+      "lat": 39.9612,
+      "lng": -82.9988,
       "kind": "traveled"
     },
     {

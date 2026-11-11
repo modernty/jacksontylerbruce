@@ -54,9 +54,9 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
     const hidden = decline()
     return { status: 200, body: hidden }
   }
-  // The globe answers travel questions, so they go to About and the question goes with them.
+  // Places are answered in the main conversation, with the globe beside it, so the question goes there.
   if (aboutTravel(question)) {
-    return { status: 200, body: { intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/about", annotation: "", followUps: [], confidence: 0.9, source: "keyword", handoff: true } }
+    return { status: 200, body: { intent: "location", focusIds: ["place:miami"], filter: "sheet", href: "/chat", annotation: "", followUps: [], confidence: 0.9, source: "keyword", handoff: true } }
   }
   const env = deps.env ?? process.env
   const context = parsed.data.context
@@ -88,6 +88,7 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
       followUps: finished.followUps,
       confidence: finished.confidence,
       source: finished.source,
+      ...(finished.qaKey ? { qaKey: finished.qaKey } : {}),
     },
   }
 }

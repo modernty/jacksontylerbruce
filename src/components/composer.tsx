@@ -8,8 +8,9 @@ import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
-import { CHAT_ASK, HOME_CHAT, handOff, handOffToAbout } from "./chat-thread"
+import { CHAT_ASK, CHAT_RESET, HOME_CHAT, handOff } from "./chat-thread"
 import { StarterPrompts } from "./starter-prompts"
+import { CONTACT_EVENT, mailtoLink } from "./mailto"
 import { inlineChat, quietPage } from "./chrome"
 
 function sessionId(): string {
@@ -21,7 +22,14 @@ function sessionId(): string {
   return next
 }
 
-export function Composer() {
+const mailIcon = (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" />
+    <path d="M3 5.5l7 5.5 7-5.5" strokeLinejoin="round" />
+  </svg>
+)
+
+export function Composer({ email }: { email: string }) {
   const router = useRouter()
   const path = usePathname()
   const project = path.startsWith("/work/")
@@ -42,6 +50,30 @@ export function Composer() {
     }
   }, [path])
   const prompts = path === "/timeline" && !started
+  // Email mode: the composer writes a note to Tyler instead of asking a question.
+  const [emailing, setEmailing] = useState(false)
+  // The conversation starts or clears from the prompts and the New conversation button too.
+  useEffect(() => {
+    const onAsk = () => setStarted(true)
+    const onReset = (event: Event) => {
+      if ((event as CustomEvent<string>).detail === HOME_CHAT) setStarted(false)
+    }
+    const onContact = () => {
+      setEmailing(true)
+      shellRef.current?.querySelector<HTMLTextAreaElement>(".input")?.focus()
+    }
+    window.addEventListener(CHAT_ASK, onAsk)
+    window.addEventListener(CHAT_RESET, onReset)
+    window.addEventListener(CONTACT_EVENT, onContact)
+    return () => {
+      window.removeEventListener(CHAT_ASK, onAsk)
+      window.removeEventListener(CHAT_RESET, onReset)
+      window.removeEventListener(CONTACT_EVENT, onContact)
+    }
+  }, [])
+  // Tall, with Contact inside, only while the conversation is empty or a note is being written.
+  // Once the first message is sent it goes back to one line, and Contact goes back to the top bar.
+  const tall = quiet && ((path === "/chat" && !started) || emailing)
 
   useEffect(() => {
     const shell = shellRef.current
@@ -62,6 +94,14 @@ export function Composer() {
     const input = shell?.querySelector<HTMLTextAreaElement>(".input")
     const q = input?.value.trim() ?? ""
     if (!q || !input) return
+    if (emailing) {
+      track("email_composed", { length: q.length })
+      window.location.href = mailtoLink(email, q)
+      input.value = ""
+      input.dispatchEvent(new Event("input"))
+      setEmailing(false)
+      return
+    }
     setStarted(true)
     // Sent: the composer empties at once, wherever the answer appears.
     input.value = ""
@@ -78,7 +118,7 @@ export function Composer() {
     })
     const data = (await response.json()) as { href?: string; handoff?: boolean; intent?: string; source?: string }
     track("ask_submitted", { status: response.status, intent: data.intent ?? "none", source: data.source ?? "none" })
-    if (data.handoff) handOffToAbout(q)
+    if (data.handoff) handOff(HOME_CHAT, q)
     // Work lists are answered in the conversation, which lists the projects to preview.
     if (data.intent === "projects" || data.intent === "focus") {
       handOff(HOME_CHAT, q)
@@ -118,7 +158,7 @@ export function Composer() {
           />
         ) : null}
         <form
-          className="shell"
+          className={tall ? "shell tall" : "shell"}
           ref={shellRef}
           onSubmit={(event) => {
             event.preventDefault()
@@ -129,8 +169,8 @@ export function Composer() {
             className="input"
             rows={1}
             maxLength={400}
-            placeholder={project ? "Let’s talk about it" : path === "/chat" ? "Ask about the work" : quiet ? "Ask anything" : "Ask anything about my work…"}
-            aria-label={project ? "Talk about this project" : "Ask anything about my work"}
+            placeholder={emailing ? "Write a note" : project ? "Ask about this project" : quiet ? "Ask anything" : "Ask anything about the work…"}
+            aria-label={emailing ? "Write a note" : project ? "Ask about this project" : "Ask anything about the work"}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault()
@@ -138,6 +178,26 @@ export function Composer() {
               }
             }}
           />
+          <div className="row">
+          {tall ? (
+            <button
+              type="button"
+              className={emailing ? "email-pill on" : "email-pill"}
+              aria-pressed={emailing}
+              onClick={() => {
+                setEmailing((on) => !on)
+                shellRef.current?.querySelector<HTMLTextAreaElement>(".input")?.focus()
+              }}
+            >
+              {mailIcon}
+              {emailing ? "Composing an email" : "Contact"}
+              {emailing ? (
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                </svg>
+              ) : null}
+            </button>
+          ) : null}
           <div className="g">
             <button className="ib voice" type="button" title="Voice" aria-label="Voice">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -150,6 +210,7 @@ export function Composer() {
                 <path d="M12 19V5M6 11l6-6 6 6" />
               </svg>
             </button>
+          </div>
           </div>
         </form>
       </div>

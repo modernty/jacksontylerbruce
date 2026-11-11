@@ -36,8 +36,8 @@ test("sheet copy stays short and pills are fixed", () => {
   }
   const pills = followUpsFor("career")
   assert.deepEqual(pills.map((pill) => pill.label), [
-    "How do you design trust into AI products?",
-    "Show me Overmatch",
-    "Walk me through your career",
+    "Designing trust into AI products",
+    "Show Overmatch",
+    "Walk through the career",
   ])
 })

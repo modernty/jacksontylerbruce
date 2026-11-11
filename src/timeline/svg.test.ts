@@ -43,7 +43,7 @@ test("public views omit flagged work and link real sections", () => {
   const hidden = catalog.projects.filter((project) => project.flagged)
   const blob = `${stage.desktop}\n${stage.mobile}\n${JSON.stringify(stage.cards)}`
   for (const project of hidden) {
-    assert.equal(blob.includes(project.name), false, project.name)
+    assert.equal(new RegExp(`(^|[^A-Za-z])${project.name}([^A-Za-z]|$)`).test(blob), false, project.name)
     assert.equal(blob.includes(`/work/${project.slug}`), false, project.slug)
   }
   for (const card of stage.cards) {

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { MessagePair } from "@/src/components/assistant-ui/elements/message-pair"
+import { CONTACT_EVENT } from "./mailto"
 
 /** The composer sends this on pages that hold a conversation, instead of routing to another view. */
 export const CHAT_ASK = "chat:ask"
@@ -24,9 +25,19 @@ const WAITING = "…"
 /** Extra structure a reply can carry: project slugs to list, and what the reply asked the visitor for. */
 /** What a reply opens beside the chat besides projects: the globe or the timeline. */
 export type Panel = "globe" | "timeline"
-export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel }
+/** followUps are suggested next prompts, in the visitor's words; contact adds the contact link. */
+/** source says who answered (the site, or the model for a question outside it); sources are pages it cites; nudge shows the note about general questions. */
+export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel; followUps?: string[]; contact?: boolean; source?: "site" | "open"; sources?: { title: string; url: string }[]; nudge?: boolean; placeKind?: "lived" }
 
-type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean } & ReplyExtra
+/** What the model is doing while an answer is on its way. */
+export type Status = "thinking" | "searching"
+const STATUS_LABEL: Record<Status, string> = { thinking: "Thinking", searching: "Searching the web" }
+
+/** One earlier exchange, sent with a question so a follow-up reads in context. */
+export type Past = { q: string; a: string; source?: "site" | "open" }
+const HISTORY_TURNS = 6
+
+type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean; status?: Status } & ReplyExtra
 
 /**
  * Each conversation lives in session storage while the tab is open, so it survives switching
@@ -49,6 +60,14 @@ function load(key: string): Stored[] {
           expects: item.expects === "category" ? "category" : undefined,
           panel: item.panel === "globe" || item.panel === "timeline" ? item.panel : undefined,
           roles: Array.isArray(item.roles) ? item.roles.filter((id): id is string => typeof id === "string") : undefined,
+          followUps: Array.isArray(item.followUps) ? item.followUps.filter((text): text is string => typeof text === "string").slice(0, 3) : undefined,
+          contact: item.contact === true ? true : undefined,
+          source: item.source === "open" || item.source === "site" ? item.source : undefined,
+          sources: Array.isArray(item.sources)
+            ? item.sources.filter((entry) => typeof entry?.title === "string" && typeof entry?.url === "string" && entry.url.startsWith("https://")).slice(0, 3)
+            : undefined,
+          nudge: item.nudge === true ? true : undefined,
+          placeKind: item.placeKind === "lived" ? "lived" : undefined,
         }))
       : []
   } catch {
@@ -81,15 +100,13 @@ export function sessionId(): string {
 }
 
 /** Answers one question. `last` is what the previous reply asked for, so a short answer like "brand" reads in context. */
-export type Asker = (question: string, last?: ReplyExtra) => Promise<string | ({ answer: string } & ReplyExtra)>
+export type Asker = (question: string, last?: ReplyExtra, more?: { history: Past[]; onStatus: (status: Status) => void }) => Promise<string | ({ answer: string } & ReplyExtra)>
 
-/** Where a reply sends the visitor. handoff continues on About; chat continues in the main conversation. */
+/** Where a reply sends the visitor. handoff and chat both carry the question into the main conversation. */
 export type Go = { href: string; handoff?: boolean; chat?: boolean }
 
-const ABOUT_CHAT = "about-chat"
 /** The main conversation, at /chat. */
 export const HOME_CHAT = "home-chat"
-export const ABOUT_OPEN = "about-chat-open"
 const MOVE_MS = 700
 
 /** Leaves a question unanswered in a conversation, which answers it when its page opens. */
@@ -98,20 +115,9 @@ export function handOff(key: string, question: string) {
   record(key, { id, question, answer: null })
 }
 
-/** Leaves a question unanswered in the About conversation, which answers it when the page opens. */
-export function handOffToAbout(question: string) {
-  handOff(ABOUT_CHAT, question)
-  try {
-    sessionStorage.setItem(ABOUT_OPEN, "1")
-  } catch {
-    // The conversation opens by default.
-  }
-}
-
 /** Moves on once the reply has started, so the visitor sees why the page is changing. */
 export function follow(go: Go, question: string, router: { push: (href: string) => void; back: () => void }) {
-  if (go.handoff) handOffToAbout(question)
-  if (go.chat) handOff(HOME_CHAT, question)
+  if (go.handoff || go.chat) handOff(HOME_CHAT, question)
   window.setTimeout(() => (go.href === "back" ? router.back() : router.push(go.href)), MOVE_MS)
 }
 
@@ -128,7 +134,7 @@ export async function askJson(url: string, body: Record<string, unknown>, field:
     const text = data[field] ?? data.error
     return typeof text === "string" && text ? text : "Something went wrong. Try asking again."
   } catch {
-    return "I couldn't reach the site just now. Try asking again."
+    return "The site couldn't be reached just now. Try asking again."
   }
 }
 
@@ -164,12 +170,15 @@ export function ChatThread({
     async (id: number, question: string) => {
       record(storeKey, { id, question, answer: null })
       setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words: [WAITING], shown: 1, pending: true } : turn)))
-      const previous = load(storeKey).filter((item) => item.id < id && item.answer !== null).pop()
-      const reply = await ask(question, previous ? { projects: previous.projects, expects: previous.expects } : undefined)
-      const { answer, projects, roles, expects, panel } = typeof reply === "string" ? { answer: reply, projects: undefined, roles: undefined, expects: undefined, panel: undefined } : reply
-      record(storeKey, { id, question, answer, projects, roles, expects, panel })
+      const answered = load(storeKey).filter((item) => item.id < id && item.answer !== null)
+      const previous = answered[answered.length - 1]
+      const history: Past[] = answered.slice(-HISTORY_TURNS).map((item) => ({ q: item.question.slice(0, 400), a: (item.answer ?? "").slice(0, 4000), source: item.source }))
+      const onStatus = (status: Status) => setTurns((all) => all.map((turn) => (turn.id === id && turn.pending ? { ...turn, status } : turn)))
+      const reply = await ask(question, previous ? { projects: previous.projects, expects: previous.expects } : undefined, { history, onStatus })
+      const { answer, ...extra }: { answer: string } & ReplyExtra = typeof reply === "string" ? { answer: reply } : reply
+      record(storeKey, { id, question, answer, ...extra })
       const words = answer.split(/\s+/).filter(Boolean)
-      setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words, shown: reduce.current ? words.length : 0, pending: false, projects, roles, expects, panel } : turn)))
+      setTurns((all) => all.map((turn) => (turn.id === id ? { id, question, words, shown: reduce.current ? words.length : 0, pending: false, ...extra } : turn)))
     },
     [storeKey, ask],
   )
@@ -181,7 +190,7 @@ export function ChatThread({
     nextId.current = stored.reduce((max, item) => Math.max(max, item.id + 1), 0)
     setTurns(stored.map((item) => {
       const words = item.answer ? item.answer.split(/\s+/).filter(Boolean) : []
-      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null, projects: item.projects, roles: item.roles, expects: item.expects, panel: item.panel }
+      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null, projects: item.projects, roles: item.roles, expects: item.expects, panel: item.panel, followUps: item.followUps, contact: item.contact, source: item.source, sources: item.sources, nudge: item.nudge, placeKind: item.placeKind }
     }))
     for (const item of stored) if (item.answer === null) void run(item.id, item.question)
 
@@ -239,14 +248,81 @@ export function ChatThread({
             words={turn.words}
             visibleWords={turn.shown}
             streaming={turn.pending || turn.shown < turn.words.length}
+            status={turn.pending && turn.status ? STATUS_LABEL[turn.status] : undefined}
             className="max-w-none gap-4 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
-            final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: turn.panel }) : undefined}
+            final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind }) : undefined}
           />
           {after && !turn.pending && turn.shown >= turn.words.length ? after(turn) : null}
+          {!turn.pending && turn.shown >= turn.words.length && turn.sources?.length ? (
+            <p className="chat-sources">
+              {turn.sources.map((entry) => (
+                <a key={entry.url} className="chat-link" href={entry.url} target="_blank" rel="noreferrer noopener">
+                  {entry.title}
+                </a>
+              ))}
+            </p>
+          ) : null}
+          {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && turn.nudge ? (
+            <p className="chat-nudge">Yo, use your own subscriptions for general questions.</p>
+          ) : null}
+          {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && (turn.followUps?.length || turn.contact) ? (
+            <section className="follow-ups" aria-label="Follow up">
+              <p className="follow-label">Follow up</p>
+              <p className="prompts">
+              {turn.contact ? (
+                <button type="button" onClick={() => window.dispatchEvent(new Event(CONTACT_EVENT))}>
+                  Start a conversation
+                </button>
+              ) : null}
+              {turn.followUps?.map((text) => (
+                <button key={text} type="button" onClick={() => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: text }))}>
+                  {text}
+                </button>
+              ))}
+              </p>
+            </section>
+          ) : null}
         </div>
       ))}
     </section>
   )
+}
+
+/**
+ * One action at a time: the link that opens a view ("Open globe", "Open timeline") shows only on
+ * the newest answer that offers that same view. An older answer keeps its words and loses the link.
+ * Different views (the full globe, the lived-only globe, the timeline) each keep their newest link.
+ */
+function newestAction(turns: { panel?: Panel; placeKind?: "lived" }[], index: number): boolean {
+  const turn = turns[index]
+  if (!turn.panel) return false
+  return !turns.slice(index + 1).some((later) => later.panel === turn.panel && later.placeKind === turn.placeKind)
+}
+
+/** Reads a newline-delimited JSON reply: status lines as they arrive, then the reply itself. */
+export async function readLines<T>(response: Response, onStatus?: (status: Status) => void): Promise<T> {
+  const reader = response.body?.getReader()
+  if (!reader) throw new Error("no body")
+  const decoder = new TextDecoder()
+  let buffer = ""
+  let reply: T | null = null
+  const take = (line: string) => {
+    if (!line.trim()) return
+    const data = JSON.parse(line) as { status?: Status; reply?: T }
+    if (data.status === "thinking" || data.status === "searching") onStatus?.(data.status)
+    if (data.reply) reply = data.reply
+  }
+  for (;;) {
+    const { done, value } = await reader.read()
+    buffer += decoder.decode(value, { stream: !done })
+    const lines = buffer.split("\n")
+    buffer = lines.pop() ?? ""
+    lines.forEach(take)
+    if (done) break
+  }
+  take(buffer)
+  if (!reply) throw new Error("no reply")
+  return reply
 }

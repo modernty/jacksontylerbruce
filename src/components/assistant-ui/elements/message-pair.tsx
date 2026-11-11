@@ -21,6 +21,8 @@ export interface MessagePairProps extends Omit<
   onRegenerate?: () => void;
   /** Shown in place of the words once streaming ends, e.g. the same text with links in it. */
   final?: ReactNode;
+  /** What is happening while the answer is on its way, e.g. "Thinking". Shown in place of the words. */
+  status?: string;
 }
 
 export function MessagePair({
@@ -32,6 +34,7 @@ export function MessagePair({
   onCopy,
   onRegenerate,
   final,
+  status,
   className,
   ...props
 }: MessagePairProps) {
@@ -46,7 +49,7 @@ export function MessagePair({
     >
       <p
         className={cn(
-          "max-w-[85%] self-end text-sm",
+          "max-w-[85%] self-end text-[15px] leading-[22px]",
           variant === "bubble"
             ? cn(paper, "rounded-2xl px-3.5 py-2")
             : "text-foreground/90 text-end",
@@ -56,8 +59,13 @@ export function MessagePair({
       </p>
       <div className="group/message flex flex-col items-start">
         {/* A div, not a p: a rendered answer can hold a list. */}
-        <div className="min-h-[4.25rem] text-sm leading-relaxed">
-          {!streaming && final ? final : shown.map((word, index) => {
+        {/* Room is held only while the answer is arriving, so what follows a finished answer sits close to it. */}
+        <div className={cn("text-[15px] leading-relaxed", streaming && "min-h-[4.25rem]")}>
+          {status ? (
+            <span role="status" className="animate-pulse text-[color:var(--ink-placeholder)] motion-reduce:animate-none">
+              {status}
+            </span>
+          ) : !streaming && final ? final : shown.map((word, index) => {
             const fresh = streaming && shown.length - 1 - index < 2;
 
             return (
@@ -76,7 +84,7 @@ export function MessagePair({
               </span>
             );
           })}
-          {streaming && shown.length > 0 && (
+          {streaming && !status && shown.length > 0 && (
             <span
               aria-hidden
               className="-mb-0.5 ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-full bg-[var(--ink)] motion-reduce:animate-none"

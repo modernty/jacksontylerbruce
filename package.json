@@ -7,11 +7,12 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts src/design/*.test.ts src/globe/*.test.ts src/analytics/*.test.ts src/site/*.test.ts",
+    "test": "tsx --conditions=react-server --test src/content/*.test.ts src/timeline/*.test.ts src/router/*.test.ts src/design/*.test.ts src/globe/*.test.ts src/analytics/*.test.ts src/site/*.test.ts src/components/*.test.ts",
     "eval": "tsx --conditions=react-server evals/run.ts",
     "fonts": "node scripts/check-fonts.mjs",
     "tokens": "node scripts/tokens.mjs",
     "assets": "node scripts/assets.mjs",
+    "qa:misses": "tsx --conditions=react-server scripts/qa-misses.ts",
     "borders": "node scripts/borders.mjs"
   },
   "dependencies": {

@@ -1,14 +1,16 @@
 import "server-only"
 import { clientLabel } from "./employer"
+import { notionLines } from "./notion"
 import { wordCount } from "./guard"
 import { publishCatalog, type PublicCatalog } from "./publish"
 import type { Project, Role, Theme } from "./schema"
+import { EDUCATION } from "@/src/router/personal"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import type { Intent, Pill } from "@/src/router/types"
 
 const FILLERS: Pill[] = [
-  { label: "Walk me through your career", href: "/timeline#axis" },
-  { label: "Show me your projects", href: "/timeline/projects#projects" },
+  { label: "Walk through the career", href: "/timeline#axis" },
+  { label: "Show the projects", href: "/timeline/projects#projects" },
   DEFAULT_PILLS[0],
 ]
 
@@ -70,7 +72,7 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
     const facts = [catalog.profile.name, catalog.profile.location]
     return {
       title: catalog.profile.location,
-      body: `${catalog.profile.name} is based in ${catalog.profile.location}.`,
+      body: `Based in ${catalog.profile.location}.`,
       facts,
       cta: timeline,
     }
@@ -79,7 +81,7 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
     const facts = [catalog.profile.name, catalog.profile.title]
     return {
       title: catalog.profile.title,
-      body: `${catalog.profile.name} is a ${catalog.profile.title}.`,
+      body: "Designer. Product, digital and spatial work. One craft across mediums.",
       facts,
       cta: projects,
     }
@@ -89,9 +91,9 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
     const roles = open.map((role) => `${role.name} (${role.title}, ${role.since ?? role.yearLabel})`).join("; ")
     return {
       title: "Get in touch",
-      body: `Write to ${catalog.profile.email}, or find me on LinkedIn.${roles ? ` Current roles: ${roles}.` : ""} Based in ${catalog.profile.location}.`,
+      body: `Write to ${catalog.profile.email}, or connect on LinkedIn.${roles ? ` Current roles: ${roles}.` : ""} Based in ${catalog.profile.location}.`,
       facts,
-      cta: { label: "Email me →", href: `mailto:${catalog.profile.email}` },
+      cta: { label: "Start a conversation →", href: `mailto:${catalog.profile.email}` },
     }
   }
   if (topic === "process") {
@@ -105,14 +107,14 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
   if (topic === "decline") {
     return {
       title: "Not on this site",
-      body: `Ask about the public work of ${catalog.profile.name}.`,
+      body: "Ask about the public work.",
       facts: [catalog.profile.name],
       cta: timeline,
     }
   }
   return {
     title: catalog.profile.name,
-    body: `${catalog.profile.name} is based in ${catalog.profile.location}. The public work is on the timeline.`,
+    body: `Based in ${catalog.profile.location}. The public work is on the timeline.`,
     facts: [catalog.profile.name, catalog.profile.location],
     cta: timeline,
   }
@@ -152,9 +154,10 @@ export function factText(catalog: PublicCatalog = publishCatalog()): string {
     catalog.employer,
     ...catalog.roles.flatMap((role) => [role.name, role.title, role.yearLabel, role.since ?? ""]),
     ...catalog.clients.map((client) => clientLabel({ name: client.name, usesEmployerName: false })),
-    ...catalog.projects.flatMap((project) => [project.name, project.summary, ...project.sections.flatMap((section) => [section.title, section.body])]),
+    ...catalog.projects.flatMap((project) => [project.name, project.summary, ...project.sections.flatMap((section) => [section.title, section.body]), ...notionLines(project.slug)]),
     ...catalog.themes.flatMap((theme) => [theme.name, theme.label]),
     ...catalog.places.map((place) => place.name),
+    EDUCATION,
     "open roles",
     "public projects",
     "public focuses",

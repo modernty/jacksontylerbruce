@@ -91,6 +91,8 @@ test("model calls use the token cap and a timeout", async () => {
   assert.equal(timed, true)
   assert.equal(costUsd(1_000_000, 0), 0.1)
   assert.equal(costUsd(0, 1_000_000), 0.5)
+  assert.equal(costUsd(1_000_000, 1_000_000, "claude-sonnet-5-5"), 12)
+  assert.equal(costUsd(0, 0, "claude-haiku-5-5", 2), 0.02)
 })
 
 test("the shared store is used only when its env vars exist", async () => {

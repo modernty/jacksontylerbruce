@@ -9,7 +9,7 @@ const ViewModeContext = createContext<{ boring: boolean; setBoring: (boring: boo
   setBoring: () => undefined,
 })
 
-/** Boring view swaps the project conversation for a plain two-column page. It is remembered per visitor. */
+/** Reading view (stored as "boring") swaps the project conversation for a plain two-column page. It is remembered per visitor. */
 export function ViewModeProvider({ children }: { children: ReactNode }) {
   const [boring, setState] = useState(false)
 
@@ -47,7 +47,7 @@ export function BoringToggle() {
   const { boring, setBoring } = useViewMode()
   return (
     <button type="button" className="boring" aria-pressed={boring} onClick={() => setBoring(!boring)}>
-      Boring view: {boring ? "on" : "off"}
+      {boring ? "Conversation view" : "Reading view"}
     </button>
   )
 }

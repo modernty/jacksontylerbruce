@@ -1,22 +1,39 @@
 import "server-only"
+import { answerAbout } from "./about"
+import { qaReply, type QaReply } from "./qa"
 import { z } from "zod"
 import { careerEntries } from "@/src/content/career"
+import { careerReply, mentionedRoles } from "./career"
 import { DISCIPLINES, byRecent, disciplineOf, type Discipline } from "@/src/content/disciplines"
 import { containsBlocked } from "@/src/content/guard"
 import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Project } from "@/src/content/schema"
+import { converse, type OpenClient, type PastTurn, type Source, type Status } from "./converse"
 import { handleAsk, type AskDeps } from "./handle"
+import { hydrate } from "./llm"
 import { handleProjectAsk } from "./project"
 import { keywordRoute, mentionedProjects } from "./keyword"
-import { MAX_CHARS } from "./limits"
-import type { Go } from "./navigate"
+import { MAX_CHARS, spendRatio, underLimit } from "./limits"
+import { matchQa, resolveTokens } from "./qa"
+import { QA } from "@/src/content/qa"
+import { memoryStore, storeFromEnv, type Store } from "./store"
+import { aboutTravel, type Go } from "./navigate"
 
 /**
  * One reply in the main conversation. projects lists slugs, in order, that the chat shows as
  * links; previous and next in the preview follow that order. expects says what the reply asked for.
  */
 /** roles lists role ids the reply shows as a resume-style list, newest first. */
-export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go }
+/** followUps are suggested next prompts; contact shows the contact link under the answer. */
+/** source says who answered: the site's own content, or the model for a question outside it. sources are pages an open answer cites. nudge shows the note about general questions. */
+export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open"; sources?: Source[]; nudge?: boolean; placeKind?: "lived" }
+
+export type ChatDeps = AskDeps & { open?: OpenClient | null; onStatus?: (status: Status) => void }
+
+/** The open answer at which the note about general questions starts to show. */
+export const NUDGE_AFTER = 3
+/** Said when a question is outside the site and no open answer can be given. */
+export const OUTSIDE = "That's outside the work here."
 
 const ChatAsk = z.object({
   q: z.string(),
@@ -25,7 +42,20 @@ const ChatAsk = z.object({
   // Where the conversation stands: the projects the last reply listed, in order, and the open preview.
   listed: z.array(z.string().max(80)).max(20).optional(),
   open: z.string().max(80).optional(),
+  // The last few exchanges, as the visitor saw them, so a follow-up reads in context.
+  history: z.array(z.object({ q: z.string().max(400), a: z.string().max(4000), source: z.enum(["site", "open"]).optional() })).max(6).optional(),
 })
+
+// A message that leans on the last answer: "who is this person?", "like what kind?", "why?".
+const LEANS = /\b(this|that|these|those|it|its|they|them|one|ones|she|her)\b|^(like|and|but|so|why|how come|what kind|which|tell me more|more|go on|really|who(s| is| are| was)|what(s| is| are| was))\b/
+const ABOUT_TYLER = /\b(he|his|him|tyler|tylers|you|your)\b/
+
+/** Whether a message continues the last answer rather than asking the site something new. */
+export function isFollowUp(question: string, catalog: PublicCatalog = publishCatalog()): boolean {
+  const q = fold(question).replace(/['’]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim()
+  if (!q || q.split(" ").length > 12 || !LEANS.test(q) || ABOUT_TYLER.test(q) || ALL_WORK.test(q)) return false
+  return !mentionedProjects(question, catalog).length && !mentionedRoles(question, catalog).length && !themeIn(q, catalog)
+}
 
 const ORDINALS: [RegExp, (count: number) => number][] = [
   [/\b(first|1st|number one|#?1)\b/, () => 0],
@@ -64,6 +94,7 @@ const fold = (text: string) => text.normalize("NFKD").replace(/\p{M}/gu, "").toL
 const has = (q: string, word: string) => new RegExp(`(^|[^a-z])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`).test(q)
 
 const ALL_WORK = /\b(projects|portfolio|case studies|(your|tyler'?s|the|all|other|recent|latest) work|what (have you|has tyler) (made|built|designed|done))\b/
+const THEME_WORK = /\b(work|design\w*|experience|projects?|built|made|case stud(y|ies))\b/
 const YES = /^(yes|yeah|yep|yup|sure|ok|okay|please|go ahead|do it|y)\b/
 const NO = /^(no|nope|nah|not now|no thanks|all of them|show (me )?all)\b/
 
@@ -79,7 +110,7 @@ function disciplineIn(q: string): Discipline | null {
 }
 
 function themeIn(q: string, catalog: PublicCatalog) {
-  return catalog.themes.find((theme) => [theme.name, theme.key, theme.slug].some((word) => word.length > 2 && has(q, fold(word))))
+  return catalog.themes.find((theme) => [theme.name, theme.key, theme.slug].some((word) => word.length > 1 && has(q, fold(word))))
 }
 
 /** "A", "A and B", "A, B and C". */
@@ -113,7 +144,7 @@ function allWork(catalog: PublicCatalog): ChatReply {
   const { companies, projects } = recentPicks(catalog)
   const from = companies.length ? ` from ${joinNames(companies)}` : ""
   return {
-    answer: `My most recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Select one to view, or I can group the rest by type: ${typeList()}.`,
+    answer: `Recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Select one to view, or pick a type to see the rest: ${typeList()}.`,
     projects: projects.map((project) => project.slug),
     expects: "category",
   }
@@ -128,8 +159,8 @@ function sentence(lead: string, found: Project[]): ChatReply {
 function byDiscipline(key: Discipline, catalog: PublicCatalog): ChatReply {
   const label = DISCIPLINES.find((item) => item.key === key)?.label ?? key
   const found = catalog.projects.filter((project) => disciplineOf(project) === key)
-  if (!found.length) return { answer: `I don't have ${label.toLowerCase()} work up yet. Try ${typeList()}.`, expects: "category" }
-  return sentence(`My ${label.toLowerCase()} work, most recent first:`, found)
+  if (!found.length) return { answer: `No ${label.toLowerCase()} work is up yet. Try ${typeList()}.`, expects: "category" }
+  return sentence(`${label} work, most recent first:`, found)
 }
 
 /**
@@ -140,6 +171,8 @@ function byDiscipline(key: Discipline, catalog: PublicCatalog): ChatReply {
 export function answerChat(question: string, expects: "category" | undefined, catalog: PublicCatalog = publishCatalog()): ChatReply | null {
   const q = fold(question)
   if (!q) return null
+  const qa = qaReply(question)
+  if (qa) return qaToChat(qa)
   const discipline = disciplineIn(q)
 
   if (expects === "category") {
@@ -150,6 +183,10 @@ export function answerChat(question: string, expects: "category" | undefined, ca
     if (NO.test(q)) return sentence("Sure. Here's all of it, most recent first:", catalog.projects)
   }
 
+  // A theme asked for as work: "experience designing for AI", "AI projects". Not when a company
+  // is named, so "Lazarus AI" stays a question about that role.
+  const theme = mentionedRoles(question, catalog).length ? undefined : themeIn(q, catalog)
+  if (theme && THEME_WORK.test(q)) return byTheme(theme.id, catalog)
   const work = ALL_WORK.test(q) || /\bwork\b/.test(q)
   if (discipline && work) return byDiscipline(discipline, catalog)
   if (ALL_WORK.test(q)) return allWork(catalog)
@@ -162,7 +199,11 @@ export function answerChat(question: string, expects: "category" | undefined, ca
   return null
 }
 
-const GLOBE_LEAD = "Here's where Tyler has lived and travelled."
+function qaToChat({ answer, panel, followUps, contact }: Pick<QaReply, "answer" | "panel" | "followUps" | "contact">): ChatReply {
+  return { answer, ...(panel ? { panel } : {}), ...(followUps ? { followUps } : {}), ...(contact ? { contact } : {}) }
+}
+
+const GLOBE_LEAD = "Places lived and travelled, on the globe."
 
 function panelFor(intent: string | undefined, question: string): "globe" | "timeline" | null {
   if (intent === "location") return "globe"
@@ -172,23 +213,120 @@ function panelFor(intent: string | undefined, question: string): "globe" | "time
 }
 
 /** Asked again only when the visitor's reply was neither a type nor anything else the site knows. */
-export const askTypeAgain = (): ChatReply => ({ answer: `I group the work as ${typeList()}. Which would you like?`, expects: "category" })
+export const askTypeAgain = (): ChatReply => ({ answer: `The work is grouped as ${typeList()}. Which one?`, expects: "category" })
 
 function byTheme(themeId: string, catalog: PublicCatalog): ChatReply {
   const theme = catalog.themes.find((item) => item.id === themeId)
   const found = catalog.projects.filter((project) => project.themeIds.includes(themeId))
   if (!theme || !found.length) return allWork(catalog)
-  return sentence(`My ${theme.name} work, most recent first:`, found)
+  return sentence(`${theme.name} work, most recent first:`, found)
 }
 
-export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: number }, deps: AskDeps = {}): Promise<{ status: number; body: ChatReply | { error: string } }> {
+const MISSES = "qa:misses"
+const MAX_MISSES = 500
+
+/** Keeps a question the exact answers missed, and what answered it, so the Q&A can grow. Text only. */
+async function logMiss(store: Store, q: string, how: string, now: number): Promise<void> {
+  await store.push(MISSES, JSON.stringify({ q: q.slice(0, 200), how, at: new Date(now).toISOString().slice(0, 10) }), MAX_MISSES).catch(() => undefined)
+}
+
+/** The questions the exact answers missed, newest first. */
+export async function readMisses(store: Store = storeFromEnv()): Promise<{ q: string; how: string; at: string }[]> {
+  return (await store.list(MISSES)).flatMap((row) => {
+    try {
+      return [JSON.parse(row) as { q: string; how: string; at: string }]
+    } catch {
+      return []
+    }
+  })
+}
+
+type Routed = { annotation?: string; href?: string; intent?: string; handoff?: boolean; focusIds?: string[]; qaKey?: string }
+
+/** A route from the site router, as a reply in the conversation. */
+function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
+  const entry = body.qaKey ? QA.find((item) => item.key === body.qaKey) : undefined
+  if (entry) {
+    return qaToChat({ answer: resolveTokens(entry.answer), ...(entry.view ? { panel: entry.view } : {}), ...(entry.followUps.length ? { followUps: entry.followUps } : {}) })
+  }
+  const answer = body.annotation?.trim() || "Here's where that lives."
+  // Some answers have a view that fits beside the chat, so the conversation stays put and changes
+  // what it shows: the globe for places, the timeline for the career, a preview for one project.
+  const panel = panelFor(body.intent, q)
+  // Places answer from the places content, the same as About.
+  if (panel === "globe") {
+    const place = answerAbout(q, catalog)
+    return { answer: place.answer.startsWith("The globe covers") ? GLOBE_LEAD : place.answer, panel, ...(place.only ? { placeKind: place.only } : {}) }
+  }
+  if (panel === "timeline") return { answer, panel }
+  // The career is answered in the conversation, as a resume: each role, its dates and what it was.
+  if (body.intent === "career") {
+    return { answer: "The career, most recent first. The timeline is open beside it.", roles: careerEntries(catalog).map((entry) => entry.id), panel: "timeline" }
+  }
+  const focusIds = body.focusIds ?? []
+  if (body.intent === "role") {
+    const role = catalog.roles.find((item) => focusIds.includes(item.id))
+    if (role) return { answer: `Time at ${role.name}.`, roles: [role.id] }
+  }
+  if (body.intent === "project") {
+    const project = catalog.projects.find((item) => focusIds.includes(item.id))
+    if (project) return { answer, projects: [project.slug] }
+  }
+  if (body.intent === "decline" || body.intent === "off_topic" || !body.href) return { answer }
+  return { answer, go: { href: body.href, handoff: body.handoff } }
+}
+
+export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: number }, deps: ChatDeps = {}): Promise<{ status: number; body: ChatReply | { error: string } }> {
   const parsed = ChatAsk.safeParse(raw)
   if (!parsed.success) return { status: 400, body: { error: "Expected {q, sessionId}." } }
   const { q, sessionId, expects, listed = [], open } = parsed.data
   if (q.length > MAX_CHARS) return { status: 400, body: { error: "Question is capped at 400 characters." } }
   const blocked = deps.blocked ?? containsBlocked
   const catalog = publishCatalog()
+  const env = deps.env ?? process.env
+  const now = ctx.now ?? deps.now ?? Date.now()
+  const store = deps.store ?? storeFromEnv(env)
+  // Earlier turns come from the visitor's browser: drop any that carry a blocked term.
+  const history: PastTurn[] = (parsed.data.history ?? []).filter((turn) => !blocked(turn.q) && !blocked(turn.a))
+  const last = history[history.length - 1]
+  const openBefore = history.filter((turn) => turn.source === "open").length
+
+  /** An answer from the model, for a question the site has no answer of its own for. */
+  const openTurn = async (): Promise<ChatReply | null> => {
+    if ((await spendRatio(now, env, store).catch(() => 0)) >= 1) return null
+    const out = await converse(q, history, { client: deps.open, onStatus: deps.onStatus, env })
+    if (!out) return null
+    // The model saw a question about the work after all: show the site's own view.
+    if (out.view) {
+      const view = hydrate(out.view, q)
+      if (view.intent !== "off_topic" && view.intent !== "decline") return { ...fromRoute(view, q, catalog), source: "site" }
+      return null
+    }
+    return { answer: out.text, source: "open", ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
+  }
+
   if (!blocked(q)) {
+    // The Notion Q&A first: a matched question or pill is answered without the model.
+    const qa = qaReply(q)
+    if (qa && !qa.contact) return { status: 200, body: qaToChat(qa) }
+    // A follow-up to an open or Q&A answer stays in that thread: "who is this person?".
+    if (last && (last.source === "open" || matchQa(last.q)) && isFollowUp(q, catalog)) {
+      const allowed = await underLimit(ctx.ip || "local", now, store).catch(() => underLimit(ctx.ip || "local", now, memoryStore))
+      if (!allowed) return { status: 429, body: { error: "Too many questions." } }
+      const reply = await openTurn()
+      if (reply) {
+        await logMiss(store, q, reply.source === "open" ? "open" : "view", now)
+        return { status: 200, body: reply }
+      }
+    }
+    // A personal question with no entry.
+    if (qa) return { status: 200, body: qaToChat(qa) }
+    // Places lived and travelled answer from the places content, with the globe beside them.
+    if (aboutTravel(q) || /\b(everywhere|where all)\b.*\b(lived|been|travell?ed)\b/i.test(q)) {
+      // An answer about places lived shows only those on the globe.
+      const place = answerAbout(q, catalog)
+      return { status: 200, body: { answer: place.answer, panel: "globe", ...(place.only ? { placeKind: place.only } : {}) } }
+    }
     const slug = pickFromList(q, listed.filter((item) => catalog.projects.some((project) => project.slug === item)))
     if (slug) {
       const project = catalog.projects.find((item) => item.slug === slug)
@@ -200,35 +338,29 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
       const body = reply.body as { answer?: string; source?: string }
       if (reply.status === 200 && body.answer && body.source !== "route") return { status: 200, body: { answer: body.answer, projects: [opened.slug] } }
     }
+    // Where Tyler worked, answered with only the roles asked about; the whole history opens the timeline.
+    const asksTheme = !mentionedRoles(q, catalog).length && !!themeIn(fold(q), catalog) && THEME_WORK.test(fold(q))
+    const career = ALL_WORK.test(fold(q)) || asksTheme ? null : careerReply(q, catalog)
+    if (career) return { status: 200, body: career }
     const answered = answerChat(q, expects, catalog)
     if (answered) return { status: 200, body: answered }
   }
   // Not a list: the main router answers, knowing where the conversation stands, and the reply
   // either changes the view beside the chat or says where to go.
   const result = await handleAsk({ q, sessionId, context: contextLine(catalog, listed, open, expects) }, ctx, deps)
-  const body = result.body as { annotation?: string; href?: string; intent?: string; error?: string; handoff?: boolean }
+  const body = result.body as Routed & { error?: string }
   if (result.status !== 200) return { status: result.status, body: { error: body.error ?? "Something went wrong. Try asking again." } }
-  const answer = body.annotation?.trim() || "Here's where that lives."
-  if (body.intent === "off_topic" && expects === "category") return { status: 200, body: askTypeAgain() }
-  // Some answers have a view that fits beside the chat, so the conversation stays put and changes
-  // what it shows: the globe for places, the timeline for the career, a preview for one project.
-  const panel = panelFor(body.intent, q)
-  if (panel === "globe") return { status: 200, body: { answer: body.annotation?.trim() || GLOBE_LEAD, panel } }
-  if (panel === "timeline") return { status: 200, body: { answer, panel } }
-  // The career is answered in the conversation, as a resume: each role, its dates and what it was.
-  if (body.intent === "career") {
-    return { status: 200, body: { answer: "Here's my career, most recent first.", roles: careerEntries(catalog).map((entry) => entry.id) } }
+  if (body.intent === "off_topic" && !blocked(q)) {
+    // Outside the site: the model answers, with the conversation so far and web search.
+    const reply = await openTurn()
+    if (reply) {
+      await logMiss(store, q, reply.source === "open" ? "open" : "view", now)
+      return { status: 200, body: reply }
+    }
+    await logMiss(store, q, "fallback", now)
+    if (expects === "category") return { status: 200, body: askTypeAgain() }
+    return { status: 200, body: { answer: OUTSIDE, contact: true } }
   }
-  if (body.intent === "role") {
-    const focusIds = (result.body as { focusIds?: string[] }).focusIds ?? []
-    const role = catalog.roles.find((item) => focusIds.includes(item.id))
-    if (role) return { status: 200, body: { answer: `Here's my time at ${role.name}.`, roles: [role.id] } }
-  }
-  if (body.intent === "project") {
-    const focusIds = (result.body as { focusIds?: string[] }).focusIds ?? []
-    const project = catalog.projects.find((item) => focusIds.includes(item.id))
-    if (project) return { status: 200, body: { answer, projects: [project.slug] } }
-  }
-  if (body.intent === "decline" || body.intent === "off_topic" || !body.href) return { status: 200, body: { answer } }
-  return { status: 200, body: { answer, go: { href: body.href, handoff: body.handoff } } }
+  if (!blocked(q)) await logMiss(store, q, body.qaKey ? `qa-fuzzy:${body.qaKey}` : `route:${body.intent ?? "unknown"}`, now)
+  return { status: 200, body: fromRoute(body, q, catalog) }
 }

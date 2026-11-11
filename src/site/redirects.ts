@@ -25,6 +25,11 @@ export function legacyRedirects(): Redirect[] {
     rows.push({ source: `/${slug}`, destination, permanent: true })
     rows.push({ source: "/404.html", has: [{ type: "query", key: "p", value: slug }], destination, permanent: true })
   }
+  // Everything about Tyler is answered in the conversation; the About page is gone.
+  rows.push({ source: "/about", destination: "/chat", permanent: true })
+  // Brand projects folded into their parents.
+  rows.push({ source: "/work/jet-brand", destination: "/work/fixed-rate-fixed-term", permanent: true })
+  rows.push({ source: "/work/chatter-brand", destination: "/work/chatter", permanent: true })
   // /assets is not redirected: the images live there, at the same paths the old site used.
   for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*"]) {
     rows.push({ source, destination: "/", permanent: true })

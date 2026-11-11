@@ -9,6 +9,10 @@ import { useViewMode } from "./view-mode"
 
 const TOP = 120
 const BREAK = 900
+/** The width from which the gallery sits beside the text. Matches the stylesheet. */
+const PAIR_MIN = 769
+/** The images start to arrive just as the introduction starts to stream. */
+const GALLERY_MS = 350
 
 /**
  * Pins the info column while the photos scroll. A column taller than the window scrolls with the
@@ -74,15 +78,37 @@ export function WorkView({ slug, head, leadIds, lead, meta, sections, media, has
     setGallery(true)
     track("gallery_opened", { slug })
   }, [hasImages, slug])
+  // Closing is remembered for this visit, so the gallery does not reopen on its own.
+  const closeGallery = useCallback(() => {
+    setGallery(false)
+    try {
+      sessionStorage.setItem(`gallery-closed:${slug}`, "1")
+    } catch {
+      // Not remembered.
+    }
+  }, [slug])
+
+  // With room for two columns, the images arrive beside the text as it streams in. On a phone
+  // they wait in the sheet behind "Open gallery", so the introduction is read first.
+  useEffect(() => {
+    if (!hasImages || boring || !matchMedia(`(min-width: ${PAIR_MIN}px)`).matches) return
+    try {
+      if (sessionStorage.getItem(`gallery-closed:${slug}`) === "1") return
+    } catch {
+      // Opens every time.
+    }
+    const timer = window.setTimeout(() => setGallery(true), GALLERY_MS)
+    return () => window.clearTimeout(timer)
+  }, [hasImages, boring, slug])
 
   useEffect(() => {
     if (!gallery) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setGallery(false)
+      if (event.key === "Escape") closeGallery()
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [gallery])
+  }, [gallery, closeGallery])
   const [leadId, ...aliases] = leadIds
   const anchors = aliases.map((id) => <span key={id} id={id} />)
 
@@ -113,8 +139,8 @@ export function WorkView({ slug, head, leadIds, lead, meta, sections, media, has
           {chevronDown}
         </button>
         {hasImages ? (
-          <button type="button" className="btn ghost with-icon" aria-expanded={gallery} onClick={openGallery}>
-            Open gallery
+          <button type="button" className="btn ghost with-icon" aria-expanded={gallery} onClick={gallery ? closeGallery : openGallery}>
+            {gallery ? "Close gallery" : "Open gallery"}
             {galleryIcon}
           </button>
         ) : null}
@@ -142,9 +168,9 @@ export function WorkView({ slug, head, leadIds, lead, meta, sections, media, has
       </article>
       {gallery ? (
         <>
-          <button type="button" className="sheet-scrim" aria-label="Close gallery" onClick={() => setGallery(false)} />
+          <button type="button" className="sheet-scrim" aria-label="Close gallery" onClick={closeGallery} />
           <aside className="gallery" aria-label="Gallery">
-            <button type="button" className="preview-close" onClick={() => setGallery(false)} aria-label="Close gallery">
+            <button type="button" className="preview-close" onClick={closeGallery} aria-label="Close gallery">
               Close
               <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true">
                 <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />

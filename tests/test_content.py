@@ -315,7 +315,7 @@ def test_overmatch_is_featured_sample_work_without_sensitive_specifics():
     assert public["projects"][0]["id"] == "project:overmatch-ai"
     published = _by_id(public["projects"])["project:overmatch-ai"]
     assert published["summary"] == (
-        "Sample work in progress: product patterns I'm exploring as Design Lead at Overmatch AI."
+        "Sample work in progress: product patterns in exploration at Overmatch AI."
     )
     assert published["visuals"] == ""
     assert published["patterns"] == (

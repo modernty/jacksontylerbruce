@@ -14,16 +14,21 @@
   --ink-quiet:color-mix(in srgb,var(--ink) 70%,transparent);
   --sans:'Aeonik Pro','Avenir Next',Avenir,'Segoe UI',sans-serif;
   --mono:var(--plex),ui-monospace,monospace;
+  --fs-display:28px;
+  --fs-display-small:26px;
   --fs-header:20px;
   --fs-input:16px;
   --fs-body:16px;
+  --fs-text:15px;
+  --fs-small:14px;
+  --fs-micro:12px;
   --fs-card-title:15px;
-  --fs-tab:13px;
-  --fs-company:12.5px;
-  --fs-card-body:12px;
-  --fs-project:11.5px;
-  --fs-label:11px;
-  --fs-axis:10px;
+  --fs-tab:14px;
+  --fs-company:14px;
+  --fs-card-body:14px;
+  --fs-project:13px;
+  --fs-label:12px;
+  --fs-axis:12px;
   --fw-regular:400;
   --fw-medium:500;
   --fw-semibold:600;
@@ -37,5 +42,9 @@
   --motion-quick:160ms;
   --motion-base:250ms;
   --motion-page:320ms;
+  --motion-slow:450ms;
+  --motion-reveal:600ms;
+  --motion-stagger:40ms;
+  --motion-pulse:2600ms;
   --motion-load:2100ms;
 }

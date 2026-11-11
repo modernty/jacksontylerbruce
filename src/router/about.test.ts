@@ -6,12 +6,14 @@ import { answerAbout } from "./about"
 const ask = (q: string) => answerAbout(q)
 
 test("travel and location questions answer from the places content", () => {
-  assert.match(ask("Where has Tyler travelled?").answer, /55 places across 20 countries/)
-  assert.equal(ask("Where are you based?").answer, "I'm based in Miami, FL.")
+  // The Notion Q&A answers its own questions first.
+  assert.equal(ask("Where has Tyler travelled?").answer, "Medellín, Tulum, Costa Rica, and more. Living inside a place changes how a problem looks.")
+  assert.match(ask("Which places has Tyler been to?").answer, /^56 places across 20 countries/)
+  assert.match(ask("Where are you based?").answer, /^Miami\. \d{1,2}:\d{2} [AP]M there\.$/)
   const lived = ask("Where have you lived?")
   assert.match(lived.answer, /Medellín/)
-  assert.match(lived.answer, /Home is Miami, FL\.$/)
-  assert.match(ask("How many countries have you been to?").answer, /^55 places across 20 countries: United States/)
+  assert.match(lived.answer, /Home is Miami\.$/)
+  assert.match(ask("How many countries have you been to?").answer, /^56 places across 20 countries: United States/)
 })
 
 test("countries, cities and short forms turn the globe to the right place", () => {
@@ -21,9 +23,11 @@ test("countries, cities and short forms turn the globe to the right place", () =
   assert.equal(ask("Did you go to medellin?").placeId, "place:medellin")
   assert.equal(ask("Ever been to NYC?").placeId, "place:new-york")
   assert.equal(ask("Have you been to the UK?").placeId, "place:london")
-  assert.match(ask("Tell me about Miami").answer, /is home/)
+  assert.equal(ask("Tell me about Medellín").answer, "Yes, Medellín, Colombia. Lived there for a while.")
+  assert.equal(ask("Tell me about Miami").answer, "Miami, FL. Home. Based in Miami.")
+  assert.match(ask("Have you been to Columbus?").answer, /Columbus, OH/)
   const colombia = ask("Where did you live in Colombia?")
-  assert.match(colombia.answer, /I lived in Medellín/)
+  assert.match(colombia.answer, /Lived in Medellín/)
 })
 
 test("regions answer with their countries and cities", () => {
@@ -38,12 +42,20 @@ test("regions answer with their countries and cities", () => {
 
 test("names match whole words only, and unknown places get an honest no", () => {
   assert.notEqual(ask("What was your goal?").placeId, "place:goa")
-  assert.equal(ask("Have you been to Brazil?").answer, "Not yet. Brazil isn't one of the 20 countries I've been to.")
-  assert.match(ask("What's your favourite colour?").answer, /Ask me about a country, a city or a part of the world/)
+  assert.equal(ask("Have you been to Brazil?").answer, "Not yet. Brazil isn't among the 20 countries so far.")
+  // A personal question with no Q&A entry gets the fallback and the contact link.
+  const colour = ask("What's your favourite colour?")
+  assert.equal(colour.answer, "That's one to ask him directly.")
+  assert.equal(colour.contact, true)
+  assert.match(ask("What colour is the sky?").answer, /Ask about a country, a city or a part of the world/)
 })
 
 test("every answer passes the public checks", () => {
   for (const q of ["Where has Tyler travelled?", "Where in Asia?", "Have you been to Japan?", "Where have you lived?", "Have you been to Brazil?"]) {
     assert.deepEqual(textIssues(ask(q).answer), [], q)
   }
+})
+
+test("height is answered on About too", () => {
+  assert.equal(ask("How tall are you?").answer, "6'2\". 200 lbs.")
 })

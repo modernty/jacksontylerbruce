@@ -1,0 +1,196 @@
+{
+  "source": "https://app.notion.com/p/b173ba66d1e9475d8ab63af547b7ce66",
+  "note": "Chat Q&A, copied from Notion. Rows with Status = Ready. Rows whose Notion View the site has no panel for answer as text (view: null). Held back: didnt-go-to-plan (no Setbacks yet), surprise-me (no Live projects). Key is each entry's stable id. Edit in Notion, then copy here.",
+  "synced": "2026-11-11",
+  "entries": [
+    {
+      "key": "best-designed-thing",
+      "question": "What's the best-designed thing he's ever used?",
+      "alternates": [],
+      "answer": "A soy sauce bottle. Air in one side, sauce out the other.",
+      "view": null,
+      "pill": true,
+      "followUps": []
+    },
+    {
+      "key": "day-in-life",
+      "question": "What's a day like for him?",
+      "alternates": [
+        "What's his routine?",
+        "How does he work?"
+      ],
+      "answer": "Training early. Deep work before noon. Calls with teams across time zones after.",
+      "view": null,
+      "pill": false,
+      "followUps": [
+        "Walk me through his process."
+      ]
+    },
+    {
+      "key": "dog",
+      "question": "Does he have a dog?",
+      "alternates": [
+        "Pets?",
+        "Who's Winston?",
+        "Any pets?",
+        "Does he have a family?"
+      ],
+      "answer": "Winston. A French Bulldog. Chief of morale.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "eli5",
+      "question": "Explain his work like I'm five.",
+      "alternates": [
+        "Simple version?",
+        "What does he actually do?"
+      ],
+      "answer": "Find what's confusing. Make it simple. Then make it beautiful.",
+      "view": null,
+      "pill": true,
+      "followUps": [
+        "Show me an example."
+      ]
+    },
+    {
+      "key": "favorite-studios",
+      "question": "Who are his favorite designers or studios?",
+      "alternates": [
+        "Who does he look up to?",
+        "Who are his favorite designers?",
+        "Who are his favourite designers?",
+        "Favorite studios?"
+      ],
+      "answer": "Rem Koolhaas, SANAA, Zaha Hadid Architects, Le Corbusier, Valerio Olgiati, Tadao Ando, Chris Precht, Bjarke Ingels, and more.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "favorite-tool",
+      "question": "What tool could he not live without?",
+      "alternates": [
+        "What tools does he use?"
+      ],
+      "answer": "Figma for the work. Claude for thinking out loud.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "hot-take",
+      "question": "What's his hot take on design?",
+      "alternates": [
+        "What does he believe?",
+        "Strong opinion?"
+      ],
+      "answer": "Design is a craft at risk. Microwave culture rushes past the time it takes to observe a problem and solve it with intent.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "how-start",
+      "question": "How does he start a project?",
+      "alternates": [
+        "What's his process?",
+        "Where does he begin?"
+      ],
+      "answer": "Inside the problem. Time with the people it's for, before any screen.",
+      "view": null,
+      "pill": true,
+      "followUps": []
+    },
+    {
+      "key": "inspiration",
+      "question": "What inspires him?",
+      "alternates": [
+        "What are his influences?",
+        "What's on his moodboard?"
+      ],
+      "answer": "Architecture, contemporary art, and the way people actually use things.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "is-this-ai",
+      "question": "Is this site AI?",
+      "alternates": [
+        "How does this site work?",
+        "Who built this?"
+      ],
+      "answer": "Partly. Claude picks the view. The content is real and written by hand. ;)",
+      "view": null,
+      "pill": false,
+      "followUps": [
+        "Show me how this site works."
+      ]
+    },
+    {
+      "key": "side-projects",
+      "question": "What's he building for fun?",
+      "alternates": [
+        "Side projects?",
+        "Experiments?"
+      ],
+      "answer": "TouchDesigner experiments, motion, generative work.",
+      "view": null,
+      "pill": true,
+      "followUps": []
+    },
+    {
+      "key": "three-words",
+      "question": "Describe Tyler in three words.",
+      "alternates": [],
+      "answer": "Grounded. Curious. Deliberate.",
+      "view": null,
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "where-lived",
+      "question": "Where has he lived and worked from?",
+      "alternates": [
+        "Where has he traveled?",
+        "Is he a nomad?"
+      ],
+      "answer": "Medellín, Tulum, Costa Rica, and more. Living inside a place changes how a problem looks.",
+      "view": "globe",
+      "pill": false,
+      "followUps": []
+    },
+    {
+      "key": "where-now",
+      "question": "Where is Tyler right now?",
+      "alternates": [
+        "Where is he based?",
+        "Where does he live?",
+        "What time is it for him?"
+      ],
+      "answer": "Miami. {local_time} there.",
+      "view": "globe",
+      "pill": true,
+      "followUps": [
+        "Show me everywhere he's lived."
+      ]
+    },
+    {
+      "key": "why-hire",
+      "question": "Why should I hire him over someone else?",
+      "alternates": [
+        "What makes him different?",
+        "Why him?"
+      ],
+      "answer": "Depth. Going further into the problem than the brief asks.",
+      "view": null,
+      "pill": false,
+      "followUps": [
+        "Show me a project that proves it.",
+        "How do I start a project with him?"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og"
 import { tokens } from "@/src/design/tokens"
 import { SITE_NAME } from "@/src/site/seo"
 
-export const alt = `${SITE_NAME}, Miami, FL`
+export const alt = `${SITE_NAME}, Miami`
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -18,9 +18,8 @@ export default function ShareCard() {
           <div style={{ flex: 1, height: 2, background: ink }} />
           <div style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${ink}` }} />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 36 }}>
-          <div>Designer</div>
-          <div>Miami, FL</div>
+        <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 36 }}>
+          <div>Miami</div>
         </div>
       </div>
     ),

@@ -1,3 +1,4 @@
+import { byRecent } from "./disciplines"
 import type { PublicCatalog } from "./publish"
 
 /** One role as the conversation lists it, resume style. */
@@ -18,7 +19,7 @@ export function careerEntries(catalog: PublicCatalog): CareerEntry[] {
   return [...catalog.roles]
     .sort((a, b) => (b.end ?? Infinity) - (a.end ?? Infinity) || b.start - a.start)
     .map((role) => {
-      const projects = catalog.projects.filter((project) => project.roleId === role.id)
+      const projects = byRecent(catalog.projects.filter((project) => project.roleId === role.id))
       const start = role.since ?? monthLabel(role.start)
       const end = role.end === null ? "Now" : monthLabel(role.end)
       return {

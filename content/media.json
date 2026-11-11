@@ -72,10 +72,6 @@
         }
       ]
     },
-    "jet-brand": {
-      "cover": null,
-      "images": []
-    },
     "novart": {
       "cover": "/assets/thumbs/novart.jpg",
       "images": [
@@ -146,35 +142,6 @@
         {
           "src": "/assets/images/novart/17.jpg",
           "alt": "Loan offer dialog listing the terms, the interest rate and four collateral artworks, with options to accept or decline."
-        }
-      ]
-    },
-    "chatter-brand": {
-      "cover": "/assets/thumbs/chatter-social.jpg",
-      "images": [
-        {
-          "src": "/assets/images/chatter-social/01.jpg",
-          "alt": "Ten Chatter phone screens in a dark interface: profiles, live rooms, discovery, subscriptions and settings."
-        },
-        {
-          "src": "/assets/images/chatter-social/02.jpg",
-          "alt": "Two phone screens for scheduling a live session, with the form extended to show every option."
-        },
-        {
-          "src": "/assets/images/chatter-social/03.jpg",
-          "alt": "Four phone screens of live rooms, video chat and subscriber content."
-        },
-        {
-          "src": "/assets/images/chatter-social/04.jpg",
-          "alt": "Four phones on black showing an audio room, a speaker, a live stage and the group chat."
-        },
-        {
-          "src": "/assets/images/chatter-social/05.jpg",
-          "alt": "One phone on black showing the Discover screen with a live event featuring a musician, in teal."
-        },
-        {
-          "src": "/assets/images/chatter-social/06.jpg",
-          "alt": "Phone showing the Discover screen with a listening party and Q&A promoted over a portrait of an artist."
         }
       ]
     },

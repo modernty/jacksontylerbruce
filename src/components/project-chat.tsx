@@ -20,7 +20,7 @@ async function askConversation(q: string, expects?: "category", listed?: string[
     })
     return (await response.json()) as ChatData
   } catch {
-    return { answer: "I couldn't reach the site just now. Try asking again." }
+    return { answer: "The site couldn't be reached just now. Try asking again." }
   }
 }
 
@@ -77,7 +77,8 @@ export function ProjectChat({ slug, names, careers, hasImages, onImages }: { slu
     openTab(target)
     router.push(`/work/${target}`)
   }
-  const onPanel = (kind: Panel) => router.push(kind === "globe" ? "/about" : "/timeline#axis")
+  // Places are answered in the main conversation, with the globe beside it.
+  const onPanel = (kind: Panel) => router.push(kind === "globe" ? "/chat" : "/timeline#axis")
 
   return (
     <>

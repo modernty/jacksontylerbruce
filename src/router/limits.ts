@@ -5,9 +5,26 @@ export const DAY_MS = 24 * 60 * 60 * 1000
 export const BURST_LIMIT = 10
 export const DAY_LIMIT = 50
 export const MAX_CHARS = 400
-export const MAX_TOKENS = 300
-export const ASK_TIMEOUT_MS = 8000
-export const DEFAULT_MODEL = "claude-haiku-5-5"
+export const MAX_TOKENS = 1200
+export const ASK_TIMEOUT_MS = 12000
+/** Anything about Tyler and the work: routing, loosely worded questions, project questions. */
+export const DEFAULT_MODEL = "claude-sonnet-5-5"
+/** General questions and web search. */
+export const GENERAL_MODEL = "claude-haiku-5-5"
+export const GENERAL_MAX_TOKENS = 700
+export const GENERAL_TIMEOUT_MS = 25000
+export const MAX_SEARCHES = 2
+/** USD per million tokens, input and output, by model family. */
+const RATES: [RegExp, number, number][] = [
+  [/sonnet/, 2, 10],
+  [/haiku/, 0.1, 0.5],
+]
+const USD_PER_SEARCH = 0.01
+
+/** Turns thinking off for a short grounded answer. Sonnet 5.5 rejects "disabled". */
+export function thinkingOff(model: string): { type: "disabled" } {
+  return (/sonnet-5-5|opus-5-5/.test(model) ? { type: "between_tools" } : { type: "disabled" }) as { type: "disabled" }
+}
 const MICROS = 1_000_000
 
 function bucket(ip: string, now: number, size: number, name: string): string {
@@ -36,8 +53,8 @@ export async function spendRatio(now = Date.now(), env: Env = process.env, store
   return (await store.get(spendKey(now), now)) / MICROS / cap
 }
 
-export function costUsd(inputTokens: number, outputTokens: number, env: Env = process.env): number {
-  const inputRate = Number(env.USD_PER_MILLION_INPUT ?? "0.1")
-  const outputRate = Number(env.USD_PER_MILLION_OUTPUT ?? "0.5")
-  return (inputTokens * inputRate + outputTokens * outputRate) / 1_000_000
+/** What one call cost: tokens at the model's rate, plus web searches. */
+export function costUsd(inputTokens: number, outputTokens: number, model: string = GENERAL_MODEL, searches = 0): number {
+  const [, inputRate, outputRate] = RATES.find(([family]) => family.test(model)) ?? RATES[0]
+  return (inputTokens * inputRate + outputTokens * outputRate) / 1_000_000 + searches * USD_PER_SEARCH
 }

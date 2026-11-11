@@ -1,6 +1,7 @@
 import { publishCatalog } from "@/src/content/publish"
 
-export const SITE_NAME = "Tyler Jackson — Designer"
+/** The name as the site writes it, everywhere: the header, page titles and share cards. */
+export const SITE_NAME = "Jackson, Tyler Bruce"
 export const HERO = "Designing the intimacy between people and machines."
 const CANONICAL = "https://jacksontylerbruce.com"
 
@@ -23,7 +24,6 @@ export function publicPaths(): string[] {
   return [
     "/timeline",
     "/timeline/projects",
-    "/about",
     ...catalog.themes.map((theme) => `/focus/${theme.slug}`),
     ...catalog.projects.map((project) => `/work/${project.slug}`),
   ]

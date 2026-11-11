@@ -1,5 +1,6 @@
 import "server-only"
 import placesFile from "@/content/places.json"
+import notionProjects from "@/content/notion-projects.json"
 import { mediaFor } from "./media"
 import { generateSections } from "./sections"
 import { CatalogSchema, type Catalog, type Client, type Place, type Project, type Role, type Theme } from "./schema"
@@ -119,32 +120,19 @@ const projects: Omit<Project, "media">[] = [
     slug: "fixed-rate-fixed-term",
     name: "Fixed Rate Fixed Term",
     summary: "Fixed-rate, fixed-term lending on Solana, designed so a new kind of market feels trustworthy.",
-    sections: [section("summary", "Summary", "Fixed-rate, fixed-term lending on Solana, designed so a new kind of market feels trustworthy.")],
+    sections: [
+      section("summary", "Summary", "Fixed-rate, fixed-term lending on Solana, designed so a new kind of market feels trustworthy."),
+      section("brand", "Brand", "A tighter brand for Jet Protocol."),
+    ],
     start: 2022.8,
     end: 2023.6,
     roleId: "role:jet",
     clientId: "client:jet",
     lane: 0,
-    themeIds: ["theme:finance", "theme:trust"],
+    themeIds: ["theme:finance", "theme:trust", "theme:identity"],
     onTimeline: true,
     flagged: false,
-    aliases: ["fixed rate fixed term", "fixed rate", "fixed term"],
-  },
-  {
-    id: "project:jet-brand",
-    slug: "jet-brand",
-    name: "Jet brand",
-    summary: "A tighter brand for Jet Protocol.",
-    sections: [section("summary", "Summary", "A tighter brand for Jet Protocol.")],
-    start: 2023.0,
-    end: 2023.4,
-    roleId: "role:jet",
-    clientId: "client:jet",
-    lane: 0,
-    themeIds: ["theme:identity"],
-    onTimeline: false,
-    flagged: false,
-    aliases: ["jet brand"],
+    aliases: ["fixed rate fixed term", "fixed rate", "fixed term", "jet brand"],
   },
   {
     id: "project:novart",
@@ -170,32 +158,19 @@ const projects: Omit<Project, "media">[] = [
     slug: "chatter",
     name: "Chatter",
     summary: "A group, live and stream product with creator monetization.",
-    sections: [section("summary", "Summary", "A group, live and stream product with creator monetization.")],
+    sections: [
+      section("summary", "Summary", "A group, live and stream product with creator monetization."),
+      section("brand", "Brand", "The Chatter Social brand, from first concept through launch."),
+    ],
     start: 2023.8,
     end: 2025.0,
     roleId: "role:chatter",
     clientId: "client:chatter",
     lane: 2,
-    themeIds: ["theme:systems"],
+    themeIds: ["theme:systems", "theme:identity"],
     onTimeline: true,
     flagged: false,
-    aliases: ["chatter app"],
-  },
-  {
-    id: "project:chatter-brand",
-    slug: "chatter-brand",
-    name: "Chatter brand",
-    summary: "The Chatter Social brand, from first concept through launch.",
-    sections: [section("summary", "Summary", "The Chatter Social brand, from first concept through launch.")],
-    start: 2023.8,
-    end: 2024.3,
-    roleId: "role:chatter",
-    clientId: "client:chatter",
-    lane: 2,
-    themeIds: ["theme:identity"],
-    onTimeline: false,
-    flagged: false,
-    aliases: ["chatter brand"],
+    aliases: ["chatter app", "chatter brand"],
   },
   {
     id: "project:lazarus-brand",
@@ -326,7 +301,7 @@ const projects: Omit<Project, "media">[] = [
     lane: 2,
     themeIds: ["theme:systems"],
     onTimeline: true,
-    flagged: false,
+    flagged: true,
     aliases: ["rv"],
   },
   {
@@ -362,6 +337,44 @@ const projects: Omit<Project, "media">[] = [
     orgLabel: "Side project",
     aliases: ["traveller"],
   },
+  {
+    id: "project:lzr-2",
+    slug: "lzr-2",
+    name: "LZR 2.0",
+    summary: "One company. Three readers. One argument.",
+    sections: [
+      section(
+        "summary",
+        "Summary",
+        "AI for regulated industries is sold against suspicion. LZR 2.0 restates Lazarus for three readers: the practitioner, the buyer, the researcher. Each arrives with a different doubt. Each is answered in turn. Explainability is the organizing idea.",
+      ),
+    ],
+    start: 2025.6,
+    end: 2026.5,
+    roleId: "role:lazarus",
+    clientId: "client:lazarus",
+    lane: 0,
+    themeIds: ["theme:identity", "theme:ai", "theme:trust"],
+    onTimeline: true,
+    flagged: false,
+    aliases: ["lzr 2.0", "lzr 2", "lzr", "lazarus website"],
+  },
+  {
+    id: "project:overmatch-ai",
+    slug: "overmatch-ai",
+    name: "Overmatch AI",
+    summary: "Product and platform UI, brand identity and website.",
+    sections: [section("summary", "Summary", "Product and platform UI, brand identity and website. In progress.")],
+    start: 2026.35,
+    end: null,
+    roleId: "role:overmatch",
+    clientId: "client:overmatch",
+    lane: 1,
+    themeIds: ["theme:ai", "theme:systems"],
+    onTimeline: true,
+    flagged: false,
+    aliases: ["overmatch ai work"],
+  },
 ]
 
 function client(id: string, name: string, roleId: string, projectIds: string[], extra: Partial<Client> = {}): Client {
@@ -372,20 +385,20 @@ const clients: Client[] = [
   client("client:joba", "Joba Studio", "role:joba", ["project:usm-hue-man", "project:usm-milan"]),
   client("client:soul-machines", "Soul Machines", "role:soul-machines", ["project:corelogic", "project:nestle"]),
   client("client:urvin", "Urvin Finance", "role:urvin", ["project:the-terminal"]),
-  client("client:jet", "Jet Protocol", "role:jet", ["project:fixed-rate-fixed-term", "project:jet-brand"]),
+  client("client:jet", "Jet Protocol", "role:jet", ["project:fixed-rate-fixed-term"]),
   client("client:nax", "Nax Group", "role:nax", ["project:novart"]),
-  client("client:chatter", "Chatter Social", "role:chatter", ["project:chatter", "project:chatter-brand"]),
-  client("client:lazarus", "Lazarus AI", "role:lazarus", ["project:lazarus-brand", "project:model-playground", "project:talent-management", "project:whitelist"]),
+  client("client:chatter", "Chatter Social", "role:chatter", ["project:chatter"]),
+  client("client:lazarus", "Lazarus AI", "role:lazarus", ["project:lazarus-brand", "project:model-playground", "project:talent-management", "project:whitelist", "project:lzr-2"]),
   client("client:loblaw-pc-health", "Loblaw / PC Health", "role:employer", ["project:loblaw", "project:remedy"]),
   client("client:intuit", "Intuit", "role:employer", ["project:intuit"]),
   client("client:rv", "RV", "role:employer", ["project:rv"]),
-  client("client:overmatch", "Overmatch AI", "role:overmatch", []),
+  client("client:overmatch", "Overmatch AI", "role:overmatch", ["project:overmatch-ai"]),
   client("client:own", "Side project", "role:own", ["project:traveller"]),
 ]
 
 const roles: Role[] = [
   role("role:joba", "Joba Studio", "Designer", 2019.35, 2021.55, `2019${en}21`, 0, ["client:joba"], ["joba", "joba studio"], {
-    summary: "Led design across environmental, product and web projects. Reported directly to the CEO and Creative Director, running project execution and growing the designers around me.",
+    summary: "Led design across environmental, product and web projects. Reported directly to the CEO and Creative Director, running project execution and growing the designers on staff.",
   }),
   role("role:soul-machines", "Soul Machines", "Designer", 2021.6, 2022.55, `2021${en}22`, 1, ["client:soul-machines"], ["soul machines", "soul"], {
     summary: "Sole designer on web and mobile experiences featuring AI digital humans for enterprise clients including Nestlé and CoreLogic. Designed conversational interfaces that streamlined customer service and specialised workflows.",
@@ -443,6 +456,12 @@ function relations(): Catalog["relations"] {
   return rows
 }
 
+/** Order and Circa from the Notion intake, by the site's slug. */
+function notionFields(slug: string): { order?: number; circa?: string } {
+  const entry = (notionProjects.projects as Record<string, { order?: number; circa?: string }>)[slug]
+  return entry ? { order: entry.order, circa: entry.circa } : {}
+}
+
 export function loadCatalog(): Catalog {
   const publicNames = new Map(projects.filter((project) => !project.flagged).map((project) => [project.slug, project.name]))
   return CatalogSchema.parse({
@@ -450,7 +469,7 @@ export function loadCatalog(): Catalog {
       id: "profile:tyler",
       name: "Tyler Jackson",
       title: "Designer",
-      location: "Miami, FL",
+      location: "Miami",
       placeId: "place:miami",
       email: "jacksontylerbruce@gmail.com",
       linkedin: "https://www.linkedin.com/in/tyler-jackson-0a1154181/",
@@ -461,6 +480,7 @@ export function loadCatalog(): Catalog {
     clients,
     projects: projects.map((project) => ({
       ...project,
+      ...notionFields(project.slug),
       sections: generateSections(project.slug, project.sections, publicNames),
       media: mediaFor(project.slug, project.name),
     })),

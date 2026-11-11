@@ -14,4 +14,6 @@ export type GlobeProps = {
   /** The place to turn to and label, for example from the list or the chat. */
   focusId?: string | null
   onHover?: (id: string | null) => void
+  /** wide (default) for a full page; panel for the larger, squarer preview beside the chat. */
+  fit?: "wide" | "panel"
 }

@@ -31,7 +31,8 @@ export type AnswerProps = {
   /** Opens a project the answer names, with the list it came from. */
   onProject: (slug: string, list: string[]) => void
   /** Opens the view the answer called for. */
-  onPanel: (kind: Panel) => void
+  /** only narrows the globe to the places the answer was about. */
+  onPanel: (kind: Panel, only?: "lived") => void
   /** The project or view open now, shown pressed. */
   current?: string
   /** A project shown as plain text, e.g. the one this tab is about. */
@@ -92,6 +93,11 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
             )
           })}
         </ol>
+        {turn.panel === "timeline" ? (
+          <button type="button" className="chat-link" aria-pressed={current === "timeline"} onClick={() => onPanel("timeline")}>
+            Open timeline
+          </button>
+        ) : null}
       </>
     )
   }
@@ -101,8 +107,8 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
     return [
       turn.answer,
       " ",
-      <button key="view" type="button" className="chat-link" aria-pressed={current === kind} onClick={() => onPanel(kind)}>
-        {kind === "globe" ? "See the globe" : "See the timeline"}
+      <button key="view" type="button" className="chat-link" aria-pressed={current === kind} onClick={() => onPanel(kind, turn.placeKind)}>
+        {kind === "globe" ? (turn.placeKind === "lived" ? "Open places lived" : "Open globe") : "Open timeline"}
       </button>,
     ]
   }

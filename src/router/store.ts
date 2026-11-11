@@ -4,6 +4,10 @@ export interface Store {
   incr(key: string, ttlMs: number, now: number, by?: number): Promise<number>
   /** The current total for `key`, or 0. */
   get(key: string, now: number): Promise<number>
+  /** Adds `value` to the front of the list at `key`, keeping at most `max` entries. */
+  push(key: string, value: string, max: number): Promise<void>
+  /** The list at `key`, newest first. */
+  list(key: string): Promise<string[]>
 }
 
 export type Env = Record<string, string | undefined>
@@ -28,8 +32,19 @@ export class MemoryStore implements Store {
     return current && current.exp > now ? current.n : 0
   }
 
+  private lists = new Map<string, string[]>()
+
+  async push(key: string, value: string, max: number): Promise<void> {
+    this.lists.set(key, [value, ...(this.lists.get(key) ?? [])].slice(0, max))
+  }
+
+  async list(key: string): Promise<string[]> {
+    return this.lists.get(key) ?? []
+  }
+
   reset(): void {
     this.buckets.clear()
+    this.lists.clear()
   }
 }
 
@@ -58,6 +73,15 @@ export function createRestStore(url: string, token: string, fetcher: Fetcher = f
       const total = Number(value ?? 0)
       return Number.isFinite(total) ? total : 0
     },
+    async push(key, value, max) {
+      const encoded = encodeURIComponent(key)
+      await call(`lpush/${encoded}/${encodeURIComponent(value)}`)
+      await call(`ltrim/${encoded}/0/${Math.max(0, Math.trunc(max) - 1)}`)
+    },
+    async list(key) {
+      const rows = await call(`lrange/${encodeURIComponent(key)}/0/-1`)
+      return Array.isArray(rows) ? rows.filter((row): row is string => typeof row === "string") : []
+    },
   }
 }
 
@@ -67,6 +91,8 @@ export function withFallback(primary: Store, fallback: Store = memoryStore): Sto
   return {
     incr: (key, ttlMs, now, by) => primary.incr(key, ttlMs, now, by).catch(() => fallback.incr(key, ttlMs, now, by)),
     get: (key, now) => primary.get(key, now).catch(() => fallback.get(key, now)),
+    push: (key, value, max) => primary.push(key, value, max).catch(() => fallback.push(key, value, max)),
+    list: (key) => primary.list(key).catch(() => fallback.list(key)),
   }
 }
 

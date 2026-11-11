@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!found) return {}
   const { project } = found
   return {
-    title: `${project.name} — Tyler Jackson`,
+    title: project.name,
     description: project.summary,
     openGraph: project.media.coverInk ? { images: [{ url: project.media.coverInk, width: 1600, height: 1000 }] } : undefined,
   }
@@ -93,7 +93,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         lead={lead ? lead.body.split("\n\n").filter(Boolean) : []}
         meta={
           <div className="facts">
-            <p className="meta">{[org, role?.title, role?.yearLabel].filter(Boolean).join(" · ")}</p>
+            <p className="meta">{[org, role?.title, project.circa ?? role?.yearLabel].filter(Boolean).join(" · ")}</p>
             <p className="themes">{themes}</p>
           </div>
         }

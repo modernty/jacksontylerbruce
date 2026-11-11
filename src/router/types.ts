@@ -29,4 +29,6 @@ export type ViewSpec = {
   followUps: Pill[]
   confidence: number
   source: "keyword" | "model"
+  /** Set when the model matched the question to an authored Q&A entry. */
+  qaKey?: string
 }

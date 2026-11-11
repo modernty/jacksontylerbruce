@@ -5,6 +5,8 @@ import { followUpsFor, sheetAnswer } from "@/src/content/answers"
 import { publishCatalog } from "@/src/content/publish"
 import type { Intent } from "@/src/router/types"
 
+export const metadata = { title: "Answer" }
+
 const TOPICS = new Set(["location", "about", "process", "availability", "off_topic", "decline"])
 
 export default async function SheetPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
