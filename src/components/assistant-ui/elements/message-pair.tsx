@@ -62,7 +62,7 @@ export function MessagePair({
         {/* Room is held only while the answer is arriving, so what follows a finished answer sits close to it. */}
         <div className={cn("text-[15px] leading-relaxed", streaming && "min-h-[4.25rem]")}>
           {status ? (
-            <span role="status" className="animate-pulse text-[color:var(--ink-placeholder)] motion-reduce:animate-none">
+            <span role="status" className="animate-pulse text-[color:var(--accent)] motion-reduce:animate-none">
               {status}
             </span>
           ) : !streaming && final ? final : shown.map((word, index) => {
@@ -87,7 +87,7 @@ export function MessagePair({
           {streaming && !status && shown.length > 0 && (
             <span
               aria-hidden
-              className="-mb-0.5 ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-full bg-[var(--ink)] motion-reduce:animate-none"
+              className="-mb-0.5 ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-full bg-[var(--accent)] motion-reduce:animate-none"
             />
           )}
         </div>

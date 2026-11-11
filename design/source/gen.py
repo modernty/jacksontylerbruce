@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-INK = "#2E3A87"
+INK = "#111111"
 NOW = 2026.83
 SKIP_TIMELINE = ("Jet brand", "Chatter brand", "Overmatch patterns")
 FOCUS = [

@@ -1,6 +1,8 @@
 /* Generated from design/tokens.json by scripts/tokens.mjs. Do not edit. */
 :root{
-  --ink:#2E3A87;
+  --ink:#111111;
+  --accent:#2E3A87;
+  --accent-soft:#E3E8FA;
   --paper:#FBFBF8;
   --surface:#FFFFFF;
   --ink-hover:color-mix(in srgb,var(--ink) 5%,transparent);

@@ -1,7 +1,9 @@
 // Generated from design/tokens.json by scripts/tokens.mjs. Do not edit.
 export const tokens = {
   "color": {
-    "ink": "#2E3A87",
+    "ink": "#111111",
+    "accent": "#2E3A87",
+    "accentSoft": "#E3E8FA",
     "paper": "#FBFBF8",
     "surface": "#FFFFFF"
   },

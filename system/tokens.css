@@ -9,7 +9,7 @@
 :root {
   /* Text uses --ink. 70% ink on paper is about 4.3:1, short of AA for small type. */
   --paper: #FBFBF8;
-  --ink: #2E3A87;
+  --ink: #111111;
   --ink-70: color-mix(in srgb, var(--ink) 70%, var(--paper));
   --ink-40: color-mix(in srgb, var(--ink) 40%, var(--paper));
   --ink-15: color-mix(in srgb, var(--ink) 15%, var(--paper));

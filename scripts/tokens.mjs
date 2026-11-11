@@ -11,7 +11,7 @@ const pct = (alpha) => `${Math.round(alpha * 100)}%`
 
 function css() {
   const lines = []
-  for (const [name, value] of Object.entries(tokens.color)) lines.push(`--${name}:${value};`)
+  for (const [name, value] of Object.entries(tokens.color)) lines.push(`--${kebab(name)}:${value};`)
   for (const [name, alpha] of Object.entries(tokens.inkAlpha)) {
     lines.push(`--ink-${kebab(name)}:color-mix(in srgb,var(--ink) ${pct(alpha)},transparent);`)
   }
