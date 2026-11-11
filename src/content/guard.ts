@@ -27,9 +27,10 @@ export const PUBLISHED = new Set([
   "e342afe5bdfedc90c2531e69ffa98768427d86212deab8abd2818da8997b5b13",
 ])
 
-const FORBIDDEN_TITLE = /product[\s-]*designers?/i
 const TEAM_PHRASING = /my team|design team|\bthe team\b/i
 const GRADUATION = /graduat/i
+/** Empty hype the voice guide (design/source/voice.md) rules out. */
+const HYPE = /game[- ]?changing|revolutionary|legendary/i
 
 function hostLabels(url: string): string[] {
   const rest = url.split("://", 2)[1] ?? ""
@@ -74,10 +75,10 @@ export function containsBlocked(text: string, digests: Set<string> = BLOCKLIST):
 
 export function textIssues(text: string): string[] {
   const issues: string[] = []
-  if (FORBIDDEN_TITLE.test(text)) issues.push("forbidden title")
   if (containsBlocked(text)) issues.push("blocked term")
   if (TEAM_PHRASING.test(text)) issues.push("team phrasing")
   if (GRADUATION.test(text)) issues.push("graduation")
+  if (HYPE.test(text)) issues.push("hype")
   if (text.includes("NEEDS TYLER")) issues.push("placeholder")
   return issues
 }

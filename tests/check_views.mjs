@@ -85,7 +85,7 @@ const now = timed.lanes.flatMap((lane) => lane.items).filter((item) => item.now)
 check(now.length === 2, "expected two current roles");
 check(now.every((item) => item.open && item.x1 === 1), "current roles are not open-ended");
 check(now.some((item) => item.id === "project:overmatch-ai" && item.label === "Overmatch AI" && item.meta === "Design Lead"), "overmatch now drifted");
-check(now.some((item) => item.id === "project:loblaw" && item.label === "Loblaw / PC Health" && item.meta === "Senior Designer"), "loblaw now drifted");
+check(now.some((item) => item.id === "project:loblaw" && item.label === "Loblaw / PC Health" && item.meta === "Senior Product Designer"), "loblaw now drifted");
 check(!now.some((item) => /canada/i.test(item.label)), "role label names the company");
 check(
   timed.lanes.find((lane) => lane.id === "labs").items.some((item) => item.id === "project:verystrongopinion"),

@@ -9,7 +9,6 @@ from pipeline.blocklist import PUBLISHED, contains_blocked
 from pipeline.catalog import (
     CONFIRMED_OVERLAPS,
     CONTENT_DIR,
-    FORBIDDEN_TITLE,
     CatalogError,
     count_placeholders,
     export_public,
@@ -175,7 +174,7 @@ def test_tyler_role_and_date_answers():
 
     loblaw = projects["project:loblaw"]
     assert loblaw.summary == "A mobile health chat assistant codenamed Remedy."
-    assert loblaw.role == "Senior Designer"
+    assert loblaw.role == "Senior Product Designer"
     assert loblaw.year == "2026–present"
     assert loblaw.start == "2026-01"
     assert loblaw.end is None
@@ -216,7 +215,6 @@ def _site_texts():
 def test_forbidden_phrases_are_absent_from_the_seed():
     blob = "\n".join(path.read_text(encoding="utf-8") for path in CONTENT_DIR.glob("*.json"))
     lowered = blob.lower()
-    assert "product designer" not in lowered
     assert not contains_blocked(blob, PUBLISHED)
     assert "my team" not in lowered
     assert "watch party" not in lowered
@@ -278,8 +276,6 @@ def test_built_site_has_no_blocked_terms():
         text = path.read_text(encoding="utf-8", errors="ignore")
         if contains_blocked(text, PUBLISHED):
             hits.append(str(path.relative_to(CONTENT_DIR.parent)))
-        if FORBIDDEN_TITLE.search(text):
-            hits.append(str(path.relative_to(CONTENT_DIR.parent)) + " title")
     assert hits == []
     page = (CONTENT_DIR.parent / "index.html").read_text(encoding="utf-8")
     assert "What are you looking for?" in page
@@ -353,14 +349,9 @@ def test_blocklist_catches_a_synthetic_term():
 
 
 def test_public_scan_rejects_blocked_terms():
-    assert scan_public("Tyler, Product Designer")
-    assert scan_public("Lead Product Designer")
-    assert scan_public("senior product designer")
-    assert scan_public("product-designer")
-    assert scan_public("ProductDesigner")
-    assert scan_public("product designers")
     assert scan_public("graduated in 2014")
     assert scan_public("still NEEDS TYLER")
+    assert scan_public("A game-changing launch.")
     assert scan_public("Designer / Design Director") == []
     assert scan_public("Lead Designer") == []
 
@@ -403,10 +394,10 @@ def test_bad_seed_fails_validation(tmp_path: Path):
     projects = json.loads((tmp_path / "projects.json").read_text(encoding="utf-8"))
     for project in projects:
         if project["slug"] == "model-playground":
-            project["role"] = "Product Designer"
+            project["summary"] = "Built with my team."
     (tmp_path / "projects.json").write_text(json.dumps(projects), encoding="utf-8")
     report = validate(load_catalog(tmp_path))
-    assert any("forbidden title" in error for error in report.errors)
+    assert any("team phrasing" in error for error in report.errors)
     with pytest.raises(CatalogError):
         from pipeline.build import build_map
 

@@ -31,7 +31,7 @@ test("a topic the project has not written up says so instead of repeating the in
 })
 
 test("a model answer that fails the checks falls back to the section", async () => {
-  const invented = async () => "I led Remedy at a Fortune 500 Product Designer shop."
+  const invented = async () => "I led Remedy at a Fortune 500 shop."
   const reply = await answerProject(project("novart"), "What did you do?", invented)
   assert.equal(reply.source, "section")
   const grounded = async () => "I redesigned the flow as two gates before a short form."

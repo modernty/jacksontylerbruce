@@ -9,3 +9,4 @@
 - Motion: load-in, timeline grows left to right (baselines, then pills in date order, then labels and ticks, then NOW), then tabs, header and composer fade up; ease cubic-bezier(.22,1,.36,1); ~2.1s; reduced-motion skips to the end state.
 - Lots of whitespace; desktop 1440x900, mobile 390 (vertical timeline).
 - Text styles (added Nov 10 2026): most components use at most two text styles, one size, with Medium and Regular as the only change. Example: the career list sets company, title and dates in Medium and the summary in Regular, all at the same size. Links add an underline, not a third style.
+- Voice and tone (added Nov 10 2026): the current studio voice (plain, factual) stays primary; `voice.md` in this folder is Tyler's personal guide, secondary for now.

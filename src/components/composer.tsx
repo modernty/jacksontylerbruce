@@ -3,12 +3,13 @@
 import { track } from "@vercel/analytics"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
 import { CHAT_ASK, HOME_CHAT, handOff, handOffToAbout } from "./chat-thread"
+import { StarterPrompts } from "./starter-prompts"
 import { inlineChat, quietPage } from "./chrome"
 
 function sessionId(): string {
@@ -30,6 +31,17 @@ export function Composer() {
   const shellRef = useRef<HTMLFormElement>(null)
   const pills = usePills()
   const shown = pills.length ? pills : DEFAULT_PILLS
+  // The timeline offers the conversation's starting questions on top of the composer, until one
+  // is picked or a conversation has started.
+  const [started, setStarted] = useState(true)
+  useEffect(() => {
+    try {
+      setStarted((JSON.parse(sessionStorage.getItem(HOME_CHAT) ?? "[]") as unknown[]).length > 0)
+    } catch {
+      setStarted(false)
+    }
+  }, [path])
+  const prompts = path === "/timeline" && !started
 
   useEffect(() => {
     const shell = shellRef.current
@@ -50,6 +62,7 @@ export function Composer() {
     const input = shell?.querySelector<HTMLTextAreaElement>(".input")
     const q = input?.value.trim() ?? ""
     if (!q || !input) return
+    setStarted(true)
     // Sent: the composer empties at once, wherever the answer appears.
     input.value = ""
     input.dispatchEvent(new Event("input"))
@@ -94,6 +107,16 @@ export function Composer() {
             </div>
           </>
         )}
+        {prompts ? (
+          <StarterPrompts
+            className="composer-prompts"
+            onPick={(question) => {
+              setStarted(true)
+              handOff(HOME_CHAT, question)
+              router.push("/chat")
+            }}
+          />
+        ) : null}
         <form
           className="shell"
           ref={shellRef}

@@ -30,10 +30,10 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT_DIR = ROOT / "content"
 PLACEHOLDER = "NEEDS TYLER"
 
-# Any spelling of the title: spaces, hyphens, or closed up, singular or plural.
-FORBIDDEN_TITLE = re.compile(r"product[\s-]*designers?", re.IGNORECASE)
 TEAM_PHRASING = re.compile(r"my team|design team|\bthe team\b", re.IGNORECASE)
 GRADUATION = re.compile(r"graduat", re.IGNORECASE)
+# Empty hype the voice guide (design/source/voice.md) rules out.
+HYPE = re.compile(r"game[- ]?changing|revolutionary|legendary", re.IGNORECASE)
 YEAR_RANGE = re.compile(
     r"^(\d{4})(?:\s*[\u2010\u2011\u2012\u2013\u2014-]\s*(\d{4}))?$"
 )
@@ -278,8 +278,6 @@ def validate(catalog: Catalog) -> Validation:
         result.errors.append(
             f"origin title must be {ORIGIN_TITLE!r}, got {catalog.origin.title!r}"
         )
-    if FORBIDDEN_TITLE.search(catalog.origin.title) or FORBIDDEN_TITLE.search(catalog.origin.label):
-        result.errors.append("origin title uses the forbidden wording")
     if not catalog.origin.visible or catalog.origin.confidential:
         result.errors.append("origin must be visible and not confidential")
     for withheld in catalog.origin.withheld:
@@ -328,8 +326,6 @@ def validate(catalog: Catalog) -> Validation:
         },
     }
     blob = json.dumps(seed_payload, ensure_ascii=False)
-    if FORBIDDEN_TITLE.search(blob):
-        result.errors.append("seed contains the forbidden title")
     if contains_blocked(blob, PUBLISHED):
         result.errors.append("seed contains a blocked term")
     if TEAM_PHRASING.search(blob):
@@ -582,14 +578,14 @@ def export_public(catalog: Catalog) -> dict:
 
 def scan_public(text: str, digests: frozenset[str] | None = None) -> list[str]:
     errors = []
-    if FORBIDDEN_TITLE.search(text):
-        errors.append("generated output contains a forbidden title")
     if contains_blocked(text, PUBLISHED if digests is None else digests):
         errors.append("public output contains a blocked term")
     if TEAM_PHRASING.search(text):
         errors.append("public output contains team phrasing")
     if GRADUATION.search(text):
         errors.append("public output mentions a graduation year")
+    if HYPE.search(text):
+        errors.append("public output contains hype words")
     if PLACEHOLDER in text:
         errors.append("public output contains a NEEDS TYLER placeholder")
     return errors

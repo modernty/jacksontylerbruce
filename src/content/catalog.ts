@@ -401,7 +401,7 @@ const roles: Role[] = [
   }),
   role("role:chatter", "Chatter Social", "Design Director", 2023.78, 2025.7, `2023${en}25`, 2, ["client:chatter"], ["chatter social", "chatter"]),
   role("role:lazarus", "Lazarus AI", "Design Lead", 2024.13, 2026.56, `2024${en}26`, 0, ["client:lazarus"], ["lazarus", "lazarus ai"]),
-  role("role:employer", "", "Senior Designer", 2026.04, null, `2026${en}`, 2, ["client:loblaw-pc-health", "client:intuit", "client:rv"], ["current role", "current employer"], {
+  role("role:employer", "", "Senior Product Designer", 2026.04, null, `2026${en}`, 2, ["client:loblaw-pc-health", "client:intuit", "client:rv"], ["current role", "current employer"], {
     employer: true,
     since: "Jan 2026",
   }),

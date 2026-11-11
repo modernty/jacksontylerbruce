@@ -49,7 +49,6 @@ def test_fake_build_shape_origin_edges_and_exclusion(tmp_path: Path):
     nodes = json.loads((tmp_path / "nodes.json").read_text(encoding="utf-8"))
     assert "NEEDS TYLER" not in text
     assert not contains_blocked(text, PUBLISHED)
-    assert "product designer" not in text.lower()
     assert "graduat" not in text.lower()
     for hidden in HIDDEN_IDS:
         assert hidden not in text

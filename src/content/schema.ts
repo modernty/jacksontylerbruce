@@ -6,6 +6,7 @@ export const TITLES = [
   "Lead Designer",
   "Design Lead",
   "Senior Designer",
+  "Senior Product Designer",
 ] as const
 
 const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)

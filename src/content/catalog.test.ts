@@ -24,7 +24,7 @@ test("profile is Miami and the current role is one employer", () => {
   assert.equal(catalog.places[0]?.name, "Miami, FL")
   const employer = catalog.roles.find((role) => role.employer)
   assert.ok(employer)
-  assert.equal(employer?.title, "Senior Designer")
+  assert.equal(employer?.title, "Senior Product Designer")
   assert.equal(employer?.since, "Jan 2026")
   assert.equal(employer?.end, null)
   assert.deepEqual(employer?.clientIds, ["client:loblaw-pc-health", "client:intuit", "client:rv"])
@@ -63,7 +63,6 @@ test("flagged work is absent from public output", () => {
   assert.equal(published.profile.location, "Miami, FL")
   assert.equal(textIssues(blob).length, 0)
   for (const project of published.projects) assert.ok(wordCount(project.summary) <= 40)
-  for (const role of published.roles) assert.notEqual(role.title, "Product Designer")
 })
 
 test("the employer name is only the switch", () => {
@@ -82,7 +81,6 @@ test("the employer name is only the switch", () => {
     .filter((file) => !file.endsWith(".test.ts"))
     .map((file) => readFileSync(file, "utf8"))
     .join("\n")
-  assert.equal(/product[\s-]*designers?/i.test(tree), false)
   assert.equal(/medell/i.test(tree), false)
   assert.equal(/graduat/i.test(JSON.stringify(loadCatalog())), false)
 })
@@ -95,4 +93,9 @@ test("blocklist matches the python digests", () => {
   assert.equal(parsed.safe, false)
   assert.equal(containsBlocked("Tyler is based in Miami, FL."), false)
   assert.equal(containsBlocked("Design Lead at Overmatch AI"), false)
+})
+
+test("the voice guide's hype words are flagged", () => {
+  assert.deepEqual(textIssues("A revolutionary, game-changing launch."), ["hype"])
+  assert.deepEqual(textIssues("Good design starts by living inside the problem."), [])
 })
