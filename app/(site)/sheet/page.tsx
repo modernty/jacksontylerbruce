@@ -16,23 +16,25 @@ export default async function SheetPage({ searchParams }: { searchParams: Promis
   const copy = sheetAnswer(key, catalog)
   const pills = followUpsFor(key as Intent, [], catalog)
   return (
-    <section className="tlw sheet">
-      <SectionAnchor />
-      <PillSlot pills={pills} />
-      <article className="study">
-        <h1>{copy.title}</h1>
-        <p id="answer">{copy.body}</p>
-        <p className="meta">{copy.facts.join(" · ")}</p>
-        <div className="follow">
-          {pills.map((pill) => (
-            <Link key={pill.href + pill.label} href={pill.href}>{pill.label}</Link>
-          ))}
-        </div>
-        <p className="cta">
-          <Link href={copy.cta.href}>{copy.cta.label}</Link>
-          {key === "availability" ? <a href={catalog.profile.linkedin} target="_blank" rel="noreferrer">LinkedIn →</a> : null}
-        </p>
-      </article>
-    </section>
+    <main>
+      <section className="tlw sheet">
+        <SectionAnchor />
+        <PillSlot pills={pills} />
+        <article className="study">
+          <h1>{copy.title}</h1>
+          <p id="answer">{copy.body}</p>
+          <p className="meta">{copy.facts.join(" · ")}</p>
+          <div className="follow">
+            {pills.map((pill) => (
+              <Link key={pill.href + pill.label} href={pill.href}>{pill.label}</Link>
+            ))}
+          </div>
+          <p className="cta">
+            <Link href={copy.cta.href}>{copy.cta.label}</Link>
+            {key === "availability" ? <a href={catalog.profile.linkedin} target="_blank" rel="noreferrer">LinkedIn →</a> : null}
+          </p>
+        </article>
+      </section>
+    </main>
   )
 }

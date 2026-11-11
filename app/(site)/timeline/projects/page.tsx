@@ -5,5 +5,9 @@ export const metadata = { title: "Projects" }
 
 export default function ProjectsPage() {
   const stage = publicStage()
-  return <AxisStage mode="projects" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
+  return (
+    <main>
+      <AxisStage mode="projects" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
+    </main>
+  )
 }

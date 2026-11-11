@@ -5,5 +5,9 @@ export const metadata = { title: "Timeline" }
 
 export default function TimelinePage() {
   const stage = publicStage()
-  return <AxisStage mode="timeline" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
+  return (
+    <main>
+      <AxisStage mode="timeline" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
+    </main>
+  )
 }

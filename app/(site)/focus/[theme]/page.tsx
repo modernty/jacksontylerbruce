@@ -11,12 +11,14 @@ export default async function FocusPage({ params }: { params: Promise<{ theme: s
   if (!theme) notFound()
   const stage = publicStage()
   return (
-    <AxisStage
-      mode="focus"
-      desktop={stage.desktop}
-      mobile={stage.mobile}
-      cards={stage.cards}
-      annotation={focusAnnotation(theme, catalog)}
-    />
+    <main>
+      <AxisStage
+        mode="focus"
+        desktop={stage.desktop}
+        mobile={stage.mobile}
+        cards={stage.cards}
+        annotation={focusAnnotation(theme, catalog)}
+      />
+    </main>
   )
 }
