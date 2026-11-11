@@ -13,7 +13,7 @@ import { handleAsk, type AskDeps } from "./handle"
 import { hydrate } from "./llm"
 import { handleProjectAsk } from "./project"
 import { keywordRoute, mentionedProjects } from "./keyword"
-import { MAX_CHARS, spendRatio, underLimit } from "./limits"
+import { MAX_CHARS, modelCallsAllowed, spendRatio, underLimit } from "./limits"
 import { matchQa, resolveTokens } from "./qa"
 import { QA } from "@/src/content/qa"
 import { memoryStore, storeFromEnv, type Store } from "./store"
@@ -293,7 +293,7 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
 
   /** An answer from the model, for a question the site has no answer of its own for. */
   const openTurn = async (): Promise<ChatReply | null> => {
-    if ((await spendRatio(now, env, store).catch(() => 0)) >= 1) return null
+    if (!modelCallsAllowed(env) || (await spendRatio(now, env, store).catch(() => 0)) >= 1) return null
     const out = await converse(q, history, { client: deps.open, onStatus: deps.onStatus, env })
     if (!out) return null
     // The model saw a question about the work after all: show the site's own view.

@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import { keywordRoute } from "./keyword"
 import { handleAsk } from "./handle"
-import { BURST_LIMIT, DAY_LIMIT, DAY_MS, MAX_TOKENS, TEN_MIN_MS, costUsd, recordSpend, spendRatio, underLimit } from "./limits"
+import { BURST_LIMIT, DAY_LIMIT, DAY_MS, MAX_TOKENS, TEN_MIN_MS, costUsd, modelCallsAllowed, recordSpend, spendRatio, underLimit } from "./limits"
 import { MemoryStore, createRestStore, memoryStore, storeFromEnv, withFallback } from "./store"
 
 test("burst limit is 10 per 10 minutes and 50 per day", async () => {
@@ -129,4 +129,60 @@ test("a failing shared store falls back to memory for limits and spend", async (
   assert.equal(await spendRatio(1, { DAILY_USD_CAP: "1" }, store), 0.5)
   const limited = await handleAsk({ q: "Where are you based?", sessionId: "s" }, { ip: "fb", now: 3 }, { store })
   assert.equal(limited.status, 429)
+})
+
+test("model calls fail closed without a valid daily spend cap", async () => {
+  assert.equal(modelCallsAllowed({}), false)
+  assert.equal(modelCallsAllowed({ DAILY_USD_CAP: "" }), false)
+  assert.equal(modelCallsAllowed({ DAILY_USD_CAP: "0" }), false)
+  assert.equal(modelCallsAllowed({ DAILY_USD_CAP: "-1" }), false)
+  assert.equal(modelCallsAllowed({ DAILY_USD_CAP: "nope" }), false)
+  assert.equal(modelCallsAllowed({ DAILY_USD_CAP: "5" }), true)
+  let called = false
+  const result = await handleAsk(
+    { q: "What is the capital of France?", sessionId: "s" },
+    { ip: "nocap", now: 11_000 },
+    { store: new MemoryStore(), env: { NODE_ENV: "test" }, routeModel: async () => { called = true; return keywordRoute("What is the capital of France?") } },
+  )
+  assert.equal(called, false)
+  assert.equal((result.body as { source: string }).source, "keyword")
+})
+
+test("model calls fail closed on Vercel without a shared store", async () => {
+  const cap = { DAILY_USD_CAP: "5" }
+  assert.equal(modelCallsAllowed({ ...cap, VERCEL_ENV: "preview" }), false)
+  assert.equal(modelCallsAllowed({ ...cap, VERCEL_ENV: "production" }), false)
+  assert.equal(modelCallsAllowed({ ...cap, VERCEL_ENV: "preview", UPSTASH_REDIS_REST_URL: "https://r.example", UPSTASH_REDIS_REST_TOKEN: "t" }), true)
+  assert.equal(modelCallsAllowed({ ...cap, VERCEL_ENV: "preview", KV_REST_API_URL: "https://r.example", KV_REST_API_TOKEN: "t" }), true)
+  // Local dev still allows the in-memory store when the cap is set.
+  assert.equal(modelCallsAllowed({ ...cap, NODE_ENV: "test" }), true)
+
+  let called = false
+  const blocked = await handleAsk(
+    { q: "What is the capital of France?", sessionId: "s" },
+    { ip: "nostore", now: 12_000 },
+    {
+      store: new MemoryStore(),
+      env: { NODE_ENV: "test", DAILY_USD_CAP: "5", VERCEL_ENV: "preview" },
+      routeModel: async () => { called = true; return keywordRoute("What is the capital of France?") },
+    },
+  )
+  assert.equal(called, false)
+  assert.equal((blocked.body as { source: string }).source, "keyword")
+
+  called = false
+  const allowed = await handleAsk(
+    { q: "What is the capital of France?", sessionId: "s" },
+    { ip: "withstore", now: 13_000 },
+    {
+      store: new MemoryStore(),
+      env: { NODE_ENV: "test", DAILY_USD_CAP: "5", VERCEL_ENV: "preview", UPSTASH_REDIS_REST_URL: "https://r.example", UPSTASH_REDIS_REST_TOKEN: "t" },
+      routeModel: async () => {
+        called = true
+        return { ...keywordRoute("What is the capital of France?"), source: "model" }
+      },
+    },
+  )
+  assert.equal(called, true)
+  assert.equal((allowed.body as { source: string }).source, "model")
 })

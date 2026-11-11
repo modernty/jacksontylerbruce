@@ -5,7 +5,7 @@ import { sheetAnswer, followUpsFor } from "@/src/content/answers"
 import { containsBlocked } from "@/src/content/guard"
 import { keywordRoute, withQuestion } from "./keyword"
 import { modelRoute, type ModelCaller } from "./llm"
-import { MAX_CHARS, spendRatio, underLimit } from "./limits"
+import { MAX_CHARS, modelCallsAllowed, spendRatio, underLimit } from "./limits"
 import { memoryStore, storeFromEnv, type Store } from "./store"
 import type { ViewSpec } from "./types"
 
@@ -65,7 +65,7 @@ export async function handleAsk(raw: unknown, ctx: { ip: string; now?: number },
   // Rules first: a confident match answers without the model, which is faster and free. The model
   // takes what the rules can't place, and can't overrule a match by calling it off topic.
   const confident = routed.intent !== "off_topic" && routed.confidence >= 0.9
-  if (caller && !confident && (await spendRatio(now, env, store).catch(() => 0)) < 1) {
+  if (caller && !confident && modelCallsAllowed(env) && (await spendRatio(now, env, store).catch(() => 0)) < 1) {
     const ruled = routed
     try {
       const modelled = await caller(question, context)

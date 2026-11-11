@@ -7,7 +7,7 @@ import { publishCatalog } from "@/src/content/publish"
 import type { Project, Section } from "@/src/content/schema"
 import { annotationAllowed, factBlob } from "./check"
 import { routeQuestion, type Go } from "./navigate"
-import { ASK_TIMEOUT_MS, DEFAULT_MODEL, MAX_CHARS, costUsd, recordSpend, spendRatio, thinkingOff, underLimit } from "./limits"
+import { ASK_TIMEOUT_MS, DEFAULT_MODEL, MAX_CHARS, costUsd, modelCallsAllowed, recordSpend, spendRatio, thinkingOff, underLimit } from "./limits"
 import { memoryStore, storeFromEnv, type Store } from "./store"
 
 /** One reply in a project conversation. sectionId names the section it was drawn from. */
@@ -139,7 +139,7 @@ export async function handleProjectAsk(raw: unknown, ctx: { ip: string }, deps: 
   const route = routeQuestion(question, catalog, { page: "project", slug })
   if (route) return { status: 200, body: { ...route, sectionId: null, source: "route" } }
   const env = deps.env ?? process.env
-  const underCap = env.ANTHROPIC_API_KEY ? (await spendRatio(now, env, store).catch(() => 0)) < 1 : false
+  const underCap = env.ANTHROPIC_API_KEY && modelCallsAllowed(env) ? (await spendRatio(now, env, store).catch(() => 0)) < 1 : false
   const model = deps.model !== undefined ? deps.model : underCap ? claude : null
   return { status: 200, body: await answerProject(project, question, model) }
 }

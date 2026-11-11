@@ -27,6 +27,31 @@ export function thinkingOff(model: string): { type: "disabled" } {
 }
 const MICROS = 1_000_000
 
+/** True when Upstash or Vercel KV REST credentials are present. */
+export function hasSharedStore(env: Env = process.env): boolean {
+  const url = env.UPSTASH_REDIS_REST_URL || env.KV_REST_API_URL
+  const token = env.UPSTASH_REDIS_REST_TOKEN || env.KV_REST_API_TOKEN
+  return Boolean(url && token)
+}
+
+/** A positive daily spend cap is required before the model can be called. */
+export function dailyCapUsd(env: Env = process.env): number | null {
+  const cap = Number(env.DAILY_USD_CAP)
+  if (!Number.isFinite(cap) || cap <= 0) return null
+  return cap
+}
+
+/**
+ * Model calls fail closed when the spend cap is missing or invalid, and when the
+ * app is deployed (VERCEL_ENV is set) without a shared Upstash or KV store.
+ * Local dev and tests keep the in-memory store.
+ */
+export function modelCallsAllowed(env: Env = process.env): boolean {
+  if (dailyCapUsd(env) == null) return false
+  if (env.VERCEL_ENV && !hasSharedStore(env)) return false
+  return true
+}
+
 function bucket(ip: string, now: number, size: number, name: string): string {
   return `${name}:${ip}:${Math.floor(now / size)}`
 }

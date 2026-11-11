@@ -46,9 +46,17 @@ Without `ANTHROPIC_API_KEY`, every answer comes from the keyword routes and the 
 | Variable | Purpose |
 |---|---|
 | `ANTHROPIC_API_KEY` | Enables model answers. Server-side only |
-| `ANTHROPIC_MODEL` | Overrides the default model |
+| `ANTHROPIC_MODEL` | Overrides the default routing model |
+| `ANTHROPIC_GENERAL_MODEL` | Overrides the model used for open conversation |
+| `DAILY_USD_CAP` | Required for model calls. A missing, zero, or invalid value fails closed to the keyword routes |
+| `UPSTASH_REDIS_REST_URL` | Shared store for rate limits and the spend cap. Required with its token on Vercel |
+| `UPSTASH_REDIS_REST_TOKEN` | Token for the Upstash REST store |
+| `KV_REST_API_URL` | Alternative shared store (Vercel KV). Used if the Upstash URL is unset |
+| `KV_REST_API_TOKEN` | Token for the Vercel KV REST store |
 | `NEXT_PUBLIC_FONT_BASE_URL` | Private host for `aeonikpro-regular.otf`, `-medium.otf` and `-semibold.otf`. Without it, the fallback font is used |
 | `EMPLOYER_PUBLIC_NAME` | The public name of the current employer |
+
+On Vercel (`VERCEL_ENV` is set), model calls also fail closed unless `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, or `KV_REST_API_URL` and `KV_REST_API_TOKEN`, are set. Local dev and tests can use the in-memory store.
 
 Aeonik Pro is licensed and must never be committed. `npm run fonts` checks this.
 

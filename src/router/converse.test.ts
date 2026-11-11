@@ -10,7 +10,7 @@ const says = (text: string, sources: { title: string; url: string }[] = []): Ope
   return { text, sources }
 }
 const chat = (q: string, history: PastTurn[], open: OpenClient | null, extra: { store?: MemoryStore; statuses?: string[]; env?: NodeJS.ProcessEnv } = {}) =>
-  handleChatAsk({ q, sessionId: "s", history }, { ip: "1" }, { store: extra.store ?? new MemoryStore(), env: extra.env ?? { NODE_ENV: "test" }, open, onStatus: (status) => extra.statuses?.push(status) })
+  handleChatAsk({ q, sessionId: "s", history }, { ip: "1" }, { store: extra.store ?? new MemoryStore(), env: extra.env ?? { NODE_ENV: "test", DAILY_USD_CAP: "5" }, open, onStatus: (status) => extra.statuses?.push(status) })
 
 test("a follow-up leans on the last answer and names nothing on the site", () => {
   for (const q of ["Who is this person?", "Like what kind of soy sauce bottle?", "Why?", "Tell me more", "Who is Rem Koolhaas?", "what is that"]) assert.equal(isFollowUp(q), true, q)
@@ -86,6 +86,11 @@ test("with no key, an error, the cap reached or a blocked answer, the site says 
   const capped = await chat("What is the capital of France?", [], client, { store, env: { NODE_ENV: "test", DAILY_USD_CAP: "1" } })
   assert.deepEqual(capped.body, { answer: OUTSIDE, contact: true })
   assert.equal(called, false)
+  // A missing cap also fails closed.
+  called = false
+  const uncapped = await chat("What is the capital of France?", [], client, { env: { NODE_ENV: "test" } })
+  assert.deepEqual(uncapped.body, { answer: OUTSIDE, contact: true })
+  assert.equal(called, false)
 })
 
 test("when the model asks for a site view, the reply is the site's own", async () => {
@@ -128,7 +133,7 @@ test("a loosely worded Q&A question gets the authored answer by key, and is kept
   const store = new MemoryStore()
   const { hydrate } = await import("./llm")
   const routeModel = async (question: string) => hydrate({ qaKey: "favorite-studios", intent: "about", focusIds: [], filter: "sheet", annotation: "x", followUps: ["a", "b", "c"] }, question)
-  const reply = await handleChatAsk({ q: "whos his fav designers", sessionId: "s" }, { ip: "1" }, { store, env: { NODE_ENV: "test" }, routeModel, open: null })
+  const reply = await handleChatAsk({ q: "whos his fav designers", sessionId: "s" }, { ip: "1" }, { store, env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, routeModel, open: null })
   assert.ok("answer" in reply.body)
   assert.match(reply.body.answer, /^Rem Koolhaas, SANAA/)
   assert.deepEqual((await readMisses(store)).map((miss) => miss.how), ["qa-fuzzy:favorite-studios"])
