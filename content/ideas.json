@@ -1,0 +1,200 @@
+[
+  {
+    "id": "idea:explainability",
+    "notionId": "4062280f-d03d-8100-b570-df9d6831e67f",
+    "type": "idea",
+    "slug": "explainability",
+    "name": "Explainability",
+    "note": "Rationale at every level (Talent Management).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:creator-economy",
+    "notionId": "4062280f-d03d-810e-b670-f2ba493be002",
+    "type": "idea",
+    "slug": "creator-economy",
+    "name": "Creator economy",
+    "note": "Tips, subscriptions, ticketed events (Chatter).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:progressive-disclosure",
+    "notionId": "4062280f-d03d-8114-8113-ed3401bd7681",
+    "type": "idea",
+    "slug": "progressive-disclosure",
+    "name": "Progressive disclosure",
+    "note": "Gates before forms (Novart).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:digital-humans",
+    "notionId": "4062280f-d03d-8126-b781-eba5784c6e5f",
+    "type": "idea",
+    "slug": "digital-humans",
+    "name": "Digital humans",
+    "note": "AI as a guide or chief of staff (Ruth, Cora).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:architecture-space",
+    "notionId": "4062280f-d03d-8127-b0f9-d9cff966e16f",
+    "type": "idea",
+    "slug": "architecture-space",
+    "name": "Architecture-first space",
+    "note": "B.Arch thinking applied to products and installations.",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:consent",
+    "notionId": "4062280f-d03d-8135-9157-cb3047602ced",
+    "type": "idea",
+    "slug": "consent",
+    "name": "Consent and data trust",
+    "note": "The user knows where their data goes (Loblaw onboarding/consent).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:multimodal",
+    "notionId": "4062280f-d03d-8153-b542-c0fa79c653ee",
+    "type": "idea",
+    "slug": "multimodal",
+    "name": "Multimodal interfaces",
+    "note": "Video wall, touch table, voice (CoreLogic).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:legible-ai",
+    "notionId": "4062280f-d03d-8170-9f2c-c76821e541f1",
+    "type": "idea",
+    "slug": "legible-ai",
+    "name": "Making AI legible",
+    "note": "Make invisible intelligence visible and understandable (Model Playground copy).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:systems-scale",
+    "notionId": "4062280f-d03d-8178-93bb-c01860d23174",
+    "type": "idea",
+    "slug": "systems-scale",
+    "name": "Design systems at scale",
+    "note": "One shared system across demos and deployments.",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:flexible-architecture",
+    "notionId": "4062280f-d03d-819c-8992-ed5b67b7aca2",
+    "type": "idea",
+    "slug": "flexible-architecture",
+    "name": "Flexible architecture",
+    "note": "The product reshapes to requested inputs and outputs (Model Playground).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:empowerment",
+    "notionId": "4062280f-d03d-81ae-8427-d9a41286f487",
+    "type": "idea",
+    "slug": "empowerment",
+    "name": "Design as empowerment",
+    "note": "Access for BIPOC creatives (Hue+Man).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:community",
+    "notionId": "4062280f-d03d-81b0-ac3c-cd09914e41db",
+    "type": "idea",
+    "slug": "community",
+    "name": "Community over feed",
+    "note": "Group-first, live presence (Chatter).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:dynamic-objective-specific-plans",
+    "notionId": null,
+    "type": "idea",
+    "slug": "dynamic-objective-specific-plans",
+    "name": "Dynamic objective-specific plans",
+    "note": "Plans that reshape around the objective.",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:agentic-trust",
+    "notionId": "4062280f-d03d-81b4-9afa-fea059c1bb49",
+    "type": "idea",
+    "slug": "agentic-trust",
+    "name": "Trust and verifiable reasoning",
+    "note": "Users trust outputs they can trace (ATLS work).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:complexity",
+    "notionId": "4062280f-d03d-81bd-be11-f041b743c248",
+    "type": "idea",
+    "slug": "complexity",
+    "name": "Complexity without collapse",
+    "note": "Dense financial systems made usable (Jet, Urvin).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:human-judgment",
+    "notionId": "4062280f-d03d-81d5-b9d6-e920d7601ccf",
+    "type": "idea",
+    "slug": "human-judgment",
+    "name": "Human judgment amplified",
+    "note": "Speed without giving up decision ownership.",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:restraint",
+    "notionId": "4062280f-d03d-81d6-a6c6-d0a20aa152f1",
+    "type": "idea",
+    "slug": "restraint",
+    "name": "Restraint as signal",
+    "note": "Substance over spectacle (Lazarus brand).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  },
+  {
+    "id": "idea:continuity",
+    "notionId": "4062280f-d03d-81fb-a362-cc011fe3344a",
+    "type": "idea",
+    "slug": "continuity",
+    "name": "Cognitive continuity",
+    "note": "Field to desk, phone to desktop (Whitelist).",
+    "status": "Candidate",
+    "visible": true,
+    "confidential": false
+  }
+]

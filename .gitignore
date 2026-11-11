@@ -4,3 +4,17 @@ node_modules/
 .vscode/
 .idea/
 .claude/settings.local.json
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+data/engine/models/
+.next/
+*.tsbuildinfo
+.env
+.env.*
+*.otf
+*.woff
+*.woff2
+!fonts/courier-prime-regular.woff2
+design/source/resume-timeline.svg

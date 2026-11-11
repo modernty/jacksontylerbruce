@@ -1,0 +1,496 @@
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em;-webkit-font-smoothing:antialiased}
+svg,svg text{font-family:var(--sans)}
+.top{position:absolute;top:40px;left:120px;right:120px;display:flex;justify-content:space-between;text-transform:uppercase}
+.top span:last-child{opacity:.72}
+.hero::before{content:"";position:absolute;left:0;right:0;top:-40px;bottom:-60px;background:linear-gradient(color-mix(in srgb,var(--paper) 0%,transparent),var(--paper) 40px);z-index:-1}
+.hero{position:fixed;left:0;right:0;bottom:calc(32px + env(safe-area-inset-bottom));padding:0 24px;text-align:center;z-index:10;pointer-events:none}
+.hero .in{pointer-events:auto}
+.in{max-width:640px;margin:0 auto}
+h1, .hero h1{font-family:var(--sans);font-weight:400;font-size:var(--fs-header);letter-spacing:-.01em;line-height:1.2}
+.shell{text-align:left;margin-top:14px;box-shadow:0 10px 40px var(--ink-shadow);border:1px solid var(--ink-hair);border-radius:20px;padding:8px 8px 8px 18px;display:flex;flex-direction:row;align-items:center;gap:6px;background:var(--surface);border-radius:999px}
+form.shell{font:inherit;color:inherit}
+.input{flex:1;padding:6px 0;border:0;outline:0;resize:none;background:transparent;color:var(--ink);line-height:24px;height:36px;max-height:156px;overflow-y:hidden;display:block;font-family:var(--sans);font-weight:400;font-size:var(--fs-body);letter-spacing:0}
+.g{display:flex;gap:4px;align-items:center}
+.ib{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:0;background:transparent;padding:0;color:inherit}
+.ib:hover{background:var(--ink-hover)}
+.send{background:var(--ink);opacity:.28}
+.cards{margin-top:12px;display:flex;gap:24px;justify-content:center}
+.cards a{white-space:nowrap;opacity:.72;padding-bottom:3px;border-bottom:1px solid var(--ink-hair);color:inherit;text-decoration:none;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em}
+.tlw{box-sizing:border-box;height:100vh;padding:56px 24px 104px;max-width:1168px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
+.m{display:none}
+/* Below 768px (tablets in portrait, phones) the vertical timeline takes over from the horizontal graph. */
+@media(max-width:768px){
+  .d{display:none}
+  .tlw{height:auto;display:block;padding:96px 0 calc(200px + env(safe-area-inset-bottom));max-width:330px}
+  .m{display:block}
+}
+@media(max-width:600px){
+  .top{left:24px;right:24px;top:24px}
+  .top span:last-child{display:none}
+  .hero{padding:0 16px}
+  .cards{justify-content:flex-start;overflow-x:auto;gap:18px;padding-bottom:2px;scrollbar-width:none}
+  .tlw{padding-top:72px}
+}
+.mode{opacity:0;transform:translateY(8px);transition:opacity var(--motion-slow) var(--motion-ease),transform var(--motion-slow) var(--motion-ease);pointer-events:none}
+.mode.on{opacity:1;transform:none;pointer-events:auto}
+.d{position:relative}
+.pj{cursor:pointer;outline:none}
+.pj .w6,.co .w4{opacity:0}
+.pj .w4{opacity:.7}
+.pj text,.co text{transition:opacity var(--motion-base) var(--motion-ease-move)}
+.pv .pj .w4{opacity:.85}
+.m.mf .yr,.m.mf .nowl,.m.mf .nowl+text{display:none}
+.pv .pj.act .w4{opacity:1}
+.co text{transition:opacity var(--motion-base) var(--motion-ease-move)}
+.pv .co .w6{opacity:.5}
+.pj:focus-visible .w4{text-decoration:underline}
+/* The graph and the card share the space above the chat bar: the card's slot takes the room between
+   the graph and the chat bar and centres the card in it. The card hugs its content, and the slot
+   keeps the tallest card's height, so hovering never shifts the graph. */
+@media(min-width:769px){
+  .d{flex:1;display:flex;flex-direction:column;min-height:0}
+  .d::before{content:"";flex:1}
+  /* The graph scales with the window; its viewBox keeps the proportions. */
+  .d svg{display:block;width:100%;height:auto}
+}
+.card-slot{flex:1;display:flex;align-items:center;justify-content:center;width:min(540px,100%);min-height:162px;margin:0 auto}
+.pjn{cursor:pointer;outline:none}
+.mpn{cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.mpn:active,.mpn:focus-visible{text-decoration:underline}
+.chev{fill:none;stroke:var(--ink);stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.pjn.act,.pjn:focus-visible{text-decoration:underline}
+.card{box-sizing:border-box;width:100%;padding:16px;border-radius:16px;transform:translateY(4px);background:color-mix(in srgb,var(--ink) 5%,var(--paper));font-family:var(--sans);letter-spacing:0;color:var(--ink);opacity:0;transition:opacity var(--motion-base) var(--motion-ease),transform var(--motion-base) var(--motion-ease);pointer-events:none}
+.card.on{opacity:1;transform:none}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.card h3{font-weight:var(--fw-medium);font-size:var(--fs-body);line-height:22px}
+.card .when{font-size:var(--fs-body);line-height:22px;white-space:nowrap}
+.card .fo{font-size:var(--fs-body);line-height:22px;margin-top:0}
+.card .sm{font-size:var(--fs-text);line-height:24px;margin-top:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* Reduced motion keeps state changes visible, as quick fades that run once. Nothing loops or travels. */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:150ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:150ms!important;transition-delay:0ms!important;scroll-behavior:auto!important}}
+.pr,.bl,.nowl{transform-box:fill-box}
+html.pre .hero h1,html.pre .shell,html.pre .cards{opacity:0}
+html.pre .mode.on .rp,html.pre .mode.on .tk,html.pre .mode.on .pj,html.pre .yr,html.pre .nowl,html.pre .nowt,html.pre .bl,html.pre .mpj{opacity:0}
+.input::placeholder{color:var(--ink-placeholder)}
+.shell{transition:border-radius var(--motion-base) var(--motion-ease)}
+.shell.stack{flex-direction:column;align-items:stretch;border-radius:20px;padding:12px 10px 8px 18px}
+.shell.stack .input{height:auto;flex:none}
+.input{color:var(--ink)!important}
+.shell.has .send{opacity:1}
+.shell.stack .g{align-self:flex-end}
+.note{font-family:var(--sans);font-size:var(--fs-small);letter-spacing:0;text-align:center;opacity:.7;margin:-8px auto 18px;max-width:640px;line-height:1.4}
+.study{max-width:640px;margin:0 auto;padding:0 24px;font-family:var(--sans);letter-spacing:0}
+.study h1{font-weight:400;font-size:var(--fs-header);letter-spacing:-.01em;line-height:1.2;text-align:left}
+.study .meta,.study .themes{font-size:var(--fs-small);opacity:.72;margin-top:8px;font-family:var(--sans);letter-spacing:0}
+.study .themes{opacity:.85}
+.study section{margin-top:22px}
+.study h2{font-weight:600;font-size:var(--fs-text);font-family:var(--sans);letter-spacing:0;scroll-margin-top:96px}
+.study h2.anchored,#answer.anchored{background:var(--ink-wash);box-shadow:inset 0 -1px 0 var(--ink)}
+.study p{font-size:var(--fs-body);line-height:1.5;margin-top:8px;font-family:var(--sans);letter-spacing:0}
+.study .cta{display:flex;gap:24px;margin-top:28px}
+.study .cta a{color:var(--ink);font-size:var(--fs-small);font-weight:600;text-decoration:none;font-family:var(--sans);letter-spacing:0}
+.follow{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px}
+.follow a{font-family:var(--mono);font-weight:400;font-size:var(--fs-micro);letter-spacing:.06em;opacity:.72;border-bottom:1px solid var(--ink-hair);padding-bottom:3px;color:inherit;text-decoration:none}
+body:has(.sheet) .cards{display:none}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top-work{position:fixed;z-index:3;top:40px;left:36px;right:36px;text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:var(--fs-text)}
+.top-work a{color:var(--ink);text-decoration:none}
+.top-work em{font-style:italic}
+.top-work .place,.top-work span:last-child{opacity:1}
+.top-work .place{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.work{--col:min(540px,calc(100vw - 32px));padding:37vh 16px calc(200px + env(safe-area-inset-bottom));font-family:var(--sans);letter-spacing:0}
+.column{width:var(--col);margin:0 auto}
+.column-head{position:sticky;top:80px;z-index:2;background:var(--paper);padding-bottom:4px}
+.column-head::before{content:"";position:absolute;left:-16px;right:-16px;bottom:100%;height:80px;background:var(--paper)}
+.column-head::after{content:"";position:absolute;left:0;right:0;top:100%;height:24px;background:linear-gradient(var(--paper),color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
+:is(.column,.info) .stream p+p{margin-top:12px}
+.after{opacity:0;pointer-events:none;transition:opacity var(--motion-page) var(--motion-ease)}
+.after.on{opacity:1;pointer-events:auto}
+:is(.column,.info) h1{font-weight:var(--fw-medium);font-size:var(--fs-header);letter-spacing:var(--track-header);line-height:1.2;text-align:left}
+:is(.column,.info) .links{display:flex;flex-wrap:wrap;gap:4px 28px;margin-top:20px;font-size:var(--fs-small);font-style:italic}
+:is(.column,.info) .links a{color:var(--ink);text-decoration:none}
+:is(.column,.info) .links a:hover{text-decoration:underline;text-underline-offset:3px}
+:is(.column,.info) .lead{margin-top:20px}
+.work [id]{scroll-margin-top:168px}
+:is(.column,.info) p{font-size:var(--fs-text);line-height:24px}
+:is(.column,.info) p+p{margin-top:12px}
+/* Under the intro: More info opens the facts and sections in place; Open gallery brings the images in beside the chat. */
+.work-actions{display:flex;justify-content:flex-start;align-items:center;gap:28px;margin-top:28px}
+/* Text buttons: no side padding, so the first label lines up with the paragraph above. */
+.work-actions .btn.ghost{padding-left:0;padding-right:0}
+/* Icons stay put on hover; only the More info chevron turns over when open. */
+.work-actions .btn.with-icon svg,.work-actions .btn.with-icon:hover svg{transform:none;transition:transform var(--motion-base) var(--motion-ease)}
+.work-actions .btn.more-toggle[aria-expanded=true] svg,.work-actions .btn.more-toggle[aria-expanded=true]:hover svg{transform:rotate(180deg)}
+.more>summary{display:none}
+.facts{margin-top:36px}
+.facts .meta{font-size:var(--fs-small);opacity:.6}
+.facts .themes{margin-top:4px;font-size:var(--fs-small)}
+.accordions{margin-top:24px;border-bottom:1px solid var(--ink-rule)}
+.accordions details{border-top:1px solid var(--ink-rule)}
+.accordions summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;font-weight:var(--fw-semibold);font-size:var(--fs-card-title)}
+.accordions summary::-webkit-details-marker{display:none}
+.accordions summary::after{content:"+";font-family:var(--mono);font-weight:400;font-size:var(--fs-label);opacity:.45;transition:transform var(--motion-base) var(--motion-ease)}
+.accordions details[open] summary::after{transform:rotate(45deg)}
+.accordions summary:hover::after{opacity:1}
+.accordions details.anchored summary{box-shadow:inset 2px 0 0 var(--ink);padding-left:10px}
+.panel{padding:0 0 18px}
+.items{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-direction:column;gap:6px}
+.panel p+.items{margin-top:12px}
+.items li{display:flex;flex-direction:column;gap:2px;font-size:var(--fs-small)}
+.items li+li:has(.item-note){margin-top:6px}
+.items .item-note{font-size:var(--fs-card-body);opacity:.6}
+.items a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink-hair)}
+.items a:hover{border-color:var(--ink)}
+.media{display:flex;flex-direction:column;gap:32px;margin-top:40px}
+.media .frame{margin:0}
+/* On desktop no project image is taller than half the screen; it keeps its shape rather than stretching. */
+@media(min-width:769px){
+  .media .frame img{width:100%;height:auto;max-height:50vh;object-fit:contain;background:none}
+  .media .frame .grain{max-height:50vh}
+}
+.frame img{display:block;width:100%;height:auto;background:var(--ink-wash)}
+.frame figcaption{display:flex;justify-content:space-between;gap:16px;margin-top:8px;font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;opacity:.45}
+:is(.column,.info) .cta{margin-top:32px;font-size:var(--fs-small)}
+:is(.column,.info) .cta a{color:var(--ink);text-decoration:none}
+.chat{display:flex;flex-direction:column;gap:40px;margin-top:48px;padding-top:32px;border-top:1px solid var(--ink-rule)}
+.chat>div{scroll-margin-bottom:180px}
+.chat [data-slot=message-pair]>div>div:first-child{min-height:0}
+.top-work span.right{display:flex;gap:28px;align-items:center}
+/* The disclaimer, small, at the very bottom of every page, under the composer. */
+.disclaimer{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom));z-index:11;margin:0;padding:0 16px;text-align:center;font-family:var(--sans);font-size:var(--fs-micro);line-height:16px;letter-spacing:0;color:var(--ink);opacity:.5;pointer-events:none}
+/* On the empty conversation, Contact sits inside the composer instead. */
+body:has(.conv-empty) .top-work .mail-link{display:none}
+.top-work span.contact{display:flex;gap:20px;align-items:center}
+/* Email, LinkedIn and the globe (About) as icons; the label is for screen readers and the tooltip. */
+.top-work .icon-link{display:inline-flex;color:var(--ink);opacity:.72;transition:opacity var(--motion-quick) var(--motion-ease)}
+.top-work .icon-link:hover,.top-work .icon-link:focus-visible{opacity:1}
+.boring{all:unset;cursor:pointer;color:var(--ink);font:inherit}
+.boring:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.boring:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+html[data-view=boring] .hero-work{display:none}
+.work:has(.split){padding:120px 36px 96px}
+.split{display:grid;grid-template-columns:minmax(300px,5fr) 7fr;gap:72px;max-width:1344px;margin:0 auto;align-items:start}
+.split .info{position:sticky;top:120px}
+.split .column-head{position:static;background:none;padding:0}
+.split .column-head::before,.split .column-head::after{display:none}
+.split .facts{margin-top:28px}
+/* The gallery column: each image centred in it, with plenty of paper between them. */
+.split .media{margin-top:0;gap:120px}
+.split .media .frame figcaption{justify-content:center;margin-top:16px}
+.hero-work{bottom:calc(48px + env(safe-area-inset-bottom))}
+.hero-work .in{max-width:min(540px,calc(100vw - 32px))}
+.hero-work .shell{margin-top:0;box-shadow:none;border-color:var(--ink);background:var(--paper);min-height:56px;padding-left:20px}
+.hero-work .shell .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hero-work .shell .row .g{margin-left:auto}
+/* Tall: the empty conversation, or a note to Tyler. Text on top, actions along the bottom. */
+.hero-work .shell.tall{min-height:112px;padding:14px 10px 10px 20px;border-radius:16px;flex-direction:column;align-items:stretch;justify-content:space-between}
+.hero-work .shell.tall .input{flex:none;height:auto}
+/* Contact: a ghost button in the composer that turns it into a note, sent from the visitor's own mail app. */
+.email-pill{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 4px;color:var(--ink);opacity:.72;font-family:var(--sans);font-size:var(--fs-small);letter-spacing:0;line-height:1;white-space:nowrap;transition:opacity var(--motion-quick) var(--motion-ease)}
+.email-pill:hover{opacity:1}
+/* Composing: outlined and at full ink, with the × to close it. */
+.email-pill.on{opacity:1;padding:0 12px;border:1px solid var(--ink);border-radius:var(--radius-pill)}
+.email-pill:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.hero-work .input{font-size:var(--fs-body)}
+.hero-work .input::placeholder{color:var(--ink)}
+.hero-work .voice{display:none}
+.hero-work .send{transition:opacity var(--motion-base) var(--motion-ease)}
+/* About is exactly one screen tall: the globe fits inside it, and a long conversation scrolls in its own column. */
+.about{--dock:min(440px,36vw);box-sizing:border-box;height:100svh;overflow:hidden;display:flex;flex-direction:column;padding:120px 36px calc(200px + env(safe-area-inset-bottom));font-family:var(--sans);letter-spacing:0}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center}
+.stage-chat{width:min(540px,100%)}
+.stage-chat .chat{margin-top:0;padding-top:0;border-top:0}
+.stage-chat .conv-tools{margin-top:0}
+/* About, before the first question: prompts under the composer, which rises to make room. */
+.about-prompts{position:fixed;z-index:11;left:50%;transform:translateX(-50%);bottom:calc(44px + env(safe-area-inset-bottom));width:min(540px,calc(100vw - 32px));margin:0}
+body:has(.about-prompts) .hero-work{bottom:calc(44px + var(--prompts-h,48px) + 16px + env(safe-area-inset-bottom))}
+body:has(.about-prompts) .about{padding-bottom:calc(var(--prompts-h,48px) + 168px + env(safe-area-inset-bottom))}
+.stage-view{width:100%;max-width:1120px;margin-top:16px}
+/* Same height and centring docked or not, so docking only moves the globe sideways. */
+.stage .stage-view{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;margin-top:0}
+/* Docked, chat and globe sit as one centred pair, the same width as the chat page's chat and preview. */
+.stage.docked{width:min(1056px,100%);margin:0 auto;display:grid;grid-template-columns:var(--dock) 1fr;grid-template-rows:minmax(0,1fr);gap:96px;align-items:stretch;justify-items:stretch}
+.stage.docked .stage-chat{width:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;text-align:left}
+.stage.docked .stage-chat::-webkit-scrollbar{display:none}
+body:has(.stage.docked) .hero-work{left:max(36px,calc((100vw - min(1056px,calc(100vw - 72px))) / 2));right:auto;width:min(440px,36vw);padding:0}
+body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
+.travel{margin-top:0;width:100%}
+.globe-svg{display:block;width:100%;height:auto;max-height:calc(100svh - 330px);touch-action:none;cursor:grab;user-select:none}
+.globe-svg:active{cursor:grabbing}
+.globe-svg .rim{fill:none;stroke:var(--ink);stroke-width:1;opacity:.165}
+.globe-svg .line{fill:none;stroke:var(--ink);stroke-width:1;opacity:.165}
+.globe-svg .line.back{stroke-dasharray:6 6;opacity:.09}
+.globe-svg .arc{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.3}
+.globe-svg .arc.back{opacity:.1}
+.globe-svg .borders{fill:none;stroke:var(--ink);stroke-width:.6;opacity:0}
+.globe-svg .rim,.globe-svg .line,.globe-svg .borders{transition:opacity var(--motion-page) var(--motion-ease)}
+/* The outline and equator always show at 75% of their hover strength and come up to full on hover.
+   The country borders only appear while the pointer is over the globe, or a finger is on it. */
+.globe-svg.lit .rim,.globe-svg.lit .line{opacity:.22}
+.globe-svg.lit .line.back{opacity:.12}
+.globe-svg.lit .borders{opacity:.16}
+.globe-svg .mark .ring{fill:var(--paper);stroke:var(--ink);stroke-width:1.3}
+.globe-svg .mark .dot,.globe-svg .dot{fill:var(--ink);stroke:none}
+.globe-svg .mark.back{opacity:.18}
+.globe-svg .pulse{fill:none;stroke:var(--ink);stroke-width:1;transform-box:fill-box;transform-origin:center;animation:globe-pulse var(--motion-pulse) var(--motion-ease) infinite}
+@keyframes globe-pulse{from{transform:scale(1);opacity:.5}to{transform:scale(2.4);opacity:0}}
+.globe-svg .leader{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.7}
+.globe-svg .leader-end{fill:var(--ink)}
+.globe-svg .name{fill:var(--ink);font-family:var(--sans);font-weight:var(--fw-medium);font-size:var(--fs-body)}
+.globe-svg .meta{fill:var(--ink);font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+@media(max-width:900px){
+  .about{padding:88px 16px calc(200px + env(safe-area-inset-bottom))}
+  .about{--dock:100%}
+  .stage.docked{display:flex;flex-direction:column;align-items:stretch}
+  .about:has(.stage.docked){height:auto;min-height:100svh;overflow:visible}
+  .stage.docked .stage-chat{overflow:visible}
+  .stage.docked .stage-view{flex:none}
+  body:has(.stage.docked) .hero-work{left:0;right:0;width:auto;padding:0 16px}
+  .globe-svg{max-height:calc(100svh - 300px)}
+  .work:has(.split){padding:88px 16px 64px}
+  .split{grid-template-columns:1fr;gap:40px}
+  .split .info{position:static}
+}
+@media(max-width:600px){
+  .top-work{top:24px;left:16px;right:16px}
+  .top-work span.right{display:flex;gap:20px}
+  .top-work span.contact{gap:20px}
+  /* The project bar also holds the view toggle, so the links wait on the other pages. */
+  .top-work span.contact.on-project{display:none}
+  .work{padding-top:28vh}
+}
+/* Focus is one hairline of ink, offset off the glyphs. Text opacities stay at or above .72 so they clear 4.5:1 on paper. */
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+.pj:focus-visible,.mpn:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+.input:focus-visible{outline:0}
+/* The main conversation. Work replies list project names; picking one moves the chat left and
+   previews the project beside it, or in a bottom sheet on phones. */
+.conversation{--pair:min(1056px,calc(100vw - 72px));--side:min(440px,36vw);min-height:100svh;padding:132px 36px calc(200px + env(safe-area-inset-bottom));font-family:var(--sans);letter-spacing:0}
+.conv-chat{width:min(540px,100%);margin-left:max(0px,calc((100% - min(540px,100%)) / 2));transition:margin-left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+/* New conversation, above the thread: a text button, its icon still on hover. */
+.conv-tools{display:flex;justify-content:center;margin-bottom:24px}
+.conv-tools .btn.ghost{padding-left:0;padding-right:0}
+.conv-tools .btn.with-icon svg,.conv-tools .btn.with-icon:hover svg{transform:none}
+.conv-chat .chat{margin-top:0;padding-top:0;border-top:0}
+/* Paper behind the name bar and tabs, so scrolled messages fade out under them. */
+.conversation::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:120px;background:linear-gradient(var(--paper) 72%,color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
+.conv-empty{padding-top:22vh}
+/* The empty conversation: the composer joins the title and prompts instead of waiting at the bottom. */
+body:has(.conv-empty) .hero-work{top:var(--empty-bottom,60vh);bottom:auto}
+/* Holds the composer's place in the empty state, so the prompts sit under it. */
+.composer-slot{height:var(--composer-h,112px);margin-top:24px}
+.conv-empty .prompts{margin-top:20px}
+body:has(.conv-empty) .hero-work::before{display:none}
+.conv-empty h1{margin:0;font-size:var(--fs-display);line-height:36px;letter-spacing:-.02em;font-weight:var(--fw-medium)}
+@media(max-width:600px){.conv-empty h1{font-size:var(--fs-display-small);line-height:34px}}
+.conv-intro{margin:0 0 20px;font-size:var(--fs-text);line-height:24px}
+/* Starter prompts are pills on the light ink wash, each with a send arrow; they fill the line, then wrap. */
+.prompts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.prompts button{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 16px;border-radius:var(--radius-pill);background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-text);line-height:24px;white-space:nowrap;transition:background var(--motion-quick) var(--motion-ease)}
+.prompts button:hover{background:var(--ink-hover)}
+.prompts button svg{flex:none;opacity:.8}
+.prompts button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* On the timeline the prompts sit on top of the composer until one is picked or a question is sent. */
+.composer-prompts{margin:0 0 12px}
+/* Project names inside a reply: underlined words in the sentence, each one opens its preview. */
+/* Every link inside a message: a dotted underline, solid once it is the one open. */
+.chat-link{all:unset;cursor:pointer;font:inherit;color:var(--ink);text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--ink) 60%,transparent)}
+.chat-link:hover{text-decoration-color:var(--ink)}
+.chat-link[aria-pressed=true]{text-decoration-style:solid;text-decoration-color:var(--ink)}
+.chat-link:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+/* Career, resume style. One size throughout and two styles: role facts in Medium, the summary in Regular. */
+.career{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:28px}
+.career p{margin:0}
+.career-facts{display:flex;flex-direction:column;font-weight:var(--fw-medium)}
+.career .career-summary{margin-top:8px}
+.preview{font-family:var(--sans)}
+.preview .frame{margin:0}
+.preview .frame img{border-radius:4px}
+/* Views an answer can open beside the chat. The timeline is the phone layout, scrolled in place. */
+.preview .travel{width:100%}
+.panel-timeline{width:100%;max-width:520px;height:100%;overflow-y:auto;scrollbar-width:none;margin:0 auto}
+.panel-timeline::-webkit-scrollbar{display:none}
+.panel-timeline svg{display:block;width:100%;height:auto}
+.panel-timeline{max-height:100%}
+/* Graphics in the preview (globe, timeline) take the whole frame. */
+.preview.view-globe .globe-svg{max-height:100%}
+.preview.view-globe .travel,.preview.view-globe .viewer{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.preview .summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+/* Stand-in cover: deep ink falling off to pale blue, with heavy grain, until a project has its own image. */
+.grain{display:block;width:100%;height:auto;aspect-ratio:16/10;border-radius:4px;overflow:hidden}
+.grain .g-deep{stop-color:color-mix(in srgb,color-mix(in srgb,var(--ink) 60%,navy) 60%,black)}
+.grain .g-ink{stop-color:color-mix(in srgb,color-mix(in srgb,var(--ink) 55%,steelblue) 72%,black)}
+.grain .g-mid{stop-color:color-mix(in srgb,steelblue 70%,slategray)}
+.grain .g-light{stop-color:color-mix(in srgb,lightsteelblue 70%,steelblue)}
+.grain .g-pale{stop-color:color-mix(in srgb,lightskyblue 35%,lightsteelblue)}
+.grain .g-noise{mix-blend-mode:overlay;opacity:.85}
+/* Aeonik Pro throughout the panel, two styles: the name in Medium, everything else in Regular. */
+.preview h2{font-family:var(--sans);font-weight:var(--fw-medium);font-size:var(--fs-header);line-height:1.2;margin:20px 0 0}
+.preview .meta{font-family:var(--sans);font-weight:var(--fw-regular);font-size:var(--fs-text);line-height:1.5;opacity:.72;margin:6px 0 0}
+.preview .summary{font-size:var(--fs-text);line-height:1.5;margin:12px 0 0}
+/* Back pinned left, forward pinned right, the way into the full project between them. */
+.preview-actions{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:22px}
+.preview-actions .prev{grid-column:1;justify-self:start}
+.preview-actions .open{grid-column:2}
+.preview-actions .next{grid-column:3;justify-self:end}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;border:1px solid var(--ink);border-radius:var(--radius-pill);padding:10px 16px;font-family:var(--sans);font-size:var(--fs-small);line-height:1;color:var(--ink);transition:background var(--motion-quick) var(--motion-ease)}
+.btn:hover{background:var(--ink-hover)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--ink);opacity:.9}
+/* Tertiary: no border. */
+.btn.ghost{border-color:transparent}
+.btn.ghost:hover{background:none;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+/* Flush with the panel edges they are pinned to. */
+.preview-actions .prev{padding-left:0}
+.preview-actions .next{padding-right:0}
+/* An icon after the label; the diagonal arrow says it opens the full project. */
+.btn.with-icon{display:inline-flex;align-items:center;gap:8px}
+.btn.with-icon svg{transition:transform var(--motion-quick) var(--motion-ease)}
+.btn.with-icon:hover svg,.btn.with-icon:focus-visible svg{transform:translate(2px,-2px)}
+.btn.with-chevron{display:inline-flex;align-items:center;gap:6px}
+.btn.with-chevron svg{transition:transform var(--motion-quick) var(--motion-ease)}
+.btn.prev:hover svg{transform:translateX(-2px)}
+.btn.next:hover svg{transform:translateX(2px)}
+.btn:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+/* Secondary: a tinted surface instead of an outline, the label before the icon. */
+.preview-close{all:unset;cursor:pointer;box-sizing:border-box;position:absolute;top:12px;right:12px;height:32px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;border-radius:var(--radius-pill);background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;z-index:1;transition:background var(--motion-quick) var(--motion-ease)}
+.preview-close:hover{background:var(--ink-rule)}
+.preview-close:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+.sheet-scrim{display:none}
+/* The project gallery: the conversation moves left and the images stack on the right. */
+.work-stage{--pair:min(1056px,calc(100vw - 72px));--side:min(440px,36vw)}
+.work-stage .column{margin-left:max(0px,calc((100% - var(--col)) / 2));transition:margin-left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+.gallery{font-family:var(--sans)}
+.gallery .media{margin-top:0;gap:96px;padding-bottom:24px}
+@keyframes preview-in{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+@media(min-width:769px){
+  /* The chat and the preview sit side by side as one centred pair. */
+  .conv.previewing .conv-chat{margin-left:max(0px,calc((100% - var(--pair)) / 2));width:var(--side)}
+  /* The preview fills the view height: the image takes what is left, the project info sits at the bottom. */
+  .preview{position:fixed;z-index:1;top:132px;right:max(36px,calc((100vw - var(--pair)) / 2));bottom:calc(48px + env(safe-area-inset-bottom));width:calc(var(--pair) - var(--side) - 96px);display:flex;flex-direction:column;overflow:hidden;animation:preview-in var(--motion-page) var(--motion-ease-move) both}
+  /* The image keeps its own shape, no taller than half the screen; the space left over is just paper. */
+  .preview .frame{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+  /* Sized by the frame, never by the file: a cached smaller rendition must not shrink it. Contained and centred. */
+  .preview .frame img{display:block;width:100%;height:100%;max-height:min(100%,50vh);object-fit:contain;background:none;margin:auto}
+  .preview .frame .grain{max-height:min(100%,50vh)}
+  .preview-info{flex:none}
+  .preview-close{top:8px;right:10px}
+  /* The composer is pinned to the chat column and glides with it, so the two never come apart. */
+  body:has(.conv) .hero-work{--col:min(540px,calc(100vw - 72px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+  body:has(.conv) .hero-work .in{max-width:none;margin:0}
+  body:has(.conv.previewing) .hero-work{left:max(36px,calc((100vw - min(1056px,calc(100vw - 72px))) / 2));width:min(440px,36vw)}
+  .work-stage.galleried .column{margin-left:max(0px,calc((100% - var(--pair)) / 2));width:var(--side)}
+  body:has(.work-stage) .hero-work{--col:min(540px,calc(100vw - 32px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+  body:has(.work-stage) .hero-work .in{max-width:none;margin:0}
+  body:has(.work-stage.galleried) .hero-work{left:calc((100vw - min(1056px,calc(100vw - 72px))) / 2);width:min(440px,36vw)}
+  .gallery{position:fixed;z-index:3;top:132px;right:max(36px,calc((100vw - var(--pair)) / 2));bottom:calc(48px + env(safe-area-inset-bottom));width:calc(var(--pair) - var(--side) - 96px);display:flex;flex-direction:column;overflow:hidden;animation:preview-in var(--motion-page) var(--motion-ease-move) both}
+  .gallery-scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+  .gallery-scroll::-webkit-scrollbar{display:none}
+  /* Its own row above the images, and it stays in reach as they scroll. */
+  .gallery .preview-close{position:relative;top:auto;right:auto;flex:none;align-self:flex-end;margin:0 0 20px}
+}
+@media(max-width:768px){
+  .conversation{padding:112px 16px calc(200px + env(safe-area-inset-bottom))}
+  .sheet-scrim{all:unset;display:block;position:fixed;inset:0;z-index:19;background:color-mix(in srgb,var(--ink) 18%,transparent)}
+  .preview{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:84svh;display:flex;flex-direction:column;overflow:hidden;background:var(--paper);border-radius:20px 20px 0 0;box-shadow:0 -10px 40px var(--ink-shadow);padding:16px 16px calc(24px + env(safe-area-inset-bottom));animation:sheet-up var(--motion-page) var(--motion-ease-move) both}
+  .preview::before{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--ink-rule);margin:0 auto 14px}
+  .preview-close{top:12px;right:12px}
+  .preview .frame{display:flex;justify-content:center}
+  .preview .frame img{width:100%;height:auto;max-height:44svh;object-fit:contain;background:none}
+  .preview .frame .grain{max-height:44svh}
+  /* Open takes the first row; back and forward share the row under it, pinned to each side. */
+  .preview-actions .open{grid-column:1 / -1;grid-row:1;justify-content:center}
+  .preview-actions .prev,.preview-actions .next{grid-row:2}
+  .gallery{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:84svh;display:flex;flex-direction:column;overflow:hidden;background:var(--paper);border-radius:20px 20px 0 0;box-shadow:0 -10px 40px var(--ink-shadow);padding:56px 16px calc(24px + env(safe-area-inset-bottom));animation:sheet-up var(--motion-page) var(--motion-ease-move) both}
+  .gallery .preview-close{position:absolute;top:12px;right:12px}
+  .gallery-scroll{flex:1 1 auto;min-height:0;overflow-y:auto}
+  .gallery .media{gap:40px}
+}
+@media(prefers-reduced-motion:reduce){
+  .conv-chat,body:has(.conv) .hero-work,.work-stage .column,body:has(.work-stage) .hero-work{transition:none}
+  .preview{animation:none}
+}
+/* Site tabs: the conversation and the projects opened from it. */
+.tabs{position:fixed;z-index:3;top:76px;left:36px;right:36px;display:flex;gap:6px;font-family:var(--sans);font-size:var(--fs-small);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink-hair);border-radius:var(--radius-pill);padding:6px 12px;background:var(--paper);color:var(--ink);text-decoration:none;white-space:nowrap}
+.tab a{color:inherit;text-decoration:none}
+.tab[aria-current=page]{border-color:var(--ink)}
+.tab:hover{border-color:var(--ink)}
+.tab-close{all:unset;cursor:pointer;display:grid;place-items:center;width:16px;height:16px;border-radius:999px;opacity:.72}
+.tab-close:hover,.tab-close:focus-visible{opacity:1;background:var(--ink-hover)}
+@media(max-width:600px){
+  .tabs{top:54px;left:16px;right:16px}
+}
+
+/* Under an answer the model gave: the pages it cites, then the note about general questions. */
+.chat-sources{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-family:var(--sans);font-size:var(--fs-small);line-height:20px}
+.chat-sources .chat-link{cursor:pointer}
+.chat-nudge{margin:12px 0 0;font-family:var(--sans);font-size:var(--fs-micro);line-height:16px;color:var(--ink);opacity:.5}
+/* Follow-ups sit close under the answer, in their own labelled section. */
+.follow-ups{margin-top:4px}
+.follow-label{margin:0 0 8px;font-family:var(--sans);font-size:var(--fs-small);line-height:20px;letter-spacing:0;color:var(--ink);opacity:.6}
+.follow-ups .prompts{margin:0}
+/* The pills keep the light fill of the starting prompts. */
+.follow-ups .prompts button{white-space:normal;text-align:left}
+
+/* Touch targets: every control answers to at least 44px, without changing how it looks. */
+/* Close keeps its own position (pinned top right, hugging its label); it is already positioned, so the hit area still anchors to it. */
+.ib,.top-work a,.top-work .icon-link,.boring,.email-pill,.tab-close,.work-actions .btn,.chat-link{position:relative}
+.ib::after,.top-work a::after,.boring::after,.email-pill::after,.preview-close::after,.tab-close::after,.work-actions .btn::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%)}
+.prompts button{min-height:44px}
+/* Type polish: headings break evenly, paragraphs avoid a lone last word, and the clock's digits keep their width. */
+h1,h2,h3,.conv-intro{text-wrap:balance}
+p{text-wrap:pretty}
+.chat{font-variant-numeric:tabular-nums}
+
+/* The gallery arrives as one calm fade, then its images one after another. Opacity only: nothing slides. */
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@media(min-width:769px){
+  .gallery{animation:fade-in var(--motion-reveal) var(--motion-ease) both}
+  .preview{animation:fade-in var(--motion-slow) var(--motion-ease) both}
+}
+.gallery .frame{animation:fade-in var(--motion-reveal) var(--motion-ease) both;animation-delay:calc(var(--motion-stagger) * 6)}
+.gallery .frame:nth-child(1){animation-delay:calc(var(--motion-stagger) * 2)}
+.gallery .frame:nth-child(2){animation-delay:calc(var(--motion-stagger) * 4)}
+.gallery .frame:nth-child(3){animation-delay:calc(var(--motion-stagger) * 5)}
+/* On a phone a sheet never covers the composer: it stops above it, and the composer stays on top,
+   so a new message can be sent while the globe, the timeline, a project or the gallery is open. */
+@media(max-width:768px){
+  body:has(.preview) .hero,body:has(.gallery) .hero{z-index:21}
+  body:has(.preview) .disclaimer,body:has(.gallery) .disclaimer{z-index:22}
+  .preview,.gallery{padding-bottom:calc(132px + env(safe-area-inset-bottom))}
+  .preview.view-globe .globe-svg{max-height:46svh}
+  .globe-svg{max-height:calc(100svh - 340px)}
+}
+
+/* The globe is the picture, so its panel takes the room: the pair widens to the window, the globe
+   fills the panel's full height, and the caption sits over its lower left corner instead of under it. */
+@media(min-width:769px){
+  .conversation:has(.preview.view-globe){--pair:min(1440px,calc(100vw - 72px))}
+  body:has(.preview.view-globe) .hero-work{left:max(36px,calc((100vw - min(1440px,calc(100vw - 72px))) / 2))}
+  .preview.view-globe .frame{flex:1;min-height:0}
+  .preview.view-globe .preview-info{position:absolute;left:0;bottom:0;max-width:240px;pointer-events:none}
+  .preview.view-globe .preview-info h2{margin-top:0}
+}
+
+/* Accent. Ink stays black for text and rules; blue marks what can be acted on and what is active. */
+::selection{background:var(--accent-soft);color:var(--ink)}
+.input{caret-color:var(--accent)}
+.shell.has .send{background:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.btn.primary:hover{background:var(--accent);opacity:.9}
+.chat-link{color:var(--accent);text-decoration-color:color-mix(in srgb,var(--accent) 50%,transparent)}
+.chat-link:hover,.chat-link[aria-pressed=true]{text-decoration-color:var(--accent)}
+.prompts button:hover{background:var(--accent-soft);color:var(--accent)}
+.prompts button svg{color:var(--accent);opacity:1}
+.tab[aria-current=page]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.email-pill.on{border-color:var(--accent);color:var(--accent)}
+.globe-svg .mark .ring{stroke:var(--accent)}
+.globe-svg .mark .dot,.globe-svg .dot{fill:var(--accent)}
+.globe-svg .pulse{stroke:var(--accent)}
+:focus-visible,.pj:focus-visible,.mpn:focus-visible,.boring:focus-visible,.btn:focus-visible,.preview-close:focus-visible,.chat-link:focus-visible,.email-pill:focus-visible,.prompts button:focus-visible{outline-color:var(--accent)}
+.input:focus-visible{outline:0}

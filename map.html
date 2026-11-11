@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Jackson, Tyler Bruce</title>
+<meta name="description" content="Designing the intimacy between people and machines.">
+<link rel="stylesheet" href="system/tokens.css">
+<link rel="stylesheet" href="system/primitives.css">
+<link rel="stylesheet" href="map.css">
+<script src="system/fonts.js"></script>
+</head>
+<body>
+<div class="column">
+<h1 id="hero"><jtb-text variant="display">Designing the intimacy between people and machines.</jtb-text></h1>
+<nav class="views" aria-label="View">
+  <jtb-button variant="text" id="view-map" data-view="map">Map</jtb-button>
+  <span aria-hidden="true">·</span>
+  <jtb-button variant="text" id="view-list" data-view="list">List</jtb-button>
+</nav>
+<nav class="filters" aria-label="Filter">
+  <jtb-tag data-filter="project">Projects</jtb-tag>
+  <jtb-tag data-filter="theme">Themes</jtb-tag>
+  <jtb-tag data-filter="tool">Tools</jtb-tag>
+  <jtb-tag data-filter="client">Clients</jtb-tag>
+  <jtb-tag data-filter="idea">Ideas</jtb-tag>
+</nav>
+<jtb-counter id="scope-count" value="0" noun="node"></jtb-counter>
+<p class="exit"><jtb-link variant="onward" href="system/">System</jtb-link></p>
+<jtb-button variant="text" id="detail-back" hidden>Back out</jtb-button>
+<section id="detail" hidden aria-labelledby="detail-label">
+  <jtb-text id="detail-kind" variant="mono"></jtb-text>
+  <jtb-text id="detail-label" variant="display" size="md" tabindex="-1"></jtb-text>
+  <jtb-text id="detail-meta" variant="mono"></jtb-text>
+  <jtb-text id="detail-summary" variant="body"></jtb-text>
+  <jtb-text id="detail-patterns" variant="body"></jtb-text>
+  <ul id="detail-relations"></ul>
+</section>
+<div id="list" hidden></div>
+</div>
+
+<div id="stage">
+  <svg id="edges" aria-hidden="true"></svg>
+  <div id="points"></div>
+</div>
+
+<jtb-text id="status" variant="caption" role="status"></jtb-text>
+<script src="system/primitives.js"></script>
+<script src="map.js"></script>
+</body>
+</html>

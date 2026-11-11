@@ -1,0 +1,454 @@
+{
+  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10, Columbus 2026-11-11). Tyler is based in Miami; Miami is listed first in the catalog. Coordinates are city centres, to four decimals.",
+  "home": "miami",
+  "places": [
+    {
+      "slug": "miami",
+      "name": "Miami, FL",
+      "country": "United States",
+      "lat": 25.7617,
+      "lng": -80.1918,
+      "kind": "lived"
+    },
+    {
+      "slug": "washington-dc",
+      "name": "Washington, DC",
+      "country": "United States",
+      "lat": 38.9072,
+      "lng": -77.0369,
+      "kind": "lived"
+    },
+    {
+      "slug": "new-york",
+      "name": "New York",
+      "country": "United States",
+      "lat": 40.7128,
+      "lng": -74.006,
+      "kind": "traveled"
+    },
+    {
+      "slug": "los-angeles",
+      "name": "Los Angeles",
+      "country": "United States",
+      "lat": 34.0522,
+      "lng": -118.2437,
+      "kind": "traveled"
+    },
+    {
+      "slug": "san-francisco",
+      "name": "San Francisco",
+      "country": "United States",
+      "lat": 37.7749,
+      "lng": -122.4194,
+      "kind": "traveled"
+    },
+    {
+      "slug": "chicago",
+      "name": "Chicago",
+      "country": "United States",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "kind": "traveled"
+    },
+    {
+      "slug": "columbus",
+      "name": "Columbus, OH",
+      "country": "United States",
+      "lat": 39.9612,
+      "lng": -82.9988,
+      "kind": "traveled"
+    },
+    {
+      "slug": "boston",
+      "name": "Boston",
+      "country": "United States",
+      "lat": 42.3601,
+      "lng": -71.0589,
+      "kind": "traveled"
+    },
+    {
+      "slug": "austin",
+      "name": "Austin",
+      "country": "United States",
+      "lat": 30.2672,
+      "lng": -97.7431,
+      "kind": "traveled"
+    },
+    {
+      "slug": "atlanta",
+      "name": "Atlanta",
+      "country": "United States",
+      "lat": 33.749,
+      "lng": -84.388,
+      "kind": "traveled"
+    },
+    {
+      "slug": "orlando",
+      "name": "Orlando",
+      "country": "United States",
+      "lat": 28.5384,
+      "lng": -81.3789,
+      "kind": "traveled"
+    },
+    {
+      "slug": "tampa",
+      "name": "Tampa",
+      "country": "United States",
+      "lat": 27.9506,
+      "lng": -82.4572,
+      "kind": "traveled"
+    },
+    {
+      "slug": "charlotte",
+      "name": "Charlotte",
+      "country": "United States",
+      "lat": 35.2271,
+      "lng": -80.8431,
+      "kind": "traveled"
+    },
+    {
+      "slug": "breckenridge",
+      "name": "Breckenridge",
+      "country": "United States",
+      "lat": 39.4817,
+      "lng": -106.0384,
+      "kind": "traveled"
+    },
+    {
+      "slug": "blacksburg",
+      "name": "Blacksburg",
+      "country": "United States",
+      "lat": 37.2296,
+      "lng": -80.4139,
+      "kind": "traveled"
+    },
+    {
+      "slug": "san-juan",
+      "name": "San Juan",
+      "country": "Puerto Rico",
+      "lat": 18.4655,
+      "lng": -66.1057,
+      "kind": "traveled"
+    },
+    {
+      "slug": "cancun",
+      "name": "Cancún",
+      "country": "Mexico",
+      "lat": 21.1619,
+      "lng": -86.8515,
+      "kind": "traveled"
+    },
+    {
+      "slug": "tulum",
+      "name": "Tulum",
+      "country": "Mexico",
+      "lat": 20.2114,
+      "lng": -87.4654,
+      "kind": "lived"
+    },
+    {
+      "slug": "medellin",
+      "name": "Medellín",
+      "country": "Colombia",
+      "lat": 6.2442,
+      "lng": -75.5812,
+      "kind": "lived"
+    },
+    {
+      "slug": "san-jose",
+      "name": "San José",
+      "country": "Costa Rica",
+      "lat": 9.9281,
+      "lng": -84.0907,
+      "kind": "traveled"
+    },
+    {
+      "slug": "santa-teresa",
+      "name": "Santa Teresa",
+      "country": "Costa Rica",
+      "lat": 9.6436,
+      "lng": -85.1686,
+      "kind": "lived"
+    },
+    {
+      "slug": "el-tunco",
+      "name": "El Tunco",
+      "country": "El Salvador",
+      "lat": 13.4936,
+      "lng": -89.3833,
+      "kind": "traveled"
+    },
+    {
+      "slug": "santo-domingo",
+      "name": "Santo Domingo",
+      "country": "Dominican Republic",
+      "lat": 18.4861,
+      "lng": -69.9312,
+      "kind": "traveled"
+    },
+    {
+      "slug": "punta-cana",
+      "name": "Punta Cana",
+      "country": "Dominican Republic",
+      "lat": 18.5601,
+      "lng": -68.3725,
+      "kind": "traveled"
+    },
+    {
+      "slug": "las-terrenas",
+      "name": "Las Terrenas",
+      "country": "Dominican Republic",
+      "lat": 19.311,
+      "lng": -69.5428,
+      "kind": "lived"
+    },
+    {
+      "slug": "ocho-rios",
+      "name": "Ocho Rios",
+      "country": "Jamaica",
+      "lat": 18.4077,
+      "lng": -77.1031,
+      "kind": "traveled"
+    },
+    {
+      "slug": "nassau",
+      "name": "Nassau",
+      "country": "Bahamas",
+      "lat": 25.0443,
+      "lng": -77.3504,
+      "kind": "traveled"
+    },
+    {
+      "slug": "grand-cayman",
+      "name": "Grand Cayman",
+      "country": "Cayman Islands",
+      "lat": 19.3133,
+      "lng": -81.2546,
+      "kind": "traveled"
+    },
+    {
+      "slug": "london",
+      "name": "London",
+      "country": "United Kingdom",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "kind": "traveled"
+    },
+    {
+      "slug": "paris",
+      "name": "Paris",
+      "country": "France",
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "kind": "traveled"
+    },
+    {
+      "slug": "madrid",
+      "name": "Madrid",
+      "country": "Spain",
+      "lat": 40.4168,
+      "lng": -3.7038,
+      "kind": "traveled"
+    },
+    {
+      "slug": "barcelona",
+      "name": "Barcelona",
+      "country": "Spain",
+      "lat": 41.3874,
+      "lng": 2.1686,
+      "kind": "traveled"
+    },
+    {
+      "slug": "valencia",
+      "name": "Valencia",
+      "country": "Spain",
+      "lat": 39.4699,
+      "lng": -0.3763,
+      "kind": "traveled"
+    },
+    {
+      "slug": "ibiza",
+      "name": "Ibiza",
+      "country": "Spain",
+      "lat": 38.9067,
+      "lng": 1.4206,
+      "kind": "traveled"
+    },
+    {
+      "slug": "bilbao",
+      "name": "Bilbao",
+      "country": "Spain",
+      "lat": 43.263,
+      "lng": -2.935,
+      "kind": "traveled"
+    },
+    {
+      "slug": "milan",
+      "name": "Milan",
+      "country": "Italy",
+      "lat": 45.4642,
+      "lng": 9.19,
+      "kind": "traveled"
+    },
+    {
+      "slug": "venice",
+      "name": "Venice",
+      "country": "Italy",
+      "lat": 45.4408,
+      "lng": 12.3155,
+      "kind": "traveled"
+    },
+    {
+      "slug": "rome",
+      "name": "Rome",
+      "country": "Italy",
+      "lat": 41.9028,
+      "lng": 12.4964,
+      "kind": "traveled"
+    },
+    {
+      "slug": "florence",
+      "name": "Florence",
+      "country": "Italy",
+      "lat": 43.7696,
+      "lng": 11.2558,
+      "kind": "traveled"
+    },
+    {
+      "slug": "lake-como",
+      "name": "Lake Como",
+      "country": "Italy",
+      "lat": 45.9867,
+      "lng": 9.2611,
+      "kind": "traveled"
+    },
+    {
+      "slug": "naples",
+      "name": "Naples",
+      "country": "Italy",
+      "lat": 40.8518,
+      "lng": 14.2681,
+      "kind": "traveled"
+    },
+    {
+      "slug": "amalfi-coast",
+      "name": "Amalfi Coast",
+      "country": "Italy",
+      "lat": 40.634,
+      "lng": 14.6027,
+      "kind": "traveled"
+    },
+    {
+      "slug": "positano",
+      "name": "Positano",
+      "country": "Italy",
+      "lat": 40.6281,
+      "lng": 14.485,
+      "kind": "traveled"
+    },
+    {
+      "slug": "munich",
+      "name": "Munich",
+      "country": "Germany",
+      "lat": 48.1351,
+      "lng": 11.582,
+      "kind": "traveled"
+    },
+    {
+      "slug": "hamburg",
+      "name": "Hamburg",
+      "country": "Germany",
+      "lat": 53.5511,
+      "lng": 9.9937,
+      "kind": "traveled"
+    },
+    {
+      "slug": "basel",
+      "name": "Basel",
+      "country": "Switzerland",
+      "lat": 47.5596,
+      "lng": 7.5886,
+      "kind": "traveled"
+    },
+    {
+      "slug": "lucerne",
+      "name": "Lucerne",
+      "country": "Switzerland",
+      "lat": 47.0502,
+      "lng": 8.3093,
+      "kind": "traveled"
+    },
+    {
+      "slug": "lugano",
+      "name": "Lugano",
+      "country": "Switzerland",
+      "lat": 46.0037,
+      "lng": 8.9511,
+      "kind": "traveled"
+    },
+    {
+      "slug": "riva-san-vitale",
+      "name": "Riva San Vitale",
+      "country": "Switzerland",
+      "lat": 45.905,
+      "lng": 8.9716,
+      "kind": "lived"
+    },
+    {
+      "slug": "tokyo",
+      "name": "Tokyo",
+      "country": "Japan",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "kind": "traveled"
+    },
+    {
+      "slug": "kyoto",
+      "name": "Kyoto",
+      "country": "Japan",
+      "lat": 35.0116,
+      "lng": 135.7681,
+      "kind": "traveled"
+    },
+    {
+      "slug": "osaka",
+      "name": "Osaka",
+      "country": "Japan",
+      "lat": 34.6937,
+      "lng": 135.5023,
+      "kind": "traveled"
+    },
+    {
+      "slug": "mumbai",
+      "name": "Mumbai",
+      "country": "India",
+      "lat": 19.076,
+      "lng": 72.8777,
+      "kind": "traveled"
+    },
+    {
+      "slug": "goa",
+      "name": "Goa",
+      "country": "India",
+      "lat": 15.2993,
+      "lng": 74.124,
+      "kind": "traveled"
+    },
+    {
+      "slug": "stockholm",
+      "name": "Stockholm",
+      "country": "Sweden",
+      "lat": 59.3293,
+      "lng": 18.0686,
+      "kind": "traveled"
+    },
+    {
+      "slug": "copenhagen",
+      "name": "Copenhagen",
+      "country": "Denmark",
+      "lat": 55.6761,
+      "lng": 12.5683,
+      "kind": "traveled"
+    }
+  ]
+}

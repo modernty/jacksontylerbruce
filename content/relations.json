@@ -1,0 +1,9 @@
+[
+  {
+    "id": "manual:usm-milan-venice-2025",
+    "from": "project:usm-milan-2025",
+    "to": "project:usm-venice-2025",
+    "kind": "manual",
+    "reason": "Separate 2025 USM projects: Milan Design Week and the Venice show."
+  }
+]

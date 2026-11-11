@@ -1,0 +1,395 @@
+{
+  "$description": "Authored media per project slug. `cover` drives the hero and generated plates; `images` is the gallery in order. Add `alt` per image as you write it. Run `npm run assets` after changes.",
+  "projects": {
+    "usm-hue-man": {
+      "cover": "/assets/thumbs/usm-hue-man.jpg",
+      "images": [
+        {
+          "src": "/assets/images/usm-hue-man/01.gif",
+          "alt": "USM logo, a chrome ball joint, animating on a black background."
+        },
+        {
+          "src": "/assets/images/usm-hue-man/02.jpg",
+          "alt": "Hue + Man installation: a USM steel-frame structure with iridescent panels, displaying collectibles and sneakers along a gallery wall."
+        },
+        {
+          "src": "/assets/images/usm-hue-man/03.jpg",
+          "alt": "Close view of the steel frame holding a tennis racket, sneakers and shoes against iridescent panels."
+        },
+        {
+          "src": "/assets/images/usm-hue-man/04.jpg",
+          "alt": "Grey 3D render of the installation, with two figures beside the frame, colored panels and a Hue + Man wall graphic."
+        },
+        {
+          "src": "/assets/images/usm-hue-man/05.jpg",
+          "alt": "Corner of the installation in yellow and orange light, with collectible figures and a basketball on the shelves."
+        },
+        {
+          "src": "/assets/images/usm-hue-man/06.jpg",
+          "alt": "Long view down the gallery, with the frame suspended from the ceiling and purple panels at the far end."
+        }
+      ]
+    },
+    "corelogic": {
+      "cover": "/assets/thumbs/corelogic.jpg",
+      "images": [
+        {
+          "src": "/assets/images/corelogic/01.jpg",
+          "alt": "Dark property-risk map of Calabasas, California, with colored property markers, an insights panel and a digital person in the corner."
+        },
+        {
+          "src": "/assets/images/corelogic/02.jpg",
+          "alt": "Map zoomed in to one neighborhood, with red property markers, a property photo and a digital person."
+        },
+        {
+          "src": "/assets/images/corelogic/03.jpg",
+          "alt": "Dark map of the southeastern United States, with property counts by region and a risk score panel."
+        },
+        {
+          "src": "/assets/images/corelogic/04.jpg",
+          "alt": "Map with orange risk zones, a QR code to continue on a phone, and a digital person in the corner."
+        }
+      ]
+    },
+    "nestle": {
+      "cover": "/assets/thumbs/nestle.jpg",
+      "images": [
+        {
+          "src": "/assets/images/nestle/01.jpg",
+          "alt": "Nestlé Toll House welcome screen: a digital baking coach asks what ingredients you have, surrounded by cookies, eggs and sugar."
+        },
+        {
+          "src": "/assets/images/nestle/02.jpg",
+          "alt": "Phone view of the coach asking what kind of sweet ingredients you have, with white and brown sugar options."
+        },
+        {
+          "src": "/assets/images/nestle/03.jpg",
+          "alt": "The coach beside a row of recommended recipe cards, sorted by category."
+        },
+        {
+          "src": "/assets/images/nestle/04.jpg",
+          "alt": "Phone view of recipe categories, with fudge recipe cards and a preferences bar."
+        }
+      ]
+    },
+    "novart": {
+      "cover": "/assets/thumbs/novart.jpg",
+      "images": [
+        {
+          "src": "/assets/images/novart/01.jpg",
+          "alt": "Novart borrower dashboard showing a $150K loan request, four collateral pieces, action items and recent messages."
+        },
+        {
+          "src": "/assets/images/novart/02.jpg",
+          "alt": "Dashboard with a list of ten action items open in a dialog."
+        },
+        {
+          "src": "/assets/images/novart/03.jpg",
+          "alt": "Dashboard with a tooltip explaining what a Bill of Sale is."
+        },
+        {
+          "src": "/assets/images/novart/04.jpg",
+          "alt": "Dashboard with the notifications panel open, listing messages and new action items."
+        },
+        {
+          "src": "/assets/images/novart/05.jpg",
+          "alt": "Admin list of users, with their roles, activity and edit controls."
+        },
+        {
+          "src": "/assets/images/novart/06.jpg",
+          "alt": "Admin view of one loan, showing loan details, action items and the users attached to it."
+        },
+        {
+          "src": "/assets/images/novart/07.jpg",
+          "alt": "Document review dialog for an appraisal report, over a list of collateral artworks."
+        },
+        {
+          "src": "/assets/images/novart/08.jpg",
+          "alt": "Loan details page with a confirmation that a new action item was created."
+        },
+        {
+          "src": "/assets/images/novart/09.jpg",
+          "alt": "Sign-up gate asking whether you are a resident of New York, California or Florida."
+        },
+        {
+          "src": "/assets/images/novart/10.jpg",
+          "alt": "Welcome screen stating the minimum loan of $150,000 and the minimum art collection value of $300,000."
+        },
+        {
+          "src": "/assets/images/novart/11.jpg",
+          "alt": "Full-length onboarding form with every step of the application shown at once."
+        },
+        {
+          "src": "/assets/images/novart/12.jpg",
+          "alt": "Form asking about the first art piece: artist, title, medium, estimated value and date."
+        },
+        {
+          "src": "/assets/images/novart/13.jpg",
+          "alt": "Form asking for the desired loan amount and term."
+        },
+        {
+          "src": "/assets/images/novart/14.jpg",
+          "alt": "Dialog congratulating the borrower on completing onboarding, with a button to the dashboard."
+        },
+        {
+          "src": "/assets/images/novart/15.jpg",
+          "alt": "Upload dialog asking the borrower for a Bill of Sale."
+        },
+        {
+          "src": "/assets/images/novart/16.jpg",
+          "alt": "The same upload dialog with a PDF attached, ready to submit."
+        },
+        {
+          "src": "/assets/images/novart/17.jpg",
+          "alt": "Loan offer dialog listing the terms, the interest rate and four collateral artworks, with options to accept or decline."
+        }
+      ]
+    },
+    "lazarus-brand": {
+      "cover": "/assets/thumbs/lazarus-ai-pubsec-brand.jpg",
+      "images": [
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/key-visual.jpg",
+          "alt": "Grid of Lazarus AI brand applications: stationery, data visualization, infographics, event graphics, a map and printed documents."
+        }
+      ]
+    },
+    "model-playground": {
+      "cover": "/assets/thumbs/model-playground.jpg",
+      "images": [
+        {
+          "src": "/assets/images/model-playground/01.jpg",
+          "alt": "Capability Selection dialog listing models with their data types, type and status."
+        },
+        {
+          "src": "/assets/images/model-playground/02.jpg",
+          "alt": "Capability Selection dialog on the Demos tab, with a set of industry demos to choose from."
+        },
+        {
+          "src": "/assets/images/model-playground/03.jpg",
+          "alt": "Prompt screen for a talent management demo, with knowledge sources and a button to begin the demonstration."
+        },
+        {
+          "src": "/assets/images/model-playground/04.jpg",
+          "alt": "Prompt screen with a model connected to five data sources, and a box to state your objective."
+        },
+        {
+          "src": "/assets/images/model-playground/05.jpg",
+          "alt": "Orchestration canvas linking a model, uploaded documents, a prompt and an output."
+        },
+        {
+          "src": "/assets/images/model-playground/06.jpg",
+          "alt": "Analysis canvas with an objective, step-by-step results and a map of Japan with labelled regions."
+        },
+        {
+          "src": "/assets/images/model-playground/07.jpg",
+          "alt": "Analysis results beside a weather chart of the seas around Japan."
+        },
+        {
+          "src": "/assets/images/model-playground/08.jpg",
+          "alt": "Save Prompt dialog over the analysis steps, with a destination and title."
+        },
+        {
+          "src": "/assets/images/model-playground/09.jpg",
+          "alt": "Orchestration canvas with sources, the ATLS model, analysis steps and an activity log showing a run in progress."
+        }
+      ]
+    },
+    "talent-management": {
+      "cover": "/assets/thumbs/talent-management.jpg",
+      "images": [
+        {
+          "src": "/assets/images/talent-management/01.jpg",
+          "alt": "ATLS welcome screen with open positions, unassigned officers, an Assign button and a table of sessions."
+        },
+        {
+          "src": "/assets/images/talent-management/02.jpg",
+          "alt": "Start new assignment dialog listing roles to fill and a field to name the session."
+        },
+        {
+          "src": "/assets/images/talent-management/03.jpg",
+          "alt": "Position details beside a ranked list of candidates and the selected candidate's profile with a 93% fitness score."
+        },
+        {
+          "src": "/assets/images/talent-management/04.jpg",
+          "alt": "Two-candidate view, with a prompt to select a second candidate from the list."
+        },
+        {
+          "src": "/assets/images/talent-management/05.jpg",
+          "alt": "Two candidates side by side, each with a fitness score, and a button for the comparison rationale."
+        },
+        {
+          "src": "/assets/images/talent-management/06.jpg",
+          "alt": "Panel comparing two candidates in written form, over the position and candidate details."
+        }
+      ]
+    },
+    "whitelist": {
+      "cover": "/assets/thumbs/whitelist.jpg",
+      "images": [
+        {
+          "src": "/assets/images/whitelist/01.jpg",
+          "alt": "Two phone screens: a company page listing products, and a drone product page with its image, price and specifications."
+        },
+        {
+          "src": "/assets/images/whitelist/02.jpg",
+          "alt": "Two phone screens: an Add to Group dialog, and the answer to a question about a drone."
+        },
+        {
+          "src": "/assets/images/whitelist/03.jpg",
+          "alt": "Three phone screens: the navigation menu, the prompt history, and an answer with tabs for sources, media and logic."
+        }
+      ]
+    },
+    "intuit": {
+      "cover": "/assets/thumbs/intuit.png",
+      "images": [
+        {
+          "src": "/assets/images/intuit/01.png",
+          "alt": "Phone showing an Intuit Wallet balance of $6,500, quick actions, recent contacts and suggested deposits."
+        },
+        {
+          "src": "/assets/images/intuit/02.png",
+          "alt": "ChatGPT conversation on a phone where Intuit confirms a $6,500 invoice from ACME Corporation has been paid."
+        }
+      ]
+    },
+    "the-terminal": {
+      "cover": "/assets/thumbs/urvin-finance.jpg",
+      "images": [
+        {
+          "src": "/assets/images/urvin-finance/01.jpg",
+          "alt": "Terminal dashboard for GameStop in a dark interface, with a candlestick chart, company summary and top news."
+        },
+        {
+          "src": "/assets/images/urvin-finance/02.jpg",
+          "alt": "News page of the terminal, with articles, video and featured topics in a long dark layout."
+        },
+        {
+          "src": "/assets/images/urvin-finance/03.jpg",
+          "alt": "GameStop price chart with historical price data in a table below."
+        },
+        {
+          "src": "/assets/images/urvin-finance/04.jpg",
+          "alt": "Security details view with a detailed chart and two data readouts on hover."
+        },
+        {
+          "src": "/assets/images/urvin-finance/05.jpg",
+          "alt": "Component sheet of the terminal's dark interface, with date pickers, text inputs and purple buttons."
+        }
+      ]
+    },
+    "fixed-rate-fixed-term": {
+      "cover": "/assets/thumbs/jet-protocol.jpg",
+      "images": [
+        {
+          "src": "/assets/images/jet-protocol/01.jpg",
+          "alt": "Jet portfolio screen for a new account, with empty balances and a prompt to deposit."
+        },
+        {
+          "src": "/assets/images/jet-protocol/02.jpg",
+          "alt": "Transfer dialog for depositing SOL, over the dimmed portfolio."
+        },
+        {
+          "src": "/assets/images/jet-protocol/03.jpg",
+          "alt": "Markets screen listing SOL and USDC with lend and borrow buttons."
+        },
+        {
+          "src": "/assets/images/jet-protocol/04.jpg",
+          "alt": "USDC market with a red and teal liquidity curve, an order book and a borrow panel."
+        },
+        {
+          "src": "/assets/images/jet-protocol/05.jpg",
+          "alt": "USDC market with the borrow panel showing a fill summary before submitting."
+        },
+        {
+          "src": "/assets/images/jet-protocol/06.jpg",
+          "alt": "USDC market with a green confirmation that the borrow was submitted."
+        },
+        {
+          "src": "/assets/images/jet-protocol/07.jpg",
+          "alt": "Concentrated liquidity pools shown as a grid of SOL/USDC pool cards."
+        },
+        {
+          "src": "/assets/images/jet-protocol/08.jpg",
+          "alt": "Leveraged LP form with a price range and an estimated yield for SOL/USDC."
+        },
+        {
+          "src": "/assets/images/jet-protocol/09.jpg",
+          "alt": "Input form for an LP deposit, with leverage, tenor and projected yield."
+        },
+        {
+          "src": "/assets/images/jet-protocol/10.jpg",
+          "alt": "Preview of the deposit, with borrow position, rates and projected yield."
+        },
+        {
+          "src": "/assets/images/jet-protocol/11.jpg",
+          "alt": "The same preview with a wallet password prompt open at the right."
+        },
+        {
+          "src": "/assets/images/jet-protocol/12.jpg",
+          "alt": "Deposit successful screen with the position summary."
+        },
+        {
+          "src": "/assets/images/jet-protocol/13.jpg",
+          "alt": "Portfolio screen for a funded account, with a balance chart and open positions."
+        },
+        {
+          "src": "/assets/images/jet-protocol/14.jpg",
+          "alt": "Search dialog for SOL, listing positions and lend, borrow and trade options."
+        },
+        {
+          "src": "/assets/images/jet-protocol/15.jpg",
+          "alt": "SOL/USDC swap screen with a price chart and a trade panel."
+        },
+        {
+          "src": "/assets/images/jet-protocol/16.jpg",
+          "alt": "Jet Protocol landing page with variable-rate and fixed-term cards around lend, borrow, swap and vote."
+        },
+        {
+          "src": "/assets/images/jet-protocol/17.jpg",
+          "alt": "Jet Protocol poster with glowing teal orbs: Earn a predictable yield on your stables."
+        }
+      ]
+    },
+    "chatter": {
+      "cover": "/assets/thumbs/chatter-social.jpg",
+      "images": [
+        {
+          "src": "/assets/images/chatter-social/01.jpg",
+          "alt": "Ten Chatter phone screens in a dark interface: profiles, live rooms, discovery, subscriptions and settings."
+        },
+        {
+          "src": "/assets/images/chatter-social/02.jpg",
+          "alt": "Two phone screens for scheduling a live session, with the form extended to show every option."
+        },
+        {
+          "src": "/assets/images/chatter-social/03.jpg",
+          "alt": "Four phone screens of live rooms, video chat and subscriber content."
+        },
+        {
+          "src": "/assets/images/chatter-social/04.jpg",
+          "alt": "Four phones on black showing an audio room, a speaker, a live stage and the group chat."
+        },
+        {
+          "src": "/assets/images/chatter-social/05.jpg",
+          "alt": "One phone on black showing the Discover screen with a live event featuring a musician, in teal."
+        },
+        {
+          "src": "/assets/images/chatter-social/06.jpg",
+          "alt": "Phone showing the Discover screen with a listening party and Q&A promoted over a portrait of an artist."
+        }
+      ]
+    },
+    "usm-milan": {
+      "cover": null,
+      "images": [],
+      "needs": "illustration"
+    },
+    "loblaw": {
+      "cover": null,
+      "images": [],
+      "needs": "illustration"
+    }
+  }
+}
