@@ -291,8 +291,8 @@ export function ChatThread({
             visibleWords={turn.shown}
             streaming={turn.pending || turn.shown < turn.words.length}
             tint={tint}
-            status={turn.pending && turn.status ? STATUS_LABEL[turn.status] : undefined}
-            className="max-w-none gap-4 text-[15px]"
+            status={turn.pending ? STATUS_LABEL[turn.status ?? "thinking"] : undefined}
+            className="max-w-none gap-8 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
             final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind }) : undefined}
@@ -313,17 +313,30 @@ export function ChatThread({
           {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && (turn.followUps?.length || turn.contact) ? (
             <section className="follow-ups" aria-label="Follow up">
               <p className="follow-label">Follow up</p>
-              <p className="prompts">
-              {turn.contact ? (
-                <button type="button" onClick={() => window.dispatchEvent(new Event(CONTACT_EVENT))}>
-                  Start a conversation
-                </button>
-              ) : null}
-              {turn.followUps?.map((text) => (
-                <button key={text} type="button" onClick={() => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: text }))}>
-                  {text}
-                </button>
-              ))}
+              {/* Read as a paragraph, the same as the quick start: inline spans wrap mid-question like text,
+                  which a <button> cannot. Each still acts as a button: focusable, and Enter or Space asks it. */}
+              <p className="prompts prompt-links">
+                {[
+                  ...(turn.contact ? [{ label: "Start a conversation", pick: () => window.dispatchEvent(new Event(CONTACT_EVENT)) }] : []),
+                  ...(turn.followUps ?? []).map((text) => ({ label: text, pick: () => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: text })) })),
+                ].map((item, at, all) => (
+                  <span key={item.label}>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className="prompt-link"
+                      onClick={item.pick}
+                      onKeyDown={(event) => {
+                        if (event.key !== "Enter" && event.key !== " ") return
+                        event.preventDefault()
+                        item.pick()
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                    {at < all.length - 1 ? " " : null}
+                  </span>
+                ))}
               </p>
             </section>
           ) : null}

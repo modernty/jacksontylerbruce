@@ -68,7 +68,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   const lead = context ?? summary
   const external = byId.get("links")?.items ?? []
   const rest = project.sections.filter((section) => section !== lead && section.id !== "links" && section.id !== "summary")
-  const images = [project.media.cover, ...project.media.images].filter((image) => image !== null)
+  // The cover leads the gallery; an image listed again after it (the same file) shows once.
+  const images = [project.media.cover, ...project.media.images]
+    .filter((image) => image !== null)
+    .filter((image, index, all) => all.findIndex((other) => other.src === image.src) === index)
   const leadIds = [lead?.id ?? "summary", ...(summary && lead !== summary ? ["summary"] : [])]
 
   return (

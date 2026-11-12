@@ -8,11 +8,11 @@ export type QaReply = { answer: string; key?: string; panel?: "globe"; followUps
 export const HOME_TIME_ZONE = "America/New_York"
 
 /** The answer when a personal question has no entry. The contact link goes with it. */
-export const ASK_DIRECTLY = "That's one to ask him directly."
+export const ASK_DIRECTLY = "That's one to ask directly."
 
 // Words that name Tyler however a visitor writes it, folded to one token so "Does Tyler have a
-// dog?" and "Does he have a dog?" read the same.
-const SUBJECT = new Set(["he", "him", "his", "hes", "tyler", "tylers", "you", "your", "youre", "yours", "jackson"])
+// dog?" and "Do you have a dog?" read the same.
+const SUBJECT = new Set(["he", "him", "his", "hes", "himself", "tyler", "tylers", "you", "your", "youre", "yours", "youve", "yourself", "jackson"])
 // Verb forms change with the subject ("are you", "is he"), so they fold too.
 const SYNONYMS: Record<string, string> = { travelled: "traveled", favourite: "favorite", are: "is", do: "does", have: "has" }
 
@@ -49,6 +49,38 @@ export function matchQa(message: string, entries: readonly QaEntry[] = QA): QaEn
       if (inside && asked.length <= wanted.length + 3 && (!best || wanted.length > best.size)) best = { entry, size: wanted.length }
     }
   }
+  return best?.entry ?? topicMatch(asked, entries)
+}
+
+// Words that carry no topic. What is left of a question is what it is about ("Any pets?" is pets).
+const FILLER = new Set(
+  "a an the any some is does has can could would will should be been was were what whats who whos where when why how which this that there it its i im me my of in on at to for from with or and but so just really actually ever like did tell about know".split(" "),
+)
+const stem = (word: string) => (word.length > 3 && word.endsWith("s") && !word.endsWith("ss") ? word.slice(0, -1) : word)
+const topics = (list: string[]) => new Set(list.filter((word) => word !== "@" && !FILLER.has(word)).map(stem))
+
+/**
+ * The looser match, for a question asked in its own words or two at once ("Does Tyler have any pets
+ * or family?"). One of the entry's phrasings has all its topic words in the message, and every topic
+ * word in the message belongs to the entry somewhere, so nothing asked goes unanswered or answered
+ * by the wrong entry ("Did he live in Medellín?" is not "Where does he live?"). A one-word topic also
+ * needs the message to be about Tyler, so "Who built the Intuit flow?" is not "Who built this?".
+ */
+function topicMatch(asked: string[], entries: readonly QaEntry[]): QaEntry | null {
+  if (asked.length > 12) return null
+  const about = asked.includes("@")
+  const said = topics(asked)
+  if (!said.size) return null
+  let best: { entry: QaEntry; size: number } | null = null
+  for (const entry of entries) {
+    const phrasings = [entry.question, ...entry.alternates].map((candidate) => topics(words(candidate)))
+    const covered = new Set(phrasings.flatMap((wanted) => [...wanted]))
+    if (![...said].every((word) => covered.has(word))) continue
+    for (const wanted of phrasings) {
+      if (!wanted.size || (wanted.size < 2 && !about)) continue
+      if ([...wanted].every((word) => said.has(word)) && (!best || wanted.size > best.size)) best = { entry, size: wanted.size }
+    }
+  }
   return best?.entry ?? null
 }
 
@@ -83,9 +115,9 @@ export function qaReply(message: string, now: Date = new Date()): QaReply | null
   }
   const fact = personalReply(message)
   if (fact) {
-    const followUps = fact === EDUCATION ? ["Walk me through his career.", "Who are his favorite designers or studios?"] : ["Where is Tyler from?"]
+    const followUps = fact === EDUCATION ? ["Walk me through your career.", "Who are your favorite designers or studios?"] : ["Where are you from?"]
     return { answer: fact, followUps }
   }
-  if (personal(message)) return { answer: ASK_DIRECTLY, contact: true, followUps: ["How do I start a project with him?"] }
+  if (personal(message)) return { answer: ASK_DIRECTLY, contact: true, followUps: ["How do I start a project with you?"] }
   return null
 }

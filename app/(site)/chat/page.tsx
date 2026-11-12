@@ -25,10 +25,11 @@ export default function ChatPage() {
       cover: project.media.cover,
     }
   })
+  const stage = publicStage()
   const places: GlobePlace[] = catalog.places.map((place) => ({ ...place, home: isHome(place, catalog.profile) }))
   return (
     <main className="conversation">
-      <ConversationStage previews={previews} places={places} timeline={publicStage().mobile} careers={careerEntries(catalog)} />
+      <ConversationStage previews={previews} places={places} timeline={{ desktop: stage.desktop, mobile: stage.mobile }} careers={careerEntries(catalog)} />
     </main>
   )
 }

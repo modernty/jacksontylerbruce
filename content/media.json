@@ -1,8 +1,9 @@
 {
-  "$description": "Authored media per project slug. `cover` drives the hero and generated plates; `images` is the gallery in order. Add `alt` per image as you write it. Run `npm run assets` after changes.",
+  "$description": "Authored media per project slug. `cover` drives the hero and generated plates; `coverAlt` describes the cover. `images` is the gallery in order, without the cover. Add `alt` per image as you write it. Run `npm run assets` after changes.",
   "projects": {
     "usm-hue-man": {
       "cover": "/assets/thumbs/usm-hue-man.jpg",
+      "coverAlt": "Long view down the gallery, with the frame suspended from the ceiling and purple panels at the far end.",
       "images": [
         {
           "src": "/assets/images/usm-hue-man/01.gif",
@@ -23,10 +24,6 @@
         {
           "src": "/assets/images/usm-hue-man/05.jpg",
           "alt": "Corner of the installation in yellow and orange light, with collectible figures and a basketball on the shelves."
-        },
-        {
-          "src": "/assets/images/usm-hue-man/06.jpg",
-          "alt": "Long view down the gallery, with the frame suspended from the ceiling and purple panels at the far end."
         }
       ]
     },
@@ -147,12 +144,8 @@
     },
     "lazarus-brand": {
       "cover": "/assets/thumbs/lazarus-ai-pubsec-brand.jpg",
-      "images": [
-        {
-          "src": "/assets/images/lazarus-ai-pubsec-brand/key-visual.jpg",
-          "alt": "Grid of Lazarus AI brand applications: stationery, data visualization, infographics, event graphics, a map and printed documents."
-        }
-      ]
+      "coverAlt": "Grid of Lazarus AI brand applications: stationery, data visualization, infographics, event graphics, a map and printed documents.",
+      "images": []
     },
     "model-playground": {
       "cover": "/assets/thumbs/model-playground.jpg",
@@ -243,11 +236,8 @@
     },
     "intuit": {
       "cover": "/assets/thumbs/intuit.png",
+      "coverAlt": "Phone showing an Intuit Wallet balance of $6,500, quick actions, recent contacts and suggested deposits.",
       "images": [
-        {
-          "src": "/assets/images/intuit/01.png",
-          "alt": "Phone showing an Intuit Wallet balance of $6,500, quick actions, recent contacts and suggested deposits."
-        },
         {
           "src": "/assets/images/intuit/02.png",
           "alt": "ChatGPT conversation on a phone where Intuit confirms a $6,500 invoice from ACME Corporation has been paid."
@@ -354,6 +344,7 @@
     },
     "chatter": {
       "cover": "/assets/thumbs/chatter-social.jpg",
+      "coverAlt": "Four phone screens of live rooms, video chat and subscriber content.",
       "images": [
         {
           "src": "/assets/images/chatter-social/01.jpg",
@@ -362,10 +353,6 @@
         {
           "src": "/assets/images/chatter-social/02.jpg",
           "alt": "Two phone screens for scheduling a live session, with the form extended to show every option."
-        },
-        {
-          "src": "/assets/images/chatter-social/03.jpg",
-          "alt": "Four phone screens of live rooms, video chat and subscriber content."
         },
         {
           "src": "/assets/images/chatter-social/04.jpg",

@@ -8,7 +8,7 @@ import { CONTACT_EVENT } from "./mailto"
 import { askHere } from "./starter-prompts"
 import { BoringToggle } from "./view-mode"
 
-const LOCATION_PROMPT = "Where is Tyler located?"
+const LOCATION_PROMPT = "Where are you located?"
 
 /** The name and location, on every page with the plain chat bar. The rest keeps the index label. */
 export function TopBar({ location, email, linkedin }: { location: string; email: string; linkedin: string }) {
@@ -58,7 +58,7 @@ export function TopBar({ location, email, linkedin }: { location: string; email:
           <Link
             href="/chat"
             className="icon-link"
-            aria-label={`Where is Tyler located? ${location}`}
+            aria-label={`Where are you located? ${location}`}
             title={location}
             onClick={(event) => {
               // The globe asks the conversation where Tyler is; the answer opens the globe beside it.

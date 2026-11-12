@@ -17,6 +17,15 @@ const LAYOUTS = {
 const SPIN = 4
 const IDLE_MS = 4000
 const HIT = 14
+/** The intro: the lines draw on, then the places arrive rippling out from home, then it settles. */
+const DRAW_MS = 1200
+const RIPPLE_MS = 60
+const RIPPLE_CAP = 20
+const SETTLE_MS = DRAW_MS + RIPPLE_CAP * RIPPLE_MS + 700
+/** The globe turns this far into place while it draws. */
+const ARRIVE_TURN = 50
+/** 0 nothing drawn, 1 lines drawing, 2 places arriving, 3 settled (no intro transitions left). */
+type Stage = 0 | 1 | 2 | 3
 
 const kindLabel = (place: GlobePlace) => (place.home ? "Home" : place.kind === "lived" ? "Lived" : "Travelled")
 
@@ -60,11 +69,12 @@ const LINES = borders as [number, number][][]
  * Markers borrow from the timeline: a dot for places travelled, a ring around a dot for places
  * lived (like the role pill's ends), and a double ring with a slow pulse for home (like NOW).
  */
-function Mark({ place, at }: { place: GlobePlace; at: Projected }) {
+function Mark({ place, at, rank }: { place: GlobePlace; at: Projected; rank: number }) {
   const className = at.front ? "mark" : "mark back"
+  const style = { "--i": rank } as React.CSSProperties
   if (place.home) {
     return (
-      <g className={className}>
+      <g className={className} style={style}>
         {at.front ? <circle className="pulse" cx={at.x} cy={at.y} r={9} /> : null}
         <circle className="ring" cx={at.x} cy={at.y} r={9} />
         <circle className="ring" cx={at.x} cy={at.y} r={5} />
@@ -74,13 +84,13 @@ function Mark({ place, at }: { place: GlobePlace; at: Projected }) {
   }
   if (place.kind === "lived") {
     return (
-      <g className={className}>
+      <g className={className} style={style}>
         <circle className="ring" cx={at.x} cy={at.y} r={5.5} />
         <circle className="dot" cx={at.x} cy={at.y} r={1.8} />
       </g>
     )
   }
-  return <circle className={`${className} dot`} cx={at.x} cy={at.y} r={2.4} />
+  return <circle className={`${className} dot`} style={style} cx={at.x} cy={at.y} r={2.4} />
 }
 
 /**
@@ -90,15 +100,41 @@ function Mark({ place, at }: { place: GlobePlace; at: Projected }) {
 export function Globe({ places, focusId, onHover, fit = "wide" }: GlobeProps) {
   const { W, H, CX, CY, R } = LAYOUTS[fit]
   const home = places.find((place) => place.home) ?? places[0]
-  const [view, setView] = useState<View>(() => ({ lng: (home?.lng ?? 0) + 35, lat: 28 }))
+  const rest: View = { lng: (home?.lng ?? 0) + 35, lat: 28 }
+  // It opens a little short of where it rests and turns the rest of the way while it draws.
+  const [view, setView] = useState<View>(() => ({ lng: rest.lng + ARRIVE_TURN, lat: rest.lat }))
+  const [stage, setStage] = useState<Stage>(0)
   const [hovered, setHovered] = useState<string | null>(null)
   // True while the pointer is over the sphere (or dragging it): the outline and borders show then.
   const [lit, setLit] = useState(false)
   const svg = useRef<SVGSVGElement>(null)
-  const state = useRef({ view, target: view, idleAt: 0, dragging: null as null | { x: number; y: number; view: View }, motion: true })
+  const state = useRef({ view, target: rest, idleAt: 0, dragging: null as null | { x: number; y: number; view: View }, motion: true })
 
   const countries = useMemo(() => new Set(places.map((place) => place.country)).size, [places])
   const links = useMemo(() => regionLinks(places), [places])
+  // Places arrive nearest home first, so they ripple outward from it.
+  const ranks = useMemo(() => {
+    const order = home ? [...places].sort((a, b) => distance(home, a) - distance(home, b)) : places
+    // Spread across RIPPLE_CAP steps however many places there are, so none arrive in a clump.
+    const step = RIPPLE_CAP / Math.max(1, order.length - 1)
+    return new Map(order.map((place, index) => [place.id, Math.round(index * Math.min(1, step) * 10) / 10]))
+  }, [places, home])
+
+  // The intro runs once per mount. Reading the layout first commits the hidden state, so the change
+  // to stage 1 transitions from it. Timers, not frames, so it still finishes in a background tab.
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setStage(3)
+      return
+    }
+    svg.current?.getBoundingClientRect()
+    const timers = [
+      window.setTimeout(() => setStage(1), 30),
+      window.setTimeout(() => setStage(2), 30 + DRAW_MS),
+      window.setTimeout(() => setStage(3), 30 + SETTLE_MS),
+    ]
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [])
 
   // Turn to a place picked elsewhere (the list, or the chat).
   useEffect(() => {
@@ -235,6 +271,7 @@ export function Globe({ places, focusId, onHover, fit = "wide" }: GlobeProps) {
     <svg
       ref={svg}
       className={lit ? "globe-svg lit" : "globe-svg"}
+      data-stage={stage}
       viewBox={`0 0 ${W} ${H}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -246,15 +283,16 @@ export function Globe({ places, focusId, onHover, fit = "wide" }: GlobeProps) {
         setHovered(null)
       }}
     >
-      <circle className="rim" cx={CX} cy={CY} r={R} />
+      {/* pathLength 1 lets the front lines draw on as a trim, whatever their real length. */}
+      <circle className="rim" cx={CX} cy={CY} r={R} pathLength={1} />
       <path className="borders" d={outlines} />
       <path className="line back" d={equator.back} />
       {arcs.map((arc) => <path key={`${arc.id}-back`} className="arc back" d={arc.back} />)}
       {ordered.map(({ place, spot }) => (
-        <Mark key={place.id} place={place} at={spot} />
+        <Mark key={place.id} place={place} at={spot} rank={ranks.get(place.id) ?? 0} />
       ))}
-      <path className="line" d={equator.front} />
-      {arcs.map((arc) => <path key={`${arc.id}-front`} className="arc" d={arc.front} />)}
+      <path className="line" d={equator.front} pathLength={1} />
+      {arcs.map((arc, index) => <path key={`${arc.id}-front`} className="arc" d={arc.front} pathLength={1} style={{ "--i": index } as React.CSSProperties} />)}
       {named && namedAt?.front ? (
         <g className="callout">
           <path className="leader" d={`M${textX} ${shelf}H${elbowX}L${namedAt.x} ${namedAt.y}`} />

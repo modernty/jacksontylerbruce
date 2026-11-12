@@ -3,7 +3,7 @@ import generated from "./media.gen.json"
 import type { Image, Media } from "./schema"
 
 type Authored = { src: string; alt: string; kind?: Image["kind"] }
-type Entry = { cover: string | null; images: Authored[] }
+type Entry = { cover: string | null; coverAlt?: string; images: Authored[] }
 type Measured = { width: number; height: number; blur: string }
 
 const entries = authored.projects as Record<string, Entry>
@@ -21,7 +21,7 @@ export function mediaFor(slug: string, name: string): Media {
   if (!entry) return { cover: null, coverInk: null, images: [] }
   const count = entry.images.length
   return {
-    cover: entry.cover ? image(entry.cover, `${name}, cover`) : null,
+    cover: entry.cover ? image(entry.cover, entry.coverAlt?.trim() || `${name}, cover`) : null,
     coverInk: entry.cover ? `/media/${slug}/cover-ink.webp` : null,
     images: entry.images.map((item, index) =>
       image(item.src, item.alt.trim() || `${name}, image ${index + 1} of ${count}`, item),

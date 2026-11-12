@@ -2,10 +2,11 @@
 
 // Vendored from assistant-ui elements. Colours changed to the ink tokens: fresh words arrive as a light ink tint and settle to ink.
 
-import type { ComponentProps, ReactNode } from "react";
+import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
 import { CopyIcon, RefreshCwIcon } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ghostButton } from "./surfaces";
+import { ThinkingIndicator } from "./thinking-indicator";
 import { take } from "../utils/range";
 
 export interface MessagePairProps extends Omit<
@@ -60,14 +61,12 @@ export function MessagePair({
       >
         {userMessage}
       </p>
-      <div className="group/message flex flex-col items-start">
+      <div className="group/message relative flex flex-col items-start">
         {/* A div, not a p: a rendered answer can hold a list. */}
         {/* Room is held only while the answer is arriving, so what follows a finished answer sits close to it. */}
         <div className={cn("text-[15px] leading-relaxed", streaming && "min-h-[4.25rem]")}>
           {status ? (
-            <span role="status" className="animate-pulse text-[color:var(--accent)] motion-reduce:animate-none">
-              {status}
-            </span>
+            <Thinking label={status} />
           ) : !streaming && final ? final : shown.map((word, index) => {
             const fresh = tint && streaming && shown.length - 1 - index < 2;
 
@@ -95,7 +94,8 @@ export function MessagePair({
           )}
         </div>
         {(onCopy || onRegenerate) && (
-          <div className="flex items-center gap-1 pt-1 opacity-0 transition-opacity group-focus-within/message:opacity-100 group-hover/message:opacity-100 motion-reduce:transition-none">
+          // Out of the flow, on the right under the answer, so it takes no room from what follows.
+          <div className="absolute end-0 top-full flex items-center gap-1 pt-1 opacity-0 transition-opacity group-focus-within/message:opacity-100 group-hover/message:opacity-100 motion-reduce:transition-none">
             {onCopy && (
               <button
                 type="button"
@@ -121,4 +121,15 @@ export function MessagePair({
       </div>
     </div>
   );
+}
+
+/** The status line while an answer is on its way, with the seconds it has taken once there is one. */
+function Thinking({ label }: { label: string }) {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const start = Date.now();
+    const timer = window.setInterval(() => setSeconds(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return <ThinkingIndicator role="status" label={label} elapsed={seconds > 0 ? `${seconds}s` : undefined} className="text-[15px]" />;
 }

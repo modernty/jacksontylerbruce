@@ -8,6 +8,7 @@ import { employerPublicName } from "@/src/content/employer"
 import { publishCatalog } from "@/src/content/publish"
 import { careerReply } from "./career"
 import { answerChat, handleChatAsk } from "./chat"
+import { qaReply } from "./qa"
 import { MemoryStore } from "./store"
 
 const catalog = publishCatalog()
@@ -57,7 +58,7 @@ test("a new question after the offer changes the subject instead of repeating th
   // It stays in the conversation and the globe opens beside it.
   assert.ok("panel" in place.body && place.body.panel === "globe", JSON.stringify(place.body))
   assert.equal("answer" in place.body ? place.body.answer : "", "From Miami.")
-  assert.deepEqual("followUps" in place.body ? place.body.followUps : null, ["Where is Tyler located?", "Where is Tyler right now?"])
+  assert.deepEqual("followUps" in place.body ? place.body.followUps : null, ["Where are you located?", "Where are you right now?"])
   assert.ok(!("expects" in place.body) || !place.body.expects)
   assert.ok(!("go" in place.body) || !place.body.go)
   const career = await chat("Walk me through your career", "category")
@@ -99,25 +100,29 @@ test("career lists the roles and opens the timeline, the timeline opens by name,
 })
 
 test("Notion Q&A rows answer without the model, with their view and follow-ups", async () => {
-  const where = await chat("Where is Tyler located?")
+  const where = await chat("Where are you located?")
   assert.ok("panel" in where.body && where.body.panel === "globe", JSON.stringify(where.body))
   assert.equal("answer" in where.body ? where.body.answer : "", "Based in Miami.")
-  assert.deepEqual("followUps" in where.body ? where.body.followUps : null, ["Where is Tyler from?", "Show me everywhere he's lived."])
-  const now = await chat("Where is Tyler right now?")
+  assert.deepEqual("followUps" in where.body ? where.body.followUps : null, ["Where are you from?", "Show me everywhere you've lived."])
+  const now = await chat("Where are you right now?")
   assert.match("answer" in now.body ? now.body.answer : "", /^Miami\. \d{1,2}:\d{2} [AP]M there\.$/)
-  assert.deepEqual("followUps" in now.body ? now.body.followUps : null, ["Show me everywhere he's lived.", "Where is Tyler from?"])
+  assert.deepEqual("followUps" in now.body ? now.body.followUps : null, ["Show me everywhere you've lived.", "Where are you from?"])
   assert.equal(answerChat("Does Tyler have a dog?", undefined)?.answer, "Winston. A French Bulldog. Chief of morale.")
-  assert.equal(answerChat("Does Tyler have a dog?", undefined)?.followUps?.[0], "What's a day like for him?")
-  assert.equal(answerChat("Explain his work like I'm five.", undefined)?.followUps?.[0], "Show me an example.")
+  assert.equal(answerChat("Does Tyler have a dog?", undefined)?.followUps?.[0], "What's a day like for you?")
+  // Asked in other words, or two questions at once, the topic still finds the entry.
+  assert.equal(answerChat("Does tyler have any pets or family?", undefined)?.answer, "Winston. A French Bulldog. Chief of morale.")
+  assert.equal(answerChat("Do you have pets?", undefined)?.answer, "Winston. A French Bulldog. Chief of morale.")
+  assert.equal(qaReply("Who built the Intuit flow?"), null)
+  assert.equal(answerChat("What do you do, in one sentence?", undefined)?.followUps?.[0], "Show me an example.")
   const personal = answerChat("Is he married?", undefined)
-  assert.equal(personal?.answer, "That's one to ask him directly.")
+  assert.equal(personal?.answer, "That's one to ask directly.")
   assert.equal(personal?.contact, true)
   // Work questions are not personal.
-  assert.notEqual(answerChat("Show me your projects", undefined)?.answer, "That's one to ask him directly.")
+  assert.notEqual(answerChat("Show me your projects", undefined)?.answer, "That's one to ask directly.")
 })
 
 test("an answer about places lived narrows the globe to them; other place answers show everything", async () => {
-  const lived = await chat("Show me everywhere he's lived.")
+  const lived = await chat("Show me everywhere you've lived.")
   assert.ok("panel" in lived.body && lived.body.panel === "globe")
   assert.equal(lived.body.placeKind, "lived")
   assert.match(lived.body.answer, /^Lived in Miami, FL/)

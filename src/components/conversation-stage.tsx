@@ -1,11 +1,12 @@
 "use client"
 
 import { track } from "@vercel/analytics"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { CareerEntry } from "@/src/content/career"
 import type { Image as MediaImage } from "@/src/content/schema"
+import { LoadingImage } from "@/src/plates/loading-image"
+import { TimelineModal, startAtNow } from "./timeline-modal"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
@@ -24,17 +25,15 @@ type Picked = { slug: string; list: string[] }
 type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
 const SCROLL_KEY = "home-chat-scroll"
-const WELCOME = [
-  "Welcome",
-  "One craft, many mediums. Every project starts with one core idea and time spent inside the problem.",
-  "How can I help you?",
-]
+const WELCOME = ["Welcome, how can I help you?", "One craft, many mediums. Every project starts with one core idea and time spent inside the problem."]
+const GREETING_TEXT = "min-h-0 max-w-none text-[18px] leading-[26px] tracking-[-0.01em]"
 /** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
 const HANDOFF_MS = 320
 
 /**
- * The empty conversation is already the thread. The greeting streams in, then the composer and
- * the quick-start pills take their place under it. Remounting (a new conversation) plays it again.
+ * The empty conversation is already the thread, in three groups: the welcome, the composer, and
+ * the quick start. The welcome streams in, then the composer and quick start take their place.
+ * Remounting (a new conversation) plays it again.
  */
 function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | null>; leaving: boolean }) {
   const [finished, setFinished] = useState(false)
@@ -56,20 +55,15 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
 
   return (
     <div className={leaving ? "conv-empty ready leaving" : ready ? "conv-empty ready" : "conv-empty"}>
-      <IntroStream
-        id="home-welcome"
-        paragraphs={WELCOME}
-        remember={false}
-        heading
-        textClassName="min-h-0 max-w-none text-[18px] leading-[26px] tracking-[-0.01em]"
-        tint={false}
-        emphasis={2}
-        onDone={finish}
-      />
-      <div className="composer-slot" ref={slotRef} aria-hidden="true" />
-      <div className="quick">
+      <div className="opening-group opening-welcome">
+        <IntroStream id="home-welcome" paragraphs={WELCOME} remember={false} heading textClassName={GREETING_TEXT} tint={false} emphasis={0} onDone={finish} />
+      </div>
+      <div className="opening-group opening-composer">
+        <div className="composer-slot" ref={slotRef} aria-hidden="true" />
+      </div>
+      <div className="opening-group quick">
         <p className="quick-label">Quick start</p>
-        <StarterPrompts className="quick-links" links onPick={askHere} />
+        <StarterPrompts className="quick-links" onPick={askHere} />
       </div>
     </div>
   )
@@ -101,7 +95,7 @@ function keepShown(picked: Shown | null) {
  * the chat left and previews the project beside it (a bottom sheet on phones), with previous and
  * next following the list the chat gave. "Open full project" opens it in a tab.
  */
-export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: string; careers: CareerEntry[] }) {
+export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: { desktop: string; mobile: string }; careers: CareerEntry[] }) {
   const router = useRouter()
   const bySlug = useRef(new Map(previews.map((item) => [item.slug, item])))
   const byRole = useRef(Object.fromEntries(careers.map((item) => [item.id, item])))
@@ -147,7 +141,9 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     place()
     const observer = new ResizeObserver(place)
     observer.observe(slot)
-    // The title and intro above the slot can change height (fonts, wrapping), which moves it.
+    // The welcome above the slot can change height (streaming, fonts, wrapping), which moves it.
+    const opening = slot.closest(".conv-empty")
+    if (opening) observer.observe(opening)
     if (slot.parentElement) observer.observe(slot.parentElement)
     if (shell) observer.observe(shell)
     window.addEventListener("resize", place)
@@ -211,7 +207,8 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   useEffect(() => {
     if (!shown) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setShown(null)
+      // Escape in the expanded timeline closes only that window; the panel under it stays.
+      if (event.key === "Escape" && !document.querySelector("dialog[open]")) setShown(null)
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
@@ -257,9 +254,10 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     router.push(`/work/${slug}`)
   }
 
-  const openPage = (href: string, panel: Panel) => {
-    track("view_opened_from_chat", { panel })
-    router.push(href)
+  const [expanded, setExpanded] = useState(false)
+  const expand = () => {
+    track("view_opened_from_chat", { panel: "timeline" })
+    setExpanded(true)
   }
 
   const close = () => setShown(null)
@@ -269,13 +267,13 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   const globePlaces = livedOnly ? places.filter((place) => place.kind === "lived" || place.home) : places
   const open = !!preview || !!panel
 
-  const arrow = (
+  const chevron = (direction: "left" | "right") => (
     <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-      <path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={direction === "left" ? "M7.5 2.5L4 6l3.5 3.5" : "M4.5 2.5L8 6l-3.5 3.5"} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
-  const closeButton = (
-    <button type="button" className="preview-close" onClick={close} aria-label="Close preview">
+  const closeButton = (onClose: () => void) => (
+    <button type="button" className="preview-close" onClick={onClose} aria-label="Close preview">
       Close
       <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true">
         <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
@@ -300,8 +298,8 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
       <div className="conv-chat">
         {active && reveal ? (
           <div className="conv-tools">
-            <button type="button" className="btn ghost with-icon" onClick={startOver}>
-              New chat
+            <button type="button" className="btn ghost with-icon" onClick={startOver} aria-label="New chat">
+              <span className="label">New chat</span>
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
                 <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
               </svg>
@@ -324,26 +322,35 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           }
         />
       </div>
+      <TimelineModal open={expanded} onClose={() => setExpanded(false)} desktop={timeline.desktop} mobile={timeline.mobile} />
       {panel ? (
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={close} />
           <aside className={`preview view-${panel}`} aria-label={panel === "globe" ? "Places" : "Career timeline"}>
-            {closeButton}
-            <div className="frame">
-              {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : <div className="panel-timeline" dangerouslySetInnerHTML={{ __html: timeline }} />}
-            </div>
-            <div className="preview-info">
-              <h2>{panel === "globe" ? "Places" : "Career"}</h2>
-              <p className="summary">{panel === "globe" ? (livedOnly ? "Places lived. Drag the globe to turn it." : "Places lived and travelled. Drag the globe to turn it.") : "Each role and the projects under it, from 2019 at the top to now."}</p>
-              {/* Places stay in the conversation: the globe has no page of its own to open. */}
-              {panel === "timeline" ? (
-                <div className="preview-actions">
-                  <button type="button" className="btn with-icon open" onClick={() => openPage("/timeline#axis", panel)}>
-                    Open the timeline
-                    {arrow}
+            {/* The bar comes first so that, when the row is too narrow for both, it wraps above the info. */}
+            <header className="preview-head">
+              <div className="preview-bar">
+                {panel === "timeline" ? (
+                  <button type="button" className="icon-btn expand" onClick={expand} aria-label="Expand the timeline">
+                    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                      <path d="M7 1.5h3.5V5M5 10.5H1.5V7M10.5 1.5L7 5M1.5 10.5L5 7" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </button>
-                </div>
-              ) : null}
+                ) : null}
+                {closeButton(close)}
+              </div>
+              <div className="preview-info">
+                <h2>{panel === "globe" ? "Places" : "Career"}</h2>
+                <p className="summary">{panel === "globe" ? (livedOnly ? "Places lived. Drag the globe to turn it." : "Places lived and travelled. Drag the globe to turn it.") : "Each role and the projects under it, from 2019 to now."}</p>
+              </div>
+            </header>
+            <div className="frame">
+              {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : (
+                <>
+                  <div className="panel-timeline desk" ref={startAtNow} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />
+                  <div className="panel-timeline phone" dangerouslySetInnerHTML={{ __html: timeline.mobile }} />
+                </>
+              )}
             </div>
           </aside>
         </>
@@ -352,24 +359,32 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={() => setPicked(null)} />
           <aside className="preview" aria-label={`${preview.name} preview`}>
-            <button type="button" className="preview-close" onClick={() => setPicked(null)} aria-label="Close preview">
-              Close
-              <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true">
-                <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-              </svg>
-            </button>
+            <header className="preview-head">
+              <div className="preview-bar">
+                <button type="button" className="icon-btn prev" onClick={() => previous && pick(previous, picked?.list ?? [])} disabled={!previous} aria-label="Previous project">
+                  {chevron("left")}
+                </button>
+                <button type="button" className="icon-btn next" onClick={() => next && pick(next, picked?.list ?? [])} disabled={!next} aria-label="Next project">
+                  {chevron("right")}
+                </button>
+                {closeButton(() => setPicked(null))}
+              </div>
+              <div className="preview-info">
+                <h2>{preview.name}</h2>
+                {preview.meta ? <p className="meta">{preview.meta}</p> : null}
+                <p className="summary">{preview.summary}</p>
+              </div>
+            </header>
             {preview.cover ? (
               <figure className="frame">
-                <Image
+                <LoadingImage
                   key={preview.slug}
                   src={preview.cover.src}
                   alt={preview.cover.alt}
                   width={preview.cover.width}
                   height={preview.cover.height}
                   sizes="(max-width: 768px) 100vw, 560px"
-                  placeholder="blur"
-                  blurDataURL={preview.cover.blur}
-                  unoptimized={preview.cover.src.endsWith(".gif")}
+                  fit="fill"
                 />
               </figure>
             ) : (
@@ -377,35 +392,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 <Grain key={preview.slug} slug={preview.slug} label={preview.name} />
               </figure>
             )}
-            <div className="preview-info">
-            <h2>{preview.name}</h2>
-            {preview.meta ? <p className="meta">{preview.meta}</p> : null}
-            <p className="summary">{preview.summary}</p>
-            <div className="preview-actions">
-              {previous ? (
-                <button type="button" className="btn ghost with-chevron prev" onClick={() => pick(previous, picked?.list ?? [])}>
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                    <path d="M7.5 2.5L4 6l3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  Previous project
-                </button>
-              ) : null}
-              <button type="button" className="btn primary with-icon open" onClick={() => openFull(preview.slug)}>
+            <footer className="preview-foot">
+              <button type="button" className="btn primary with-chevron open" onClick={() => openFull(preview.slug)}>
                 Open full project
-                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                  <path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                {chevron("right")}
               </button>
-              {next ? (
-                <button type="button" className="btn ghost with-chevron next" onClick={() => pick(next, picked?.list ?? [])}>
-                  Next project
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                    <path d="M4.5 2.5L8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              ) : null}
-            </div>
-            </div>
+            </footer>
           </aside>
         </>
       ) : null}

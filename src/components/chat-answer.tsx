@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react"
 import type { CareerEntry } from "@/src/content/career"
+import { CareerCards } from "./career-cards"
 import type { Panel, ReplyExtra } from "./chat-thread"
 
 /**
@@ -60,6 +61,7 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
     return (
       <>
         {turn.answer}
+        <CareerCards roles={roles} names={names} link={link} />
         <ol className="career">
           {roles.map((role) => {
             const named = role.projects.filter((slug) => names[slug])

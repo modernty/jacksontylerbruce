@@ -4,7 +4,7 @@ import { NUDGE_AFTER, OUTSIDE, handleChatAsk, isFollowUp, readMisses } from "./c
 import { openSystem, pastMessages, readBlocks, type OpenClient, type PastTurn } from "./converse"
 import { MemoryStore } from "./store"
 
-const FAVOURITES: PastTurn = { q: "Who are his favorite designers or studios?", a: "Rem Koolhaas, SANAA, Zaha Hadid Architects, Le Corbusier, Valerio Olgiati, Tadao Ando, Chris Precht, Bjarke Ingels, and more.", source: "site" }
+const FAVOURITES: PastTurn = { q: "Who are your favorite designers or studios?", a: "Rem Koolhaas, SANAA, Zaha Hadid Architects, Le Corbusier, Valerio Olgiati, Tadao Ando, Chris Precht, Bjarke Ingels, and more.", source: "site" }
 const says = (text: string, sources: { title: string; url: string }[] = []): OpenClient => async (_request, onStatus) => {
   onStatus("searching")
   return { text, sources }
@@ -49,7 +49,7 @@ test("a question about the work after an open turn is a site answer again, with 
   const reply = await chat("Show me your projects", history, client)
   assert.ok("projects" in reply.body && reply.body.projects?.length)
   assert.equal(called, false)
-  const qa = await chat("Does he have a dog?", history, client)
+  const qa = await chat("Do you have a dog?", history, client)
   assert.ok("answer" in qa.body && qa.body.answer.startsWith("Winston."))
   assert.equal(called, false)
 })

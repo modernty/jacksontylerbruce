@@ -5,20 +5,23 @@
   "entries": [
     {
       "key": "best-designed-thing",
-      "question": "What's the best-designed thing he's ever used?",
-      "alternates": [],
+      "question": "What's the best-designed thing you've ever used?",
+      "alternates": [
+        "What's the best-designed thing he's ever used?"
+      ],
       "answer": "A soy sauce bottle. Air in one side, sauce out the other.",
       "view": null,
       "pill": true,
       "followUps": [
-        "What inspires him?",
-        "What tool could he not live without?"
+        "What inspires you?",
+        "What tool can't you live without?"
       ]
     },
     {
       "key": "day-in-life",
-      "question": "What's a day like for him?",
+      "question": "What's a day like for you?",
       "alternates": [
+        "What's a day like for him?",
         "What's his routine?",
         "How does he work?"
       ],
@@ -26,14 +29,15 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "Walk me through his process.",
-        "How does he start a project?"
+        "Walk me through your process.",
+        "How do you start a project?"
       ]
     },
     {
       "key": "dog",
-      "question": "Does he have a dog?",
+      "question": "Do you have a dog?",
       "alternates": [
+        "Does he have a dog?",
         "Pets?",
         "Who's Winston?",
         "Any pets?",
@@ -43,13 +47,14 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "What's a day like for him?"
+        "What's a day like for you?"
       ]
     },
     {
       "key": "eli5",
-      "question": "Explain his work like I'm five.",
+      "question": "What do you do, in one sentence?",
       "alternates": [
+        "Explain his work like I'm five.",
         "Simple version?",
         "What does he actually do?"
       ],
@@ -62,8 +67,9 @@
     },
     {
       "key": "favorite-studios",
-      "question": "Who are his favorite designers or studios?",
+      "question": "Who are your favorite designers or studios?",
       "alternates": [
+        "Who are his favorite designers or studios?",
         "Who does he look up to?",
         "Who are his favorite designers?",
         "Who are his favourite designers?",
@@ -73,29 +79,31 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "What inspires him?",
-        "What's his hot take on design?",
-        "What's the best-designed thing he's ever used?"
+        "What inspires you?",
+        "What's your hot take on design?",
+        "What's the best-designed thing you've ever used?"
       ]
     },
     {
       "key": "favorite-tool",
-      "question": "What tool could he not live without?",
+      "question": "What tool can't you live without?",
       "alternates": [
+        "What tool could he not live without?",
         "What tools does he use?"
       ],
       "answer": "Figma for the work. Claude for thinking out loud.",
       "view": null,
       "pill": false,
       "followUps": [
-        "What's he building for fun?",
-        "How does he start a project?"
+        "What are you building on the side?",
+        "How do you start a project?"
       ]
     },
     {
       "key": "hot-take",
-      "question": "What's his hot take on design?",
+      "question": "What's your hot take on design?",
       "alternates": [
+        "What's his hot take on design?",
         "What does he believe?",
         "Strong opinion?"
       ],
@@ -103,14 +111,15 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "How does he start a project?",
-        "Why should I hire him over someone else?"
+        "How do you start a project?",
+        "Why should I hire you over someone else?"
       ]
     },
     {
       "key": "how-start",
-      "question": "How does he start a project?",
+      "question": "How do you start a project?",
       "alternates": [
+        "How does he start a project?",
         "What's his process?",
         "Where does he begin?"
       ],
@@ -118,14 +127,15 @@
       "view": null,
       "pill": true,
       "followUps": [
-        "Walk me through his process.",
+        "Walk me through your process.",
         "Show me an example."
       ]
     },
     {
       "key": "inspiration",
-      "question": "What inspires him?",
+      "question": "What inspires you?",
       "alternates": [
+        "What inspires him?",
         "What are his influences?",
         "What's on his moodboard?"
       ],
@@ -133,8 +143,8 @@
       "view": null,
       "pill": false,
       "followUps": [
-        "Who are his favorite designers or studios?",
-        "What's the best-designed thing he's ever used?"
+        "Who are your favorite designers or studios?",
+        "What's the best-designed thing you've ever used?"
       ]
     },
     {
@@ -153,8 +163,9 @@
     },
     {
       "key": "side-projects",
-      "question": "What's he building for fun?",
+      "question": "What are you building on the side?",
       "alternates": [
+        "What's he building for fun?",
         "Side projects?",
         "Experiments?"
       ],
@@ -162,25 +173,28 @@
       "view": null,
       "pill": true,
       "followUps": [
-        "What tool could he not live without?",
+        "What tool can't you live without?",
         "Is this site AI?"
       ]
     },
     {
       "key": "three-words",
-      "question": "Describe Tyler in three words.",
-      "alternates": [],
+      "question": "Describe yourself in three words.",
+      "alternates": [
+        "Describe Tyler in three words."
+      ],
       "answer": "Grounded. Curious. Deliberate.",
       "view": null,
       "pill": false,
       "followUps": [
-        "What's his hot take on design?"
+        "What's your hot take on design?"
       ]
     },
     {
       "key": "where-lived",
-      "question": "Where has he lived and worked from?",
+      "question": "Where have you lived and worked from?",
       "alternates": [
+        "Where has he lived and worked from?",
         "Where has he traveled?",
         "Is he a nomad?"
       ],
@@ -188,14 +202,15 @@
       "view": "globe",
       "pill": false,
       "followUps": [
-        "Where is Tyler right now?",
-        "Show me everywhere he's lived."
+        "Where are you right now?",
+        "Show me everywhere you've lived."
       ]
     },
     {
       "key": "where-now",
-      "question": "Where is Tyler right now?",
+      "question": "Where are you right now?",
       "alternates": [
+        "Where is Tyler right now?",
         "Where is he based?",
         "Where does he live?",
         "What time is it for him?"
@@ -204,14 +219,15 @@
       "view": "globe",
       "pill": true,
       "followUps": [
-        "Show me everywhere he's lived.",
-        "Where is Tyler from?"
+        "Show me everywhere you've lived.",
+        "Where are you from?"
       ]
     },
     {
       "key": "why-hire",
-      "question": "Why should I hire him over someone else?",
+      "question": "Why should I hire you over someone else?",
       "alternates": [
+        "Why should I hire him over someone else?",
         "What makes him different?",
         "Why him?"
       ],
@@ -220,8 +236,8 @@
       "pill": false,
       "followUps": [
         "Show me a project that proves it.",
-        "How do I start a project with him?",
-        "Walk me through his career."
+        "How do I start a project with you?",
+        "Walk me through your career."
       ]
     }
   ]

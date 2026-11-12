@@ -11,29 +11,41 @@ import { CHAT_ASK } from "./chat-thread"
 export const STARTERS: readonly string[] = rotatePills(0)
 
 /** Starting questions on a project page, answered from that project's own content. */
-export const PROJECT_STARTERS = ["What was Tyler's role?", "How was it approached?", "What was the outcome?"]
+export const PROJECT_STARTERS = ["What was your role?", "How was it approached?", "What was the outcome?"]
 export const IMAGES_STARTER = "Show the images"
 
 /** Asks a question in the conversation on this page. */
 export const askHere = (question: string) => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: question }))
 
-export function StarterPrompts({ onPick, className, items = STARTERS, links = false }: { onPick: (question: string) => void; className?: string; items?: readonly string[]; links?: boolean }) {
+/**
+ * Prompts read as a paragraph: inline spans wrap mid-question like text, which a <button> cannot.
+ * Each still acts as a button: focusable, and Enter or Space asks it.
+ */
+export function StarterPrompts({ onPick, className, items = STARTERS }: { onPick: (question: string) => void; className?: string; items?: readonly string[] }) {
   // The first visit's pills rotate after hydration, so the server and client agree on the first render.
   const [shown, setShown] = useState(items)
   useEffect(() => {
     setShown(items === STARTERS && QA_PILLS.length > 3 ? rotatePills(Date.now() / 1000) : items)
   }, [items])
   return (
-    <p className={className ? `prompts ${className}` : "prompts"}>
-      {shown.map((label) => (
-        <button key={label} type="button" onClick={() => onPick(label)}>
-          {label}
-          {links ? null : (
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-              <path d="M7 11.5v-9M3 6.5l4-4 4 4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-        </button>
+    <p className={className ? `prompts prompt-links ${className}` : "prompts prompt-links"}>
+      {shown.map((label, index) => (
+        <span key={label}>
+          <span
+            role="button"
+            tabIndex={0}
+            className="prompt-link"
+            onClick={() => onPick(label)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter" && event.key !== " ") return
+              event.preventDefault()
+              onPick(label)
+            }}
+          >
+            {label}
+          </span>
+          {index < shown.length - 1 ? " " : null}
+        </span>
       ))}
     </p>
   )

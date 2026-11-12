@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { LoadingImage } from "./loading-image"
 import type { Image as MediaImage } from "@/src/content/schema"
 
 /** One image on the page. Illustrations always say so, so they never read as shipped work. */
@@ -18,17 +18,7 @@ export function MediaFrame({
   const counter = index !== undefined && total ? `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}` : null
   return (
     <figure className="frame">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        sizes={sizes}
-        placeholder="blur"
-        blurDataURL={image.blur}
-        priority={priority}
-        unoptimized={image.src.endsWith(".gif")}
-      />
+      <LoadingImage src={image.src} alt={image.alt} width={image.width} height={image.height} sizes={sizes} priority={priority} />
       {counter || image.kind === "illustration" ? (
         <figcaption>
           {counter ? <span>{counter}</span> : null}
