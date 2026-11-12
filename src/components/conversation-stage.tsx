@@ -14,6 +14,7 @@ import { IntroStream } from "./intro-stream"
 import { StarterPrompts, askHere } from "./starter-prompts"
 import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, CHAT_CLOSE_PANEL, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
+import { holdComposer } from "./composer"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null }
 
@@ -49,11 +50,8 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
 
   // The composer lives in the page chrome. Keep it out of reach until it is on screen.
   useEffect(() => {
-    const hero = document.querySelector<HTMLElement>(".hero-work")
-    if (!hero) return
-    if (ready) hero.removeAttribute("inert")
-    else hero.setAttribute("inert", "")
-    return () => hero.removeAttribute("inert")
+    holdComposer(!ready)
+    return () => holdComposer(false)
   }, [ready])
 
   return (

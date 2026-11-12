@@ -3,7 +3,7 @@
 import { track } from "@vercel/analytics"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
@@ -29,7 +29,22 @@ const mailIcon = (
   </svg>
 )
 
+// The opening greeting keeps the composer out of reach until it is on screen. Held here rather
+// than set on the DOM, so the composer renders it itself and hydration sees the server's markup.
+let held = false
+const holders = new Set<() => void>()
+export function holdComposer(next: boolean) {
+  if (held === next) return
+  held = next
+  holders.forEach((notify) => notify())
+}
+function onHold(notify: () => void) {
+  holders.add(notify)
+  return () => holders.delete(notify)
+}
+
 export function Composer({ email }: { email: string }) {
+  const hold = useSyncExternalStore(onHold, () => held, () => false)
   const router = useRouter()
   const path = usePathname()
   const project = path.startsWith("/work/")
@@ -128,7 +143,7 @@ export function Composer({ email }: { email: string }) {
   }
 
   return (
-    <section className={quiet ? "hero hero-work" : "hero"} aria-label="Ask about the work">
+    <section className={quiet ? "hero hero-work" : "hero"} aria-label="Ask about the work" inert={quiet && hold}>
       <div className="in">
         {quiet ? null : (
           <>
