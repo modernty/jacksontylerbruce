@@ -21,25 +21,12 @@ function animate(el: Element, keyframes: Keyframe[], options: KeyframeAnimationO
   return el.animate(keyframes, { easing: EASE, fill: "backwards", ...options })
 }
 
-export function loadIn() {
-  const root = document.documentElement
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
-  if (reduce || played) {
-    root.classList.remove("pre")
-    return
-  }
-  played = true
-  const stage = document.querySelector<HTMLElement>(".tlw")
-  // Matches the CSS switch to the vertical timeline.
-  const mobile = matchMedia("(max-width: 768px)").matches
-  const mode = stage?.dataset.mode
-  const svg = document.querySelector(mobile ? ".m svg" : ".d svg")
-  const motionRoot = document.querySelector(mobile ? ".m" : ".d .mode[data-m=timeline]")
-  root.classList.remove("pre")
-  if (!svg || !motionRoot || mode !== "timeline") {
-    fadeChrome()
-    return
-  }
+/**
+ * The timeline drawing grows into view: lanes draw out, each role's pill extends in date order with its
+ * dots and label, project ticks and names follow, then NOW. Shared by the timeline page, the panel
+ * beside the chat and the expanded window. Returns when the roles finish, in ms.
+ */
+export function growTimeline(svg: Element, motionRoot: Element, mobile: boolean): number {
   const axis = mobile ? "scaleY" : "scaleX"
   const origin = mobile ? "top" : "left"
   const tmin = 2019
@@ -113,6 +100,29 @@ export function loadIn() {
       fill: "none",
     })
   })
+  return last
+}
+
+export function loadIn() {
+  const root = document.documentElement
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+  if (reduce || played) {
+    root.classList.remove("pre")
+    return
+  }
+  played = true
+  const stage = document.querySelector<HTMLElement>(".tlw")
+  // Matches the CSS switch to the vertical timeline.
+  const mobile = matchMedia("(max-width: 768px)").matches
+  const mode = stage?.dataset.mode
+  const svg = document.querySelector(mobile ? ".m svg" : ".d svg")
+  const motionRoot = document.querySelector(mobile ? ".m" : ".d .mode[data-m=timeline]")
+  root.classList.remove("pre")
+  if (!svg || !motionRoot || mode !== "timeline") {
+    fadeChrome()
+    return
+  }
+  const last = growTimeline(svg, motionRoot, mobile)
   fadeChrome(last + T.now * 0.5)
 }
 

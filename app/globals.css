@@ -296,7 +296,7 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
 /* The main conversation. Work replies list project names; picking one moves the chat left and
    previews the project beside it, or in a bottom sheet on phones. */
 .conversation{--pair:min(1056px,calc(100vw - 72px));--side:min(440px,36vw);min-height:100svh;padding:132px 36px calc(200px + env(safe-area-inset-bottom));font-family:var(--sans);letter-spacing:0}
-.conv-chat{width:min(540px,100%);margin-left:max(0px,calc((100% - min(540px,100%)) / 2));transition:margin-left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
+.conv-chat{width:min(540px,100%);margin-left:max(0px,calc((100% - min(540px,100%)) / 2));transition:margin-left var(--motion-slide) var(--motion-ease-slide),width var(--motion-slide) var(--motion-ease-slide)}
 /* New conversation, above the thread: a text button, its icon still on hover. */
 /* New chat sits in the header row, centred in the window, and stays there while the thread scrolls.
    The 36px button is centred on the 20px header line. */
@@ -417,8 +417,7 @@ body:has(.conv-empty) .hero-work::before{display:none}
   /* Drawn 1120 wide, shown a little smaller (type about 11-12.5px). */
   .panel-timeline.desk svg{width:1000px;max-width:none;height:auto}
   /* The pair widens while the timeline is open, so the drawing reads at a usable size; the chat and composer follow. */
-  .conversation:has(.preview.view-timeline){--pair:min(1320px,calc(100vw - 72px))}
-  body:has(.conv.previewing .preview.view-timeline) .hero-work{left:max(36px,calc((100vw - min(1320px,calc(100vw - 72px))) / 2))}
+  .conversation:has(.conv.showing-timeline){--pair:min(1320px,calc(100vw - 72px))}
 }
 @media(max-width:768px){
   .career-cards,.panel-timeline.desk{display:none}
@@ -510,10 +509,13 @@ body:has(.conv-empty) .hero-work::before{display:none}
   .preview .frame .grain{max-height:min(100%,50vh)}
   .preview-info{flex:none}
   /* The composer is pinned to the chat column and glides with it, so the two never come apart. */
-  body:has(.conv) .hero-work{--col:min(540px,calc(100vw - 72px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
-  body:has(.conv-empty.ready) .hero-work{transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move),opacity var(--motion-page) var(--motion-ease)}
+  body:has(.conv) .hero-work{--col:min(540px,calc(100vw - 72px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-slide) var(--motion-ease-slide),width var(--motion-slide) var(--motion-ease-slide)}
+  body:has(.conv-empty.ready) .hero-work{transition:left var(--motion-slide) var(--motion-ease-slide),width var(--motion-slide) var(--motion-ease-slide),opacity var(--motion-page) var(--motion-ease)}
   body:has(.conv) .hero-work .in{max-width:none;margin:0}
   body:has(.conv.previewing) .hero-work{left:max(36px,calc((100vw - min(1056px,calc(100vw - 72px))) / 2));width:min(440px,36vw)}
+  /* The wider pair while the timeline is open. Kept right after the rule above and one class stronger,
+     so the composer always lines up with the chat it belongs to. */
+  body:has(.conv.previewing.showing-timeline) .hero-work{left:max(36px,calc((100vw - min(1320px,calc(100vw - 72px))) / 2))}
   .work-stage.galleried .column{margin-left:max(0px,calc((100% - var(--pair)) / 2));width:var(--side)}
   body:has(.work-stage) .hero-work{--col:min(540px,calc(100vw - 32px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
   body:has(.work-stage) .hero-work .in{max-width:none;margin:0}
@@ -580,6 +582,7 @@ p{text-wrap:pretty}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 @media(min-width:769px){
   .gallery{animation:fade-in var(--motion-reveal) var(--motion-ease) both}
+  /* Lands at 90% of the chat slide (see the stage), then fades in over what is left of it and beyond. */
   .preview{animation:fade-in var(--motion-slow) var(--motion-ease) both}
 }
 .gallery .frame{animation:fade-in var(--motion-reveal) var(--motion-ease) both;animation-delay:calc(var(--motion-stagger) * 6)}

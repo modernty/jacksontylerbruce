@@ -127,6 +127,13 @@ const ALL_WORK = /\b(projects|portfolio|case studies|(your|tyler'?s|the|all|othe
 const THEME_WORK = /\b(work|design\w*|experience|projects?|built|made|case stud(y|ies))\b/
 const YES = /^(yes|yeah|yep|yup|sure|ok|okay|please|go ahead|do it|y)\b/
 const NO = /^(no|nope|nah|not now|no thanks|all of them|show (me )?all)\b/
+/** "all projects", "every project", "the rest of the work", "show me all of them": the whole list, not the overview again. */
+const EVERY = /\b(all|every|entire|whole|full|complete|rest)\b/
+const EVERY_OF = /\b(them|the rest|rest of (it|them))\b/
+const asksForEverything = (q: string) => EVERY.test(q) && (ALL_WORK.test(q) || /\bprojects?\b/.test(q) || EVERY_OF.test(q))
+
+/** The types as next prompts, so a type is one tap rather than something to type out. */
+const typePrompts = () => DISCIPLINES.map((item) => `${item.label} work.`)
 
 const typeList = () => {
   const labels = DISCIPLINES.map((item) => item.label.toLowerCase())
@@ -171,14 +178,18 @@ export function recentPicks(catalog: PublicCatalog): { companies: string[]; proj
 }
 
 function allWork(catalog: PublicCatalog): ChatReply {
-  const { companies, projects } = recentPicks(catalog)
-  const from = companies.length ? ` from ${joinNames(companies)}` : ""
+  const { projects } = recentPicks(catalog)
   return {
-    answer: `Recent projects include work${from}: ${joinNames(projects.map((project) => project.name))}. Select one to view, or pick a type to see the rest: ${typeList()}.`,
+    answer: `The newest: ${joinNames(projects.map((project) => project.name))}. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`,
     projects: projects.map((project) => project.slug),
     expects: "category",
-    followUps: ["How do you start a project?", "Walk me through your career."],
+    followUps: ["All projects.", ...typePrompts()],
   }
+}
+
+/** Every public project, newest first, with the types to narrow it. */
+function everything(catalog: PublicCatalog): ChatReply {
+  return { ...sentence(`All ${catalog.projects.length} projects, most recent first:`, catalog.projects), followUps: typePrompts() }
 }
 
 /** A group of projects as one sentence, newest first. */
@@ -191,7 +202,9 @@ function byDiscipline(key: Discipline, catalog: PublicCatalog): ChatReply {
   const label = DISCIPLINES.find((item) => item.key === key)?.label ?? key
   const found = catalog.projects.filter((project) => disciplineOf(project) === key)
   if (!found.length) return { answer: `No ${label.toLowerCase()} work is up yet. Try ${typeList()}.`, expects: "category" }
-  return sentence(`${label} work, most recent first:`, found)
+  // The other types and the whole list come next, so the visitor can keep browsing in one tap.
+  const others = DISCIPLINES.filter((item) => item.key !== key).map((item) => `${item.label} work.`)
+  return { ...sentence(`${label} work, most recent first:`, found), followUps: [...others, "All projects."] }
 }
 
 /**
@@ -211,7 +224,7 @@ export function answerChat(question: string, expects: "category" | undefined, ca
     const theme = themeIn(q, catalog)
     if (theme) return byTheme(theme.id, catalog)
     if (YES.test(q)) return { answer: `Which type: ${typeList()}?`, expects: "category" }
-    if (NO.test(q)) return sentence("Sure. Here's all of it, most recent first:", catalog.projects)
+    if (NO.test(q)) return everything(catalog)
   }
 
   // A theme asked for as work: "experience designing for AI", "AI projects". Not when a company
@@ -220,6 +233,7 @@ export function answerChat(question: string, expects: "category" | undefined, ca
   if (theme && THEME_WORK.test(q)) return byTheme(theme.id, catalog)
   const work = ALL_WORK.test(q) || /\bwork\b/.test(q)
   if (discipline && work) return byDiscipline(discipline, catalog)
+  if (asksForEverything(q) && !discipline && !theme) return everything(catalog)
   if (ALL_WORK.test(q)) return allWork(catalog)
   const named = mentionedProjects(question, catalog)
   if (named.length === 1) return { answer: `Here's ${named[0].name}. ${named[0].summary}`, projects: [named[0].slug], followUps: suggest(question, ["How do you start a project?", "Walk me through your career."]) }

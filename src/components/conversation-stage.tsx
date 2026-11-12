@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { CareerEntry } from "@/src/content/career"
 import type { Image as MediaImage } from "@/src/content/schema"
 import { LoadingImage } from "@/src/plates/loading-image"
-import { TimelineModal, startAtNow } from "./timeline-modal"
+import { TimelineModal, desktopTimeline, phoneTimeline } from "./timeline-modal"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
@@ -29,6 +29,8 @@ const WELCOME = ["Welcome, how can I help you?", "One craft, many mediums. Every
 const GREETING_TEXT = "min-h-0 max-w-none text-[18px] leading-[26px] tracking-[-0.01em]"
 /** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
 const HANDOFF_MS = 320
+/** How long the chat takes to slide aside for a preview. Matches --motion-slide. */
+const SLIDE_MS = 640
 
 /**
  * The empty conversation is already the thread, in three groups: the welcome, the composer, and
@@ -266,6 +268,17 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   const livedOnly = shown?.kind === "globe" && shown.only === "lived"
   const globePlaces = livedOnly ? places.filter((place) => place.kind === "lived" || place.home) : places
   const open = !!preview || !!panel
+  // The chat slides left first. What comes in on the right lands once the slide is 90% done, so its
+  // own entrance (the fade, the globe drawing on, the timeline growing) plays where it can be seen.
+  // Phones have nothing to slide: the sheet rises at once.
+  const [landed, setLanded] = useState(false)
+  if (!open && landed) setLanded(false)
+  useEffect(() => {
+    if (!open || landed) return
+    const still = matchMedia("(max-width: 768px), (prefers-reduced-motion: reduce)").matches
+    const timer = window.setTimeout(() => setLanded(true), still ? 0 : SLIDE_MS * 0.9)
+    return () => window.clearTimeout(timer)
+  }, [open, landed])
 
   const chevron = (direction: "left" | "right") => (
     <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
@@ -294,7 +307,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   }
 
   return (
-    <div className={open ? "conv previewing" : "conv"}>
+    <div className={open ? `conv previewing${panel ? ` showing-${panel}` : ""}` : "conv"}>
       <div className="conv-chat">
         {active && reveal ? (
           <div className="conv-tools">
@@ -323,7 +336,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
         />
       </div>
       <TimelineModal open={expanded} onClose={() => setExpanded(false)} desktop={timeline.desktop} mobile={timeline.mobile} />
-      {panel ? (
+      {panel && landed ? (
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={close} />
           <aside className={`preview view-${panel}`} aria-label={panel === "globe" ? "Places" : "Career timeline"}>
@@ -347,15 +360,15 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
             <div className="frame">
               {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : (
                 <>
-                  <div className="panel-timeline desk" ref={startAtNow} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />
-                  <div className="panel-timeline phone" dangerouslySetInnerHTML={{ __html: timeline.mobile }} />
+                  <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />
+                  <div className="panel-timeline phone" ref={phoneTimeline} dangerouslySetInnerHTML={{ __html: timeline.mobile }} />
                 </>
               )}
             </div>
           </aside>
         </>
       ) : null}
-      {preview ? (
+      {preview && landed ? (
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={() => setPicked(null)} />
           <aside className="preview" aria-label={`${preview.name} preview`}>

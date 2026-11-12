@@ -1,10 +1,27 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { growTimeline } from "./behaviors"
 
-/** Scrolls a sideways timeline to its right end, so it opens on now. */
-export function startAtNow(node: HTMLDivElement | null) {
-  if (node) node.scrollLeft = node.scrollWidth
+/** Plays the drawing's grow-in when it mounts, if it is the one showing at this width. */
+function grow(node: HTMLDivElement, mobile: boolean) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  if (matchMedia("(max-width: 768px)").matches !== mobile) return
+  const svg = node.querySelector("svg")
+  if (!svg) return
+  growTimeline(svg, mobile ? node : (svg.querySelector(".mode[data-m=timeline]") ?? svg), mobile)
+}
+
+/** The horizontal drawing: opens scrolled to its right end, on now, and grows into view. */
+export function desktopTimeline(node: HTMLDivElement | null) {
+  if (!node) return
+  node.scrollLeft = node.scrollWidth
+  grow(node, false)
+}
+
+/** The vertical drawing on phones, growing into view. */
+export function phoneTimeline(node: HTMLDivElement | null) {
+  if (node) grow(node, true)
 }
 
 /**
@@ -37,8 +54,8 @@ export function TimelineModal({ open, onClose, desktop, mobile }: { open: boolea
             Close timeline
           </button>
           <div className="timeline-modal-frame">
-            <div className="panel-timeline desk" ref={startAtNow} dangerouslySetInnerHTML={{ __html: desktop }} />
-            <div className="panel-timeline phone" dangerouslySetInnerHTML={{ __html: mobile }} />
+            <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: desktop }} />
+            <div className="panel-timeline phone" ref={phoneTimeline} dangerouslySetInnerHTML={{ __html: mobile }} />
           </div>
         </div>
       ) : null}

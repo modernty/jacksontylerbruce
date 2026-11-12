@@ -26,7 +26,8 @@ test("asking for the work answers in one sentence: three recent projects from tw
   assert.ok(new Set(picked.map((project) => project?.roleId)).size <= 2)
   // The newest project always leads.
   assert.equal(reply.projects[0], byRecent(catalog.projects)[0]?.slug)
-  assert.equal(reply.answer, `Recent projects include work from Overmatch AI and ${employerPublicName()}: Overmatch AI, Intuit and Loblaw / PC Health. Select one to view, or pick a type to see the rest: product design, brand or spatial.`)
+  assert.equal(reply.answer, `The newest: Overmatch AI, Intuit and Loblaw / PC Health. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`)
+  assert.deepEqual(reply.followUps, ["All projects.", "Product design work.", "Brand work.", "Spatial work."])
   assert.equal(reply.expects, "category")
   assert.ok(!reply.answer.includes("\n"))
   const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug)
@@ -198,4 +199,18 @@ test("the AI starter lists the AI work, not the career", async () => {
 test("height and weight get Tyler's answer in both conversations", () => {
   assert.equal(answerChat("How tall is Tyler?", undefined)?.answer, "6'2\". 200 lbs.")
   assert.equal(answerChat("how much does he weigh", undefined)?.answer, "6'2\". 200 lbs.")
+})
+
+test("asking for all of the work lists every project, not the overview again", () => {
+  for (const ask of ["all projects", "Show me all your projects", "every project", "All projects.", "the rest of them"]) {
+    for (const expects of [undefined, "category" as const]) {
+      const reply = answerChat(ask, expects)
+      assert.equal(reply?.projects?.length, catalog.projects.length, `${ask} (${expects})`)
+      assert.ok(reply?.answer.startsWith(`All ${catalog.projects.length} projects`), `${ask} (${expects})`)
+    }
+  }
+  // A type still narrows, even with "all" in it.
+  assert.ok(answerChat("all brand work", undefined)?.answer.startsWith("Brand work"))
+  // The overview offers each type as a tap.
+  assert.ok(answerChat("Brand work.", "category")?.answer.startsWith("Brand work"))
 })

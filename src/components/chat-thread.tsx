@@ -73,7 +73,7 @@ function load(key: string): Stored[] {
           expects: item.expects === "category" ? "category" : undefined,
           panel: item.panel === "globe" || item.panel === "timeline" ? item.panel : undefined,
           roles: Array.isArray(item.roles) ? item.roles.filter((id): id is string => typeof id === "string") : undefined,
-          followUps: Array.isArray(item.followUps) ? item.followUps.filter((text): text is string => typeof text === "string").slice(0, 3) : undefined,
+          followUps: Array.isArray(item.followUps) ? item.followUps.filter((text): text is string => typeof text === "string").slice(0, 4) : undefined,
           contact: item.contact === true ? true : undefined,
           source: item.source === "open" || item.source === "site" || item.source === "work" ? item.source : undefined,
           sources: Array.isArray(item.sources)
