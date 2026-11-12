@@ -154,7 +154,7 @@ body:has(.sheet) .cards{display:none}
 .frame figcaption{display:flex;justify-content:space-between;gap:16px;margin-top:8px;font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;opacity:.45}
 :is(.column,.info) .cta{margin-top:32px;font-size:var(--fs-small)}
 :is(.column,.info) .cta a{color:var(--ink);text-decoration:none}
-.chat{display:flex;flex-direction:column;gap:40px;margin-top:48px;padding-top:32px;border-top:1px solid var(--ink-rule)}
+.chat{display:flex;flex-direction:column;gap:32px;margin-top:48px;padding-top:32px;border-top:1px solid var(--ink-rule)}
 .chat>div{scroll-margin-bottom:180px}
 .chat [data-slot=message-pair]>div>div:first-child{min-height:0}
 .top-work span.right{display:flex;gap:28px;align-items:center}
@@ -305,9 +305,9 @@ body:has(.conv-empty.ready) .hero-work .in{pointer-events:auto}
 .conversation .chat.held{display:none}
 .conversation .chat.arrive{animation:welcome-in var(--motion-page) var(--motion-ease)}
 @keyframes welcome-in{from{opacity:0}to{opacity:1}}
-/* The question and its answer match the greeting: 18px on a 26px line. */
+/* The thread reads at chat size: 16px on a 24px line, wrapped without a lone last word. */
 .conversation .chat [data-slot=message-pair]>p,
-.conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:18px;line-height:26px}
+.conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:16px;line-height:24px;text-wrap:pretty}
 body:has(.conv-empty) .hero-work::before{display:none}
 .conv-empty .stream p{margin:0;font-weight:var(--fw-regular,400);text-wrap:wrap}
 .conv-empty .stream p.emphasis{font-weight:var(--fw-medium)}

@@ -40,14 +40,14 @@ const WAITING = "…"
 export type Panel = "globe" | "timeline"
 /** followUps are suggested next prompts, in the visitor's words; contact adds the contact link. */
 /** source says who answered (the site, or the model for a question outside it); sources are pages it cites; nudge shows the note about general questions. */
-export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel; followUps?: string[]; contact?: boolean; source?: "site" | "open"; sources?: { title: string; url: string }[]; nudge?: boolean; placeKind?: "lived" }
+export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: { title: string; url: string }[]; nudge?: boolean; placeKind?: "lived" }
 
 /** What the model is doing while an answer is on its way. */
-export type Status = "thinking" | "searching"
-const STATUS_LABEL: Record<Status, string> = { thinking: "Thinking", searching: "Searching the web" }
+export type Status = "thinking" | "searching" | "reading"
+const STATUS_LABEL: Record<Status, string> = { thinking: "Thinking", searching: "Searching the web", reading: "Reading the work" }
 
 /** One earlier exchange, sent with a question so a follow-up reads in context. */
-export type Past = { q: string; a: string; source?: "site" | "open" }
+export type Past = { q: string; a: string; source?: "site" | "open" | "work" }
 const HISTORY_TURNS = 6
 
 type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean; status?: Status } & ReplyExtra
@@ -75,7 +75,7 @@ function load(key: string): Stored[] {
           roles: Array.isArray(item.roles) ? item.roles.filter((id): id is string => typeof id === "string") : undefined,
           followUps: Array.isArray(item.followUps) ? item.followUps.filter((text): text is string => typeof text === "string").slice(0, 3) : undefined,
           contact: item.contact === true ? true : undefined,
-          source: item.source === "open" || item.source === "site" ? item.source : undefined,
+          source: item.source === "open" || item.source === "site" || item.source === "work" ? item.source : undefined,
           sources: Array.isArray(item.sources)
             ? item.sources.filter((entry) => typeof entry?.title === "string" && typeof entry?.url === "string" && entry.url.startsWith("https://")).slice(0, 3)
             : undefined,
@@ -354,7 +354,7 @@ export async function readLines<T>(response: Response, onStatus?: (status: Statu
   const take = (line: string) => {
     if (!line.trim()) return
     const data = JSON.parse(line) as { status?: Status; reply?: T }
-    if (data.status === "thinking" || data.status === "searching") onStatus?.(data.status)
+    if (data.status === "thinking" || data.status === "searching" || data.status === "reading") onStatus?.(data.status)
     if (data.reply) reply = data.reply
   }
   for (;;) {

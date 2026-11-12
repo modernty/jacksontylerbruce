@@ -8,6 +8,7 @@ import { DISCIPLINES, byRecent, disciplineOf, type Discipline } from "@/src/cont
 import { containsBlocked } from "@/src/content/guard"
 import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Project } from "@/src/content/schema"
+import { workAgent, type WorkClient } from "./agent"
 import { converse, type OpenClient, type PastTurn, type Source, type Status } from "./converse"
 import { handleAsk, type AskDeps } from "./handle"
 import { hydrate } from "./llm"
@@ -26,9 +27,9 @@ import { aboutTravel, type Go } from "./navigate"
 /** roles lists role ids the reply shows as a resume-style list, newest first. */
 /** followUps are suggested next prompts; contact shows the contact link under the answer. */
 /** source says who answered: the site's own content, or the model for a question outside it. sources are pages an open answer cites. nudge shows the note about general questions. */
-export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open"; sources?: Source[]; nudge?: boolean; placeKind?: "lived" }
+export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: Source[]; nudge?: boolean; placeKind?: "lived" }
 
-export type ChatDeps = AskDeps & { open?: OpenClient | null; onStatus?: (status: Status) => void }
+export type ChatDeps = AskDeps & { open?: OpenClient | null; work?: WorkClient | null; onStatus?: (status: Status) => void }
 
 /** The open answer at which the note about general questions starts to show. */
 export const NUDGE_AFTER = 3
@@ -43,7 +44,7 @@ const ChatAsk = z.object({
   listed: z.array(z.string().max(80)).max(20).optional(),
   open: z.string().max(80).optional(),
   // The last few exchanges, as the visitor saw them, so a follow-up reads in context.
-  history: z.array(z.object({ q: z.string().max(400), a: z.string().max(4000), source: z.enum(["site", "open"]).optional() })).max(6).optional(),
+  history: z.array(z.object({ q: z.string().max(400), a: z.string().max(4000), source: z.enum(["site", "open", "work"]).optional() })).max(6).optional(),
 })
 
 // A message that leans on the last answer: "who is this person?", "like what kind?", "why?".
@@ -73,6 +74,35 @@ export function pickFromList(question: string, listed: string[]): string | null 
   if (!/\b(one|project|that|it|open|show|see|preview|the)\b/.test(q) && !/^(first|second|third|fourth|fifth|last)\b/.test(q)) return null
   for (const [pattern, at] of ORDINALS) if (pattern.test(q)) return listed[at(listed.length)] ?? null
   return null
+}
+
+// A comparison: "what's the difference between Intuit and Loblaw", "how do they compare".
+const COMPARE = /\b(difference|differences|differ|different|compare|compared|comparison|vs|versus|similar|similarities|in common|contrast)\b/
+// Words that only ask to see a project: "show me Intuit", "tell me about Loblaw", "Intuit".
+const SHOW_WORDS = new Set(["show", "me", "open", "see", "view", "preview", "pull", "up", "the", "a", "an", "project", "projects", "case", "study", "tell", "about", "what", "whats", "is", "it", "and", "please", "work", "on", "go", "to", "lets", "can", "i", "you"])
+
+/** True when the message only names projects to look at, so the preview answers it at once. */
+export function showOnly(question: string, named: Project[]): boolean {
+  let q = ` ${fold(question).replace(/['’]/g, "").replace(/[^a-z0-9+ ]+/g, " ")} `
+  for (const project of named) {
+    for (const phrase of [project.name, ...project.aliases]) {
+      const words = fold(phrase).replace(/['’]/g, "").replace(/[^a-z0-9+ ]+/g, " ").trim()
+      if (words) q = q.split(` ${words} `).join(" ")
+    }
+  }
+  return q.split(/\s+/).filter(Boolean).every((word) => SHOW_WORDS.has(word))
+}
+
+/** Whether the work agent should read the projects to answer this, rather than show a preview. */
+export function wantsWork(question: string, catalog: PublicCatalog, state: { open?: string; last?: PastTurn } = {}): boolean {
+  const q = fold(question)
+  const named = mentionedProjects(question, catalog)
+  const roles = mentionedRoles(question, catalog)
+  if (COMPARE.test(q) && named.length + roles.length >= 2) return true
+  if (COMPARE.test(q) && named.length && state.open) return true
+  if (named.length && !showOnly(question, named) && !ALL_WORK.test(q)) return true
+  if (!named.length && state.open && ABOUT_OPEN.test(q) && !ALL_WORK.test(q)) return true
+  return !!state.last && state.last.source === "work" && isFollowUp(question, catalog)
 }
 
 // A question about the project already open: "what was your role?", "how did that turn out?".
@@ -323,6 +353,17 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
     return { answer: out.text, source: "open", followUps: suggest(q, ["Show me your projects.", "How does he start a project?"]), ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
   }
 
+  /** An answer from the work agent, which reads the projects before it answers. */
+  const workTurn = async (): Promise<ChatReply | "limited" | null> => {
+    if (!modelCallsAllowed(env) || (await spendRatio(now, env, store).catch(() => 0)) >= 1) return null
+    const allowed = await underLimit(ctx.ip || "local", now, store).catch(() => underLimit(ctx.ip || "local", now, memoryStore))
+    if (!allowed) return "limited"
+    const out = await workAgent(q, history, { client: deps.work, onStatus: deps.onStatus, env, context: contextLine(catalog, listed, open, expects), catalog })
+    if (!out) return null
+    const followUps = out.followUps.length ? out.followUps : suggest(q, ["How does he start a project?", "Show me your projects."])
+    return { answer: out.answer, projects: out.projects, followUps, source: "work", ...(out.panel ? { panel: out.panel } : {}) }
+  }
+
   if (!blocked(q)) {
     // The Notion Q&A first: a matched question or pill is answered without the model.
     const qa = qaReply(q)
@@ -352,6 +393,12 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
     if (slug) {
       const project = catalog.projects.find((item) => item.slug === slug)
       if (project) return { status: 200, body: { answer: `Here's ${project.name}. ${project.summary}`, projects: [project.slug], followUps: suggest(q, ["How does he start a project?", "Walk me through his career."]) } }
+    }
+    // A question about the work itself, a comparison, or a follow-up to one: the agent reads and answers.
+    if (wantsWork(q, catalog, { open, last })) {
+      const reply = await workTurn()
+      if (reply === "limited") return { status: 429, body: { error: "Too many questions." } }
+      if (reply) return { status: 200, body: reply }
     }
     const opened = open ? catalog.projects.find((project) => project.slug === open) : undefined
     if (opened && ABOUT_OPEN.test(fold(q)) && !mentionedProjects(q, catalog).length && !ALL_WORK.test(fold(q))) {

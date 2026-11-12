@@ -5,7 +5,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { CopyIcon, RefreshCwIcon } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { ghostButton, paper } from "./surfaces";
+import { ghostButton } from "./surfaces";
 import { take } from "../utils/range";
 
 export interface MessagePairProps extends Omit<
@@ -52,9 +52,9 @@ export function MessagePair({
     >
       <p
         className={cn(
-          "max-w-[85%] self-end text-[15px] leading-[22px]",
+          "max-w-[85%] self-end text-[15px] leading-[22px] [text-wrap:pretty]",
           variant === "bubble"
-            ? cn(paper, "rounded-2xl px-3.5 py-2")
+            ? "rounded-[18px] bg-[var(--ink-wash)] px-4 py-2.5"
             : "text-foreground/90 text-end",
         )}
       >

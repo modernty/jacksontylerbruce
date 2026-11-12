@@ -8,9 +8,15 @@ import { ShowView, indexText, toolSchema } from "./llm"
 import { resolveTokens } from "./qa"
 
 /** One earlier exchange, as the visitor saw it. */
-export type PastTurn = { q: string; a: string; source?: "site" | "open" }
+export type PastTurn = { q: string; a: string; source?: "site" | "open" | "work" }
 export type Source = { title: string; url: string }
-export type Status = "thinking" | "searching"
+export type Status = "thinking" | "searching" | "reading"
+
+/** The site's voice, shared by every model that writes in the conversation. */
+export const VOICE = [
+  "Voice: calm, direct, concrete. No hype, no praise words (iconic, legendary, renowned). Never end on a question or an offer.",
+  "About Tyler, write with no subject: never \"I\", \"he\", \"his\", \"we\", \"Tyler\" or \"Tyler's\" (write \"the work\", \"the project\"). Lead with the fact (\"Founding designer. App, brand and system.\"). The title is \"designer\", never \"architect\". Other people and things are written about normally.",
+]
 
 /** What the model came back with: words, the pages it cited, or a site view to show instead. */
 export type OpenAnswer = { text: string; sources: Source[]; view?: z.infer<typeof ShowView> }
