@@ -1,5 +1,6 @@
 import { byRecent } from "./disciplines"
 import type { PublicCatalog } from "./publish"
+import { roleTitle } from "./titles"
 
 /** One role as the conversation lists it, resume style. */
 export type CareerEntry = { id: string; name: string; title: string; dates: string; summary: string; sizes: string; projects: string[] }
@@ -25,7 +26,7 @@ export function careerEntries(catalog: PublicCatalog): CareerEntry[] {
       return {
         id: role.id,
         name: role.name,
-        title: role.title,
+        title: roleTitle(role),
         dates: `${start} ${en} ${end}`,
         summary: role.summary ?? "",
         sizes: [role.team, role.company].filter(Boolean).join(" · "),

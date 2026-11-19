@@ -7,6 +7,7 @@ import { WorkView } from "@/src/components/work-view"
 import { careerEntries } from "@/src/content/career"
 import { publishCatalog } from "@/src/content/publish"
 import type { Section } from "@/src/content/schema"
+import { projectTitle } from "@/src/content/titles"
 import { Grain } from "@/src/plates/grain"
 import { MediaFrame } from "@/src/plates/media-frame"
 
@@ -96,7 +97,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         lead={lead ? lead.body.split("\n\n").filter(Boolean) : []}
         meta={
           <div className="facts">
-            <p className="meta">{[org, role?.title, project.circa ?? role?.yearLabel].filter(Boolean).join(" · ")}</p>
+            <p className="meta">{[org, projectTitle(project, role), project.circa ?? role?.yearLabel].filter(Boolean).join(" · ")}</p>
             <p className="themes">{themes}</p>
           </div>
         }

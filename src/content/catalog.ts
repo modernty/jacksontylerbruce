@@ -205,6 +205,7 @@ const projects: Omit<Project, "media">[] = [
     themeIds: ["theme:ai", "theme:trust", "theme:arch", "theme:systems"],
     onTimeline: true,
     flagged: false,
+    title: "Product Design Lead",
     aliases: ["model playground", "playground"],
   },
   {
@@ -238,6 +239,7 @@ const projects: Omit<Project, "media">[] = [
     themeIds: ["theme:ai", "theme:trust"],
     onTimeline: true,
     flagged: false,
+    title: "Product Design Lead",
     aliases: ["talent management", "atls"],
   },
   {
@@ -413,7 +415,9 @@ const roles: Role[] = [
     summary: "Led product design for an art lending platform that let collectors borrow against their collections to grow their portfolios. Designed the core experience bridging fine art and financial services.",
   }),
   role("role:chatter", "Chatter Social", "Design Director", 2023.78, 2025.7, `2023${en}25`, 2, ["client:chatter"], ["chatter social", "chatter"]),
-  role("role:lazarus", "Lazarus AI", "Design Lead", 2024.13, 2026.56, `2024${en}26`, 0, ["client:lazarus"], ["lazarus", "lazarus ai"]),
+  role("role:lazarus", "Lazarus AI", "Design Director", 2024.13, 2026.56, `2024${en}26`, 0, ["client:lazarus"], ["lazarus", "lazarus ai"], {
+    titles: ["Product Design Lead", "Design Director"],
+  }),
   role("role:employer", "", "Senior Product Designer", 2026.04, null, `2026${en}`, 2, ["client:loblaw-pc-health", "client:intuit", "client:rv"], ["current role", "current employer"], {
     employer: true,
     since: "Jan 2026",

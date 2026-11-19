@@ -4,6 +4,7 @@ import { notionLines } from "./notion"
 import { wordCount } from "./guard"
 import { publishCatalog, type PublicCatalog } from "./publish"
 import type { Project, Role, Theme } from "./schema"
+import { roleTitle } from "./titles"
 import { EDUCATION } from "@/src/router/personal"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import type { Intent, Pill } from "@/src/router/types"
@@ -49,7 +50,7 @@ export function projectsAnnotation(catalog: PublicCatalog): string {
 
 export function roleAnnotation(role: Role): string {
   const name = role.employer ? role.name : role.name
-  return `${name} is on the timeline as ${role.title}, ${role.yearLabel}.`
+  return `${name} is on the timeline as ${roleTitle(role)}, ${role.yearLabel}.`
 }
 
 export function compareAnnotation(catalog: PublicCatalog, ids: string[]): string {
@@ -88,7 +89,7 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
   }
   if (topic === "availability") {
     const facts = [catalog.profile.location, ...open.flatMap((role) => [role.name, role.title, role.since ?? role.yearLabel])]
-    const roles = open.map((role) => `${role.name} (${role.title}, ${role.since ?? role.yearLabel})`).join("; ")
+    const roles = open.map((role) => `${role.name} (${roleTitle(role)}, ${role.since ?? role.yearLabel})`).join("; ")
     return {
       title: "Get in touch",
       body: `Write to ${catalog.profile.email}, or connect on LinkedIn.${roles ? ` Current roles: ${roles}.` : ""} Based in ${catalog.profile.location}.`,
@@ -152,7 +153,8 @@ export function factText(catalog: PublicCatalog = publishCatalog()): string {
     catalog.profile.location,
     catalog.profile.title,
     catalog.employer,
-    ...catalog.roles.flatMap((role) => [role.name, role.title, role.yearLabel, role.since ?? ""]),
+    ...catalog.roles.flatMap((role) => [role.name, role.title, ...(role.titles ?? []), roleTitle(role), role.yearLabel, role.since ?? ""]),
+    ...catalog.projects.flatMap((project) => (project.title ? [project.title] : [])),
     ...catalog.clients.map((client) => clientLabel({ name: client.name, usesEmployerName: false })),
     ...catalog.projects.flatMap((project) => [project.name, project.summary, ...project.sections.flatMap((section) => [section.title, section.body]), ...notionLines(project.slug)]),
     ...catalog.themes.flatMap((theme) => [theme.name, theme.label]),

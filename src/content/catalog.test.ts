@@ -108,3 +108,18 @@ test("the voice guide's hype words are flagged", () => {
   assert.deepEqual(textIssues("A revolutionary, game-changing launch."), ["hype"])
   assert.deepEqual(textIssues("Good design starts by living inside the problem."), [])
 })
+
+test("titles: Lazarus is a progression, and two Lazarus projects carry Product Design Lead", async () => {
+  const { roleTitle, projectTitle } = await import("./titles")
+  const catalog = publishCatalog()
+  const lazarus = catalog.roles.find((role) => role.id === "role:lazarus")
+  assert.ok(lazarus)
+  assert.equal(roleTitle(lazarus), "Product Design Lead, then Design Director")
+  for (const slug of ["model-playground", "talent-management"]) {
+    const project = catalog.projects.find((item) => item.slug === slug)
+    assert.ok(project, slug)
+    assert.equal(projectTitle(project, lazarus), "Product Design Lead", slug)
+  }
+  const employer = catalog.roles.find((role) => role.employer)
+  assert.equal(employer && roleTitle(employer), "Senior Product Designer")
+})

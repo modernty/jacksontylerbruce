@@ -6,6 +6,7 @@ import { wordCount } from "@/src/content/guard"
 import { notionLines } from "@/src/content/notion"
 import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Project } from "@/src/content/schema"
+import { projectTitle } from "@/src/content/titles"
 import { voiceIssues } from "./check"
 import { VOICE, openAllowed, pastMessages, type PastTurn, type Status } from "./converse"
 import { DEFAULT_MODEL, GENERAL_TIMEOUT_MS, costUsd, recordSpend, thinkingOff } from "./limits"
@@ -29,7 +30,7 @@ export const MAX_WORDS = 130
 
 const projectLine = (project: Project, catalog: PublicCatalog) => {
   const role = catalog.roles.find((item) => item.id === project.roleId)
-  return `${project.slug} | ${project.name} | ${project.circa ?? ""} | ${role ? `${role.name}, ${role.title}` : ""} | ${project.summary}`
+  return `${project.slug} | ${project.name} | ${project.circa ?? ""} | ${role ? `${role.name}, ${projectTitle(project, role)}` : ""} | ${project.summary}`
 }
 
 /** Everything public about one project, as plain text for the model. */
@@ -40,7 +41,7 @@ export function projectFile(project: Project, catalog: PublicCatalog = publishCa
   const lines = [
     `Project: ${project.name} (slug ${project.slug})`,
     project.circa ? `When: ${project.circa}` : "",
-    role ? `Role: ${role.name}, ${role.title}` : "",
+    role ? `Role: ${role.name}, ${projectTitle(project, role)}` : "",
     client ? `Client: ${client.name}` : "",
     themes.length ? `Themes: ${themes.join(", ")}` : "",
     `Type: ${DISCIPLINES.find((item) => item.key === disciplineOf(project))?.label ?? ""}`,

@@ -147,7 +147,7 @@ def test_tyler_role_and_date_answers():
     catalog = load_catalog()
     projects = _by_id(catalog.projects)
     playground = projects["project:model-playground"]
-    assert playground.role == "Design Lead"
+    assert playground.role == "Product Design Lead"
     assert playground.ledOrMade == "Led and made"
     assert playground.year == "2024\u20132025"
 

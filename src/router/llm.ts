@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { z } from "zod"
 import { factText, followUpsFor, sectionHref, sheetAnswer, focusAnnotation, roleAnnotation, careerAnnotation, projectsAnnotation, compareAnnotation } from "@/src/content/answers"
 import { notionLines } from "@/src/content/notion"
+import { roleTitle } from "@/src/content/titles"
 import { publishCatalog, publicFocusIds } from "@/src/content/publish"
 import { annotationAllowed } from "./check"
 import { keywordRoute } from "./keyword"
@@ -62,7 +63,7 @@ export function indexText(): string {
   const catalog = publishCatalog()
   const lines = [
     `${catalog.profile.id} | ${catalog.profile.name} | ${catalog.profile.location} | ${catalog.profile.title}`,
-    ...catalog.roles.map((role) => `${role.id} | ${role.name} | ${role.title} | ${role.yearLabel}`),
+    ...catalog.roles.map((role) => `${role.id} | ${role.name} | ${roleTitle(role)} | ${role.yearLabel}`),
     ...catalog.clients.map((client) => `${client.id} | ${client.name} | role ${client.roleId}`),
     ...catalog.projects.map((project) => [`${project.id} | ${project.name} | ${project.circa ?? ""} | ${project.summary}`, ...notionLines(project.slug).map((line) => `  ${line}`)].join("\n")),
     ...catalog.themes.map((theme) => `${theme.id} | ${theme.name}`),

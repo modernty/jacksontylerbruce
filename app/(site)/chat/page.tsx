@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { ConversationStage, type ProjectPreview } from "@/src/components/conversation-stage"
 import { careerEntries } from "@/src/content/career"
 import { publishCatalog } from "@/src/content/publish"
+import { projectTitle } from "@/src/content/titles"
 import type { GlobePlace } from "@/src/globe/types"
 import { publicStage } from "@/src/timeline/stage-data"
 
@@ -21,7 +22,7 @@ export default function ChatPage() {
       slug: project.slug,
       name: project.name,
       summary: project.summary,
-      meta: [org === project.name ? "" : org, role?.title, project.circa ?? role?.yearLabel].filter(Boolean).join(" · "),
+      meta: [org === project.name ? "" : org, projectTitle(project, role), project.circa ?? role?.yearLabel].filter(Boolean).join(" · "),
       cover: project.media.cover,
     }
   })

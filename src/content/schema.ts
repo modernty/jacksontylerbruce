@@ -7,7 +7,10 @@ export const TITLES = [
   "Design Lead",
   "Senior Designer",
   "Senior Product Designer",
+  "Product Design Lead",
 ] as const
+
+export type Title = (typeof TITLES)[number]
 
 const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
 
@@ -76,6 +79,8 @@ export const RoleSchema = z.object({
   employer: z.boolean(),
   listed: z.boolean(),
   title: z.enum(TITLES),
+  /** Titles held in this role, earliest first, when it was a progression. title is the last one. */
+  titles: z.array(z.enum(TITLES)).min(2).optional(),
   start: z.number(),
   end: z.number().nullable(),
   yearLabel: z.string().min(1),
@@ -128,6 +133,8 @@ export const ProjectSchema = z.object({
   onTimeline: z.boolean(),
   flagged: z.boolean(),
   orgLabel: z.string().optional(),
+  /** The title held on this project, when it differs from the role's. */
+  title: z.enum(TITLES).optional(),
   aliases: z.array(z.string()),
   media: MediaSchema,
   /** Sort position from the Notion intake. 1 is the most recent. */
