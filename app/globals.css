@@ -401,7 +401,6 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .chat-link:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
 /* The view an answer offers (the globe, the timeline) sits on its own line below it, as a secondary button. */
 .chat-view-action{display:flex;margin-top:14px}
-.chat-view-action.is-globe .preview-close{border-radius:6px}
 /* Career, resume style. One size throughout and two styles: role facts in Medium, the summary in Regular. */
 .career{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:28px}
 .career p{margin:0}
@@ -511,7 +510,8 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .btn.next:hover svg{transform:translateX(2px)}
 .btn:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
 /* Secondary: a tinted surface instead of an outline, the label before the icon. */
-.preview-close{all:unset;cursor:pointer;box-sizing:border-box;position:relative;height:32px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;border-radius:var(--radius-pill);background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;z-index:1;transition:background var(--motion-quick) var(--motion-ease)}
+/* The secondary button (Close, Hide media, Show/Hide globe and timeline): a soft fill, 6px corners. */
+.preview-close{all:unset;cursor:pointer;box-sizing:border-box;position:relative;height:32px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;border-radius:6px;background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;z-index:1;transition:background var(--motion-quick) var(--motion-ease)}
 .preview-close:hover{background:var(--ink-rule)}
 .preview-close:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
 .sheet-scrim{display:none}
@@ -540,6 +540,8 @@ body:has(.work-stage.wide){--media-max:1000px}
   .preview{position:fixed;z-index:1;top:132px;right:max(36px,calc((100vw - var(--pair)) / 2));bottom:calc(48px + env(safe-area-inset-bottom));width:calc(var(--pair) - var(--side) - 96px);display:flex;flex-direction:column;overflow:hidden;animation:preview-in var(--motion-page) var(--motion-ease-move) both}
   /* The image keeps its own shape, no taller than half the screen; the space left over is just paper. */
   .preview .frame{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+  /* Lifted toward the screen's middle (see screen-centre.ts). */
+  .preview .frame>*{translate:0 calc(var(--lift,0px) * -1)}
   /* Sized by the frame, never by the file: a cached smaller rendition must not shrink it. Contained and centred. */
   .preview .frame img{display:block;width:100%;height:100%;max-height:min(100%,50vh);object-fit:contain;background:none;margin:auto}
   .preview .frame .grain{max-height:min(100%,50vh)}

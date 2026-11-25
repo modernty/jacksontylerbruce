@@ -8,12 +8,12 @@ const ask = (q: string) => answerAbout(q)
 test("travel and location questions answer from the places content", () => {
   // The Notion Q&A answers its own questions first.
   assert.equal(ask("Where has Tyler travelled?").answer, "Medellín, Tulum, Costa Rica, and more. Living inside a place changes how a problem looks.")
-  assert.match(ask("Which places has Tyler been to?").answer, /^56 places across 20 countries/)
+  assert.match(ask("Which places has Tyler been to?").answer, /^57 places across 20 countries/)
   assert.match(ask("Where are you based?").answer, /^Miami\. \d{1,2}:\d{2} [AP]M there\.$/)
   const lived = ask("Where have you lived?")
   assert.match(lived.answer, /Medellín/)
   assert.match(lived.answer, /Home is Miami\.$/)
-  assert.match(ask("How many countries have you been to?").answer, /^56 places across 20 countries: United States/)
+  assert.match(ask("How many countries have you been to?").answer, /^57 places across 20 countries: United States/)
 })
 
 test("countries, cities and short forms turn the globe to the right place", () => {
@@ -35,7 +35,7 @@ test("countries, cities and short forms turn the globe to the right place", () =
 
 test("regions answer with their countries and cities", () => {
   const asia = ask("Where in Asia?")
-  assert.match(asia.answer, /India \(Mumbai and Goa\)/)
+  assert.match(asia.answer, /India \(Mumbai, Chennai and Goa\)/)
   assert.match(asia.answer, /Japan \(Tokyo, Kyoto and Osaka\)/)
   const europe = ask("What about Europe?")
   assert.match(europe.answer, /^In Europe: /)

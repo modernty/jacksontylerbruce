@@ -8,7 +8,7 @@ test("places hold the confirmed travel list with home first", () => {
   assert.equal(places[0]?.id, "place:miami")
   assert.ok(profile.location.startsWith(places[0]?.name.split(",")[0] ?? "?"))
   assert.equal(profile.placeId, places[0]?.id)
-  assert.equal(places.length, 56)
+  assert.equal(places.length, 57)
   assert.equal(new Set(places.map((place) => place.country)).size, 20)
   assert.equal(new Set(places.map((place) => place.id)).size, places.length)
 })

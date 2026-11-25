@@ -1,5 +1,5 @@
 {
-  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10, Columbus 2026-11-11). Tyler is based in Miami; Miami is listed first in the catalog. Coordinates are city centres, to four decimals.",
+  "$description": "Places Tyler has lived (a month or more) or travelled to, confirmed by Tyler on 2026-11-02 for public use (Stockholm and Copenhagen added 2026-11-10, Columbus 2026-11-11, Chennai 2026-11-25). Tyler is based in Miami; Miami is listed first in the catalog. Coordinates are city centres, to four decimals.",
   "home": "miami",
   "places": [
     {
@@ -424,6 +424,14 @@
       "country": "India",
       "lat": 19.076,
       "lng": 72.8777,
+      "kind": "traveled"
+    },
+    {
+      "slug": "chennai",
+      "name": "Chennai",
+      "country": "India",
+      "lat": 13.0827,
+      "lng": 80.2707,
       "kind": "traveled"
     },
     {

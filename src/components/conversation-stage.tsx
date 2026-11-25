@@ -17,6 +17,7 @@ import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, CHAT_CLOSE_PANEL, follo
 import { openTab } from "./project-tabs"
 import { holdComposer } from "./composer"
 import { DemoCards } from "./demo-cards"
+import { useScreenCentre } from "./screen-centre"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null; logo?: string }
 
@@ -112,6 +113,8 @@ function keepShown(picked: Shown | null) {
  */
 export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: { desktop: string; mobile: string }; careers: CareerEntry[] }) {
   const router = useRouter()
+  const centreOnScreen = useScreenCentre()
+  const centreProject = useScreenCentre()
   const bySlug = useRef(new Map(previews.map((item) => [item.slug, item])))
   const byRole = useRef(Object.fromEntries(careers.map((item) => [item.id, item])))
   const names = useRef(Object.fromEntries(previews.map((item) => [item.slug, item.name])))
@@ -382,7 +385,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 <p className="summary">{panel === "globe" ? (livedOnly ? "Places lived. Drag the globe to turn it." : "Places lived and travelled. Drag the globe to turn it.") : "Each role and the projects under it, from 2019 to now."}</p>
               </div>
             </header>
-            <div className="frame">
+            <div className="frame" ref={centreOnScreen}>
               {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : (
                 <>
                   <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />
@@ -411,7 +414,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
               <h2 className="sr-only">{preview.name}</h2>
             </header>
             {preview.cover ? (
-              <figure className="frame">
+              <figure className="frame" ref={centreProject}>
                 <LoadingImage
                   key={preview.slug}
                   src={preview.cover.src}
@@ -422,7 +425,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 />
               </figure>
             ) : (
-              <figure className="frame">
+              <figure className="frame" ref={centreProject}>
                 <Grain key={preview.slug} slug={preview.slug} label={preview.name} />
               </figure>
             )}
