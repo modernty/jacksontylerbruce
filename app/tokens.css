@@ -3,6 +3,7 @@
   --ink:#111111;
   --accent:#2E3A87;
   --link:#3A4FA0;
+  --charcoal:#2B2B2B;
   --accent-soft:#E3E8FA;
   --paper:#FAFAFA;
   --surface:#FFFFFF;
@@ -29,9 +30,9 @@
   --ink-muted:color-mix(in srgb,var(--ink) 45%,transparent);
   --ink-meta:color-mix(in srgb,var(--ink) 60%,transparent);
   --ink-quiet:color-mix(in srgb,var(--ink) 70%,transparent);
-  --sans:'Aeonik Pro','Avenir Next',Avenir,'Segoe UI',sans-serif;
+  --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
   --mono:var(--plex),ui-monospace,monospace;
-  --serif:var(--source-serif),Georgia,serif;
+  --serif:'Helvetica Neue',Helvetica,Arial,sans-serif;
   --fs-display:28px;
   --fs-display-small:26px;
   --fs-header:20px;

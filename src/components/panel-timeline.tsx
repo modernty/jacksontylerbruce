@@ -6,11 +6,11 @@ import type { TimelineModel } from "@/src/timeline/types"
 import { desktopTimeline } from "./timeline-modal"
 
 /** Space left clear on each side of the drawing, inside the panel. */
-const SIDE = 36
+const SIDE = 48
 
 /**
  * The career timeline in the chat's side panel, drawn at the width it is shown at: the time axis (the
- * role bars, the lanes, the years) spans the panel less 36px each side, while the type keeps one real
+ * role bars, the lanes, the years) spans the panel less 48px each side, while the type keeps one real
  * size, 12px on an ordinary desktop and 16px from 2000px wide. Until it is measured it shows the
  * server's drawing.
  */

@@ -27,7 +27,7 @@ test("each role's projects stack under its left edge, one row each", () => {
   assert.deepEqual(lazarus.map((point) => point.y - lazarus[0].y), [0, 15, 30, 45])
   const jet = label("Fixed Rate Fixed Term")
   assert.ok(jet.x < label("Novart").x, "Jet's project sits at Jet's start, before Nax's")
-  assert.ok(svg.includes(`>${employerPublicName().toUpperCase()}</tspan>`), "the current role reads the employer switch")
+  assert.ok(svg.includes(`>${employerPublicName()}</tspan>`), "the current role reads the employer switch")
   assert.ok(label("Loblaws / PC Health").x === label("Intuit").x)
 })
 

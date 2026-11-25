@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { quietPage } from "./chrome"
-import { HOME_CHAT, closeHomePanel, handOff } from "./chat-thread"
+import { HOME_CHAT, handOff, startNewChat } from "./chat-thread"
 import { askHere } from "./starter-prompts"
 import { BoringToggle } from "./view-mode"
 
@@ -19,21 +19,20 @@ export function TopBar({ location, place, linkedin }: { location: string; place?
         <Link
           href="/chat"
           onClick={(event) => {
-            // The name puts the conversation back on its own. The chat stays; the panel beside it closes.
-            if (path === "/chat") event.preventDefault()
-            closeHomePanel()
+            // The name starts a new chat: the conversation and its panel clear, open tabs stay.
+            startNewChat()
+            if (path === "/chat") {
+              event.preventDefault()
+              window.scrollTo(0, 0)
+            }
           }}
         >
-          Jackson, <em>Tyler</em> Bruce
+          Jackson, Tyler Bruce
         </Link>
         {/* LinkedIn and the location sit beside the name, at the left with the chat. */}
         <span className={project ? "contact on-project" : "contact"}>
           <a href={linkedin} className="top-link external" target="_blank" rel="noreferrer">
             <span>LinkedIn</span>
-            {/* It leaves the site, so it ends on the arrow out instead of leading with a dot. */}
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M2.5 7.5l5-5M3.5 2.5h4v4" />
-            </svg>
           </a>
           <Link
             href="/chat"
@@ -59,7 +58,7 @@ export function TopBar({ location, place, linkedin }: { location: string; place?
   // Every other page (the 404, for one) carries the same name, and nothing else.
   return (
     <header className="top top-work">
-      <Link href="/chat" onClick={() => closeHomePanel()}>Jackson, <em>Tyler</em> Bruce</Link>
+      <Link href="/chat" onClick={() => startNewChat()}>Jackson, Tyler Bruce</Link>
     </header>
   )
 }

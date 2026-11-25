@@ -86,5 +86,7 @@ export const CONVERSATIONS: ConversationCase[] = [
   { q: "show me the last one", state: { listed: RECENT }, want: { projects: ["whitelist"] } },
   { q: "What was your role?", state: { open: "novart" }, want: { projects: ["novart"] } },
   { q: "Tell me about Whitelist", state: { open: "novart" }, want: { projects: ["whitelist"] } },
-  { q: "How do you approach a vague brief?", state: { expects: "category", listed: RECENT }, want: { go: true } },
+  // How Tyler works is answered in the conversation: no page, no panel.
+  { q: "How do you approach a vague brief?", state: { expects: "category", listed: RECENT }, want: {} },
+  { q: "Walk me through your process", state: {}, want: {} },
 ]

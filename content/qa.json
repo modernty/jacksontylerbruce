@@ -22,8 +22,7 @@
       "question": "What's a day like for you?",
       "alternates": [
         "What's a day like for him?",
-        "What's his routine?",
-        "How does he work?"
+        "What's his routine?"
       ],
       "answer": "Training early. Deep work before noon. Calls with teams across time zones after.",
       "view": null,
@@ -121,7 +120,11 @@
       "alternates": [
         "How does he start a project?",
         "What's his process?",
-        "Where does he begin?"
+        "Where does he begin?",
+        "Walk me through your process.",
+        "What's your process?",
+        "How do you work?",
+        "How does he work?"
       ],
       "answer": "Inside the problem. Time with the people it's for, before any screen.",
       "view": null,

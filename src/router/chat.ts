@@ -28,9 +28,9 @@ import { aboutTravel, type Go } from "./navigate"
  * links; previous and next in the preview follow that order. expects says what the reply asked for.
  */
 /** roles lists role ids the reply shows as a resume-style list, newest first. */
-/** followUps are suggested next prompts; contact shows the contact link under the answer. */
+/** followUps are suggested next prompts; contact shows the contact link under the answer; preview opens the first project beside the answer. */
 /** source says who answered: the site's own content, or the model for a question outside it. sources are pages an open answer cites. nudge shows the note about general questions. */
-export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: Source[]; nudge?: boolean; placeKind?: "lived"; cards?: "demo" }
+export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: Source[]; nudge?: boolean; placeKind?: "lived"; cards?: "demo"; preview?: boolean }
 
 export type ChatDeps = AskDeps & { open?: OpenClient | null; work?: WorkClient | null; onStatus?: (status: Status) => void }
 
@@ -140,6 +140,14 @@ export function wantsWork(question: string, catalog: PublicCatalog, state: { ope
   return !!state.last && state.last.source === "work" && isFollowUp(question, catalog)
 }
 
+/**
+ * A question about how Tyler works: process, approach, thinking, values. The work agent answers it from
+ * the practice and the projects; it is never the career or a view. A career word keeps it the career.
+ */
+const PRACTICE = /\b(process|approach|method\w*|philosoph\w*|principles?|values|workflow|way of working|ways of working|how (do|does|did) (you|he|tyler) (work|think|design|approach|decide|start|begin|tackle|handle|go about)|walk (me|us) through (your|his|how|the way)|what matters to (you|him)|why do you design)\b/
+const CAREER_WORDS = /\b(career|resume|cv|work history|job history|employment|experience|background|timeline|roles?|jobs?)\b/
+export const asksPractice = (question: string) => PRACTICE.test(fold(question)) && !CAREER_WORDS.test(fold(question))
+
 // A question about the project already open: "what was your role?", "how did that turn out?".
 const ABOUT_OPEN = /\b(this|that|it|its|the project|your role|you do|team|outcome|result|impact|approach|process|challenge|problem|how did|why did|images?|screens?|who)\b/
 
@@ -227,7 +235,8 @@ function allWork(catalog: PublicCatalog): ChatReply {
 
 /** Every public project, newest first, with the types to narrow it. */
 function everything(catalog: PublicCatalog): ChatReply {
-  return { ...sentence(`All ${catalog.projects.length} projects, most recent first:`, catalog.projects), followUps: typePrompts() }
+  // The first of them opens beside the list straight away, so the work shows before anything is picked.
+  return { ...sentence(`All ${catalog.projects.length} projects, most recent first:`, catalog.projects), followUps: typePrompts(), preview: true }
 }
 
 /** A group of projects as one sentence, newest first. */
@@ -435,6 +444,18 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
   if (!blocked(q)) {
     // However a visitor asks how to reach Tyler, the answer is his email.
     if (asksForContact(q)) return { status: 200, body: { answer: contactAnswer(catalog.profile.email), followUps: ["How do you start a project?", "Show me some case studies."] } }
+    // How Tyler works is the model's to answer, from everything the site says. With no model, the
+    // Q&A or the point of view below answers it instead.
+    if (asksPractice(q)) {
+      const reply = await workTurn()
+      if (reply === "limited") return { status: 429, body: { error: "Too many questions." } }
+      if (reply) return { status: 200, body: { ...reply, panel: undefined } }
+      // No model: the Q&A or the point of view answers below; failing both, how a project starts.
+      const start = QA.find((entry) => entry.key === "how-start")
+      if (!qaReply(q) && !stanceReply(q, new Set(catalog.projects.map((project) => project.slug))) && start) {
+        return { status: 200, body: qaToChat({ answer: resolveTokens(start.answer), ...(start.followUps.length ? { followUps: start.followUps } : {}) }) }
+      }
+    }
     // An opinion is answered with the point of view, before anything else reads it as a project.
     const qa = qaReply(q)
     // A named project only blocks the broad answer: "what do you think of the Botpress design?" is
@@ -447,12 +468,12 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
     if (CASE_STUDIES.test(fold(q)) && !mentionedProjects(q, catalog).length && !asksForEverything(fold(q))) {
       const shown = new Set(catalog.projects.map((project) => project.slug))
       const studies = caseStudySlugs().filter((slug) => shown.has(slug))
-      if (studies.length) return { status: 200, body: { answer: "A few case studies to start with. Pick one to open it.", projects: studies, cards: "demo", followUps: ["Show me all projects.", "What's your take on AI?"] } }
+      if (studies.length) return { status: 200, body: { answer: "A few case studies to start with. Pick one to open it.", projects: studies, cards: "demo", followUps: ["Show me all projects.", "How do you start a project?"] } }
     }
     // "Show me a demo": the projects that can be opened and played, not one picked for the visitor.
     if (DEMO.test(fold(q)) && !mentionedProjects(q, catalog).length) {
       const playable = byRecent(catalog.projects.filter((project) => openableSlugs().includes(project.slug) && openableFor(project.slug).demo))
-      if (playable.length) return { status: 200, body: { answer: "A few you can try. Pick one to open it.", projects: playable.map((project) => project.slug), cards: "demo", followUps: ["What's your take on AI?", "Tell me about your experience."] } }
+      if (playable.length) return { status: 200, body: { answer: "A few you can try. Pick one to open it.", projects: playable.map((project) => project.slug), cards: "demo", followUps: ["How do you start a project?", "Tell me about your experience."] } }
     }
     // The Notion Q&A first: a matched question or pill is answered without the model.
     if (qa && !qa.contact) return { status: 200, body: qaToChat(qa) }

@@ -43,7 +43,7 @@ test("asking for the work answers in one sentence: three recent projects from tw
   assert.ok(new Set(picked.map((project) => project?.roleId)).size <= 2)
   // The newest project always leads.
   assert.equal(reply.projects[0], byRecent(catalog.projects)[0]?.slug)
-  assert.equal(reply.answer, `The newest: Overmatch AI, Botpress and Intuit. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`)
+  assert.equal(reply.answer, `The newest: Botpress, Intuit and LZR 2.0. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`)
   assert.deepEqual(reply.followUps, ["All projects.", "Product design work.", "Brand work.", "Spatial work."])
   assert.equal(reply.expects, "category")
   assert.ok(!reply.answer.includes("\n"))
@@ -113,8 +113,10 @@ test("career lists the roles and opens the timeline, the timeline opens by name,
   assert.deepEqual("roles" in one.body ? one.body.roles : null, ["role:soul-machines"], JSON.stringify(one.body))
   const drawn = await handleChatAsk({ q: "Take me to the timeline", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   assert.ok("panel" in drawn.body && drawn.body.panel === "timeline", JSON.stringify(drawn.body))
-  const elsewhere = await handleChatAsk({ q: "Tell me about your design process", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
-  assert.ok("go" in elsewhere.body && elsewhere.body.go?.href, JSON.stringify(elsewhere.body))
+  // How Tyler works is answered in the conversation (by the model when it runs), never a page or the timeline.
+  const process = await handleChatAsk({ q: "Tell me about your design process", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  assert.ok(!("go" in process.body) && !("panel" in process.body && process.body.panel), JSON.stringify(process.body))
+  assert.match("answer" in process.body ? process.body.answer : "", /Inside the problem/)
 })
 
 test("Notion Q&A rows answer without the model, with their view and follow-ups", async () => {

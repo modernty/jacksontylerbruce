@@ -57,17 +57,17 @@ test("profile is Miami, and the current role is one employer", () => {
 test("the public project list is the approved one, in order", () => {
   const slugs = byRecent(publishCatalog().projects).map((project) => project.slug)
   assert.deepEqual(slugs, [
-    "overmatch-ai", "botpress", "intuit", "loblaws", "lzr-2", "usm-milan", "model-playground", "talent-management", "whitelist",
+    "botpress", "intuit", "loblaws", "lzr-2", "usm-milan", "model-playground", "talent-management", "whitelist",
     "lazarus-brand", "chatter", "novart", "fixed-rate-fixed-term", "the-terminal", "corelogic", "nestle", "usm-hue-man",
   ])
   const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug).sort()
-  assert.deepEqual(hidden, ["pc-chat", "pc-chat-memory", "rv", "traveller"])
+  assert.deepEqual(hidden, ["overmatch-ai", "pc-chat", "pc-chat-memory", "rv", "traveller"])
 })
 
 test("flagged work is absent from public output", () => {
   const catalog = loadCatalog()
   const flagged = catalog.projects.filter((project) => project.flagged).map((project) => project.name).sort()
-  assert.deepEqual(flagged, ["PC Chat", "PC Chat: Memory", "RV", "Traveller"])
+  assert.deepEqual(flagged, ["Overmatch AI platform", "PC Chat", "PC Chat: Memory", "RV", "Traveller"])
   const published = publishCatalog()
   const blob = JSON.stringify(published)
   // Confidential work never appears by name. Work folded into another project (PC Chat into

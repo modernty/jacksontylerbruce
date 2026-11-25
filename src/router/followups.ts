@@ -14,7 +14,6 @@ import { matchQa } from "./qa"
 const FRESH: readonly string[] = [
   "Show me some case studies.",
   "Tell me about your experience.",
-  "What's your take on AI?",
   "How do you start a project?",
   ...QA.filter((entry) => entry.pill).map((entry) => entry.question),
 ]

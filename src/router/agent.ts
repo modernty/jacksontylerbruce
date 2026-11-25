@@ -3,7 +3,10 @@ import Anthropic from "@anthropic-ai/sdk"
 import { careerEntries } from "@/src/content/career"
 import { DISCIPLINES, byRecent, disciplineOf } from "@/src/content/disciplines"
 import { wordCount } from "@/src/content/guard"
+import intro from "@/content/intro.json"
 import { notionLines } from "@/src/content/notion"
+import { PRINCIPLES } from "@/src/content/principles"
+import { QA } from "@/src/content/qa"
 import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Project } from "@/src/content/schema"
 import { projectTitle } from "@/src/content/titles"
@@ -55,7 +58,27 @@ export function projectFile(project: Project, catalog: PublicCatalog = publishCa
   return lines.filter(Boolean).join("\n")
 }
 
+/**
+ * How Tyler works, as plain text for the model: the practice in his own words (the home intro), the
+ * point of view behind the work, and the questions the site answers about him.
+ */
+export function practiceFile(): string {
+  return [
+    "## The practice, in Tyler's words",
+    ...intro.lines.slice(0, -1),
+    "## Point of view (principles)",
+    ...PRINCIPLES.map((principle) => `- ${principle.title} ${principle.body}`),
+    "## Questions the site answers about Tyler",
+    ...QA.map((entry) => `Q: ${entry.question}\nA: ${entry.answer}`),
+  ].join("\n")
+}
+
 const TOOLS = [
+  {
+    name: "read_practice",
+    description: "How Tyler works: his practice in his own words, the principles behind the work, and the questions the site answers about him (process, how a project starts, influences, routine). Read it for any question about process, approach, thinking, values or ways of working.",
+    input_schema: { type: "object" as const, additionalProperties: false, properties: {} },
+  },
   {
     name: "list_work",
     description: "The public projects, newest first: slug | name | when | role | summary. Optionally only one theme (by theme name) or one type.",
@@ -91,6 +114,7 @@ const TOOLS = [
 /** Runs one tool against the public catalog only. Hidden projects do not exist here. */
 export function runTool(name: string, input: unknown, catalog: PublicCatalog = publishCatalog()): string {
   const args = (input ?? {}) as { slug?: string; id?: string; theme?: string; type?: string }
+  if (name === "read_practice") return practiceFile()
   if (name === "list_work") {
     let found = byRecent(catalog.projects)
     if (args.theme) {
@@ -116,7 +140,8 @@ export function runTool(name: string, input: unknown, catalog: PublicCatalog = p
 
 export function workSystem(catalog: PublicCatalog = publishCatalog()): string {
   return [
-    "You are the conversation on Tyler Jackson's design portfolio, answering questions about the work: a project, a role, or how projects compare.",
+    "You are the conversation on Tyler Jackson's design portfolio, answering questions about the work: a project, a role, how projects compare, or how Tyler works.",
+    "For a question about process, approach, thinking, values or ways of working (\"walk me through your process\", \"how do you work?\"), call read_practice first, then read one or two projects that show it in practice. Answer from the practice, with a project as the example. Never answer it with the career or a list of roles, and never set panel for it.",
     "Read before you answer. Call read_project for every project you discuss, and list_work or read_role when the question is broader. Facts about the work come only from what the tools return. If the content does not cover something, say the site does not go into it, then say what it does cover.",
     "Keep each fact as written. Never join two separate facts into a new claim (if the work was done with leadership and a prototype won sign-off, do not say leadership signed off).",
     "Stay on the subject asked. A follow-up about one project answers about that project only; do not bring the others back in. Lead with the answer, not with what the site lacks.",

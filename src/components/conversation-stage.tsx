@@ -1,19 +1,20 @@
 "use client"
 
 import { track } from "@vercel/analytics"
+import intro from "@/content/intro.json"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { CareerEntry } from "@/src/content/career"
 import type { Image as MediaImage } from "@/src/content/schema"
 import { LoadingImage } from "@/src/plates/loading-image"
-import { TimelineModal, desktopTimeline, phoneTimeline } from "./timeline-modal"
+import { desktopTimeline, phoneTimeline } from "./timeline-modal"
 import { Travel } from "@/src/globe/travel"
 import type { GlobePlace } from "@/src/globe/types"
 import { Grain } from "@/src/plates/grain"
 import { chatAnswer } from "./chat-answer"
 import { IntroStream } from "./intro-stream"
 import { StarterPrompts, askHere } from "./starter-prompts"
-import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, CHAT_CLOSE_PANEL, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
+import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, HOME_SCROLL, CHAT_CLOSE_PANEL, follow, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
 import { holdComposer } from "./composer"
 import { DemoCards } from "./demo-cards"
@@ -28,19 +29,14 @@ type Picked = { slug: string; list: string[] }
 /** only narrows the globe to one kind of place, e.g. the places lived. */
 type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
-const SCROLL_KEY = "home-chat-scroll"
+const SCROLL_KEY = HOME_SCROLL
 // The context first, then the welcome, so the question sits right above the composer it invites.
 /**
  * What a first visit reads before anything else: how the work thinks (from architecture, the idea
  * before the plan), what it is for now, and how it is done. Then the welcome, which is the one line
  * set in bold.
  */
-const WELCOME = [
-  "Grounded in architecture, where every building starts as an idea before it is a plan.",
-  "The same discipline, now applied to AI products. Agents people trust, for health, finance, support and the public sector.",
-  "One craft, many mediums. Every project starts with one core idea and time spent inside the problem. Then every detail answers to it.",
-  "Welcome, how can I help you?",
-]
+const WELCOME: string[] = intro.lines
 const GREETING_TEXT = "min-h-0 max-w-none text-[15px] leading-[24px] tracking-[-0.01em]"
 /** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
 const HANDOFF_MS = 320
@@ -227,7 +223,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   useEffect(() => {
     if (!shown) return
     const onKey = (event: KeyboardEvent) => {
-      // Escape in the expanded timeline closes only that window; the panel under it stays.
+      // Escape closes the panel, unless a dialog is open over it.
       if (event.key === "Escape" && !document.querySelector("dialog[open]")) setShown(null)
     }
     window.addEventListener("keydown", onKey)
@@ -242,11 +238,11 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ q, sessionId: sessionId(), expects: last?.expects, listed: last?.projects, open: openRef.current, history: more?.history }),
         })
-        type Reply = { answer?: string; error?: string; go?: Go } & ReplyExtra
+        type Reply = { answer?: string; error?: string; go?: Go; preview?: boolean } & ReplyExtra
         // An answer the model works on streams its status first, one JSON line at a time.
         const data = response.headers.get("content-type")?.includes("ndjson") ? await readLines<Reply>(response, more?.onStatus) : ((await response.json()) as Reply)
         const projects = data.projects?.filter((slug) => bySlug.current.has(slug))
-        if (projects?.length === 1) setPicked({ slug: projects[0], list: projects })
+        if (projects?.length === 1 || (data.preview && projects?.length)) setPicked({ slug: projects[0], list: projects })
         if (data.panel === "globe" || data.panel === "timeline") setShown({ kind: data.panel, only: data.placeKind })
         if (data.go) follow(data.go, q, router)
         const roles = data.roles?.filter((id) => id in byRole.current)
@@ -280,12 +276,6 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     router.push(media ? `/work/${slug}?media` : `/work/${slug}`)
   }
 
-  const [expanded, setExpanded] = useState(false)
-  const expand = () => {
-    track("view_opened_from_chat", { panel: "timeline" })
-    setExpanded(true)
-  }
-
   const close = () => setShown(null)
   const panel = shown && shown.kind !== "project" ? shown.kind : null
   // An answer about places lived shows only those; home always stays.
@@ -310,8 +300,8 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     </svg>
   )
   const closeButton = (onClose: () => void) => (
-    <button type="button" className="preview-close" onClick={onClose} aria-label="Close preview">
-      Close
+    <button type="button" className="preview-close" onClick={onClose} aria-label="Hide preview">
+      Hide
       <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true">
         <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
       </svg>
@@ -319,32 +309,11 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   )
 
   // The one conversation clears and starts again; project tabs keep their own quick threads.
-  const startOver = () => {
-    setShown(null)
-    resetChat(HOME_CHAT)
-    try {
-      sessionStorage.removeItem(SCROLL_KEY)
-    } catch {
-      // Not kept.
-    }
-    window.scrollTo(0, 0)
-  }
-
   return (
     <div className={open ? `conv previewing${panel ? ` showing-${panel}` : ""}` : "conv"}>
       <div className="conv-chat">
-        {active && reveal ? (
-          <div className="conv-tools">
-            <button type="button" className="btn ghost with-icon" onClick={startOver} aria-label="New chat">
-              <span className="label">New chat</span>
-              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
-        ) : (
-          <Opening slotRef={slotRef} leaving={active && !reveal} />
-        )}
+        {/* A new chat starts from the name in the header (startNewChat). */}
+        {active && reveal ? null : <Opening slotRef={slotRef} leaving={active && !reveal} />}
         <ChatThread
           storeKey={HOME_CHAT}
           ask={ask}
@@ -365,7 +334,6 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           }}
         />
       </div>
-      <TimelineModal open={expanded} onClose={() => setExpanded(false)} desktop={timeline.desktop} mobile={timeline.mobile} />
       {panel && landed ? (
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={close} />
@@ -373,13 +341,6 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
             {/* The bar comes first so that, when the row is too narrow for both, it wraps above the info. */}
             <header className="preview-head">
               <div className="preview-bar">
-                {panel === "timeline" ? (
-                  <button type="button" className="icon-btn expand" onClick={expand} aria-label="Expand the timeline">
-                    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                      <path d="M7 1.5h3.5V5M5 10.5H1.5V7M10.5 1.5L7 5M1.5 10.5L5 7" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                ) : null}
                 {closeButton(close)}
               </div>
               <div className="preview-info">
@@ -410,6 +371,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 <button type="button" className="icon-btn next" onClick={() => next && pick(next, picked?.list ?? [])} disabled={!next} aria-label="Next project">
                   {chevron("right")}
                 </button>
+                <button type="button" className="btn continue" onClick={() => openFull(preview.slug)}>
+                  Continue to project
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                    <path d="M6 10V2M2.5 5.5L6 2l3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
                 {closeButton(() => setPicked(null))}
               </div>
               {/* The chat already says what the project is; the preview shows it. Named for screen readers. */}
@@ -431,12 +398,6 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 <Grain key={preview.slug} slug={preview.slug} label={preview.name} />
               </figure>
             )}
-            <footer className="preview-foot">
-              <button type="button" className="btn primary with-chevron open" onClick={() => openFull(preview.slug)}>
-                Open full project
-                {chevron("right")}
-              </button>
-            </footer>
           </aside>
         </>
       ) : null}

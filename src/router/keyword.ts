@@ -97,7 +97,8 @@ export function keywordRoute(question: string): ViewSpec {
   if (/\b(process|vague brief|how do you (work|approach|start)|design process|way of working)\b/.test(q)) {
     return view({ intent: "process", focusIds: ["profile:tyler"], filter: "sheet", href: "/sheet?topic=process#answer", confidence: 0.86 })
   }
-  if (/\b(career|timeline|resume|\bcv\b|walk me through)\b/.test(q)) {
+  // "Walk me through" alone is not the career: "walk me through your career" matches on "career".
+  if (/\b(career|timeline|resume|\bcv\b)\b/.test(q)) {
     return view({
       intent: "career",
       focusIds: ["profile:tyler"],

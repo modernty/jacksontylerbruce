@@ -17,6 +17,7 @@ export function MediaPortal({ portal, sections }: { portal: PortalSpec; sections
   // tab or a tile, whatever shows next comes in at once.
   const [settled, setSettled] = useState(false)
   const body = useRef<HTMLDivElement>(null)
+  const plate = useRef<HTMLElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
   const opener = useRef<string | null>(null)
 
@@ -47,6 +48,16 @@ export function MediaPortal({ portal, sections }: { portal: PortalSpec; sections
     else if (opener.current) body.current?.querySelector<HTMLElement>(`[data-tile="${opener.current}"]`)?.focus({ preventScroll: true })
   }, [open])
 
+  // An open Lab or Feature is its own moment: the gallery holds on this plate, so the plates after it
+  // (the Memory reel) cannot be scrolled or stepped to until the visitor goes back.
+  useEffect(() => {
+    const scroller = plate.current?.closest<HTMLElement>(".gallery-scroll")
+    if (!scroller || !plate.current || !open) return
+    scroller.scrollTop += plate.current.getBoundingClientRect().top - scroller.getBoundingClientRect().top
+    scroller.classList.add("held")
+    return () => scroller.classList.remove("held")
+  }, [open])
+
   // Escape steps out of a page before it can close the gallery.
   useEffect(() => {
     if (!open) return
@@ -62,7 +73,7 @@ export function MediaPortal({ portal, sections }: { portal: PortalSpec; sections
   }, [open])
 
   return (
-    <section className={settled ? "frame media-portal settled" : "frame media-portal"} aria-label={portal.title}>
+    <section ref={plate} className={settled ? "frame media-portal settled" : "frame media-portal"} aria-label={portal.title}>
       <div className="portal-body" ref={body}>
         {current ? (
           <TilePage

@@ -9,8 +9,11 @@ const fold = (text: string) => text.normalize("NFKD").replace(/\p{M}/gu, "").toL
 const has = (q: string, word: string) => new RegExp(`(^|[^a-z0-9])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z0-9]|$)`).test(q)
 const join = (names: string[]) => (names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`)
 
-/** The whole history: the resume, the timeline. */
-const BROAD = /\b(resume|cv|career|work history|job history|employment|past (history|roles|jobs)|history|background|experience|walk me through)\b/
+/**
+ * The whole history: the resume, the timeline. "Walk me through" alone is not one of them: "walk me
+ * through your process" is about how Tyler works; "walk me through your career" matches on "career".
+ */
+const BROAD = /\b(resume|cv|career|work history|job history|employment|past (history|roles|jobs)|history|background|experience)\b/
 /** Words that make a question about employment rather than a project. */
 const JOBBY = /\b(work(ed|ing)? (at|for)|working|job|jobs|role|roles|employ\w*|employer|compan(y|ies)|title|position|joined|join|left|leave|leaving|was (he|tyler|you) at|were you at|how long|when did|(did|do) (you|tyler|he) do (at|for)|career)\b/
 const BEFORE = /\b(before|prior to|previous(ly)? to|earlier than|preceding|until)\b/

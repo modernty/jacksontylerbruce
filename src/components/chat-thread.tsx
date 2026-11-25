@@ -30,6 +30,23 @@ export function closeHomePanel() {
 }
 
 /** Empties a conversation and tells its thread to start over. */
+/** Where the home conversation keeps its scroll position. */
+export const HOME_SCROLL = "home-chat-scroll"
+
+/**
+ * A new conversation: the home chat and its panel clear, and it opens at the top. Project tabs, and
+ * each project's own chat, are left as they are.
+ */
+export function startNewChat() {
+  closeHomePanel()
+  try {
+    sessionStorage.removeItem(HOME_SCROLL)
+  } catch {
+    // Not kept.
+  }
+  resetChat(HOME_CHAT)
+}
+
 export function resetChat(key: string) {
   try {
     sessionStorage.removeItem(key)
@@ -428,7 +445,7 @@ export function ChatThread({
             streaming={turn.pending || turn.shown < turn.words.length}
             tint={tint}
             status={turn.pending ? STATUS_LABEL[turn.status ?? "thinking"] : undefined}
-            className="max-w-none gap-8 text-[15px]"
+            className="max-w-none gap-12 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
             final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind, cards: turn.cards }) : undefined}

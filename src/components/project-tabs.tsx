@@ -49,8 +49,14 @@ export function ProjectTabs({ names }: { names: Record<string, string> }) {
   }, [names])
 
   const current = path.startsWith("/work/") ? path.slice("/work/".length).split(/[/?#]/)[0] : null
-  const shown = path === "/chat" || (current !== null && tabs.includes(current))
-  if (!shown || !tabs.length) return null
+  // A project page is always one of the tabs, however the visitor got there (a shared link, another
+  // window), so the way back to the conversation is always beside the name.
+  useEffect(() => {
+    if (current && names[current] && !read().includes(current)) openTab(current)
+  }, [current, names])
+  const shown = path === "/chat" || (current !== null && !!names[current])
+  const list = current && names[current] && !tabs.includes(current) ? [...tabs, current] : tabs
+  if (!shown || !list.length) return null
 
   const close = (slug: string) => {
     write(read().filter((item) => item !== slug))
@@ -62,7 +68,7 @@ export function ProjectTabs({ names }: { names: Record<string, string> }) {
       <Link href="/chat" className="tab" aria-current={path === "/chat" ? "page" : undefined}>
         Conversation
       </Link>
-      {tabs.map((slug) => (
+      {list.map((slug) => (
         <span key={slug} className="tab" aria-current={slug === current ? "page" : undefined}>
           <Link href={`/work/${slug}`}>{names[slug]}</Link>
           <button type="button" className="tab-close" onClick={() => close(slug)} aria-label={`Close ${names[slug]}`}>

@@ -367,7 +367,8 @@ const projects: Omit<Project, "media">[] = [
   {
     id: "project:overmatch-ai",
     slug: "overmatch-ai",
-    name: "Overmatch AI",
+    // Named apart from the company, so hiding the project never hides Overmatch AI's role.
+    name: "Overmatch AI platform",
     summary: "Product and platform UI, brand identity and website.",
     sections: [section("summary", "Summary", "Overmatch AI is in progress, and already delivering. A handoff is in the customer's hands, Transitions has been delivered, and a simple demonstration is to come. The product and platform UI, the brand identity and the website are designed together, as one system.")],
     start: 2026.35,
@@ -377,8 +378,9 @@ const projects: Omit<Project, "media">[] = [
     lane: 1,
     themeIds: ["theme:ai", "theme:systems"],
     onTimeline: true,
-    flagged: false,
-    aliases: ["overmatch ai work"],
+    // Hidden for now (2026-11-25): Overmatch AI keeps its role on the timeline, without a project page.
+    flagged: true,
+    aliases: [],
   },
   {
     id: "project:botpress",

@@ -209,7 +209,11 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
     return () => observer.disconnect()
   }, [gallery])
   // The buttons move a plate at a time; the wheel and trackpad scroll freely, with no snapping.
-  const toPlate = (k: number) => plateList()[k]?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" })
+  // A plate holding the gallery (an open Lab or Feature page) keeps the steps from leaving it.
+  const toPlate = (k: number) => {
+    if (scroller.current?.classList.contains("held")) return
+    plateList()[k]?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" })
+  }
   const [leadId, ...aliases] = leadIds
   const anchors = aliases.map((id) => <span key={id} id={id} />)
   // The answer: the description, the facts, then each section in turn.
@@ -271,7 +275,7 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
                 </>
               ) : null}
               <button type="button" className="preview-close" onClick={closeGallery} aria-label="Hide media">
-                Close
+                Hide
                 <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true">
                   <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>

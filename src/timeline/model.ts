@@ -46,7 +46,7 @@ export function toTimelineModel(catalog: Catalog, options: { includeFlagged?: bo
     now: NOW,
     ink: tokens.color.ink,
     roles: catalog.roles.filter((role) => role.listed).map((role) => ({
-      name: (role.employer ? employerPublicName() : role.name).toUpperCase(),
+      name: role.employer ? employerPublicName() : role.name,
       year: role.yearLabel,
       start: role.start,
       end: role.end,

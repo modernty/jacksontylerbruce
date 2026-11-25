@@ -35,6 +35,7 @@ export function legacyRedirects(): Redirect[] {
   // PC Chat and PC Chat: Memory were folded into Loblaws / PC Health.
   rows.push({ source: "/work/pc-chat", destination: "/work/loblaws", permanent: true })
   rows.push({ source: "/work/pc-chat-memory", destination: "/work/loblaws", permanent: true })
+  rows.push({ source: "/work/overmatch-ai", destination: "/chat", permanent: true })
   // /assets is not redirected: the images live there, at the same paths the old site used.
   for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*"]) {
     rows.push({ source, destination: "/", permanent: true })

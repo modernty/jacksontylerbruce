@@ -84,3 +84,50 @@ test("without the model, a project question falls back to the site's own answer"
   assert.equal(reply.status, 200)
   assert.ok("projects" in reply.body && reply.body.projects?.includes("intuit"))
 })
+
+/** A fake model that reads the practice first, then replies. */
+const practises = (reply: Record<string, unknown>, seen: string[] = []): WorkClient => {
+  let round = 0
+  return async ({ messages }) => {
+    const last = messages[messages.length - 1]
+    if (Array.isArray(last.content)) for (const block of last.content as { content: string }[]) seen.push(block.content)
+    round++
+    if (round === 1) return { content: [{ type: "tool_use", id: "p", name: "read_practice", input: {} }] }
+    return { content: [{ type: "tool_use", id: "r", name: "reply", input: reply }] }
+  }
+}
+
+const PROCESS = "It starts inside the problem, with the people it is for, before any screen. One core idea comes out of that time, and every detail answers to it. Intuit shows it: one conversation instead of an app to open."
+
+test("questions about how Tyler works go to the work agent, which reads the practice, and never open the timeline", async () => {
+  for (const q of ["Walk me through your process", "How do you work?", "What's your design philosophy?", "Walk me through how you think about trust", "What's your approach to a new project?"]) {
+    const seen: string[] = []
+    const reply = await handleChatAsk(
+      { q, sessionId: "s" },
+      { ip: "1" },
+      { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: practises({ answer: PROCESS, projects: ["intuit"], panel: "timeline", followUps: ["What did you learn inside the Intuit problem?", "How do you find the core idea?", "What happens after the idea?"] }, seen) },
+    )
+    const body = reply.body as { answer: string; panel?: string; source?: string }
+    assert.equal(body.source, "work", q)
+    assert.equal(body.answer, PROCESS, q)
+    assert.equal(body.panel, undefined, q)
+    assert.match(seen.join("\n"), /Earn the right to remember/, q)
+    assert.match(seen.join("\n"), /Grounded in architecture/, q)
+  }
+})
+
+test("with no model, a question about how Tyler works answers from the site, never the timeline", async () => {
+  for (const q of ["Walk me through your process", "How do you work?", "What's your approach to a new project?"]) {
+    const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+    const body = reply.body as { answer: string; panel?: string }
+    assert.equal(body.panel, undefined, q)
+    assert.match(body.answer, /Inside the problem/, q)
+  }
+})
+
+test("the career still opens the timeline", async () => {
+  for (const q of ["Walk me through your career", "Show me your resume", "Tell me about your experience"]) {
+    const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: practises({ answer: "x", projects: [], followUps: [] }) })
+    assert.equal((reply.body as { panel?: string }).panel, "timeline", q)
+  }
+})

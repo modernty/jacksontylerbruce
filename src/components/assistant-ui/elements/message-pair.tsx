@@ -55,7 +55,7 @@ export function MessagePair({
         className={cn(
           "max-w-[85%] self-end text-[15px] leading-[24px] tracking-[-0.01em] [text-wrap:pretty]",
           variant === "bubble"
-            ? "rounded-[6px] bg-[color-mix(in_srgb,var(--ink)_3.5%,transparent)] px-4 py-2.5"
+            ? "rounded-[12px] border border-[var(--ink-hair)] px-[15px] py-[9px]"
             : "text-foreground/90 text-end",
         )}
       >

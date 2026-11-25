@@ -57,7 +57,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, drawnHeight = 340
     `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" font-family="Aeonik Pro" fill="${INK}">`,
   ]
   parts.push(
-    `<line class="nowl" x1="${fmt(x1)}" y1="${fmt(v(30))}" x2="${fmt(x1)}" y2="${height - Math.round(16 * k)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="${size(12)}" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>`,
+    `<line class="nowl" x1="${fmt(x1)}" y1="${fmt(v(30))}" x2="${fmt(x1)}" y2="${height - Math.round(16 * k)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="${size(12)}" font-weight="600" class="nowt">Now</text>`,
   )
   for (let year = 2019; year < 2027; year += 1) {
     parts.push(
@@ -247,7 +247,7 @@ export function mobileSvg(model: TimelineModel): string {
     parts.push(`<text class="yr" x="4" y="${fmt(add(locate(year), I(3)))}" font-size="11" opacity=".4">'${String(year).slice(2)}</text>`)
   }
   parts.push(
-    `<line class="nowl" x1="4" y1="${fmt(y1)}" x2="${width - 4}" y2="${fmt(y1)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="4" y="${fmt(add(y1, I(14)))}" font-size="11" font-weight="600">NOW</text>`,
+    `<line class="nowl" x1="4" y1="${fmt(y1)}" x2="${width - 4}" y2="${fmt(y1)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="4" y="${fmt(add(y1, I(14)))}" font-size="11" font-weight="600">Now</text>`,
   )
   const timelineGroup: string[] = ['<g class="mode on" data-m="timeline">']
   const lanes = [I(36), I(56), I(76)]
