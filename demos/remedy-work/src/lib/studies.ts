@@ -6,7 +6,7 @@
  * its hover affordance reads "Open" rather than "Open in Figma".
  *
  * Ported from the `STUDIES` array in the loblaw-labs-lite repo's `index.html`
- * (github.com/latecheckout/loblaw-labs-lite), which is the source of truth for this
+ * (the Labs repo), which is the source of truth for this
  * material. The spreadsheet still owns the card copy — title, status, description — and
  * this module owns the study behind it. Keyed by the sheet's slug, so the two can only
  * meet on a row that actually exists.

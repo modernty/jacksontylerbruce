@@ -22,7 +22,7 @@ from pipeline.catalog import (
 from pipeline.schema import Project
 from pipeline.sections import render_work_page, sections_from_copy
 
-EXPECTED_PLACEHOLDERS = 26
+EXPECTED_PLACEHOLDERS = 25
 
 
 def _by_id(items):
