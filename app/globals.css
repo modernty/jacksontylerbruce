@@ -1091,6 +1091,13 @@ p{text-wrap:pretty}
      the links reach at least 440px from the left and clear the name. */
   .top-work span.contact{position:absolute;top:0;bottom:0;right:calc(100% - max(var(--left), 440px));margin-left:0}
 }
+/* New chat sits under the name, at the left of the chat's columns. When tabs fill that row, it moves
+   to the row's right end, in line with the links above (Miami, FL), and the tabs stop short of it. */
+@media(min-width:769px){
+  .conv-tools{left:36px;transform:none;justify-content:flex-start}
+  body:has(.tabs) .conv-tools{left:calc(36px + max(var(--left), 440px));transform:translateX(-100%)}
+  body:has(.conv-tools) .tabs{right:calc(100vw - 36px - max(var(--left), 440px) + 120px)}
+}
 
 /* The experience list, on desktop and phone: dates, company, role, each a line of the same size and
    rhythm in the serif. The role is Medium; everything else is Regular. */
