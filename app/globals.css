@@ -422,6 +422,8 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .career-card .career-about{margin-top:12px}
 .career-card .career-work{margin-top:12px}
 /* The timeline beside the chat: the horizontal drawing on desktop, the vertical one on phones. */
+/* The project names sit right under their role's bar, so the tick that linked them is not drawn. */
+svg .tk{display:none}
 .panel-timeline{width:100%;height:100%;overflow:auto;scrollbar-width:none;margin:0 auto}
 .panel-timeline::-webkit-scrollbar{display:none}
 .panel-timeline svg{display:block;width:100%;height:auto}
