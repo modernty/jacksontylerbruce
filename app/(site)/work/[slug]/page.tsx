@@ -74,7 +74,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   // cover (often a recording of the same demo) is not repeated there.
   const openable = openableFor(project.slug)
   const toldElsewhere = !!(openable.study || openable.reel || openable.portal)
-  const images = (project.media.images.length || !toldElsewhere ? [project.media.cover, ...project.media.images] : [])
+  const cover = project.media.coverInGallery === false ? null : project.media.cover
+  const images = (project.media.images.length || !toldElsewhere ? [cover, ...project.media.images] : [])
     .filter((image) => image !== null)
     .filter((image, index, all) => all.findIndex((other) => other.src === image.src) === index)
   const leadIds = [lead?.id ?? "summary", ...(summary && lead !== summary ? ["summary"] : [])]

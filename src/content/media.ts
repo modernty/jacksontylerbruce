@@ -3,7 +3,8 @@ import generated from "./media.gen.json"
 import type { Image, Media } from "./schema"
 
 type Authored = { src: string; alt: string; kind?: Image["kind"] }
-type Entry = { cover: string | null; coverAlt?: string; images: Authored[] }
+/** coverInGallery: false keeps the cover out of the project page's gallery (its images already show it). */
+type Entry = { cover: string | null; coverAlt?: string; coverInGallery?: boolean; images: Authored[] }
 type Measured = { width: number; height: number; blur: string }
 
 const entries = authored.projects as Record<string, Entry>
@@ -21,6 +22,7 @@ export function mediaFor(slug: string, name: string): Media {
   if (!entry) return { cover: null, coverInk: null, images: [] }
   const count = entry.images.length
   return {
+    ...(entry.coverInGallery === false ? { coverInGallery: false } : {}),
     cover: entry.cover ? image(entry.cover, entry.coverAlt?.trim() || `${name}, cover`) : null,
     coverInk: entry.cover ? `/media/${slug}/cover-ink.webp` : null,
     images: entry.images.map((item, index) =>

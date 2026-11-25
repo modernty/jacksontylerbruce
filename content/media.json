@@ -237,10 +237,11 @@
     "intuit": {
       "cover": "/assets/thumbs/intuit.png",
       "coverAlt": "Phone showing an Intuit Wallet balance of $6,500, quick actions, recent contacts and suggested deposits.",
+      "coverInGallery": false,
       "images": [
         {
-          "src": "/assets/images/intuit/02.png",
-          "alt": "ChatGPT conversation on a phone where Intuit confirms a $6,500 invoice from ACME Corporation has been paid."
+          "src": "/assets/images/intuit/pair.png",
+          "alt": "Two phones side by side: Intuit Wallet showing a $6,500 balance with quick actions and suggested deposits, and a ChatGPT conversation where Intuit confirms the $6,500 invoice from ACME Corporation has been paid."
         }
       ]
     },

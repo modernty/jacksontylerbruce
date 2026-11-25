@@ -770,6 +770,8 @@ p{text-wrap:pretty}
 /* A phone demo in the gallery: three quarters of the room it could take, pinned to the plate's top so
    the phone lines up with the text beside it. */
 .gallery-scroll .frame.media-demo.phone .media-demo-stage{height:min(calc((100cqh - 110px) * .75),calc(75cqw * 874 / 440));width:75%;margin-inline:auto;align-items:flex-start}
+/* Screens after a phone demo show their phones at the demo's size: the same height, centred. */
+.gallery-scroll:has(.frame.media-demo.phone) .frame:not(.media-demo) img{height:min(calc((100cqh - 110px) * .75),calc(75cqw * 874 / 440));max-height:none;width:auto;max-width:100%;margin-inline:auto;display:block}
 .gallery-scroll .media .frame img,.gallery-scroll .media .frame .grain{max-height:calc(100cqh - 90px)}
 .gallery-scroll .chapter-figure img{width:auto;max-width:100%;max-height:calc(100cqh - 300px);margin-inline:auto}
 .gallery-scroll .chapter-figure{display:flex;justify-content:center}

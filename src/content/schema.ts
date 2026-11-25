@@ -42,6 +42,8 @@ export const MediaSchema = z.object({
   cover: ImageSchema.nullable(),
   /** The cover rendered as ink on paper, for plates and share cards. */
   coverInk: z.string().nullable(),
+  /** False when the gallery's own images already show the cover, so it is not shown twice. */
+  coverInGallery: z.literal(false).optional(),
   images: z.array(ImageSchema),
 })
 
