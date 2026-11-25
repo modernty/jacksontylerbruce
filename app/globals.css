@@ -386,7 +386,7 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .conv-empty .stream p+p{margin-top:var(--inner)}
 /* Starter prompts are pills on the light ink wash, each with a send arrow; they fill the line, then wrap. */
 .prompts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
-.prompts button{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 16px;border-radius:2px;background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-text);line-height:24px;white-space:nowrap;transition:background var(--motion-quick) var(--motion-ease)}
+.prompts button{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 16px;border-radius:4px;background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-text);line-height:24px;white-space:nowrap;transition:background var(--motion-quick) var(--motion-ease)}
 .prompts button:hover{background:var(--ink-hover)}
 .prompts button svg{flex:none;opacity:.8}
 .prompts button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -486,7 +486,7 @@ svg .tk{display:none}
 /* The way into the full project sits on its own at the bottom right. */
 .preview-foot{flex:none;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:24px}
 /* Back and forward: round, on the same tint as Close. */
-.icon-btn{all:unset;position:relative;cursor:pointer;box-sizing:border-box;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px;background:var(--ink-wash);color:var(--ink);transition:background var(--motion-quick) var(--motion-ease),opacity var(--motion-quick) var(--motion-ease)}
+.icon-btn{all:unset;position:relative;cursor:pointer;box-sizing:border-box;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;background:var(--ink-wash);color:var(--ink);transition:background var(--motion-quick) var(--motion-ease),opacity var(--motion-quick) var(--motion-ease)}
 .icon-btn:hover{background:var(--ink-rule)}
 .icon-btn:disabled{cursor:default;opacity:.35;background:var(--ink-wash)}
 .icon-btn svg{transition:transform var(--motion-quick) var(--motion-ease)}
@@ -494,7 +494,7 @@ svg .tk{display:none}
 .icon-btn.next:not(:disabled):hover svg{transform:translateX(2px)}
 .icon-btn:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
 .btn.open.with-chevron:hover svg{transform:translateX(2px)}
-.btn{all:unset;cursor:pointer;box-sizing:border-box;border:1px solid var(--ink);border-radius:2px;padding:10px 16px;font-family:var(--sans);font-size:var(--fs-small);line-height:1;color:var(--ink);transition:background var(--motion-quick) var(--motion-ease)}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;border:1px solid var(--ink);border-radius:4px;padding:10px 16px;font-family:var(--sans);font-size:var(--fs-small);line-height:1;color:var(--ink);transition:background var(--motion-quick) var(--motion-ease)}
 .btn:hover{background:var(--ink-hover)}
 .btn.primary{background:var(--ink);color:var(--paper)}
 .btn.primary:hover{background:var(--ink);opacity:.9}
@@ -511,8 +511,8 @@ svg .tk{display:none}
 .btn.next:hover svg{transform:translateX(2px)}
 .btn:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
 /* Secondary: a tinted surface instead of an outline, the label before the icon. */
-/* The secondary button (Close, Hide media, Show/Hide globe and timeline): a soft fill, 2px corners. */
-.preview-close{all:unset;cursor:pointer;box-sizing:border-box;position:relative;height:32px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;border-radius:2px;background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;z-index:1;transition:background var(--motion-quick) var(--motion-ease)}
+/* The secondary button (Close, Hide media, Show/Hide globe and timeline): a soft fill, 4px corners. */
+.preview-close{all:unset;cursor:pointer;box-sizing:border-box;position:relative;height:32px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;border-radius:4px;background:var(--ink-wash);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;z-index:1;transition:background var(--motion-quick) var(--motion-ease)}
 .preview-close:hover{background:var(--ink-rule)}
 .preview-close:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
 .sheet-scrim{display:none}
@@ -587,7 +587,7 @@ body:has(.work-stage.wide){--media-max:1000px}
 /* Site tabs: the conversation and the projects opened from it. */
 .tabs{position:fixed;z-index:3;top:76px;left:36px;right:36px;display:flex;gap:6px;font-family:var(--sans);font-size:var(--fs-small);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink-hair);border-radius:2px;padding:6px 12px;background:var(--paper);color:var(--ink);text-decoration:none;white-space:nowrap}
+.tab{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink-hair);border-radius:4px;padding:6px 12px;background:var(--paper);color:var(--ink);text-decoration:none;white-space:nowrap}
 .tab a{color:inherit;text-decoration:none}
 .tab[aria-current=page]{border-color:var(--ink)}
 .tab:hover{border-color:var(--ink)}
@@ -903,7 +903,7 @@ p{text-wrap:pretty}
 .portal-body::-webkit-scrollbar{display:none}
 .media-portal .story-head{margin-bottom:20px}
 .portal-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
-.portal-tabs button{font:inherit;font-size:var(--fs-small);display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:2px;border:1px solid var(--ink-rule);background:transparent;color:var(--ink-quiet);cursor:pointer;transition:background var(--motion-quick) var(--motion-ease),color var(--motion-quick) var(--motion-ease)}
+.portal-tabs button{font:inherit;font-size:var(--fs-small);display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;border:1px solid var(--ink-rule);background:transparent;color:var(--ink-quiet);cursor:pointer;transition:background var(--motion-quick) var(--motion-ease),color var(--motion-quick) var(--motion-ease)}
 .portal-tabs button small{font-family:var(--mono);font-size:var(--fs-micro);opacity:.6}
 .portal-tabs button:hover{background:var(--ink-hover);color:var(--ink)}
 .portal-tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
