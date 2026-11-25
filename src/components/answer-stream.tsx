@@ -51,7 +51,7 @@ function place(groups: AnswerGroup[]) {
  * visitors. Reduced motion, a link to a section, or coming back to a project already seen this
  * session shows it at once. Whatever follows waits until it has finished.
  */
-export function AnswerStream({ id, groups, children, instant = false }: { id: string; groups: AnswerGroup[]; children?: ReactNode; instant?: boolean }) {
+export function AnswerStream({ id, groups, children, instant = false, onDone }: { id: string; groups: AnswerGroup[]; children?: ReactNode; instant?: boolean; onDone?: () => void }) {
   const { placed, total } = useMemo(() => place(groups), [groups])
   const [count, setCount] = useState(instant ? total : 0)
   const done = count >= total
@@ -88,6 +88,13 @@ export function AnswerStream({ id, groups, children, instant = false }: { id: st
     // Groups are static content for a page.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total, id, instant])
+
+  // Whatever sits below the answer waits for it: told once, when the last word is in.
+  useEffect(() => {
+    if (done || total === 0) onDone?.()
+    // onDone is the page's own setter; telling it again changes nothing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, total])
 
   // Remembered once it has finished, so leaving mid-stream plays it again next time.
   useEffect(() => {

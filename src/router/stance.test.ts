@@ -2,12 +2,12 @@ import { test } from "node:test"
 import assert from "node:assert/strict"
 import { stanceReply } from "./stance"
 
-const PUBLIC = new Set(["pc-chat-memory", "intuit", "botpress", "overmatch-ai"])
+const PUBLIC = new Set(["loblaws", "intuit", "botpress", "overmatch-ai"])
 
 test("an opinion on a topic answers with that principle and the work that proves it", () => {
   const reply = stanceReply("What do you think about AI memory?", PUBLIC)
   assert.ok(reply?.answer.startsWith("Earn the right to remember."))
-  assert.deepEqual(reply?.projects, ["pc-chat-memory"])
+  assert.deepEqual(reply?.projects, ["loblaws"])
   assert.equal(reply?.broad, undefined)
 })
 

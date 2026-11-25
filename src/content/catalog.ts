@@ -273,7 +273,7 @@ const projects: Omit<Project, "media">[] = [
     themeIds: ["theme:systems", "theme:ai", "theme:trust"],
     onTimeline: true,
     flagged: false,
-    aliases: ["loblaw", "loblaws", "pc health"],
+    aliases: ["loblaw", "loblaws", "pc health", "pc chat", "remedy", "pharmacy agent", "shoppers", "refills", "pc one", "pc chat memory", "memory study"],
   },
   {
     id: "project:pc-chat",
@@ -291,8 +291,9 @@ const projects: Omit<Project, "media">[] = [
     lane: 2,
     themeIds: ["theme:ai", "theme:trust", "theme:systems"],
     onTimeline: true,
-    flagged: false,
-    aliases: ["pc chat", "remedy", "pharmacy agent", "shoppers", "refills", "pc one"],
+    // Folded into Loblaws / PC Health, which carries this work; hidden, not deleted.
+    flagged: true,
+    aliases: [],
   },
   {
     id: "project:rv",
@@ -416,8 +417,9 @@ const projects: Omit<Project, "media">[] = [
     lane: 2,
     themeIds: ["theme:trust", "theme:ai"],
     onTimeline: true,
-    flagged: false,
-    aliases: ["memory", "pc chat memory", "memory study", "consent"],
+    // Folded into Loblaws / PC Health, which carries this work; hidden, not deleted.
+    flagged: true,
+    aliases: [],
   },
 ]
 

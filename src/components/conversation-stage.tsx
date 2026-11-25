@@ -27,8 +27,18 @@ type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
 const SCROLL_KEY = "home-chat-scroll"
 // The context first, then the welcome, so the question sits right above the composer it invites.
-const WELCOME = ["One craft, many mediums. Every project starts with one core idea and time spent inside the problem.", "Welcome, how can I help you?"]
-const GREETING_TEXT = "min-h-0 max-w-none text-[16px] leading-[24px] tracking-[-0.01em]"
+/**
+ * What a first visit reads before anything else: how the work thinks (from architecture, the idea
+ * before the plan), what it is for now, and how it is done. Then the welcome, which is the one line
+ * set in bold.
+ */
+const WELCOME = [
+  "Grounded in architecture, where every building starts as an idea before it is a plan.",
+  "The same discipline, now applied to AI products. Agents people trust, for health, finance, support and the public sector.",
+  "One craft, many mediums. Every project starts with one core idea and time spent inside the problem. Then every detail answers to it.",
+  "Welcome, how can I help you?",
+]
+const GREETING_TEXT = "min-h-0 max-w-none text-[15px] leading-[24px] tracking-[-0.01em]"
 /** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
 const HANDOFF_MS = 320
 /** How long the chat takes to slide aside for a preview. Matches --motion-slide. */
@@ -61,7 +71,7 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
   return (
     <div className={leaving ? "conv-empty ready leaving" : ready ? "conv-empty ready" : "conv-empty"}>
       <div className="opening-group opening-welcome">
-        <IntroStream id="home-welcome" paragraphs={WELCOME} remember={false} heading textClassName={GREETING_TEXT} tint={false} emphasis={1} onDone={finish} />
+        <IntroStream id="home-welcome" paragraphs={WELCOME} remember={false} heading textClassName={GREETING_TEXT} tint={false} emphasis={WELCOME.length - 1} onDone={finish} />
       </div>
       <div className="opening-group opening-composer">
         <div className="composer-slot" ref={slotRef} aria-hidden="true" />
@@ -340,7 +350,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           tint={false}
           arrive={arrive}
           renderAnswer={(turn) =>
-            chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind, only) => setShown({ kind, only }), current: picked?.slug ?? panel ?? undefined })
+            chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind, only) => setShown(panel === kind && (kind !== "globe" || livedOnly === (only === "lived")) ? null : { kind, only }), current: picked?.slug ?? panel ?? undefined, currentOnly: livedOnly ? "lived" : undefined })
           }
           after={(turn) => {
             if (turn.cards !== "demo" || !turn.projects?.length) return null
@@ -409,7 +419,6 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                   width={preview.cover.width}
                   height={preview.cover.height}
                   sizes="(max-width: 768px) 100vw, 560px"
-                  fit="fill"
                 />
               </figure>
             ) : (

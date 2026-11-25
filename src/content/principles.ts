@@ -6,10 +6,12 @@ export type Principle = { id: string; title: string; body: string }
 export const PRINCIPLES = data.principles as Principle[]
 
 const byId = new Map(PRINCIPLES.map((principle) => [principle.id, principle]))
-const bySlug = data.projects as Record<string, string>
+/** Each project's principles; a project can back several, the first being its main one. */
+const bySlug = data.projects as Record<string, string | string[]>
 
-/** The principle a project proves, if it names one. */
+/** The main principle a project proves, if it names one. */
 export function principleFor(slug: string): Principle | undefined {
-  const id = bySlug[slug]
+  const named = bySlug[slug]
+  const id = Array.isArray(named) ? named[0] : named
   return id ? byId.get(id) : undefined
 }

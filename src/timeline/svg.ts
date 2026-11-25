@@ -33,10 +33,15 @@ function lanesFor(count: number): N[] {
   return [I(150)]
 }
 
-export function desktopSvg(model: TimelineModel, width = 1120, height = 340): string {
+/**
+ * The desktop drawing. `edge` runs the years nearly edge to edge, leaving just room for the first
+ * role's label on the left and NOW on the right; it suits the timeline mode alone (the focus mode
+ * needs the left margin for its labels).
+ */
+export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { edge = false } = {}): string {
   const now = model.now
-  const x0 = I(150)
-  const x1 = sub(I(width), I(110))
+  const x0 = I(edge ? 60 : 150)
+  const x1 = sub(I(width), I(edge ? 40 : 110))
   const span = sub(F(now), I(2019))
   const locate = (when: number): N => add(x0, mul(div(sub(F(when), I(2019)), span), sub(x1, x0)))
   const parts: string[] = [

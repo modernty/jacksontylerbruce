@@ -158,13 +158,8 @@ body:has(.sheet) .cards{display:none}
 .frame img{display:block;width:100%;height:auto;background:var(--ink-wash)}
 /* While a project image loads, the dot grid holds its place: no surface behind it, and the image
    resolves out of a blur once it arrives. */
-.frame:has(.image-hold){position:relative}
 .frame img.resolving{background:none;opacity:0;filter:blur(16px);transition:opacity var(--motion-reveal) var(--motion-ease),filter 1000ms var(--motion-ease)}
 .frame img.resolving[data-loaded]{opacity:1;filter:none}
-.image-hold{position:absolute;z-index:0}
-.image-hold.fill{inset:0}
-.image-hold.flow{top:0;left:0;width:100%}
-@media(min-width:769px){.media .image-hold.flow{max-height:50vh}}
 @media(prefers-reduced-motion:reduce){.frame img.resolving{filter:none;transition:opacity var(--motion-quick) linear}}
 .frame figcaption{display:flex;justify-content:space-between;gap:16px;margin-top:8px;font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;opacity:.45}
 :is(.column,.info) .cta{margin-top:32px;font-size:var(--fs-small)}
@@ -361,16 +356,31 @@ body:has(.conv-empty.ready) .hero-work .in{pointer-events:auto}
 .conv-empty .quick-links button,.conversation .follow-ups .prompts button{min-height:0;padding:0;gap:0;border:0;border-radius:0;background:none;white-space:normal;text-align:left;font-size:var(--fs-text);line-height:24px;color:var(--ink);text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--ink) 60%,transparent)}
 /* The quick start, stacked: one question per line. */
 .conv-empty .quick-links>span{display:block}
+/* Each quick start leads with a small blue dot: an icon beside the question, outside its underline. */
+/* The leading dot, outline only: on each quick start and on the header's text links. */
+.conv-empty .quick-links>span::before,.top-work .top-link::before{content:"";display:inline-block;box-sizing:border-box;width:7px;height:7px;margin:0 10px 2px 0;border-radius:50%;border:1.2px solid var(--link);vertical-align:middle}
+/* The header's LinkedIn and location read like the quick start: serif, the link blue, dotted underline. */
+.top-work .top-link{display:inline-flex;align-items:center;font-family:var(--serif);font-size:var(--fs-text);line-height:20px;color:var(--link);text-decoration:none}
+.top-work .top-link::before{margin-bottom:0}
+.top-work .top-link.external::before{display:none}
+.top-work .top-link.external svg{margin-left:5px;flex:none}
+.top-work .top-link span{display:inline;text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--link) 45%,transparent)}
+.top-work .top-link:hover span{text-decoration-color:var(--link)}
+.top-work .top-link:focus-visible{outline:1px solid var(--link);outline-offset:3px;border-radius:2px}
 .conv-empty .quick-links button::after,.conversation .follow-ups .prompts button::after{display:none}
 .conv-empty .quick-links button:hover,.conversation .follow-ups .prompts button:hover{background:none;color:var(--ink);text-decoration-color:var(--ink)}
+/* Prompts read as links wherever they are (follow-ups, a project's prompts, the quick start): a calm
+   blue, the dotted underline in the same blue, solid on hover. */
+.conversation .follow-ups .prompts button,.prompts.prompt-links .prompt-link,.conv-empty .quick-links button{color:var(--link);text-decoration-color:color-mix(in srgb,var(--link) 45%,transparent)}
+.conversation .follow-ups .prompts button:hover,.prompts.prompt-links .prompt-link:hover,.conv-empty .quick-links button:hover{color:var(--link);text-decoration-color:var(--link)}
 .conv-empty:not(.ready) .quick{opacity:0;visibility:hidden;pointer-events:none}
 .conv-empty.ready .quick{animation:welcome-in var(--motion-page) var(--motion-ease) both}
 .conversation .chat.held{display:none}
 .conversation .chat.arrive{animation:welcome-in var(--motion-page) var(--motion-ease)}
 @keyframes welcome-in{from{opacity:0}to{opacity:1}}
-/* The thread reads at the landing line's size: 16px on a 24px line, wrapped without a lone last word. */
+/* The thread reads at the landing line's size: 15px on a 24px line, wrapped without a lone last word. */
 .conversation .chat [data-slot=message-pair]>p,
-.conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:16px;line-height:24px;letter-spacing:-.01em;text-wrap:pretty}
+.conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:15px;line-height:24px;letter-spacing:-.01em;text-wrap:pretty}
 body:has(.conv-empty) .hero-work::before{display:none}
 .conv-empty .stream p{margin:0;font-weight:var(--fw-regular,400);text-wrap:wrap}
 .conv-empty .stream p.emphasis{font-weight:var(--fw-medium)}
@@ -389,6 +399,9 @@ body:has(.conv-empty) .hero-work::before{display:none}
 .chat-link:hover{text-decoration-color:var(--ink)}
 .chat-link[aria-pressed=true]{text-decoration-style:solid;text-decoration-color:var(--ink)}
 .chat-link:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+/* The view an answer offers (the globe, the timeline) sits on its own line below it, as a secondary button. */
+.chat-view-action{display:flex;margin-top:14px}
+.chat-view-action.is-globe .preview-close{border-radius:6px}
 /* Career, resume style. One size throughout and two styles: role facts in Medium, the summary in Regular. */
 .career{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:28px}
 .career p{margin:0}
@@ -424,6 +437,9 @@ body:has(.conv-empty) .hero-work::before{display:none}
   .panel-timeline.desk::-webkit-scrollbar{display:block;height:6px}
   /* Drawn 1120 wide, shown a little smaller (type about 11-12.5px). */
   .panel-timeline.desk svg{width:1000px;max-width:none;height:auto}
+  /* The chat panel's drawing (1000 wide, years edge to edge) stretches to the panel's width up to
+     1200px, centred; a narrower panel shrinks it to fit, never below 860px. */
+  .conversation .preview .panel-timeline.desk svg{width:100%;max-width:1200px;min-width:860px;margin:0 auto}
   /* The pair widens while the timeline is open, so the drawing reads at a usable size; the chat and composer follow. */
   .conversation:has(.conv.showing-timeline){--pair:min(1320px,calc(100vw - 72px))}
 }
@@ -446,7 +462,8 @@ body:has(.conv-empty) .hero-work::before{display:none}
   .timeline-modal-frame{flex:1;display:block;overflow-y:auto}
 }
 /* Graphics in the preview (globe, timeline) take the whole frame. */
-.preview.view-globe .globe-svg{max-height:100%}
+/* At most its drawn size (900x780), centred, so a large screen does not blow it up. */
+.preview.view-globe .globe-svg{max-height:min(100%,780px);max-width:900px;margin:0 auto}
 .preview.view-globe .travel,.preview.view-globe .viewer{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .preview .summary{overflow:hidden}
 /* Stand-in cover: deep ink falling off to pale blue, with heavy grain, until a project has its own image. */
@@ -506,8 +523,9 @@ body:has(.conv-empty) .hero-work::before{display:none}
    about 17 words a line), a 96px gap, then the media at its own width (wider for landscape media). */
 body:has(.work-stage){--gap:96px;--text:min(680px,44vw);--media-max:560px;--media:min(var(--media-max),calc(100vw - 72px - var(--text) - var(--gap)));--start:calc((100vw - var(--text) - var(--gap) - var(--media)) / 2)}
 body:has(.work-stage.wide){--media-max:1000px}
-/* However wide the column, a line of text stops at about 17 words. */
-.work-stage .column :is(p,h2,li,[class~="group/message"]>div){max-width:var(--measure,55ch)}
+/* The project's own text fills the column, as wide as the composer under it. Once the visitor is
+   talking to the chat, its answers stop at about 17 words a line. */
+.work-stage .column [class~="group/message"]>div{max-width:var(--measure,55ch)}
 .work-stage .column{margin-left:max(0px,calc((100% - var(--col)) / 2));transition:margin-left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
 .gallery{font-family:var(--sans)}
 .gallery .media{margin-top:0;gap:96px;padding-bottom:24px}
@@ -719,7 +737,7 @@ p{text-wrap:pretty}
 
 /* Intuit's phone screens read large: shown at three quarters of the usual height. */
 @media(min-width:769px){
-  [data-project=intuit] .media .frame img,[data-project=intuit] .media .frame .grain,[data-project=intuit] .media .image-hold.flow{max-height:37.5vh}
+  [data-project=intuit] .media .frame img,[data-project=intuit] .media .frame .grain{max-height:37.5vh}
 }
 
 /* Show media / Hide media: fully outlined while the media is showing. The padding sits outside the
@@ -749,7 +767,7 @@ p{text-wrap:pretty}
 /* A phone demo in the gallery: three quarters of the room it could take, pinned to the plate's top so
    the phone lines up with the text beside it. */
 .gallery-scroll .frame.media-demo.phone .media-demo-stage{height:min(calc((100cqh - 110px) * .75),calc(75cqw * 874 / 440));width:75%;margin-inline:auto;align-items:flex-start}
-.gallery-scroll .media .frame img,.gallery-scroll .media .image-hold.flow,.gallery-scroll .media .frame .grain{max-height:calc(100cqh - 90px)}
+.gallery-scroll .media .frame img,.gallery-scroll .media .frame .grain{max-height:calc(100cqh - 90px)}
 .gallery-scroll .chapter-figure img{width:auto;max-width:100%;max-height:calc(100cqh - 300px);margin-inline:auto}
 .gallery-scroll .chapter-figure{display:flex;justify-content:center}
 @media(min-width:769px){
@@ -1000,3 +1018,97 @@ p{text-wrap:pretty}
 /* On a phone the media waits behind "Show media": the sheet the page opens with is never shown. */
 @media(max-width:768px){.work-stage.arriving .gallery,.work-stage.arriving .sheet-scrim{display:none}}
 
+
+/* The reading face. Answers in the chat and a project's description and sections are set in the
+   serif; headings, labels, facts, buttons and cards stay in the sans. A serif reads best at its own
+   spacing, so the sans' slight tightening is undone. */
+.answer-copy,.answer .answer-text,.sr .answer-text{font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}
+.answer-copy :is(.demo-cards,.chat-view-action){font-family:var(--sans)}
+/* The home screen reads in the serif: the intro, the welcome, the quick start and its prompts. The
+   composer's own text is the serif everywhere, so what the visitor types matches the answers. */
+.conv-empty,.conv-empty :is(p,span,h1,h2,.prompt-link,button){font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}
+.input{font-family:var(--serif);font-optical-sizing:auto}
+/* Every prompt is the serif too: the follow-ups after an answer and the prompts under a project. */
+.prompts.prompt-links,.prompts.prompt-links .prompt-link,.conversation .follow-ups .prompts button{font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}
+
+/* The page is a 12-column grid on desktop: 36px margins, 24px gutters (48px between the two sides). The chat side (the
+   conversation, its composer, a project's text) takes the first 4 columns, always at the left; the
+   content (a preview, the globe, a project's media) takes the other 8. Phones keep one column. */
+@media(min-width:769px){
+  :root{
+    --edge:36px;
+    --gutter:24px;
+    --gcol:calc((100vw - var(--edge) * 2 - var(--gutter) * 11) / 12);
+    /* A tenth wider than four columns up to an ordinary desktop (484px at 1440 wide). Past that it
+       holds at 484px until three quarters of four columns is wider (about 2090 wide), then grows
+       with the screen at that rate (about 770px at 3200); the content takes the rest. */
+    --cols4:calc(var(--gcol) * 4 + var(--gutter) * 3);
+    --left:max(min(calc(var(--cols4) * 1.1), 484px), calc(var(--cols4) * .75));
+    /* The chat side and the content sit a double gutter apart; the content takes the rest. */
+    --split:48px;
+    --content-start:calc(var(--edge) + var(--left) + var(--split));
+    --content:calc(100vw - var(--content-start) - var(--edge));
+  }
+  /* The conversation: the thread and its composer in the 4 columns; a panel beside it in the 8. */
+  .conv-chat,.conv.previewing .conv-chat{margin-left:0;width:var(--left)}
+  body:has(.conv) .hero-work,body:has(.conv.previewing) .hero-work,body:has(.conv.previewing.showing-timeline) .hero-work{left:var(--edge);width:var(--left)}
+  .conversation .preview{left:var(--content-start);right:auto;width:var(--content)}
+  /* A project: its text and composer in the 4 columns, at one width whether the media is open or not;
+     the media in the 8. */
+  body:has(.work-stage){--start:var(--edge);--text:var(--left);--gap:var(--split);--media:var(--content)}
+  .work-stage .column{margin-left:calc(var(--edge) - 16px);width:var(--left)}
+  body:has(.work-stage) .hero-work{left:var(--edge);width:var(--left)}
+  /* The opening (the intro, the welcome, the quick start, then the composer) sits at the bottom of
+     the left columns, the composer 48px above the window's edge, where it rests on other pages. */
+  .conversation:has(.conv-empty){justify-content:flex-end;padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+  /* The composer comes last, under the quick start: at the bottom, where it rests on every page. */
+  .conv-empty{display:flex;flex-direction:column}
+  .conv-empty .opening-composer{order:3}
+  body:has(.conv-empty) .hero-work{top:auto;bottom:calc(48px + env(safe-area-inset-bottom))}
+}
+/* The name in the header: larger, in Medium. */
+.top-work>a:first-child{font-size:18px;font-weight:var(--fw-medium)}
+/* On a phone the name keeps its smaller size, so it clears New chat centred in the same row. */
+@media(max-width:600px){.top-work>a:first-child{font-size:var(--fs-text)}}
+/* The header reads from the left: the name, then mail, LinkedIn and the location beside it, in the
+   chat's columns. Only Reading view (on a project) stays at the far right. */
+.top-work{justify-content:flex-start;align-items:center}
+.top-work span.contact{margin-left:28px}
+.top-work span.right{margin-left:auto}
+/* On a phone the links take their own row under the name. */
+@media(max-width:600px){
+  .top-work{flex-wrap:wrap;row-gap:8px}
+  .top-work span.contact{order:3;flex-basis:100%;margin-left:0}
+}
+/* On desktop the links end where the chat's columns end, flush with the composer's right edge. */
+@media(min-width:769px){
+  /* On narrow desktops the four columns are too tight for the name and the links side by side, so
+     the links reach at least 440px from the left and clear the name. */
+  .top-work span.contact{position:absolute;top:0;bottom:0;right:calc(100% - max(var(--left), 440px));margin-left:0}
+}
+
+/* The experience list, on desktop and phone: dates, company, role, each a line of the same size and
+   rhythm in the serif. The role is Medium; everything else is Regular. */
+.career-card{font-family:var(--serif);font-size:15px;line-height:24px;padding:16px 0}
+.career-card .career-when{opacity:1}
+.career-card .career-name{margin-top:0;font-size:inherit;font-weight:var(--fw-regular);line-height:inherit}
+.career-card .career-role{font-weight:var(--fw-medium)}
+.career-card .career-about,.career-card .career-work{margin-top:0}
+.career-facts{font-family:var(--serif);font-size:15px;line-height:24px;font-weight:var(--fw-regular)}
+.career-facts .career-title{font-weight:var(--fw-medium)}
+/* A conversation sits on the composer: a short exchange starts at the bottom and grows upward. */
+.conversation:has(.chat:not(.held)){justify-content:flex-end}
+/* The visitor's own messages are in the serif too, like the answers. */
+[data-slot=message-pair]>p,.conversation .chat [data-slot=message-pair]>p{font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}
+/* In the experience list, a role's description stops at two lines. */
+.career-card .career-about{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Each role in the experience list carries a stroke down its left side instead of a rule between
+   roles, and the roles sit 48px apart (one and a half times the old 32). */
+.career-cards{gap:48px}
+.career-card{padding:0 0 0 16px;border-left:1px solid var(--ink-hair)}
+.career-card + .career-card{border-top:0}
+/* Below 1200px the header row is full (the name, its links, Reading view), so the demo note moves up
+   onto its own line above it, as on phones. */
+@media(min-width:769px) and (max-width:1199px){.disclaimer{top:calc(14px + env(safe-area-inset-top))}}
+/* The "Follow up" label over the follow-ups is the serif too, like the prompts under it. */
+.follow-ups .follow-label{font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}

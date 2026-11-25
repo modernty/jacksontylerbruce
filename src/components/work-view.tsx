@@ -94,6 +94,8 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
   const [arriving, setArriving] = useState(true)
   // The text starts level with the top of the media, once the media's place is measured.
   const [placed, setPlaced] = useState(false)
+  // The prompts under the project wait until its text has finished streaming in.
+  const [streamed, setStreamed] = useState(false)
 
   // Media is the portal into the work first, then the reel, the demo, the study's chapters (and the site it ends on), then the images.
   const hasMedia = hasImages || !!openable.demo || !!openable.study || !!openable.reel || !!(openable.portal && portal)
@@ -249,8 +251,8 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
       <article className="column">
         {head}
         {anchors}
-        <AnswerStream id={slug} groups={groups}>{after}</AnswerStream>
-        <ProjectChat slug={slug} names={names} careers={careers} hasImages={hasMedia} onImages={openGallery} />
+        <AnswerStream id={slug} groups={groups} onDone={() => setStreamed(true)}>{after}</AnswerStream>
+        <ProjectChat slug={slug} names={names} careers={careers} hasImages={hasMedia} onImages={openGallery} ready={streamed} />
       </article>
       {gallery && hasMedia ? (
         <>

@@ -69,6 +69,8 @@ const PARTS = ".chat-action, .career-cards > li, ol.career > li, .demo-cards > l
 const PART_START_MS = 500
 const PART_STEP_MS = 260
 const PART_MS = 600
+/** The least time the thinking state shows before an answer starts to stream. */
+const THINKING_MIN_MS = 2000
 /** A breath after the last part before the follow-ups begin. */
 const FOLLOW_GAP_MS = 400
 
@@ -226,7 +228,11 @@ export function ChatThread({
       const previous = answered[answered.length - 1]
       const history: Past[] = answered.slice(-HISTORY_TURNS).map((item) => ({ q: item.question.slice(0, 400), a: (item.answer ?? "").slice(0, 4000), source: item.source }))
       const onStatus = (status: Status) => setTurns((all) => all.map((turn) => (turn.id === id && turn.pending ? { ...turn, status } : turn)))
+      const started = Date.now()
       const reply = await ask(question, previous ? { projects: previous.projects, expects: previous.expects } : undefined, { history, onStatus })
+      // Thinking shows for at least two seconds, so a fast answer still reads as considered.
+      const rest = THINKING_MIN_MS - (Date.now() - started)
+      if (rest > 0) await new Promise((done) => window.setTimeout(done, rest))
       if (stopped.current.has(id)) return
       const { answer, ...extra }: { answer: string } & ReplyExtra = typeof reply === "string" ? { answer: reply } : reply
       record(storeKey, { id, question, answer, ...extra })
@@ -320,8 +326,9 @@ export function ChatThread({
   // Keep the newest turn above the composer: when it is added, when its answer arrives, and once it has fully revealed.
   const newest = turns[turns.length - 1]
   const stage = newest ? `${turns.length}:${newest.pending}:${newest.shown >= newest.words.length}` : ""
-  // The home conversation is a couple of turns with short answers, so it happens in the middle of the view.
-  const centred = storeKey === HOME_CHAT
+  // Every conversation, home included, sits on the composer: a new question starts at the bottom and
+  // the exchange grows upward from there, the newest turn kept just above the composer.
+  const centred = false
   const growing = useRef(false)
   growing.current = !!newest && (newest.pending || newest.shown < newest.words.length)
   const phase = newest ? `${turns.length}:${newest.pending ? "asked" : "answering"}` : ""
@@ -421,7 +428,7 @@ export function ChatThread({
             streaming={turn.pending || turn.shown < turn.words.length}
             tint={tint}
             status={turn.pending ? STATUS_LABEL[turn.status ?? "thinking"] : undefined}
-            className="max-w-none gap-8 text-[16px]"
+            className="max-w-none gap-8 text-[15px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
             final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind, cards: turn.cards }) : undefined}

@@ -42,8 +42,10 @@ test("public views omit flagged work and link real sections", () => {
   const catalog = loadCatalog()
   const hidden = catalog.projects.filter((project) => project.flagged)
   const blob = `${stage.desktop}\n${stage.mobile}\n${JSON.stringify(stage.cards)}`
+  // Work folded into another project is named in that project's words; only its own page is never linked.
+  const folded = new Set(["project:pc-chat", "project:pc-chat-memory"])
   for (const project of hidden) {
-    assert.equal(new RegExp(`(^|[^A-Za-z])${project.name}([^A-Za-z]|$)`).test(blob), false, project.name)
+    if (!folded.has(project.id)) assert.equal(new RegExp(`(^|[^A-Za-z])${project.name}([^A-Za-z]|$)`).test(blob), false, project.name)
     assert.equal(blob.includes(`/work/${project.slug}`), false, project.slug)
   }
   for (const card of stage.cards) {

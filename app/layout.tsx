@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { IBM_Plex_Mono } from "next/font/google"
+import { IBM_Plex_Mono, Source_Serif_4 } from "next/font/google"
 import { Suspense } from "react"
 import { SiteAnalytics } from "@/src/components/analytics"
 import { Composer } from "@/src/components/composer"
@@ -23,6 +23,15 @@ const plex = IBM_Plex_Mono({
   variable: "--plex",
 })
 
+/** The reading face: answers and project text. Optical sizing keeps it open and crisp at 16px. */
+const serif = Source_Serif_4({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  display: "swap",
+  variable: "--source-serif",
+})
+
 const live = indexable()
 
 export const metadata: Metadata = {
@@ -36,16 +45,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const faces = fontFaceCss()
-  const { profile } = loadCatalog()
+  const { profile, places } = loadCatalog()
+  const home = places.find((place) => place.id === profile.placeId)?.name
   const names = Object.fromEntries(publishCatalog().projects.map((project) => [project.slug, project.name]))
   return (
-    <html lang="en" className={`pre ${plex.variable}`}>
+    <html lang="en" className={`pre ${plex.variable} ${serif.variable}`}>
       <head>
         {faces ? <style dangerouslySetInnerHTML={{ __html: faces }} /> : null}
       </head>
       <body>
         <ViewModeProvider>
-          <TopBar location={profile.location} email={profile.email} linkedin={profile.linkedin} />
+          <TopBar location={profile.location} place={home} email={profile.email} linkedin={profile.linkedin} />
           <ProjectTabs names={names} />
           <PillsProvider>
             {children}

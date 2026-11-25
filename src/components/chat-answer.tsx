@@ -31,13 +31,38 @@ export type AnswerProps = {
   careers: Record<string, CareerEntry>
   /** Opens a project the answer names, with the list it came from. */
   onProject: (slug: string, list: string[]) => void
-  /** Opens the view the answer called for. */
+  /** Shows the view the answer called for, or hides it when it is the one showing. */
   /** only narrows the globe to the places the answer was about. */
   onPanel: (kind: Panel, only?: "lived") => void
   /** The project or view open now, shown pressed. */
   current?: string
+  /** When the globe is open, whether it shows only the places lived. */
+  currentOnly?: "lived"
   /** A project shown as plain text, e.g. the one this tab is about. */
   plain?: string
+}
+
+const globeIcon = (
+  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+    <circle cx="6" cy="6" r="4.6" fill="none" stroke="currentColor" strokeWidth="1.08" />
+    <path d="M1.4 6h9.2M6 1.4c1.4 1.3 2.1 2.9 2.1 4.6S7.4 9.3 6 10.6M6 1.4C4.6 2.7 3.9 4.3 3.9 6s.7 3.3 2.1 4.6" fill="none" stroke="currentColor" strokeWidth="0.99" />
+  </svg>
+)
+
+/**
+ * The view an answer offers, below its words: a secondary button that reads Show while the view is
+ * closed and Hide while it is the one open, like the media toggle on a project.
+ */
+function ViewAction({ kind, only, open, onPanel }: { kind: Panel; only?: "lived"; open: boolean; onPanel: AnswerProps["onPanel"] }) {
+  const noun = kind === "globe" ? (only === "lived" ? "places lived" : "globe") : "timeline"
+  return (
+    <div className={`chat-view-action is-${kind}`}>
+      <button type="button" className="preview-close chat-action" aria-pressed={open} onClick={() => onPanel(kind, only)}>
+        {open ? "Hide" : "Show"} {noun}
+        {kind === "globe" ? globeIcon : null}
+      </button>
+    </div>
+  )
 }
 
 /**
@@ -46,7 +71,7 @@ export type AnswerProps = {
  * to the globe or timeline. Null means the plain words are enough, so it is called as a
  * function rather than rendered as a component (an element is never null).
  */
-export function chatAnswer({ turn, names, careers, onProject, onPanel, current, plain }: AnswerProps): ReactNode {
+export function chatAnswer({ turn, names, careers, onProject, onPanel, current, currentOnly, plain }: AnswerProps): ReactNode {
   const link = (slug: string, label: string, list: string[]) =>
     slug === plain ? (
       label
@@ -61,6 +86,8 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
     return (
       <>
         {turn.answer}
+        {/* The timeline toggle sits on top of the list it shows beside. */}
+        {turn.panel === "timeline" ? <ViewAction kind="timeline" open={current === "timeline"} onPanel={onPanel} /> : null}
         <CareerCards roles={roles} names={names} link={link} />
         <ol className="career">
           {roles.map((role) => {
@@ -68,9 +95,9 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
             return (
               <li key={role.id}>
                 <p className="career-facts">
-                  <span>{role.name}</span>
-                  <span>{role.title}</span>
                   <span>{role.dates}</span>
+                  <span>{role.name}</span>
+                  <span className="career-title">{role.title}</span>
                   {role.sizes ? <span>{role.sizes}</span> : null}
                 </p>
                 {role.summary || named.length ? (
@@ -95,24 +122,14 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
             )
           })}
         </ol>
-        {turn.panel === "timeline" ? (
-          <button type="button" className="chat-link chat-action" aria-pressed={current === "timeline"} onClick={() => onPanel("timeline")}>
-            Open timeline
-          </button>
-        ) : null}
       </>
     )
   }
 
   if (turn.panel) {
     const kind = turn.panel
-    return [
-      turn.answer,
-      " ",
-      <button key="view" type="button" className="chat-link chat-action" aria-pressed={current === kind} onClick={() => onPanel(kind, turn.placeKind)}>
-        {kind === "globe" ? (turn.placeKind === "lived" ? "Open places lived" : "Open globe") : "Open timeline"}
-      </button>,
-    ]
+    const open = current === kind && (kind !== "globe" || currentOnly === turn.placeKind)
+    return [turn.answer, <ViewAction key="view" kind={kind} only={turn.placeKind} open={open} onPanel={onPanel} />]
   }
 
   // Projects shown as cards under the answer need no links in it.

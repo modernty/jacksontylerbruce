@@ -28,7 +28,7 @@ export default function ChatPage() {
       logo: openableFor(project.slug).logo,
     }
   })
-  const stage = publicStage()
+  const stage = publicStage({ edge: true })
   const places: GlobePlace[] = catalog.places.map((place) => ({ ...place, home: isHome(place, catalog.profile) }))
   return (
     <main className="conversation">

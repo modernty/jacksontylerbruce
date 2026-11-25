@@ -32,6 +32,9 @@ export function legacyRedirects(): Redirect[] {
   rows.push({ source: "/work/chatter-brand", destination: "/work/chatter", permanent: true })
   // The Loblaws project moved from /work/loblaw to /work/loblaws.
   rows.push({ source: "/work/loblaw", destination: "/work/loblaws", permanent: true })
+  // PC Chat and PC Chat: Memory were folded into Loblaws / PC Health.
+  rows.push({ source: "/work/pc-chat", destination: "/work/loblaws", permanent: true })
+  rows.push({ source: "/work/pc-chat-memory", destination: "/work/loblaws", permanent: true })
   // /assets is not redirected: the images live there, at the same paths the old site used.
   for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*"]) {
     rows.push({ source, destination: "/", permanent: true })

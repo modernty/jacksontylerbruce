@@ -36,9 +36,11 @@
     "overmatch-ai": "show-the-working",
     "botpress": "useful-first",
     "intuit": "surface",
-    "pc-chat-memory": "remember",
-    "loblaws": "handoff",
-    "pc-chat": "one-voice",
+    "loblaws": [
+      "handoff",
+      "remember",
+      "one-voice"
+    ],
     "lzr-2": "show-the-working",
     "model-playground": "show-the-working",
     "talent-management": "show-the-working",

@@ -29,7 +29,7 @@ async function askConversation(q: string, expects?: "category", listed?: string[
  * content; anything wider (the work, career, travel) is answered here too, by the main
  * conversation, in the same style, so the visitor stays in the tab. Other projects open as tabs.
  */
-export function ProjectChat({ slug, names, careers, hasImages, onImages }: { slug: string; names: Record<string, string>; careers: Record<string, CareerEntry>; hasImages?: boolean; onImages?: () => void }) {
+export function ProjectChat({ slug, names, careers, hasImages, onImages, ready = true }: { slug: string; names: Record<string, string>; careers: Record<string, CareerEntry>; hasImages?: boolean; onImages?: () => void; ready?: boolean }) {
   const router = useRouter()
   const [active, setActive] = useState(true)
   const wide = useCallback(
@@ -82,7 +82,7 @@ export function ProjectChat({ slug, names, careers, hasImages, onImages }: { slu
 
   return (
     <>
-      {active ? null : <StarterPrompts className="project-prompts" items={hasImages ? [...PROJECT_STARTERS, IMAGES_STARTER] : PROJECT_STARTERS} onPick={askHere} />}
+      {active ? null : <StarterPrompts className="project-prompts" items={hasImages ? [...PROJECT_STARTERS, IMAGES_STARTER] : PROJECT_STARTERS} onPick={askHere} stream={ready} />}
       <ChatThread
         storeKey={`project-chat:${slug}`}
         ask={ask}

@@ -13,6 +13,7 @@ import type { Project } from "@/src/content/schema"
 import { workAgent, type WorkClient } from "./agent"
 import { converse, type OpenClient, type PastTurn, type Source, type Status } from "./converse"
 import { handleAsk, type AskDeps } from "./handle"
+import { freshFollowUps } from "./followups"
 import { hydrate } from "./llm"
 import { handleProjectAsk } from "./project"
 import { keywordRoute, mentionedProjects } from "./keyword"
@@ -305,7 +306,7 @@ function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
   const line = homeLine(q, catalog.profile.location)
   if (line) {
     const followUps = line.startsWith("From")
-      ? suggest(q, ["Where are you located?", "Where are you right now?"])
+      ? suggest(q, ["Where are you located?", "Show me everywhere you've lived."])
       : suggest(q, ["Where are you from?", "Show me everywhere you've lived."])
     return { answer: line, panel: "globe", followUps }
   }
@@ -343,7 +344,23 @@ function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
   return { answer, go: { href: body.href, handoff: body.handoff } }
 }
 
+/**
+ * Answers a question in the conversation. Whatever answers it, its follow-ups pass through one last
+ * step: none that leads to an answer already given, none twice, and fresh topics where that leaves room.
+ */
 export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: number }, deps: ChatDeps = {}): Promise<{ status: number; body: ChatReply | { error: string } }> {
+  const reply = await answerChatAsk(raw, ctx, deps)
+  const parsed = ChatAsk.safeParse(raw)
+  if (reply.status !== 200 || !parsed.success || "error" in reply.body) return reply
+  const body = reply.body as ChatReply
+  // An answer with nothing to suggest (one that hands over to contact, say) stays that way.
+  if (!body.followUps?.length) return reply
+  const earlier = (parsed.data.history ?? []).map((turn) => turn.q)
+  const followUps = freshFollowUps(body.followUps ?? [], parsed.data.q, earlier)
+  return { ...reply, body: { ...body, ...(followUps.length ? { followUps } : {}) } }
+}
+
+async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, deps: ChatDeps = {}): Promise<{ status: number; body: ChatReply | { error: string } }> {
   const parsed = ChatAsk.safeParse(raw)
   if (!parsed.success) return { status: 400, body: { error: "Expected {q, sessionId}." } }
   const { q, sessionId, expects, listed = [], open } = parsed.data

@@ -2,6 +2,7 @@
 :root{
   --ink:#111111;
   --accent:#2E3A87;
+  --link:#3A4FA0;
   --accent-soft:#E3E8FA;
   --paper:#FAFAFA;
   --surface:#FFFFFF;
@@ -30,6 +31,7 @@
   --ink-quiet:color-mix(in srgb,var(--ink) 70%,transparent);
   --sans:'Aeonik Pro','Avenir Next',Avenir,'Segoe UI',sans-serif;
   --mono:var(--plex),ui-monospace,monospace;
+  --serif:var(--source-serif),Georgia,serif;
   --fs-display:28px;
   --fs-display-small:26px;
   --fs-header:20px;

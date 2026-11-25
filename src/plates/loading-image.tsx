@@ -2,14 +2,8 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { ImageGeneration } from "@/src/components/assistant-ui/elements/image-generation"
 
-/**
- * A project image that holds its place with the dot grid until it loads, then resolves out of a blur.
- * Renders the image and the grid side by side, so it drops into a figure without changing its layout.
- * "fill" lays the grid over the whole figure (the preview frame); "flow" over the image's own box
- * at the top of the figure, so a caption under it stays clear (the project page).
- */
+/** A project image that resolves out of a blur as it loads. No placeholder: the frame stays quiet until it arrives. */
 export function LoadingImage({
   src,
   alt,
@@ -17,7 +11,6 @@ export function LoadingImage({
   height,
   sizes,
   priority = false,
-  fit = "flow",
 }: {
   src: string
   alt: string
@@ -25,7 +18,6 @@ export function LoadingImage({
   height: number
   sizes: string
   priority?: boolean
-  fit?: "fill" | "flow"
 }) {
   const [loaded, setLoaded] = useState(false)
   const image = useRef<HTMLImageElement>(null)
@@ -49,7 +41,6 @@ export function LoadingImage({
         className="resolving"
         onLoad={() => setLoaded(true)}
       />
-      <ImageGeneration generating={!loaded} ratio={width / height} className={`image-hold ${fit}`} style={fit === "flow" ? { aspectRatio: `${width} / ${height}` } : undefined} />
     </>
   )
 }

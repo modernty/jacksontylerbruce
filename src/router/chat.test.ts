@@ -14,6 +14,15 @@ import { MemoryStore } from "./store"
 const catalog = publishCatalog()
 const names = (slugs: string[] = []) => slugs.map((slug) => catalog.projects.find((project) => project.slug === slug)?.name)
 
+test("each quick-start question is answered by the site itself, without a model", async () => {
+  for (const q of ["Show me some case studies", "Tell me about your experience", "How do you start a project?"]) {
+    const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+    const body = reply.body as { answer?: string; contact?: boolean; projects?: string[]; roles?: string[] }
+    assert.equal(reply.status, 200, q)
+    assert.ok(body.answer && !body.contact, `${q}: ${JSON.stringify(body)}`)
+  }
+})
+
 test("the case studies starter offers the chosen projects, in order, as cards to open", async () => {
   const reply = await handleChatAsk({ q: "Show me some case studies.", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
   const body = reply.body as { projects?: string[]; cards?: string; answer: string }
@@ -67,7 +76,7 @@ test("a new question after the offer changes the subject instead of repeating th
   // It stays in the conversation and the globe opens beside it.
   assert.ok("panel" in place.body && place.body.panel === "globe", JSON.stringify(place.body))
   assert.equal("answer" in place.body ? place.body.answer : "", "From Miami.")
-  assert.deepEqual("followUps" in place.body ? place.body.followUps : null, ["Where are you located?", "Where are you right now?"])
+  assert.deepEqual("followUps" in place.body ? place.body.followUps : null, ["Where are you located?", "Show me everywhere you've lived."])
   assert.ok(!("expects" in place.body) || !place.body.expects)
   assert.ok(!("go" in place.body) || !place.body.go)
   const career = await chat("Walk me through your career", "category")

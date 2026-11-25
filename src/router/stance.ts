@@ -25,9 +25,10 @@ const TOPICS: Record<string, RegExp> = {
 // Broad AI and design questions get the whole point of view, briefly.
 const BROAD = /\b(ai|a\.i\.|artificial intelligence|llms?|ai design|design|future|headed|where .* going)\b/
 
+/** The projects that prove a principle. A project can back more than one. */
 const projectsFor = (id: string) =>
-  Object.entries(data.projects as Record<string, string>)
-    .filter(([, principle]) => principle === id)
+  Object.entries(data.projects as Record<string, string | string[]>)
+    .filter(([, principles]) => (Array.isArray(principles) ? principles : [principles]).includes(id))
     .map(([slug]) => slug)
 
 /** A follow-up for each principle, as the question a visitor would ask next. */
