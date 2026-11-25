@@ -18,6 +18,8 @@ import { openTab } from "./project-tabs"
 import { holdComposer } from "./composer"
 import { DemoCards } from "./demo-cards"
 import { useScreenCentre } from "./screen-centre"
+import { PanelTimeline } from "./panel-timeline"
+import type { TimelineModel } from "@/src/timeline/types"
 
 export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null; logo?: string }
 
@@ -111,7 +113,7 @@ function keepShown(picked: Shown | null) {
  * the chat left and previews the project beside it (a bottom sheet on phones), with previous and
  * next following the list the chat gave. "Open full project" opens it in a tab.
  */
-export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: { desktop: string; mobile: string }; careers: CareerEntry[] }) {
+export function ConversationStage({ previews, places, timeline, careers }: { previews: ProjectPreview[]; places: GlobePlace[]; timeline: { desktop: string; model?: TimelineModel; mobile: string }; careers: CareerEntry[] }) {
   const router = useRouter()
   const centreOnScreen = useScreenCentre()
   const centreProject = useScreenCentre()
@@ -388,7 +390,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
             <div className="frame" ref={centreOnScreen}>
               {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : (
                 <>
-                  <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />
+                  {timeline.model ? <PanelTimeline model={timeline.model} fallback={timeline.desktop} /> : <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />}
                   <div className="panel-timeline phone" ref={phoneTimeline} dangerouslySetInnerHTML={{ __html: timeline.mobile }} />
                 </>
               )}

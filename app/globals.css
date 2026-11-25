@@ -436,9 +436,9 @@ body:has(.conv-empty) .hero-work::before{display:none}
   .panel-timeline.desk::-webkit-scrollbar{display:block;height:6px}
   /* Drawn 1120 wide, shown a little smaller (type about 11-12.5px). */
   .panel-timeline.desk svg{width:1000px;max-width:none;height:auto}
-  /* The chat panel's drawing (1000 wide, years edge to edge) stretches to the panel's width up to
-     1200px, centred; a narrower panel shrinks it to fit, never below 860px. */
-  .conversation .preview .panel-timeline.desk svg{width:100%;max-width:1200px;min-width:860px;margin:0 auto}
+  /* The chat panel's timeline is drawn at the width it shows at (panel-timeline.tsx): shown at its
+     own size, centred, 36px clear each side, never scaled. */
+  .conversation .preview .panel-timeline.desk.fitted svg{width:auto;max-width:none;margin:0 auto}
   /* The pair widens while the timeline is open, so the drawing reads at a usable size; the chat and composer follow. */
   .conversation:has(.conv.showing-timeline){--pair:min(1320px,calc(100vw - 72px))}
 }

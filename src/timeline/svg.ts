@@ -36,30 +36,39 @@ function lanesFor(count: number): N[] {
 /**
  * The desktop drawing. `edge` runs the years nearly edge to edge, leaving just room for the first
  * role's label on the left and NOW on the right; it suits the timeline mode alone (the focus mode
- * needs the left margin for its labels).
+ * needs the left margin for its labels). `type` sets every label of the timeline mode to one size,
+ * meant to be shown unscaled (the drawing made at the width it is shown at); the rows and the
+ * drawing's height grow with it, so only the time axis stretches with the width.
  */
-export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { edge = false } = {}): string {
+export function desktopSvg(model: TimelineModel, width = 1120, drawnHeight = 340, { edge = false, type }: { edge?: boolean; type?: number } = {}): string {
   const now = model.now
-  const x0 = I(edge ? 60 : 150)
-  const x1 = sub(I(width), I(edge ? 40 : 110))
+  const k = type ? type / 13 : 1
+  const v = (n: number): N => I(Math.round(n * k))
+  const height = Math.round(drawnHeight * k)
+  const size = (n: number) => type ?? n
+  // Edge to edge, the margins balance the ink: the lanes start just left of the first label, and the
+  // right margin holds the labels of the newest roles, which run past NOW.
+  const x0 = I(edge ? 56 : 150)
+  const x1 = sub(I(width), I(edge ? Math.round(96 * k) : 110))
+  const lineStart = edge ? sub(x0, I(10)) : sub(x0, I(40))
   const span = sub(F(now), I(2019))
   const locate = (when: number): N => add(x0, mul(div(sub(F(when), I(2019)), span), sub(x1, x0)))
   const parts: string[] = [
     `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" font-family="Aeonik Pro" fill="${INK}">`,
   ]
   parts.push(
-    `<line class="nowl" x1="${fmt(x1)}" y1="30" x2="${fmt(x1)}" y2="${height - 16}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="12" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>`,
+    `<line class="nowl" x1="${fmt(x1)}" y1="${fmt(v(30))}" x2="${fmt(x1)}" y2="${height - Math.round(16 * k)}" stroke="${INK}" stroke-opacity=".35" stroke-dasharray="2 3"/><text x="${fmt(x1)}" y="${height - 4}" text-anchor="middle" font-size="${size(12)}" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>`,
   )
   for (let year = 2019; year < 2027; year += 1) {
     parts.push(
-      `<text class="yr" x="${fmt(locate(year))}" y="${height - 4}" text-anchor="middle" font-size="12" opacity=".4">${year}</text>`,
+      `<text class="yr" x="${fmt(locate(year))}" y="${height - 4}" text-anchor="middle" font-size="${size(12)}" opacity=".4">${year}</text>`,
     )
   }
-  const lanes = [I(78), I(170), I(262)]
+  const lanes = [v(78), v(170), v(262)]
   const timelineGroup: string[] = ['<g class="mode on" data-m="timeline">']
   for (const laneY of lanes) {
     timelineGroup.push(
-      `<line class="bl" x1="${fmt(sub(x0, I(40)))}" y1="${fmt(laneY)}" x2="${fmt(x1)}" y2="${fmt(laneY)}" stroke="${INK}" stroke-opacity=".1"/>`,
+      `<line class="bl" x1="${fmt(lineStart)}" y1="${fmt(laneY)}" x2="${fmt(x1)}" y2="${fmt(laneY)}" stroke="${INK}" stroke-opacity=".1"/>`,
     )
   }
   const rows = new Map<string, number>()
@@ -67,19 +76,30 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { e
   timeline.forEach((project, index) => {
     const name = project.name
     const lane = project.lane
-    // Each role's projects stack under its left edge, one row each, in start order.
-    const xx = add(locate(project.anchor), I(4))
+    // Each role's projects stack under its left edge, one row each, in start order, their names
+    // aligned with the role's name and dates above; the tick drops from the bar's first dot.
+    const xx = locate(project.anchor)
+    const tx = sub(xx, I(6))
+    // A name that would run into the next role along this lane breaks onto a second line.
+    const next = model.roles.filter((role) => role.lane === lane && role.start > project.anchor).map((role) => locate(role.start).v)
+    const room = next.length ? Math.min(...next) - tx.v - 12 : Infinity
+    const lines = tw(name, F(size(13))).v > room ? splitName(name) : [name]
     const key = `${lane}:${fmt(xx)}`
     const row = rows.get(key) ?? 0
-    rows.set(key, row + 1)
-    const ly = add(add(lanes[lane], I(24)), mul(I(row), I(15)))
+    rows.set(key, row + lines.length)
+    const ly = add(add(lanes[lane], v(24)), mul(I(row), v(15)))
+    const label = (cls: string, weight: string) =>
+      `<text class="${cls}" x="${fmt(tx)}" y="${fmt(ly)}" font-size="${size(13)}"${weight}>` +
+      lines.map((line, at) => `<tspan x="${fmt(tx)}" y="${fmt(add(ly, mul(I(at), v(15))))}">${line}</tspan>`).join("") +
+      `</text>`
     const laneTop = lanes[lane]
     timelineGroup.push(
-      `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, I(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
+      `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, v(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
         `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.anchor))}">` +
-        `<rect x="${fmt(xx)}" y="${fmt(sub(ly, I(11)))}" width="${fmt(add(mul(tw(name, F(11.5)), F(1.1)), I(8)))}" height="15" fill="transparent"/>` +
-        `<text class="w4" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="13">${name}</text>` +
-        `<text class="w6" x="${fmt(add(xx, I(4)))}" y="${fmt(ly)}" font-size="13" font-weight="600">${name}</text></g>`,
+        `<rect x="${fmt(tx)}" y="${fmt(sub(ly, v(11)))}" width="${fmt(add(mul(tw(lines.reduce((a, b) => (a.length >= b.length ? a : b)), (type ? F(type * 0.885) : F(11.5))), F(1.1)), I(8)))}" height="${Math.round(15 * k) * lines.length}" fill="transparent"/>` +
+        label("w4", "") +
+        label("w6", ' font-weight="600"') +
+        `</g>`,
     )
   })
   for (const role of model.roles) {
@@ -88,7 +108,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { e
     const current = role.end == null
     const xb = current ? x1 : locate(role.end as number)
     const label = (weight: number, cls: string) =>
-      `<text class="${cls}" font-size="14" font-weight="${weight}"><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(26)))}">${role.name}</tspan><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, I(12)))}">${role.year}</tspan></text>`
+      `<text class="${cls}" font-size="${size(14)}" font-weight="${weight}"><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, type ? add(v(18), I(Math.round(type * 1.2))) : I(32)))}">${role.name}</tspan><tspan x="${fmt(sub(xa, I(6)))}" y="${fmt(sub(y, v(18)))}">${role.year}</tspan></text>`
     timelineGroup.push(
       `<g class="rp" data-t="${fmt(F(role.start))}" data-cur="${current ? 1 : 0}">${pill(xa, y, xb, y, current)}<g class="co">${label(600, "w6")}${label(400, "w4")}</g></g>`,
     )
@@ -100,7 +120,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { e
   const projectGroup: string[] = ['<g class="mode" data-m="projects">']
   for (const laneY of projectLanes) {
     projectGroup.push(
-      `<line x1="${fmt(sub(x0, I(40)))}" y1="${fmt(laneY)}" x2="${fmt(x1)}" y2="${fmt(laneY)}" stroke="${INK}" stroke-opacity=".08"/>`,
+      `<line x1="${fmt(lineStart)}" y1="${fmt(laneY)}" x2="${fmt(x1)}" y2="${fmt(laneY)}" stroke="${INK}" stroke-opacity=".08"/>`,
     )
   }
   for (const { item, index } of placed) {
@@ -149,7 +169,7 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { e
   let y = I(34)
   for (const block of blocks) {
     focusGroup.push(
-      `<line x1="${fmt(sub(x0, I(40)))}" y1="${fmt(sub(y, I(7)))}" x2="${fmt(x1)}" y2="${fmt(sub(y, I(7)))}" stroke="${INK}" stroke-opacity=".1"/>` +
+      `<line x1="${fmt(lineStart)}" y1="${fmt(sub(y, I(7)))}" x2="${fmt(x1)}" y2="${fmt(sub(y, I(7)))}" stroke="${INK}" stroke-opacity=".1"/>` +
         `<text x="${fmt(sub(x0, I(140)))}" y="${fmt(add(y, F(3.5)))}" font-size="12" font-weight="600" letter-spacing=".06em">${block.label}</text>`,
     )
     for (const item of block.items) {
@@ -177,6 +197,14 @@ export function desktopSvg(model: TimelineModel, width = 1120, height = 340, { e
   focusGroup.splice(1, 0, ...links)
   parts.push(...focusGroup, "</g></svg>")
   return hairlines(parts.join(""))
+}
+
+/** A name on two lines, broken at the space nearest its middle. */
+function splitName(name: string): string[] {
+  const spaces = [...name.matchAll(/ /g)].map((match) => match.index ?? 0)
+  if (!spaces.length) return [name]
+  const cut = spaces.reduce((best, at) => (Math.abs(at - name.length / 2) < Math.abs(best - name.length / 2) ? at : best))
+  return [name.slice(0, cut), name.slice(cut + 1)]
 }
 
 function greedy(items: ProjectMark[], locate: (when: number) => N) {
