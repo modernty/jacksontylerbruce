@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ViewModeProvider>
-          <TopBar location={profile.location} place={home} email={profile.email} linkedin={profile.linkedin} />
+          <TopBar location={profile.location} place={home} linkedin={profile.linkedin} />
           <ProjectTabs names={names} />
           <PillsProvider>
             {children}

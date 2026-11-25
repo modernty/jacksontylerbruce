@@ -39,6 +39,38 @@ export const NUDGE_AFTER = 3
 /** Said when a question is outside the site and no open answer can be given. */
 export const OUTSIDE = "That's outside the work here."
 
+/** Ways of asking how to reach Tyler: contact, email, phone, hiring, working together, talking. */
+const CONTACT_ASK = new RegExp(
+  [
+    String.raw`\bcontact`,
+    String.raw`\be-?mail`,
+    String.raw`\bget in touch`,
+    String.raw`\bin touch with`,
+    String.raw`\breach (out|you|him|tyler)`,
+    String.raw`\bhold of (you|him|tyler)`,
+    String.raw`\bphone( number)?\b`,
+    String.raw`\b(call|text|message|dm) (you|him|tyler)\b`,
+    String.raw`\bconnect with (you|him|tyler)`,
+    String.raw`\bhire (you|him|tyler)`,
+    String.raw`\bwork with (you|him|tyler)\b`,
+    String.raw`\bwork together\b`,
+    String.raw`\b(talk|speak|chat) (to|with) (you|him|tyler)`,
+    String.raw`\bcan we (talk|chat|speak)`,
+    String.raw`\b(chat|talk) about (a|my|our) (project|idea|role|job)`,
+    String.raw`\bbook a call`,
+    String.raw`\bavailable for (work|hire|projects?|freelance|contract)`,
+  ].join("|"),
+  "i",
+)
+
+export function asksForContact(question: string): boolean {
+  return CONTACT_ASK.test(question)
+}
+
+export function contactAnswer(email: string): string {
+  return `By email: ${email}. Write about a project, a role or anything else.`
+}
+
 const ChatAsk = z.object({
   q: z.string(),
   sessionId: z.string().min(1).max(80),
@@ -401,6 +433,8 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
   }
 
   if (!blocked(q)) {
+    // However a visitor asks how to reach Tyler, the answer is his email.
+    if (asksForContact(q)) return { status: 200, body: { answer: contactAnswer(catalog.profile.email), followUps: ["How do you start a project?", "Show me some case studies."] } }
     // An opinion is answered with the point of view, before anything else reads it as a project.
     const qa = qaReply(q)
     // A named project only blocks the broad answer: "what do you think of the Botpress design?" is

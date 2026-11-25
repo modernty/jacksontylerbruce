@@ -231,3 +231,15 @@ test("asking for all of the work lists every project, not the overview again", (
   // The overview offers each type as a tap.
   assert.ok(answerChat("Brand work.", "category")?.answer.startsWith("Brand work"))
 })
+
+test("any way of asking how to reach Tyler answers with his email", async () => {
+  const email = /By email: \S+@\S+\./
+  for (const q of ["How can I contact you?", "What's your email?", "How do I reach Tyler?", "Can I get in touch?", "How do I hire you?", "Can we talk?", "Do you have a phone number?", "I want to work with you", "Are you available for work?"]) {
+    const reply = await chat(q)
+    assert.match((reply.body as { answer: string }).answer, email, q)
+  }
+  for (const q of ["Who do you work with?", "What tools do you work with?", "How do you start a project?"]) {
+    const reply = await chat(q)
+    assert.doesNotMatch((reply.body as { answer: string }).answer, email, q)
+  }
+})

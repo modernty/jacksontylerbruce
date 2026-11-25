@@ -62,7 +62,7 @@ export function aboutTravel(question: string): boolean {
 }
 
 export function contactReply(catalog: PublicCatalog): string {
-  return `Write to ${catalog.profile.email}, or connect on LinkedIn. Both links are at the top of the page.`
+  return `Email ${catalog.profile.email}. You can also connect on LinkedIn, linked at the top of the page.`
 }
 
 /**

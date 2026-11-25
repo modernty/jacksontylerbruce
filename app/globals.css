@@ -171,7 +171,6 @@ body:has(.sheet) .cards{display:none}
 /* The disclaimer, small, at the very top of every page, above the header. */
 .disclaimer{position:fixed;left:0;right:0;top:calc(14px + env(safe-area-inset-top));z-index:11;margin:0;padding:0 16px;text-align:center;font-family:var(--sans);font-size:var(--fs-micro);line-height:16px;letter-spacing:0;color:var(--ink);opacity:.6;pointer-events:none}
 /* The empty conversation has no Contact control. */
-body:has(.conv-empty) .top-work .mail-link{display:none}
 .top-work span.contact{display:flex;gap:20px;align-items:center}
 /* Email, LinkedIn and the globe (About) as icons; the label is for screen readers and the tooltip. */
 .top-work .icon-link{display:inline-flex;color:var(--ink);opacity:.72;transition:opacity var(--motion-quick) var(--motion-ease)}
