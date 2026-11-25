@@ -1,0 +1,76 @@
+{
+  "slug": "chat-settings",
+  "name": "Chat Settings",
+  "status": "design-complete",
+  "order": 4,
+  "summary": "Where a user turns auto-delete off, and where they delete every chat or every memory at once.",
+  "tryIt": "chat-settings",
+  "tryItScreens": [
+    "chat-settings--settings",
+    "chat-settings--auto-delete-off",
+    "chat-settings--spent"
+  ],
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaPageId": "7043:2798",
+  "figmaPageName": "History / Memories",
+  "overview": [
+    "Chat Settings is two switches and two doors. The switch decides how long chats live: sixty days with it on, 550 days with it off. Off is not \"keep forever\". The doors delete everything — all previous chats, or all memories — and neither can be undone.",
+    "It is reached through the side panel, which gains a fourth destination to carry it. That route is the reason this is a feature rather than a screen: nothing else in the product deletes at this scale, and the only thing standing between a user and an empty history is one dialog.",
+    "The file draws the surface two ways — on the gradient, and with the auto-delete row on a card. They disagree about the page title as well as the surface, so both are documented rather than one being picked."
+  ],
+  "statesLabel": "Screens",
+  "states": [
+    {
+      "name": "The panel, with Settings",
+      "screen": "chat-settings--panel",
+      "description": "The side panel gains a fourth destination under Memory. This is the only route to the settings page that the file draws."
+    },
+    {
+      "name": "Settings",
+      "screen": "chat-settings--settings",
+      "description": "Auto-delete on, and both delete actions live. Two content states: the toggle on and off, the second carrying the toast that confirms it."
+    },
+    {
+      "name": "Confirming a delete",
+      "screen": "chat-settings--confirm",
+      "description": "The dialog, its typed confirmation, and the keyboard it makes room for. Three content states: at rest, with the keyboard up and Delete still held back, and with the word typed and Delete live."
+    },
+    {
+      "name": "Both deletes spent",
+      "screen": "chat-settings--spent",
+      "description": "After both have run. The rows stay in place and go quiet rather than disappearing, so the setting is still legible as something that exists."
+    }
+  ],
+  "behaviour": [
+    {
+      "rule": "Auto-delete sets the window, it does not remove it",
+      "detail": "On by default and sixty days. Turning it off does not keep chats indefinitely — it moves them to 550 days, after which they are deleted anyway. Both numbers are stated in days rather than as a span, so the number a user reads is the number the system holds. What happens to memories saved from an expired chat is covered by the delete-chats dialog, which says they survive.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Toggling confirms with a toast",
+      "detail": "Turning it off raises “Auto-delete for chats disabled” at the top of the screen with a dismiss control. The file draws the disabled toast; the enabled one is its mirror.",
+      "source": "partial"
+    },
+    {
+      "rule": "Deleting is gated on typing the word",
+      "detail": "Both dialogs ask the user to type Delete, and hold the Delete button in a held-back red until they do. Neither dialog can be satisfied by tapping alone.",
+      "source": "extracted"
+    },
+    {
+      "rule": "The two deletes are independent",
+      "detail": "Deleting chats leaves memories, and the dialog says so. Deleting memories leaves chat history, and that dialog says so too. Each row is spent on its own.",
+      "source": "extracted"
+    },
+    {
+      "rule": "A spent row stays and dims",
+      "detail": "The last frame keeps both rows in place at reduced opacity rather than removing them. Whether they recover — and when — is not drawn.",
+      "source": "open"
+    },
+    {
+      "rule": "Nothing warns before the dialog",
+      "detail": "The delete rows sit directly under the setting with no intermediate step. The dialog is the only gate, and the only place the consequence is written down.",
+      "source": "extracted"
+    }
+  ]
+}

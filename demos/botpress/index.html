@@ -1,0 +1,534 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lily in Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<style>
+/* Layout: a moment picker on top, a live Desk window on the left, Lily's trust line and history on the right. */
+:root{
+  --bg:#EFECE7; --paper:#F8F7F4; --surface:#FFFFFF; --sunk:#F4F3F1; --chip:#E8E5E0;
+  --ink:#141413; --muted:#6F6A63; --line:rgba(20,20,19,.09); --line2:rgba(20,20,19,.16);
+  --accent:#E66B36; --accent-soft:#FBE7DD; --draft:#FBF8F4;
+  --ok:#2F7D46; --ok-soft:#E3F1E6; --bubble-me:#EBE7E1; --btn:#141413; --btn-fg:#FFFFFF;
+  --lily-body:#E3D8CD; --shadow:0 16px 48px rgba(0,0,0,.10);
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141312; --paper:#1A1918; --surface:#22201E; --sunk:#1C1B19; --chip:#2E2B28;
+  --ink:#F1EEE9; --muted:#A39D94; --line:rgba(241,238,233,.10); --line2:rgba(241,238,233,.20);
+  --accent:#F0834F; --accent-soft:#3A2419; --draft:#2A2420;
+  --ok:#6CC08A; --ok-soft:#1F3326; --bubble-me:#2E2B28; --btn:#F1EEE9; --btn-fg:#141413;
+  --lily-body:#D9CDC0; --shadow:0 16px 48px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141312; --paper:#1A1918; --surface:#22201E; --sunk:#1C1B19; --chip:#2E2B28;
+  --ink:#F1EEE9; --muted:#A39D94; --line:rgba(241,238,233,.10); --line2:rgba(241,238,233,.20);
+  --accent:#F0834F; --accent-soft:#3A2419; --draft:#2A2420;
+  --ok:#6CC08A; --ok-soft:#1F3326; --bubble-me:#2E2B28; --btn:#F1EEE9; --btn-fg:#141413;
+  --lily-body:#D9CDC0; --shadow:0 16px 48px rgba(0,0,0,.45); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1380px;margin:0 auto;display:grid;gap:20px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* header */
+.head{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:end;justify-content:space-between}
+.head h1{font-size:30px;font-weight:500;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.head p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.moments{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.moment{display:grid;gap:1px;text-align:left;padding:8px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);min-width:0}
+.moment b{font-weight:500;font-size:13px}
+.moment span{font-size:11px;color:var(--muted)}
+.moment[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn)}
+.moment[aria-pressed="true"] span{color:inherit;opacity:.7}
+.next{padding:10px 14px;border-radius:12px;background:var(--accent);color:#fff;font-weight:500;font-size:13px}
+
+/* stage banner */
+.banner{display:flex;gap:14px;align-items:center;padding:14px 18px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.banner .when{font-family:var(--mono);font-size:12px;color:var(--accent);white-space:nowrap}
+.banner .what{min-width:0}
+.banner .what b{font-weight:500}
+.banner .what div{color:var(--muted)}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+@media (max-width:1100px){.main{grid-template-columns:minmax(0,1fr)}}
+
+/* app window */
+.app{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line2);background:var(--sunk);box-shadow:var(--shadow);
+  display:grid;grid-template-columns:200px minmax(0,1fr);height:720px}
+.rail{background:var(--surface);border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:2px}
+.logo{display:flex;gap:10px;align-items:center;padding:0 8px 16px;font-weight:600;font-size:17px}
+.desk-tile{width:32px;height:32px;border-radius:8px;background:#D7D3CE;color:#2F2D2B;display:grid;place-items:center;flex:none}
+.desk-ic{width:13px;height:13px;display:block}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bp-wm{height:20px;width:auto;display:block;color:var(--ink)}
+.brand .mono{margin:0}
+.ws{font-size:11px;font-weight:500;color:var(--muted);background:var(--chip);border-radius:99px;padding:2px 8px}
+.nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--muted);font-weight:500;width:100%;text-align:left}
+.nav[aria-current="page"]{background:var(--chip);color:var(--ink);font-weight:600}
+.nav .ic{width:16px;display:inline-grid;place-items:center;font-size:12px}
+.nav .count{margin-left:auto;font-size:11px;background:var(--chip);border-radius:99px;padding:1px 8px;color:var(--muted)}
+.me{margin-top:auto;display:flex;gap:10px;align-items:center;padding:8px}
+.me small{display:block;color:var(--muted);font-size:12px}
+.av{width:28px;height:28px;border-radius:99px;background:var(--chip);display:grid;place-items:center;font-size:11px;font-weight:600;flex:none;color:var(--ink)}
+
+.view{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px 0 28px;border-bottom:1px solid var(--line);background:var(--sunk)}
+.crumb{display:flex;gap:8px;align-items:center;min-width:0;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden}
+.crumb button{color:var(--muted)}
+.crumb b{color:var(--ink);font-weight:600}
+.spacer{flex:1}
+.bell{position:relative;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line)}
+.bell svg{width:16px;height:16px}
+.bell .n{color:var(--accent);font-weight:600;font-size:13px}
+.body{flex:1;min-height:0;overflow:auto}
+
+/* home */
+.home{max-width:700px;margin:0 auto;padding:44px 24px 120px;display:grid;gap:32px}
+.hello{display:grid;gap:12px}
+.hello h2{font-size:34px;font-weight:500;letter-spacing:-.02em;margin:0}
+.hello p{font-size:18px;margin:0;color:var(--muted);text-wrap:pretty}
+.link{color:var(--accent);text-decoration:underline dotted;text-underline-offset:4px;text-decoration-thickness:1.5px}
+.hl{color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:4px}
+.stat span{color:var(--muted);font-size:13px}
+.stat b{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums}
+.agents{display:grid;gap:10px}
+.agentrow{display:flex;gap:12px;flex-wrap:wrap}
+.agent{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:14px;width:220px}
+.agent .t{display:flex;justify-content:space-between;align-items:start}
+.live{font-size:12px;font-weight:500;color:var(--ok);background:var(--ok-soft);border-radius:99px;padding:3px 10px;display:flex;gap:6px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:99px;background:currentColor}
+.agent h4{margin:0;font-size:15px;font-weight:500}
+.agent small{color:var(--muted)}
+.agent .foot{border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;align-items:end}
+.agent .foot b{font-size:20px;font-weight:500;display:block;font-variant-numeric:tabular-nums}
+.credit{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.askbar{position:absolute;left:50%;transform:translateX(-50%);bottom:20px;width:min(640px,calc(100% - 140px));display:flex;gap:10px;align-items:center;
+  padding:10px 10px 10px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);box-shadow:var(--shadow);color:var(--muted);text-align:left}
+.askbar span{flex:1;min-width:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:8px;font-weight:500;font-size:13px;white-space:nowrap}
+.btn.dark{background:var(--btn);color:var(--btn-fg)}
+.btn.ghost{border:1px solid var(--line2);background:var(--surface)}
+.btn.orange{background:var(--accent);color:#fff}
+.btn.sm{padding:6px 11px;font-size:12px}
+
+/* notifications */
+.pop{position:absolute;top:52px;right:16px;width:380px;max-width:calc(100% - 32px);background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);z-index:20;overflow:hidden}
+.pop h5{margin:0;padding:14px 18px;font-size:14px;display:flex;justify-content:space-between}
+.pop h5 span{color:var(--muted);font-weight:400}
+.ni{display:flex;gap:12px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.ni .i{width:32px;height:32px;border-radius:8px;background:var(--chip);display:grid;place-items:center;flex:none}
+.ni .x{flex:1;min-width:0}
+.ni .x b{display:block;font-weight:500}
+.ni .x small{color:var(--muted)}
+.empty{padding:6px 18px 18px;color:var(--muted)}
+
+/* ticket */
+.ticket{display:grid;grid-template-columns:260px minmax(0,1fr);height:100%}
+.convs{background:var(--surface);border-right:1px solid var(--line);overflow:auto}
+.convs .h{padding:14px 16px 10px;display:grid;gap:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font-size:12px;font-weight:500;border-radius:99px;padding:3px 10px;background:var(--chip);color:var(--muted)}
+.tab.on{background:var(--btn);color:var(--btn-fg)}
+.conv{display:flex;gap:10px;padding:12px 16px;border-top:1px solid var(--line);text-align:left;width:100%}
+.conv[aria-current="true"]{background:var(--sunk)}
+.conv .x{min-width:0;flex:1}
+.conv .x .r{display:flex;justify-content:space-between;gap:8px}
+.conv .x b{font-weight:500}
+.conv .x small{color:var(--muted)}
+.conv .x p{margin:2px 0 0;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.state{display:inline-block;margin-top:6px;font-size:11px;font-weight:500;border-radius:99px;padding:2px 9px;background:var(--chip);color:var(--muted)}
+.state.ok{background:var(--ok-soft);color:var(--ok)}
+.tk{display:flex;flex-direction:column;min-height:0}
+.tk .th{display:flex;gap:12px;align-items:center;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--line)}
+.tk .th .x{flex:1;min-width:0}
+.tk .th .x b{display:block;font-weight:500;font-size:15px}
+.tk .th .x small{color:var(--muted)}
+.pill{font-size:12px;font-weight:500;border-radius:99px;padding:3px 10px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.thread{flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.msg{display:flex;gap:10px;max-width:100%}
+.msg.me{justify-content:flex-end}
+.bub{max-width:min(460px,80%);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 15px}
+.msg.me .bub{background:var(--bubble-me);border-color:transparent}
+.bub small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-bottom:4px}
+.ev{display:flex;gap:10px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ev::before,.ev::after{content:"";flex:1;height:1px;background:var(--line2)}
+.draftrow{display:flex;justify-content:flex-end;gap:10px}
+.draft{width:min(460px,80%);background:var(--draft);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:14px;padding:14px 14px 14px 16px;display:flex;gap:12px;align-items:flex-start;transition:all .35s ease}
+.draft .x{flex:1;min-width:0;display:grid;gap:4px}
+.draft .x b{font-weight:500}
+.draft .x p{margin:0;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.draft .acts{display:flex;gap:8px;margin-top:8px}
+.close{color:var(--muted);padding:2px 4px}
+.sending{width:auto;border-radius:99px;padding:9px 16px 9px 10px;align-items:center}
+.spin{width:16px;height:16px;border-radius:99px;border:2px solid color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:var(--accent);animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.slot{width:28px;flex:none}
+.composer{margin:0 24px 20px;display:flex;gap:10px;align-items:center;padding:10px 10px 10px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);color:var(--muted)}
+.composer span{flex:1}
+
+/* teach + ask */
+.page{max-width:760px;margin:0 auto;padding:32px 24px 120px;display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:12px}
+.card.lily{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.card h3{margin:0;font-size:24px;font-weight:500;letter-spacing:-.01em}
+.steps{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;align-items:center}
+.steps .n{width:24px;height:24px;border-radius:99px;background:var(--btn);color:var(--btn-fg);display:grid;place-items:center;font-size:12px;font-weight:500;flex:none}
+.steps li.hand .n{background:var(--chip);color:var(--ink)}
+.chatprev{background:var(--sunk);border-radius:12px;padding:14px;display:grid;gap:10px}
+.cb{max-width:80%;padding:9px 13px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.cb.cust{justify-self:end;background:var(--btn);color:var(--btn-fg);border:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.q{justify-self:end;background:var(--btn);color:var(--btn-fg);padding:10px 14px;border-radius:14px;max-width:80%}
+.sugs{display:flex;gap:8px;flex-wrap:wrap}
+.sug{font-size:13px;padding:6px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line2)}
+.bars{display:flex;gap:14px;align-items:end;height:130px;padding:12px;background:var(--sunk);border-radius:12px}
+.bar{flex:1;display:grid;gap:6px;justify-items:center;font-size:11px;color:var(--muted)}
+.bar i{display:block;width:100%;border-radius:6px;background:var(--chip)}
+.bar i.on{background:var(--accent)}
+.typing span{display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--muted);margin-right:3px;animation:blink 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{50%{opacity:.25}}
+
+/* Lily dock */
+.dock{position:absolute;right:18px;bottom:18px;z-index:30;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:calc(100% - 36px)}
+.lpill{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 6px;border-radius:99px;background:var(--surface);border:1px solid var(--line2);box-shadow:var(--shadow)}
+.lpill.has{padding-right:14px}
+.lpill .dotn{width:8px;height:8px;border-radius:99px;background:var(--accent)}
+.lcard{width:340px;max-width:100%;background:var(--surface);border:1px solid var(--line2);border-radius:18px;box-shadow:var(--shadow);padding:16px;display:grid;gap:12px;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+.lcard .h{display:flex;gap:10px;align-items:center}
+.lcard .h div{flex:1}
+.lcard .h b{display:block;font-size:13px}
+.lcard .h small{color:var(--muted);font-size:12px}
+.lcard p{margin:0;font-size:14px;text-wrap:pretty}
+.lcard .ask{padding:9px 12px;border-radius:10px;background:var(--sunk);color:var(--muted);text-align:left}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.lily{display:block;flex:none}
+
+/* side */
+.side{display:grid;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
+.panel h4{margin:0;font-size:15px;font-weight:600}
+.trust{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trust li{display:flex;gap:10px;align-items:center;color:var(--muted)}
+.trust .m{width:18px;height:18px;border-radius:99px;border:1.5px solid var(--line2);display:grid;place-items:center;font-size:10px;flex:none}
+.trust li.done{color:var(--ink)}
+.trust li.done .m{background:var(--btn);border-color:var(--btn);color:var(--btn-fg)}
+.trust li.now{color:var(--ink);font-weight:600}
+.trust li.now .m{background:var(--accent);border-color:var(--accent)}
+.trust li.now em{margin-left:auto;font-style:normal;color:var(--accent);font-size:12px;font-weight:500}
+.prog{height:6px;border-radius:99px;background:var(--chip);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.log li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.log li:first-child{border-top:0}
+.log .d{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px}
+.log li.cur .d{color:var(--accent)}
+.log p{margin:0;font-size:13px}
+.log li.future{opacity:.45}
+.hint{font-size:12px;color:var(--muted)}
+
+@media (max-width:760px){
+  .app{grid-template-columns:minmax(0,1fr);height:760px}
+  .rail{display:none}
+  .stats{grid-template-columns:minmax(0,1fr)}
+  .ticket{grid-template-columns:minmax(0,1fr)}
+  .convs{display:none}
+  .askbar{width:calc(100% - 32px)}
+  .home{padding-bottom:160px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* start screen: pick a prototype; inside a prototype only the app shows */
+.start{min-height:calc(100vh - 64px);display:grid;place-content:center;gap:28px;max-width:520px;margin:0 auto;width:100%}
+.start .bp-wm{height:22px}
+.start h1{font-size:28px;font-weight:500;letter-spacing:-.02em;margin:0}
+.start p{margin:6px 0 0;color:var(--muted)}
+.protos{display:grid;gap:8px}
+.proto{display:flex;align-items:center;gap:14px;text-align:left;padding:16px 18px;border-radius:14px;background:var(--surface);border:1px solid var(--line);transition:border-color .15s,transform .15s}
+.proto:hover{border-color:var(--line2);transform:translateY(-1px)}
+.proto .t{flex:1;min-width:0}.proto .t b{font-weight:500;display:block}.proto .t span{color:var(--muted);font-size:13px}
+.proto .go{color:var(--muted)}
+body:not(.in-proto) .wrap{display:none}
+body.in-proto .start{display:none}
+body.in-proto .head,body.in-proto .banner,body.in-proto .side{display:none}
+body.in-proto .main{grid-template-columns:minmax(0,1fr)}
+body{margin:0}
+body.in-proto{padding:0;overflow:hidden}
+body.in-proto .wrap{max-width:none;gap:0}
+body.in-proto .app{height:100vh;height:100dvh;border:0;border-radius:0;box-shadow:none}
+.back{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:50;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 10px;opacity:.35;transition:opacity .15s}
+.back:hover,.back:focus-visible{opacity:1;color:var(--ink)}
+body:not(.in-proto) .back{display:none}
+
+/* Portfolio story mode (?story): the moments, the live Desk and Lily's trust line, all on one page. */
+body.story .start{display:none}
+body.story .wrap{display:grid}
+body.story .back{display:none}
+</style>
+
+<main class="start" id="start">
+  <div><svg xmlns="http://www.w3.org/2000/svg" class="bp-wm" role="img" aria-label="Botpress" viewBox="0 0 748 160" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M102 0C118.762 0 127.143 0.000309944 133.845 2.47266C144.823 6.52282 153.477 15.177 157.527 26.1553C160 32.8569 160 41.2379 160 58V102C160 118.762 160 127.143 157.527 133.845C153.477 144.823 144.823 153.477 133.845 157.527C127.143 160 118.762 160 102 160H58C41.2379 160 32.8569 160 26.1553 157.527C15.177 153.477 6.52282 144.823 2.47266 133.845C0.000309944 127.143 0 118.762 0 102V58C0 41.2379 0.000309944 32.8569 2.47266 26.1553C6.52282 15.177 15.177 6.52282 26.1553 2.47266C32.8569 0.000309944 41.2379 0 58 0H102ZM109.473 24.9023C107.656 23.8561 105.52 23.856 103.811 24.9023L89.0684 33.2744C87.3597 34.3209 86.2911 36.0997 86.291 38.0879V53.6807L64.0703 66.2383L57.5537 62.5762L50.1826 58.3906C48.3661 57.3436 46.2296 57.3437 44.5205 58.3906L29.7773 66.7617C28.0681 67.8082 27 69.5877 27 71.5762V88.3193C27 90.3071 28.0682 92.0869 29.7773 93.0283L44.5205 101.4C46.3369 102.447 48.4733 102.447 50.1826 101.4L58.6221 96.5869L51.8916 86.75L86.291 106.215V121.911C86.1838 123.9 87.3596 125.784 89.0684 126.726L103.811 135.098C105.627 136.144 107.763 136.144 109.473 135.098L124.216 126.726C125.925 125.679 126.993 123.9 126.993 121.911V105.272C127.1 103.284 125.925 101.401 124.216 100.459L109.473 92.0869C107.763 91.1452 105.52 91.0407 103.918 92.1914L96.5469 96.377L90.0293 100.04L67.8096 87.4824V72.7266L90.0293 60.1689L103.811 52.3203L96.0117 63.5176L96.4395 63.7275L103.811 67.9131C105.627 68.9594 107.763 68.9593 109.473 67.9131L124.216 59.541C125.925 58.4946 126.993 56.7159 126.993 54.7275V38.0879C127.1 36.0997 125.925 34.2163 124.216 33.2744L109.473 24.9023Z" fill="currentColor"></path><path d="M192.884 128.12V30.4733H213.976V61.1993C216.406 58.1615 219.357 55.8613 222.829 54.299C226.388 52.7367 230.207 51.9555 234.286 51.9555C238.192 51.9555 242.141 52.6933 246.134 54.1688C250.127 55.6443 253.772 57.9879 257.07 61.1993C260.369 64.324 263.016 68.3601 265.012 73.3075C267.009 78.2549 268.007 84.2439 268.007 91.2744C268.007 98.8258 266.662 105.553 263.971 111.455C261.28 117.27 257.504 121.827 252.644 125.125C247.783 128.423 242.055 130.073 235.458 130.073C230.771 130.073 226.388 128.988 222.308 126.818C218.229 124.561 214.931 121.35 212.414 117.183L210.721 128.12H192.884ZM229.86 111.585C234.981 111.585 239.017 109.675 241.968 105.856C245.006 102.037 246.525 96.8728 246.525 90.3631C246.525 83.8533 245.006 78.7323 241.968 75C239.017 71.181 234.981 69.2714 229.86 69.2714C224.999 69.2714 221.137 71.181 218.272 75C215.408 78.7323 213.976 83.8533 213.976 90.3631C213.976 96.8728 215.408 102.037 218.272 105.856C221.137 109.675 224.999 111.585 229.86 111.585Z" fill="currentColor"></path><path d="M311.022 130.074C303.644 130.074 297.091 128.425 291.363 125.126C285.634 121.828 281.121 117.271 277.822 111.456C274.611 105.554 273.005 98.8269 273.005 91.2756C273.005 83.5507 274.611 76.7372 277.822 70.835C281.121 64.9328 285.634 60.3326 291.363 57.0343C297.091 53.6492 303.644 51.9567 311.022 51.9567C318.487 51.9567 325.04 53.6492 330.682 57.0343C336.41 60.3326 340.88 64.9328 344.092 70.835C347.39 76.7372 349.039 83.5507 349.039 91.2756C349.039 98.8269 347.39 105.554 344.092 111.456C340.88 117.271 336.41 121.828 330.682 125.126C325.04 128.425 318.487 130.074 311.022 130.074ZM311.022 111.846C315.883 111.846 319.832 109.937 322.87 106.118C325.995 102.299 327.557 97.3514 327.557 91.2756C327.557 85.0262 325.995 79.9486 322.87 76.0428C319.832 72.1369 315.883 70.184 311.022 70.184C306.161 70.184 302.169 72.1369 299.044 76.0428C296.006 79.9486 294.487 85.0262 294.487 91.2756C294.487 97.3514 296.006 102.299 299.044 106.118C302.169 109.937 306.161 111.846 311.022 111.846Z" fill="currentColor"></path><path d="M383.342 128.121C377.266 128.121 372.362 126.299 368.63 122.653C364.985 118.921 363.162 114.017 363.162 107.941V70.8355H350.924V53.9101H363.162V34.3808H384.254V53.9101H399.356V70.8355H384.254V104.296C384.254 105.945 384.774 107.29 385.816 108.332C386.857 109.373 388.159 109.894 389.722 109.894H401.57V128.121H383.342Z" fill="currentColor"></path><path d="M410.216 151.557V53.9101H428.053L429.745 64.8465C432.263 60.6803 435.561 57.5122 439.64 55.3423C443.72 53.0856 448.103 51.9572 452.79 51.9572C459.387 51.9572 465.115 53.6063 469.976 56.9046C474.836 60.2029 478.612 64.7597 481.303 70.5751C483.993 76.3905 485.339 83.1173 485.339 90.7554C485.339 97.7859 484.341 103.775 482.344 108.722C480.348 113.67 477.701 117.749 474.402 120.961C471.104 124.085 467.459 126.385 463.466 127.861C459.473 129.337 455.524 130.074 451.618 130.074C447.539 130.074 443.72 129.293 440.161 127.731C436.689 126.168 433.738 123.868 431.308 120.83V151.557H410.216ZM447.192 112.758C452.313 112.758 456.349 110.892 459.3 107.16C462.338 103.341 463.857 98.1765 463.857 91.6667C463.857 85.157 462.338 79.9926 459.3 76.1735C456.349 72.3544 452.313 70.4449 447.192 70.4449C442.331 70.4449 438.468 72.3544 435.604 76.1735C432.74 79.9926 431.308 85.157 431.308 91.6667C431.308 98.1765 432.74 103.341 435.604 107.16C438.468 110.892 442.331 112.758 447.192 112.758Z" fill="currentColor"></path><path d="M492.694 128.081V85.1169C492.694 74.4409 495.558 66.2386 501.287 60.51C507.102 54.7814 515.391 51.9172 526.154 51.9172C527.282 51.9172 529.062 52.004 531.492 52.1776C533.922 52.2643 536.353 52.5681 538.783 53.0889V71.186C537.134 70.9257 535.571 70.7087 534.096 70.5351C532.62 70.2747 530.971 70.1445 529.149 70.1445C526.458 70.1445 523.941 70.5351 521.597 71.3162C519.254 72.0974 517.344 73.573 515.869 75.7429C514.48 77.9128 513.786 81.0809 513.786 85.2471V128.081H492.694Z" fill="currentColor"></path><path d="M576.397 130.271C568.846 130.271 562.293 128.709 556.738 125.584C551.183 122.373 546.843 117.86 543.718 112.044C540.68 106.142 539.161 99.1982 539.161 91.2129C539.161 83.2276 540.68 76.3272 543.718 70.5118C546.756 64.6964 551.009 60.183 556.477 56.9715C562.032 53.76 568.542 52.1543 576.007 52.1543C583.732 52.1543 590.285 53.8902 595.666 57.3621C601.134 60.834 605.214 65.8682 607.905 72.4648C610.682 79.0613 611.854 87.0032 611.42 96.2905H560.383C561.078 101.845 562.9 106.185 565.852 109.31C568.803 112.435 572.622 113.997 577.309 113.997C581.128 113.997 584.252 113.086 586.683 111.263C589.113 109.353 590.632 107.053 591.24 104.363H610.899C610.031 109.744 607.991 114.388 604.78 118.294C601.655 122.113 597.663 125.064 592.802 127.147C587.941 129.23 582.473 130.271 576.397 130.271ZM576.137 68.2985C571.884 68.2985 568.369 69.6873 565.591 72.4648C562.814 75.1555 561.078 78.8009 560.383 83.4012H590.589C590.241 77.933 588.636 74.0705 585.771 71.8138C582.907 69.4703 579.696 68.2985 576.137 68.2985Z" fill="currentColor"></path><path d="M649.165 130.271C639.184 130.271 631.329 127.97 625.6 123.37C619.871 118.683 617.007 112.304 617.007 104.232H635.625C636.319 107.964 637.838 110.698 640.182 112.434C642.525 114.17 645.433 115.038 648.905 115.038C651.943 115.038 654.46 114.43 656.456 113.215C658.453 112 659.451 110.264 659.451 108.007C659.451 106.271 658.67 104.969 657.107 104.101C655.632 103.233 652.811 102.279 648.644 101.237C645.693 100.543 643.089 99.9351 640.833 99.4143C638.663 98.8067 636.319 98.0689 633.802 97.201C630.851 96.1594 628.117 94.9009 625.6 93.4253C623.17 91.9498 621.173 89.9534 619.611 87.4363C618.135 84.8324 617.398 81.4474 617.398 77.2811C617.398 72.5941 618.309 68.6448 620.132 65.4333C621.954 62.2219 624.385 59.6613 627.423 57.7518C630.461 55.7555 633.759 54.3233 637.318 53.4554C640.963 52.5874 644.522 52.1534 647.994 52.1534C653.809 52.1534 658.973 53.195 663.487 55.2781C668 57.2744 671.559 60.0953 674.163 63.7408C676.767 67.2995 678.069 71.4657 678.069 76.2396H658.279C658.279 73.6357 657.107 71.4657 654.764 69.7298C652.507 67.9939 649.816 67.1259 646.692 67.1259C644.522 67.1259 642.352 67.6467 640.182 68.6882C638.012 69.7298 636.927 71.4223 636.927 73.7658C636.927 75.3282 637.621 76.6735 639.01 77.8019C640.399 78.8434 643.09 79.9284 647.082 81.0568C648.558 81.404 650.294 81.8379 652.29 82.3587C654.373 82.8795 656.413 83.4003 658.409 83.9211C660.405 84.355 662.055 84.789 663.357 85.223C668.998 86.8722 673.078 89.3893 675.595 92.7743C678.199 96.1594 679.501 100.412 679.501 105.533C679.501 113.345 676.81 119.421 671.429 123.761C666.134 128.101 658.713 130.271 649.165 130.271Z" fill="currentColor"></path><path d="M717.665 130.271C707.684 130.271 699.828 127.97 694.1 123.37C688.371 118.683 685.507 112.304 685.507 104.232H704.125C704.819 107.964 706.338 110.698 708.682 112.434C711.025 114.17 713.933 115.038 717.405 115.038C720.443 115.038 722.96 114.43 724.956 113.215C726.952 112 727.951 110.264 727.951 108.007C727.951 106.271 727.169 104.969 725.607 104.101C724.132 103.233 721.311 102.279 717.144 101.237C714.193 100.543 711.589 99.9351 709.333 99.4143C707.163 98.8067 704.819 98.0689 702.302 97.201C699.351 96.1594 696.617 94.9009 694.1 93.4253C691.67 91.9498 689.673 89.9534 688.111 87.4363C686.635 84.8324 685.898 81.4474 685.898 77.2811C685.898 72.5941 686.809 68.6448 688.632 65.4333C690.454 62.2219 692.885 59.6613 695.923 57.7518C698.96 55.7555 702.259 54.3233 705.817 53.4554C709.463 52.5874 713.022 52.1534 716.493 52.1534C722.309 52.1534 727.473 53.195 731.987 55.2781C736.5 57.2744 740.059 60.0953 742.663 63.7408C745.267 67.2995 746.568 71.4657 746.568 76.2396H726.779C726.779 73.6357 725.607 71.4657 723.264 69.7298C721.007 67.9939 718.316 67.1259 715.191 67.1259C713.022 67.1259 710.852 67.6467 708.682 68.6882C706.512 69.7298 705.427 71.4223 705.427 73.7658C705.427 75.3282 706.121 76.6735 707.51 77.8019C708.899 78.8434 711.589 79.9284 715.582 81.0568C717.058 81.404 718.793 81.8379 720.79 82.3587C722.873 82.8795 724.913 83.4003 726.909 83.9211C728.905 84.355 730.554 84.789 731.856 85.223C737.498 86.8722 741.578 89.3893 744.095 92.7743C746.699 96.1594 748.001 100.412 748.001 105.533C748.001 113.345 745.31 119.421 739.928 123.761C734.634 128.101 727.213 130.271 717.665 130.271Z" fill="currentColor"></path></svg></div>
+  <div><h1>Prototypes</h1><p>Loopkit is fictional; numbers are sample data.</p></div>
+  <div class="protos">
+    <button class="proto" data-proto="lily-home"><span class="t"><b>Lily home</b><span>Desk home with Lily checking in, refunds to approve and a skill to teach</span></span><span class="go">→</span></button>
+  </div>
+</main>
+<div class="wrap">
+  <button class="back" data-act="exit">← Prototypes</button>
+  <header class="head">
+    <div>
+      <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" class="bp-wm" role="img" aria-label="Botpress" viewBox="0 0 748 160" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M102 0C118.762 0 127.143 0.000309944 133.845 2.47266C144.823 6.52282 153.477 15.177 157.527 26.1553C160 32.8569 160 41.2379 160 58V102C160 118.762 160 127.143 157.527 133.845C153.477 144.823 144.823 153.477 133.845 157.527C127.143 160 118.762 160 102 160H58C41.2379 160 32.8569 160 26.1553 157.527C15.177 153.477 6.52282 144.823 2.47266 133.845C0.000309944 127.143 0 118.762 0 102V58C0 41.2379 0.000309944 32.8569 2.47266 26.1553C6.52282 15.177 15.177 6.52282 26.1553 2.47266C32.8569 0.000309944 41.2379 0 58 0H102ZM109.473 24.9023C107.656 23.8561 105.52 23.856 103.811 24.9023L89.0684 33.2744C87.3597 34.3209 86.2911 36.0997 86.291 38.0879V53.6807L64.0703 66.2383L57.5537 62.5762L50.1826 58.3906C48.3661 57.3436 46.2296 57.3437 44.5205 58.3906L29.7773 66.7617C28.0681 67.8082 27 69.5877 27 71.5762V88.3193C27 90.3071 28.0682 92.0869 29.7773 93.0283L44.5205 101.4C46.3369 102.447 48.4733 102.447 50.1826 101.4L58.6221 96.5869L51.8916 86.75L86.291 106.215V121.911C86.1838 123.9 87.3596 125.784 89.0684 126.726L103.811 135.098C105.627 136.144 107.763 136.144 109.473 135.098L124.216 126.726C125.925 125.679 126.993 123.9 126.993 121.911V105.272C127.1 103.284 125.925 101.401 124.216 100.459L109.473 92.0869C107.763 91.1452 105.52 91.0407 103.918 92.1914L96.5469 96.377L90.0293 100.04L67.8096 87.4824V72.7266L90.0293 60.1689L103.811 52.3203L96.0117 63.5176L96.4395 63.7275L103.811 67.9131C105.627 68.9594 107.763 68.9593 109.473 67.9131L124.216 59.541C125.925 58.4946 126.993 56.7159 126.993 54.7275V38.0879C127.1 36.0997 125.925 34.2163 124.216 33.2744L109.473 24.9023Z" fill="currentColor"></path><path d="M192.884 128.12V30.4733H213.976V61.1993C216.406 58.1615 219.357 55.8613 222.829 54.299C226.388 52.7367 230.207 51.9555 234.286 51.9555C238.192 51.9555 242.141 52.6933 246.134 54.1688C250.127 55.6443 253.772 57.9879 257.07 61.1993C260.369 64.324 263.016 68.3601 265.012 73.3075C267.009 78.2549 268.007 84.2439 268.007 91.2744C268.007 98.8258 266.662 105.553 263.971 111.455C261.28 117.27 257.504 121.827 252.644 125.125C247.783 128.423 242.055 130.073 235.458 130.073C230.771 130.073 226.388 128.988 222.308 126.818C218.229 124.561 214.931 121.35 212.414 117.183L210.721 128.12H192.884ZM229.86 111.585C234.981 111.585 239.017 109.675 241.968 105.856C245.006 102.037 246.525 96.8728 246.525 90.3631C246.525 83.8533 245.006 78.7323 241.968 75C239.017 71.181 234.981 69.2714 229.86 69.2714C224.999 69.2714 221.137 71.181 218.272 75C215.408 78.7323 213.976 83.8533 213.976 90.3631C213.976 96.8728 215.408 102.037 218.272 105.856C221.137 109.675 224.999 111.585 229.86 111.585Z" fill="currentColor"></path><path d="M311.022 130.074C303.644 130.074 297.091 128.425 291.363 125.126C285.634 121.828 281.121 117.271 277.822 111.456C274.611 105.554 273.005 98.8269 273.005 91.2756C273.005 83.5507 274.611 76.7372 277.822 70.835C281.121 64.9328 285.634 60.3326 291.363 57.0343C297.091 53.6492 303.644 51.9567 311.022 51.9567C318.487 51.9567 325.04 53.6492 330.682 57.0343C336.41 60.3326 340.88 64.9328 344.092 70.835C347.39 76.7372 349.039 83.5507 349.039 91.2756C349.039 98.8269 347.39 105.554 344.092 111.456C340.88 117.271 336.41 121.828 330.682 125.126C325.04 128.425 318.487 130.074 311.022 130.074ZM311.022 111.846C315.883 111.846 319.832 109.937 322.87 106.118C325.995 102.299 327.557 97.3514 327.557 91.2756C327.557 85.0262 325.995 79.9486 322.87 76.0428C319.832 72.1369 315.883 70.184 311.022 70.184C306.161 70.184 302.169 72.1369 299.044 76.0428C296.006 79.9486 294.487 85.0262 294.487 91.2756C294.487 97.3514 296.006 102.299 299.044 106.118C302.169 109.937 306.161 111.846 311.022 111.846Z" fill="currentColor"></path><path d="M383.342 128.121C377.266 128.121 372.362 126.299 368.63 122.653C364.985 118.921 363.162 114.017 363.162 107.941V70.8355H350.924V53.9101H363.162V34.3808H384.254V53.9101H399.356V70.8355H384.254V104.296C384.254 105.945 384.774 107.29 385.816 108.332C386.857 109.373 388.159 109.894 389.722 109.894H401.57V128.121H383.342Z" fill="currentColor"></path><path d="M410.216 151.557V53.9101H428.053L429.745 64.8465C432.263 60.6803 435.561 57.5122 439.64 55.3423C443.72 53.0856 448.103 51.9572 452.79 51.9572C459.387 51.9572 465.115 53.6063 469.976 56.9046C474.836 60.2029 478.612 64.7597 481.303 70.5751C483.993 76.3905 485.339 83.1173 485.339 90.7554C485.339 97.7859 484.341 103.775 482.344 108.722C480.348 113.67 477.701 117.749 474.402 120.961C471.104 124.085 467.459 126.385 463.466 127.861C459.473 129.337 455.524 130.074 451.618 130.074C447.539 130.074 443.72 129.293 440.161 127.731C436.689 126.168 433.738 123.868 431.308 120.83V151.557H410.216ZM447.192 112.758C452.313 112.758 456.349 110.892 459.3 107.16C462.338 103.341 463.857 98.1765 463.857 91.6667C463.857 85.157 462.338 79.9926 459.3 76.1735C456.349 72.3544 452.313 70.4449 447.192 70.4449C442.331 70.4449 438.468 72.3544 435.604 76.1735C432.74 79.9926 431.308 85.157 431.308 91.6667C431.308 98.1765 432.74 103.341 435.604 107.16C438.468 110.892 442.331 112.758 447.192 112.758Z" fill="currentColor"></path><path d="M492.694 128.081V85.1169C492.694 74.4409 495.558 66.2386 501.287 60.51C507.102 54.7814 515.391 51.9172 526.154 51.9172C527.282 51.9172 529.062 52.004 531.492 52.1776C533.922 52.2643 536.353 52.5681 538.783 53.0889V71.186C537.134 70.9257 535.571 70.7087 534.096 70.5351C532.62 70.2747 530.971 70.1445 529.149 70.1445C526.458 70.1445 523.941 70.5351 521.597 71.3162C519.254 72.0974 517.344 73.573 515.869 75.7429C514.48 77.9128 513.786 81.0809 513.786 85.2471V128.081H492.694Z" fill="currentColor"></path><path d="M576.397 130.271C568.846 130.271 562.293 128.709 556.738 125.584C551.183 122.373 546.843 117.86 543.718 112.044C540.68 106.142 539.161 99.1982 539.161 91.2129C539.161 83.2276 540.68 76.3272 543.718 70.5118C546.756 64.6964 551.009 60.183 556.477 56.9715C562.032 53.76 568.542 52.1543 576.007 52.1543C583.732 52.1543 590.285 53.8902 595.666 57.3621C601.134 60.834 605.214 65.8682 607.905 72.4648C610.682 79.0613 611.854 87.0032 611.42 96.2905H560.383C561.078 101.845 562.9 106.185 565.852 109.31C568.803 112.435 572.622 113.997 577.309 113.997C581.128 113.997 584.252 113.086 586.683 111.263C589.113 109.353 590.632 107.053 591.24 104.363H610.899C610.031 109.744 607.991 114.388 604.78 118.294C601.655 122.113 597.663 125.064 592.802 127.147C587.941 129.23 582.473 130.271 576.397 130.271ZM576.137 68.2985C571.884 68.2985 568.369 69.6873 565.591 72.4648C562.814 75.1555 561.078 78.8009 560.383 83.4012H590.589C590.241 77.933 588.636 74.0705 585.771 71.8138C582.907 69.4703 579.696 68.2985 576.137 68.2985Z" fill="currentColor"></path><path d="M649.165 130.271C639.184 130.271 631.329 127.97 625.6 123.37C619.871 118.683 617.007 112.304 617.007 104.232H635.625C636.319 107.964 637.838 110.698 640.182 112.434C642.525 114.17 645.433 115.038 648.905 115.038C651.943 115.038 654.46 114.43 656.456 113.215C658.453 112 659.451 110.264 659.451 108.007C659.451 106.271 658.67 104.969 657.107 104.101C655.632 103.233 652.811 102.279 648.644 101.237C645.693 100.543 643.089 99.9351 640.833 99.4143C638.663 98.8067 636.319 98.0689 633.802 97.201C630.851 96.1594 628.117 94.9009 625.6 93.4253C623.17 91.9498 621.173 89.9534 619.611 87.4363C618.135 84.8324 617.398 81.4474 617.398 77.2811C617.398 72.5941 618.309 68.6448 620.132 65.4333C621.954 62.2219 624.385 59.6613 627.423 57.7518C630.461 55.7555 633.759 54.3233 637.318 53.4554C640.963 52.5874 644.522 52.1534 647.994 52.1534C653.809 52.1534 658.973 53.195 663.487 55.2781C668 57.2744 671.559 60.0953 674.163 63.7408C676.767 67.2995 678.069 71.4657 678.069 76.2396H658.279C658.279 73.6357 657.107 71.4657 654.764 69.7298C652.507 67.9939 649.816 67.1259 646.692 67.1259C644.522 67.1259 642.352 67.6467 640.182 68.6882C638.012 69.7298 636.927 71.4223 636.927 73.7658C636.927 75.3282 637.621 76.6735 639.01 77.8019C640.399 78.8434 643.09 79.9284 647.082 81.0568C648.558 81.404 650.294 81.8379 652.29 82.3587C654.373 82.8795 656.413 83.4003 658.409 83.9211C660.405 84.355 662.055 84.789 663.357 85.223C668.998 86.8722 673.078 89.3893 675.595 92.7743C678.199 96.1594 679.501 100.412 679.501 105.533C679.501 113.345 676.81 119.421 671.429 123.761C666.134 128.101 658.713 130.271 649.165 130.271Z" fill="currentColor"></path><path d="M717.665 130.271C707.684 130.271 699.828 127.97 694.1 123.37C688.371 118.683 685.507 112.304 685.507 104.232H704.125C704.819 107.964 706.338 110.698 708.682 112.434C711.025 114.17 713.933 115.038 717.405 115.038C720.443 115.038 722.96 114.43 724.956 113.215C726.952 112 727.951 110.264 727.951 108.007C727.951 106.271 727.169 104.969 725.607 104.101C724.132 103.233 721.311 102.279 717.144 101.237C714.193 100.543 711.589 99.9351 709.333 99.4143C707.163 98.8067 704.819 98.0689 702.302 97.201C699.351 96.1594 696.617 94.9009 694.1 93.4253C691.67 91.9498 689.673 89.9534 688.111 87.4363C686.635 84.8324 685.898 81.4474 685.898 77.2811C685.898 72.5941 686.809 68.6448 688.632 65.4333C690.454 62.2219 692.885 59.6613 695.923 57.7518C698.96 55.7555 702.259 54.3233 705.817 53.4554C709.463 52.5874 713.022 52.1534 716.493 52.1534C722.309 52.1534 727.473 53.195 731.987 55.2781C736.5 57.2744 740.059 60.0953 742.663 63.7408C745.267 67.2995 746.568 71.4657 746.568 76.2396H726.779C726.779 73.6357 725.607 71.4657 723.264 69.7298C721.007 67.9939 718.316 67.1259 715.191 67.1259C713.022 67.1259 710.852 67.6467 708.682 68.6882C706.512 69.7298 705.427 71.4223 705.427 73.7658C705.427 75.3282 706.121 76.6735 707.51 77.8019C708.899 78.8434 711.589 79.9284 715.582 81.0568C717.058 81.404 718.793 81.8379 720.79 82.3587C722.873 82.8795 724.913 83.4003 726.909 83.9211C728.905 84.355 730.554 84.789 731.856 85.223C737.498 86.8722 741.578 89.3893 744.095 92.7743C746.699 96.1594 748.001 100.412 748.001 105.533C748.001 113.345 745.31 119.421 739.928 123.761C734.634 128.101 727.213 130.271 717.665 130.271Z" fill="currentColor"></path></svg><span class="mono">Desk · prototype</span></div>
+      <h1>How Lily checks in over time</h1>
+      <p>Pick a moment and use Desk as Maya would. Lily stays in the corner, speaks up with real numbers, and asks before anything risky. Loopkit is fictional; numbers are sample data.</p>
+    </div>
+    <div class="moments" id="moments" role="group" aria-label="Moments"></div>
+  </header>
+  <div class="banner" id="banner"></div>
+  <div class="main">
+    <section class="app" id="app" aria-label="Desk prototype"></section>
+    <aside class="side" id="side"></aside>
+  </div>
+</div>
+
+<script>
+const LILY = s => `<svg class="lily" width="${s}" height="${s*145/204}" viewBox="0 0 204 145" aria-hidden="true"><path d="M48 0H131.5A72.5 72.5 0 0 1 131.5 145H0V48A48 48 0 0 1 48 0Z" fill="var(--lily-body)"/><circle cx="72" cy="72" r="32" fill="#fff"/><circle cx="132" cy="72" r="32" fill="#fff"/><circle cx="89" cy="72" r="16" fill="#141413"/><circle cx="149" cy="72" r="16" fill="#141413"/></svg>`;
+const MG = s => `<svg width="${s}" height="${s}" viewBox="0 0 48 48" aria-hidden="true" style="flex:none"><defs><linearGradient id="mg${s}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7E6D8"/><stop offset="1" stop-color="#E9AD84"/></linearGradient></defs><circle cx="24" cy="24" r="24" fill="url(#mg${s})"/><g transform="translate(12 12)" fill="none" stroke="#8A3E1A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4v5.5a2 2 0 0 0 4 0V4"/><path d="M9.5 4v16"/><path d="M16.5 4c-1.8 1.6-2.5 4.2-2.5 7.5h2.5V20"/></g></svg>`;
+const BELL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>`;
+
+const TRUST = ['Answers your questions','Helps you set up','Introduces you to Desk','Suggests what to do next','Drafts replies for your approval','Issues small refunds on her own','Runs the desk'];
+
+const TICKETS = [
+  {id:'jl',ini:'JL',name:'Jordan Lee',subj:'Cancelled, still charged for this week’s box',amt:'38.40',wait:'2h',
+   q:'Hi, I cancelled my plan on Nov 2 but I was still charged $38.40 for this week’s box. Can I get that back?',
+   mg:'Sorry about that, Jordan. I can see you cancelled on Nov 2 and the charge went through on Nov 4. I can’t issue refunds yet, so I’ve passed this to the team with the details.',
+   reply:'Hi Jordan, you’re right: you cancelled before the Nov 4 charge. I’ve refunded $38.40 to your card, and it should show in 3–5 business days. Sorry for the hassle.'},
+  {id:'pn',ini:'PN',name:'Priya Nair',subj:'Refund for a skipped week',amt:'42.00',wait:'5h',
+   q:'I skipped last week in the app but still got charged $42. Could you refund it?',
+   mg:'I can see the skip was saved before the charge ran. I can’t issue refunds yet, so I’ve sent this to the team.',
+   reply:'Hi Priya, your skip went in before the charge, so that $42.00 shouldn’t have gone through. It’s refunded now and should land in 3–5 business days.'},
+  {id:'so',ini:'SO',name:'Sam Ortiz',subj:'Charged twice for the Nov 10 box',amt:'76.80',wait:'1d',
+   q:'I see two charges of $76.80 for the same box. Please fix this.',
+   mg:'I can see two identical charges for your Nov 10 box. I can’t issue refunds yet, so the team will sort this out.',
+   reply:'Hi Sam, that was a duplicate charge on our side. I’ve refunded the extra $76.80, and it should show in 3–5 business days. Thanks for flagging it.'}
+];
+const OTHER = [
+  {ini:'AK',name:'Alex Kim',p:'Can I move my delivery to Friday?',t:'3h',s:'Resolved by Menu Guide'},
+  {ini:'DP',name:'Dana Park',p:'Is the pad thai kit nut-free?',t:'4h',s:'Resolved by Menu Guide'},
+  {ini:'RM',name:'Riley Moss',p:'Where’s my box? It was due yesterday.',t:'6h',s:'With your team'}];
+
+const STAGES = [
+  {id:'day1',label:'Going live',date:'Mon, Nov 3',title:'Menu Guide goes live',
+   note:'Lily says one thing and gets out of the way. She promises a check-in instead of a tour.',
+   period:'Today so far',conv:12,handled:9,team:3,refunds:0,late:false,unlock:false,weekend:false,trust:2,approvals:0,
+   hello:'Menu Guide is live, Maya.',line:()=>`It handled <b class="hl">9 of its first 12</b> conversations on its own.`,
+   toast:'Menu Guide is live. I’ll check in tomorrow morning with how its first day went.',log:'Lily: “I’ll check in tomorrow.”'},
+  {id:'day2',label:'Next morning',date:'Tue, Nov 4',title:'The first check-in',
+   note:'Lily comes back with numbers from the desk, as promised. Two refunds need Maya, and Lily has drafted both.',
+   period:'Yesterday',conv:38,handled:29,team:9,refunds:2,late:false,unlock:false,weekend:false,trust:4,approvals:0,
+   hello:'Morning, Maya.',line:n=>`Menu Guide handled <b class="hl">29 of 38</b> conversations yesterday. ${n?`<button class="link" data-act="notifs">${n} need${n===1?'s':''} you</button>.`:'Nothing needs you.'}`,
+   toast:'First full day: 29 of 38 handled on its own. Two refund requests are waiting, and I’ve drafted replies.',log:'Lily brings the first numbers and drafts 2 refunds.'},
+  {id:'week2',label:'A week in',date:'Mon, Nov 17',title:'The weekly read',
+   note:'A rhythm sets in. Each Monday Lily sums up the week, and anything that needs Maya waits in notifications.',
+   period:'This week',conv:412,handled:316,team:96,refunds:3,late:true,unlock:false,weekend:true,trust:4,approvals:17,
+   hello:'Morning, Maya.',line:n=>`Menu Guide handled <b class="hl">316 of 412</b> conversations this week. ${n?`<button class="link" data-act="notifs">${n} need${n===1?'s':''} you</button>.`:'Nothing needs you.'}`,
+   toast:'Your week: Menu Guide handled 316 of 412 conversations. 3 things need you, starting with refunds.',log:'Weekly read. Refund drafts, a skill to teach.'},
+  {id:'week3',label:'Bigger tasks',date:'Mon, Nov 24',title:'Earning the next step',
+   note:'Maya has approved 20 of Lily’s refund drafts. Lily asks, once, whether she can now handle small refunds herself.',
+   period:'This week',conv:455,handled:372,team:83,refunds:0,late:false,unlock:true,weekend:true,trust:4,approvals:20,taught:true,
+   hello:'Morning, Maya.',line:n=>`Handoffs are down to <b class="hl">83</b> now Menu Guide can track a late box. ${n?`<button class="link" data-act="notifs">${n} need${n===1?'s':''} you</button>.`:'Nothing needs you.'}`,
+   toast:'You’ve approved 20 of my refund drafts. I can now issue refunds under $50 on my own, and you’ll see each one here. Want me to?',log:'Lily asks to take small refunds on.'},
+  {id:'week5',label:'Later',date:'Mon, Dec 8',title:'Lily credits the agents’ work',
+   note:'Lily handles small refunds now, and the product says so. Wins are credited to her, quietly, in the weekly read.',
+   period:'This week',conv:470,handled:421,team:49,refunds:0,late:false,unlock:false,weekend:true,trust:5,approvals:20,taught:true,granted:true,
+   hello:'Morning, Maya.',line:n=>`Menu Guide and Lily handled <b class="hl">421 of 470</b> conversations this week. ${n?`<button class="link" data-act="notifs">${n} need${n===1?'s':''} you</button>.`:'Nothing needs you.'}`,
+   toast:'This week I issued 14 refunds under $50, all within your policy. Menu Guide answered 36 late-box questions.',log:'14 small refunds, credited to Lily.'}
+];
+
+const S = {stage:0,view:'home',pop:false,dock:'pill',ticket:0,phase:'draft',sent:{},approvals:0,taught:false,granted:false,unlockAnswered:false,toastText:'',ask:null,dismissed:{}};
+const $ = s => document.querySelector(s);
+const st = () => STAGES[S.stage];
+let timers=[];const later=(fn,ms)=>timers.push(setTimeout(fn,ms));const clearT=()=>{timers.forEach(clearTimeout);timers=[]};
+
+function setStage(i){
+  clearT();const g=STAGES[i];
+  Object.assign(S,{stage:i,view:'home',pop:false,dock:'pill',ticket:0,phase:'draft',sent:{},approvals:g.approvals,taught:!!g.taught,granted:!!g.granted,unlockAnswered:false,ask:null,dismissed:{}});
+  render();
+  later(()=>{S.toastText=g.toast;S.dock='toast';render()},900);
+}
+function enter(){document.body.classList.add('in-proto');setStage(2);if(location.hash!=='#lily-home')history.replaceState(null,'','#lily-home')}
+function exitProto(){clearT();document.body.classList.remove('in-proto');history.replaceState(null,'',location.pathname+location.search)}
+function openRefunds(){S.view='ticket';S.pop=false;S.ticket=firstOpen();S.phase='draft';render()}
+function firstOpen(){const n=refundsList();const i=n.findIndex(t=>!S.sent[t.id]);return i<0?0:i}
+function refundsList(){return TICKETS.slice(0,st().refunds)}
+function notifs(){
+  const g=st(),out=[];const open=refundsList().filter(t=>!S.sent[t.id]).length;
+  if(open)out.push({k:'ref',i:'$',t:`${open} refund${open>1?'s are':' is'} waiting on you`,s:'Lily drafted the replies',b:'Review',act:'refunds'});
+  if(g.late&&!S.taught&&!S.dismissed.late)out.push({k:'late',i:'✦',t:'41 late-box questions went unanswered',s:'Teach Menu Guide a new skill',b:'Teach',act:'teach'});
+  if(g.unlock&&!S.unlockAnswered)out.push({k:'unlock',i:'↑',t:'Lily can take on small refunds',s:'You approved 20 of her drafts',b:'Decide',act:'unlockcard'});
+  if(g.weekend&&!S.dismissed.weekend)out.push({k:'wk',i:'◷',t:'Weekend replies are slow',s:'2h 10m to first reply, 14m on weekdays',b:'See why',act:'askweekend'});
+  return out;
+}
+
+function render(){renderMoments();renderBanner();renderApp();renderSide()}
+function renderMoments(){
+  $('#moments').innerHTML=STAGES.map((g,i)=>`<button class="moment" aria-pressed="${i===S.stage}" data-stage="${i}"><b>${g.label}</b><span>${g.title}</span></button>`).join('')+
+  (S.stage<STAGES.length-1?`<button class="next" data-act="next">Next moment →</button>`:`<button class="next" data-stage="0">Start over</button>`);
+}
+function renderBanner(){const g=st();$('#banner').innerHTML=`<div class="when">${g.date}</div><div class="what"><b>${g.title}.</b> <div>${g.note}</div></div>`}
+
+function renderApp(){
+  const n=notifs().length;
+  const crumbs={home:'<b>Home</b>',ticket:`<button data-act="home">Home</button> › <button data-act="refunds">Refunds</button> › <b>${refundsList()[S.ticket]?.name||''}</b>`,teach:`<button data-act="home">Home</button> › <b>Teach: Track a late box</b>`,ask:`<button data-act="home">Home</button> › <b>Ask Lily</b>`}[S.view];
+  $('#app').innerHTML=`
+  <nav class="rail" aria-label="Desk">
+    <div class="logo"><span class="desk-tile" title="Desk"><svg class="desk-ic" viewBox="0 0 28 28" aria-hidden="true"><path fill="currentColor" d="M0 0h7v7H0zM7 7h7v8H7zM14 0h2c7 0 12 5.5 12 14s-5 14-12 14H0V15h7v6h9c3 0 5-2.5 5-7s-2-7-5-7h-2z"/></svg></span><span class="ws">Loopkit</span></div>
+    ${[['Home','●','home'],['Inbox','◧','inbox'],['Tickets','▤','ticket'],['Agents','◎',''],['Skills','✦','teach'],['Reports','▥','']].map(([l,ic,v])=>`<button class="nav" ${(S.view===v||(v==='home'&&S.view==='ask'))?'aria-current="page"':''} data-act="${v==='ticket'?(st().refunds?'refunds':''):v==='teach'?(st().late&&!S.taught?'teach':''):v}"><span class="ic" style="${l==='Home'?'color:var(--accent)':''}">${ic}</span>${l}${l==='Inbox'&&st().team?`<span class="count">${st().team}</span>`:''}</button>`).join('')}
+    <div class="me"><span class="av">M</span><div>Maya<small>Support lead</small></div></div>
+  </nav>
+  <div class="view">
+    <div class="top"><div class="crumb">${crumbs}</div><div class="spacer"></div>
+      <button class="bell" data-act="notifs" aria-label="Notifications, ${n}">${BELL}${n?`<span class="n">${n}</span>`:''}</button></div>
+    <div class="body" id="body">${S.view==='home'?home():S.view==='ticket'?ticket():S.view==='teach'?teach():ask()}</div>
+    ${S.view==='home'?`<button class="askbar" data-act="ask"><span>Ask Lily about your desk…</span><span class="btn dark sm" style="flex:none">Ask</span></button>`:''}
+    ${S.pop?pop():''}
+    <div class="dock">${dock()}</div>
+  </div>`;
+}
+function home(){
+  const g=st(),n=notifs().length;
+  return `<div class="home">
+    <div class="hello">${LILY(40)}<h2>${g.hello}</h2><p>${g.line(n)}</p></div>
+    <div class="stats">${[['Conversations',g.conv],['Handled by agents'+(S.granted?' and Lily':''),g.handled],['Sent to your team',g.team]].map(([k,v])=>`<div class="stat"><span>${k} · ${g.period.toLowerCase()}</span><b>${v.toLocaleString()}</b></div>`).join('')}</div>
+    <div class="agents"><div class="mono">Your agents</div><div class="agentrow">
+      <div class="agent"><div class="t">${MG(44)}<span class="live">Live</span></div><div><h4>Menu Guide</h4><small>Website chat · ${S.taught?4:3} skills</small></div><div class="foot"><div><b>${g.handled}</b><small>handled ${g.period.toLowerCase()}</small></div><span>→</span></div></div>
+      ${S.granted?`<div class="agent"><div class="t">${LILY(44)}<span class="live">On</span></div><div><h4>Lily</h4><small>Refunds under $50</small></div><div class="foot"><div><b>14</b><small>refunds issued this week</small></div><span>→</span></div></div>`:''}
+    </div></div>
+  </div>`;
+}
+function pop(){
+  const ns=notifs();
+  return `<div class="pop" role="dialog" aria-label="Needs you"><h5>Needs you <span>${ns.length}</span></h5>
+   ${ns.length?ns.map(x=>`<div class="ni"><span class="i" style="${x.i==='✦'||x.i==='↑'?'color:var(--accent)':''}">${x.i}</span><div class="x"><b>${x.t}</b><small>${x.s}</small></div><button class="btn ghost sm" data-act="${x.act}">${x.b}</button></div>`).join(''):`<div class="empty">You’re all caught up. Lily will say if anything comes up.</div>`}</div>`;
+}
+function ticket(){
+  const list=refundsList();if(!list.length){return `<div class="page"><div class="card"><b>No refunds waiting.</b><span class="hint">Lily handles refunds under $50 now. Bigger ones still come to you.</span></div></div>`}
+  const t=list[S.ticket],sent=S.sent[t.id],open=list.filter(x=>!S.sent[x.id]).length;
+  return `<div class="ticket">
+   <div class="convs"><div class="h"><b>Conversations</b><div class="tabs"><span class="tab on">Waiting on you · ${open}</span><span class="tab">All</span></div></div>
+    ${list.map((x,i)=>`<button class="conv" aria-current="${i===S.ticket}" data-ticket="${i}"><span class="av">${x.ini}</span><span class="x"><span class="r"><b>${x.name}</b><small style="${x.wait==='1d'?'color:var(--accent)':''}">${x.wait}</small></span><p>${x.subj}</p>${S.sent[x.id]?'<span class="state ok">Resolved</span>':''}</span></button>`).join('')}
+    ${OTHER.map(x=>`<div class="conv"><span class="av">${x.ini}</span><span class="x"><span class="r"><b>${x.name}</b><small>${x.t}</small></span><p>${x.p}</p><span class="state">${x.s}</span></span></div>`).join('')}
+   </div>
+   <div class="tk">
+    <div class="th"><span class="av" style="width:34px;height:34px">${t.ini}</span><div class="x"><b>${t.subj}</b><small>${t.name} · Website chat · opened ${t.wait} ago</small></div><span class="pill ${sent?'ok':''}">${sent?'Resolved':'Waiting on you'}</span></div>
+    <div class="thread">
+      <div class="msg"><span class="av">${t.ini}</span><div class="bub"><small>${t.name}</small>${t.q}</div></div>
+      <div class="msg me"><div class="bub"><small>Menu Guide · Agent</small>${t.mg}</div>${MG(28)}</div>
+      <div class="ev">Handed to your team · refund needs approval</div>
+      ${sent?`<div class="msg me"><div class="bub"><small>Menu Guide · approved by Maya</small>${t.reply}</div>${MG(28)}</div><div class="ev">Refund issued · $${t.amt} · just now</div>`:''}
+      ${!sent&&S.phase==='draft'?`<div class="draftrow"><div class="draft">${LILY(24)}<div class="x"><b>Lily drafted a reply · refund $${t.amt}</b><p>${t.reply}</p><div class="acts"><button class="btn dark sm" data-act="approve">Approve and send</button><button class="btn ghost sm" data-act="edit">Edit</button></div></div><button class="close" aria-label="Dismiss" data-act="dismissdraft">✕</button></div><span class="slot"></span></div>`:''}
+      ${!sent&&S.phase==='sending'?`<div class="draftrow"><div class="draft sending">${MG(22)}<span class="spin"></span><b style="font-weight:500">Sending with Menu Guide…</b></div><span class="slot"></span></div>`:''}
+    </div>
+    ${sent&&open?`<div style="display:flex;justify-content:flex-end;padding:0 24px 10px"><button class="btn dark sm" data-act="nextticket">Next refund →</button></div>`:''}
+    <div class="composer"><span>Reply to ${t.name.split(' ')[0]}, or ask Lily…</span><span class="btn ghost sm">Send</span></div>
+   </div></div>`;
+}
+function teach(){
+  if(S.taught)return `<div class="page"><div class="card lily"><div class="row">${LILY(28)}<b>Menu Guide can track a late box.</b></div><span class="hint">It moved to Taught in the training plan. Late-box questions will stop coming to you.</span><div><button class="btn dark sm" data-act="home">Back to Home</button></div></div></div>`;
+  return `<div class="page">
+   <div class="card lily"><div class="row">${LILY(28)}<b>Lily</b><span class="hint">Teaching Menu Guide</span></div><h3>Let’s teach Menu Guide to track a late box.</h3><span class="hint"><b class="hl">41</b> customers asked this since Oct 1 and Menu Guide couldn’t answer. Here’s how it will.</span></div>
+   <div class="card"><div class="mono">How Menu Guide will handle it</div><ol class="steps"><li><span class="n">1</span>Look up the order</li><li><span class="n">2</span>Check where the box is</li><li><span class="n">3</span>Tell the customer plainly</li><li class="hand"><span class="n">4</span>Hand to your team when it’s over 2 days late</li></ol></div>
+   <div class="card"><div class="mono">Try it</div><div class="chatprev"><div class="cb cust">Where’s my box? It was due yesterday.</div><div class="cb">Sorry, it’s running late. Order #4471 is with the courier and should arrive by 6pm today. It stays cold for 48 hours, so your food will be fine.</div></div></div>
+   <div class="row"><button class="btn orange" data-act="taught">Teach Menu Guide</button><button class="btn ghost" data-act="home">Save for later</button></div>
+  </div>`;
+}
+const ANSWERS={
+  'Why were handoffs up on Tuesday?':{t:'31 handoffs on Tuesday, about twice a normal day. Most were late-box questions after a courier delay that morning.',bars:[12,31,14,11,13,8,7],act:['Teach “Track a late box”','teach']},
+  'How is the team doing on weekends?':{t:'Weekend handoffs wait 2h 10m for a first reply. On weekdays it’s 14 minutes. One person on a Saturday morning shift would cover most of them.',bars:[14,14,15,13,16,130,120],labels:['M','T','W','T','F','S','S'],unit:'min',act:null},
+  'What should I teach next?':{t:'“Track a late box” would stop the most handoffs: 41 since Oct 1. After that, “Refund after cancelling” (14 this month).',act:['Teach “Track a late box”','teach']}
+};
+function ask(){
+  const q=S.ask;const a=q&&ANSWERS[q];const qs=Object.keys(ANSWERS);
+  return `<div class="page">
+   ${q?`<div class="q">${q}</div><div class="card">${S.typing?`<div class="row">${LILY(26)}<span class="typing"><span></span><span></span><span></span></span></div>`:`<div class="row">${LILY(26)}<b>Lily</b></div><p style="margin:0;font-size:15px">${a.t}</p>${a.bars?`<div class="bars">${a.bars.map((v,i)=>`<div class="bar"><i class="${v===Math.max(...a.bars)?'on':''}" style="height:${Math.round(v/Math.max(...a.bars)*90)}px"></i>${(a.labels||['M','T','W','T','F','S','S'])[i]}</div>`).join('')}</div>`:''}${a.act&&!S.taught?`<div><button class="btn orange sm" data-act="${a.act[1]}">${a.act[0]}</button></div>`:''}`}</div>`:`<div class="card lily"><div class="row">${LILY(28)}<b>Ask me about your desk</b></div><span class="hint">I answer from your tickets, agents and team. Typed by default; talking is optional.</span></div>`}
+   <div class="sugs">${qs.filter(x=>x!==q).map(x=>`<button class="sug" data-q="${x}">${x}</button>`).join('')}</div>
+  </div>`;
+}
+function dock(){
+  const g=st();
+  if(S.dock==='toast'){
+    const unlock=g.unlock&&!S.unlockAnswered&&S.toastText===g.toast;
+    return `<div class="lcard" role="status"><div class="h">${LILY(30)}<div><b>Lily</b><small>${g.date}</small></div><button class="close" data-act="dockclose" aria-label="Minimise">—</button></div>
+      <p>${S.toastText}</p>
+      <div class="row">${unlock?`<button class="btn dark sm" data-act="grant">Yes, go ahead</button><button class="btn ghost sm" data-act="deny">Not yet</button>`:
+        notifs().some(x=>x.k==='ref')&&S.view!=='ticket'?`<button class="btn dark sm" data-act="refunds">Review refunds</button><button class="btn ghost sm" data-act="dockclose">Later</button>`:
+        `<button class="btn ghost sm" data-act="dockclose">Thanks</button>`}</div>
+      <button class="ask" data-act="ask">Ask Lily…</button></div>`;
+  }
+  const n=notifs().length;
+  return `<button class="lpill ${n?'has':''}" data-act="dockopen" aria-label="Open Lily">${LILY(28)}${n?'<span class="dotn"></span>':''}</button>`;
+}
+function renderSide(){
+  const g=st(),cur=S.granted?5:g.trust;const ap=Math.min(S.approvals,20);
+  $('#side').innerHTML=`
+  <div class="panel"><h4>What Lily can do</h4>
+    <ul class="trust">${TRUST.map((t,i)=>`<li class="${i<cur?'done':i===cur?'now':''}"><span class="m">${i<cur?'✓':''}</span>${t}${i===cur?'<em>Now</em>':''}</li>`).join('')}</ul>
+    ${cur>=4&&!S.granted?`<div style="display:grid;gap:6px"><span class="hint">Refund drafts approved: <b style="color:var(--ink)">${ap} of 20</b></span><div class="prog"><i style="width:${ap/20*100}%"></i></div></div>`:''}
+    ${S.granted?`<span class="hint">Refunds under $50 are hers now. Bigger ones still come to Maya.</span>`:''}
+  </div>
+  <div class="panel"><h4>Lily over time</h4>
+    <ul class="log">${STAGES.map((x,i)=>`<li class="${i===S.stage?'cur':i>S.stage?'future':''}"><span class="d">${x.label}</span><p>${x.log}</p></li>`).join('')}</ul>
+    <span class="hint">Try: the bell, the underlined link, Lily in the corner, “Approve and send”, and Ask Lily.</span>
+  </div>`;
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act],[data-stage],[data-ticket],[data-q],[data-proto]');if(!b)return;
+  if(b.dataset.proto)return enter();
+  if(b.dataset.act==='exit')return exitProto();
+  if(b.dataset.stage!==undefined)return setStage(+b.dataset.stage);
+  if(b.dataset.ticket!==undefined){S.ticket=+b.dataset.ticket;S.phase='draft';return render()}
+  if(b.dataset.q){S.view='ask';S.ask=b.dataset.q;S.typing=true;render();clearT();later(()=>{S.typing=false;render()},900);return}
+  const a=b.dataset.act;
+  switch(a){
+    case 'next':return setStage(Math.min(S.stage+1,STAGES.length-1));
+    case 'home':S.view='home';S.pop=false;break;
+    case 'inbox':S.view=st().refunds?'ticket':'home';break;
+    case 'notifs':S.pop=!S.pop;break;
+    case 'refunds':S.dock='pill';return openRefunds();
+    case 'teach':S.view='teach';S.pop=false;S.dock='pill';break;
+    case 'taught':S.taught=true;S.toastText='Menu Guide learned “Track a late box”. I’ll tell you next Monday how many it answered.';S.dock='toast';break;
+    case 'ask':S.view='ask';S.pop=false;S.dock='pill';break;
+    case 'askweekend':S.view='ask';S.pop=false;S.ask='How is the team doing on weekends?';S.typing=true;render();later(()=>{S.typing=false;render()},900);return;
+    case 'unlockcard':S.pop=false;S.toastText=st().toast;S.dock='toast';break;
+    case 'grant':S.granted=true;S.unlockAnswered=true;S.toastText='Thanks, Maya. I’ll issue refunds under $50 within your policy and list each one in your weekly read.';break;
+    case 'deny':S.unlockAnswered=true;S.toastText='No problem. I’ll keep drafting them for you to approve, and ask again in a few weeks.';break;
+    case 'dockopen':S.toastText=S.toastText||st().toast;S.dock='toast';break;
+    case 'dockclose':S.dock='pill';break;
+    case 'dismissdraft':S.phase='dismissed';break;
+    case 'edit':break;
+    case 'approve':{
+      const t=refundsList()[S.ticket];S.phase='sending';render();
+      later(()=>{S.sent[t.id]=true;S.approvals++;S.phase='draft';
+        const left=refundsList().filter(x=>!S.sent[x.id]).length;
+        S.toastText=S.approvals>=20?`Sent. That’s 20 of 20. Next Monday I’ll ask if I can take small refunds on.`:`Sent. That’s ${S.approvals} of 20 approvals. ${left?`${left} refund${left>1?'s':''} left.`:'All refunds done.'}`;
+        S.dock='toast';render();later(()=>{if(S.dock==='toast'){S.dock='pill';render()}},4200)},1300);return}
+    case 'nextticket':S.ticket=firstOpen();S.phase='draft';break;
+  }
+  render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(S.pop||S.dock==='toast')){S.pop=false;S.dock='pill';render()}});
+if(location.hash==='#lily-home')enter();
+if(new URLSearchParams(location.search).has('story')){document.documentElement.dataset.theme='light';document.body.classList.add('story');setStage(0)}
+</script>
+
+</body></html>

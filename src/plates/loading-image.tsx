@@ -43,7 +43,8 @@ export function LoadingImage({
         height={height}
         sizes={sizes}
         priority={priority}
-        unoptimized={src.endsWith(".gif")}
+        // Animated covers (GIF, animated WebP) are served as they are, so they keep playing.
+        unoptimized={/\.(gif|webp)$/.test(src)}
         data-loaded={loaded ? "" : undefined}
         className="resolving"
         onLoad={() => setLoaded(true)}

@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Remedy, the work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F2EC; --panel:#FFFFFF; --ink:#23201D; --muted:#7C736A;
+  --coral:#E0563F; --rule:#E4DCD1; --tint:#EFEAE2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:400 16px/1.55 "Spline Sans",ui-sans-serif,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr);gap:64px;max-width:1240px;margin:0 auto;padding:0 40px}
+
+/* sidebar */
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;padding:44px 0 60px;border-right:1px solid var(--rule)}
+.brand{font:600 19px/1.2 "Fraunces",Georgia,serif;letter-spacing:-.01em;margin:0 0 4px}
+.brandsub{margin:0 0 34px;font-size:12.5px;color:var(--muted)}
+.navsec{margin-bottom:26px}
+.navlabel{font:600 10.5px/1 "Spline Sans",sans-serif;letter-spacing:.13em;text-transform:uppercase;color:var(--coral);margin:0 0 10px}
+.navgroup{margin:14px 0 5px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.side ul{list-style:none;margin:0;padding:0}
+.side li a{display:block;padding:3.5px 10px 3.5px 0;font-size:14px;color:var(--ink);text-decoration:none;border-left:2px solid transparent;padding-left:10px;margin-left:-12px;transition:color .15s,border-color .15s}
+.side li a:hover{color:var(--coral)}
+.side li a.on{border-color:var(--coral);color:var(--coral)}
+
+/* hero */
+.hero{padding:76px 0 48px;border-bottom:1px solid var(--rule)}
+.hero h1{font:300 clamp(40px,6vw,72px)/1.02 "Fraunces",Georgia,serif;letter-spacing:-.025em;margin:0 0 18px;max-width:14ch}
+.hero h1 em{font-style:italic;color:var(--coral)}
+.hero p{max-width:56ch;margin:0;color:var(--muted);font-size:17px}
+.tally{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
+.tally div{display:flex;align-items:baseline;gap:8px}
+.tally b{font:500 26px/1 "Fraunces",Georgia,serif}
+.tally span{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* sections */
+.sec{padding:10px 0 20px}
+.sechead{padding:64px 0 26px}
+.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--coral);margin:0 0 12px}
+.sechead h2{font:400 34px/1.1 "Fraunces",Georgia,serif;letter-spacing:-.02em;margin:0 0 12px}
+.lede{margin:0;max-width:60ch;color:var(--muted)}
+.grouprule{display:flex;align-items:center;gap:16px;margin:44px 0 8px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.grouprule::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+/* item */
+.item{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:56px;align-items:start;padding:40px 0;border-bottom:1px solid var(--rule)}
+.item h3{font:500 25px/1.2 "Fraunces",Georgia,serif;letter-spacing:-.015em;margin:0 0 12px}
+.chips{margin:0 0 16px;display:flex;gap:8px;flex-wrap:wrap}
+.chip,.plat{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;padding:5px 9px;border-radius:3px}
+.chip{background:var(--tint);color:#5C544B}
+.plat{border:1px solid var(--rule);color:var(--muted)}
+.one{margin:0 0 10px;font:400 17px/1.45 "Fraunces",Georgia,serif;max-width:46ch}
+.desc{margin:0;color:#4E4740;max-width:52ch;font-size:15px}
+.btns{margin:22px 0 0;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--rule);border-radius:999px;background:var(--panel);
+  font-size:13.5px;text-decoration:none;transition:border-color .15s,transform .15s}
+.btn:hover{border-color:var(--coral);transform:translateY(-1px)}
+.btn.empty{color:var(--muted);background:transparent;border-style:dashed}
+.dot{width:8px;height:8px;border-radius:2px;background:var(--coral)}
+.dot.repo{background:var(--ink);border-radius:50%}
+.shot{aspect-ratio:4/3;border:1px solid var(--rule);border-radius:10px;background:
+  repeating-linear-gradient(135deg,transparent 0 11px,rgba(224,86,63,.045) 11px 12px),var(--panel);
+  display:flex;align-items:flex-end;padding:14px}
+.shot span{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+
+footer{padding:60px 0 90px;color:var(--muted);font-size:13.5px}
+@media (max-width:960px){
+  .wrap{grid-template-columns:1fr;gap:0;padding:0 22px}
+  .side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule);padding:26px 0}
+  .item{grid-template-columns:1fr;gap:24px}
+  .shot{order:-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style></head>
+<body><div class="wrap">
+<aside class="side">
+  <p class="brand">Remedy</p>
+  <p class="brandsub">Everything we designed, in one place</p>
+  <div class="navsec"><p class="navlabel">What we built</p><p class="navgroup">Core and entry</p><ul><li><a href="#remedy-chat-core">Remedy Chat Core</a></li><li><a href="#personalization-and-menu">Personalization and Menu</a></li><li><a href="#onboarding-and-consent">Onboarding and Consent</a></li><li><a href="#conversation-history">Conversation History</a></li><li><a href="#navigation-ui">Navigation UI</a></li></ul><p class="navgroup">Journeys</p><ul><li><a href="#appointment-booking">Appointment Booking</a></li><li><a href="#multi-patient-and-multi-service-booking">Multi Patient and Multi Service Booking</a></li><li><a href="#rx-refills">Rx Refills</a></li><li><a href="#file-upload">File Upload</a></li></ul><p class="navgroup">Responses and safety</p><ul><li><a href="#long-summary">Long Summary</a></li><li><a href="#citations">Citations</a></li><li><a href="#red-flag-escalation">Red Flag Escalation</a></li><li><a href="#explain-enhanced">Explain Enhanced</a></li><li><a href="#triage-enhanced-components">Triage Enhanced Components</a></li></ul></div><div class="navsec"><p class="navlabel">How it is built</p><p class="navgroup">Source files</p><ul><li><a href="#remedy-product-files">Remedy Product Files</a></li><li><a href="#remedy-v1-0-handoff">Remedy V1.0 Handoff</a></li></ul><p class="navgroup">Libraries</p><ul><li><a href="#ui-kit">UI Kit</a></li><li><a href="#foundations">Foundations</a></li><li><a href="#icon-library">Icon Library</a></li></ul><p class="navgroup">Standards</p><ul><li><a href="#accessibility-audit">Accessibility Audit</a></li></ul></div><div class="navsec"><p class="navlabel">What we are exploring</p><p class="navgroup">First use</p><ul><li><a href="#first-hello-test">First hello test</a></li><li><a href="#loyalty-scan-test">Loyalty scan test</a></li><li><a href="#prescription-doorway-test">Prescription doorway test</a></li></ul><p class="navgroup">Personalization and memory</p><ul><li><a href="#family-profile-test">Family profile test</a></li><li><a href="#connection-test">Connection test</a></li><li><a href="#proof-test">Proof test</a></li></ul><p class="navgroup">One agent</p><ul><li><a href="#handoff-test">Handoff test</a></li><li><a href="#mode-control-test">Mode control test</a></li></ul><p class="navgroup">Trust</p><ul><li><a href="#clinical-signal-test">Clinical signal test</a></li><li><a href="#canadian-trust-test">Canadian trust test</a></li></ul><p class="navgroup">Earning loyalty</p><ul><li><a href="#lifestyle-surface-test">Lifestyle surface test</a></li><li><a href="#programs-test">Programs test</a></li><li><a href="#head-start-test">Head start test</a></li></ul></div>
+</aside>
+<main>
+  <div class="hero">
+    <h1>The work behind <em>Remedy</em></h1>
+    <p>A health assistant built for Shoppers Drug Mart and PC Health. Every feature, every source file, and every concept still ahead of the roadmap, with a link to the design that made it.</p>
+    <div class="tally">
+      <div><b>14</b><span>Features</span></div>
+      <div><b>6</b><span>Design system</span></div>
+      <div><b>13</b><span>Labs studies</span></div>
+      <div><b>3</b><span>Platforms</span></div>
+    </div>
+  </div>
+  <section class="sec" id="features"><header class="sechead"><p class="eyebrow">Features</p><h2>What we built</h2><p class="lede">The product itself, one entry per feature. What a person can do, where the work stands, and the design on every platform it exists on.</p></header><p class="grouprule"><span>Core and entry</span></p><article class="item" id="remedy-chat-core" data-status="Shipped">
+  <div class="col">
+    <h3>Remedy Chat Core</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">All platforms</span></p>
+    <p class="one">The assistant itself, from first message to answer.</p><p class="desc">The core conversation surface. Composer, response states, thinking and loading states, safety and escalation moments. Everything else in this section sits inside it.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-63" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-63" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=1-3" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>remedy-chat-core.png</span></div>
+</article><article class="item" id="personalization-and-menu" data-status="Design complete">
+  <div class="col">
+    <h3>Personalization and Menu</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">iOS</span></p>
+    <p class="one">Entry points that change based on what the person has done before.</p><p class="desc">The menu and personalized surfaces that meet the person before they type. Prioritizes the most relevant next action without hiding the alternatives.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=1981-18139" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>personalization-and-menu.png</span></div>
+</article><article class="item" id="onboarding-and-consent" data-status="Design complete">
+  <div class="col">
+    <h3>Onboarding and Consent</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">What a person agrees to before the first health question.</p><p class="desc">First run through the product. Explains what the assistant is, what it does with what you tell it, and gets consent before any health conversation starts.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=5-577" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=5-577" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=281-13998" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>onboarding-and-consent.png</span></div>
+</article><article class="item" id="conversation-history" data-status="Design complete">
+  <div class="col">
+    <h3>Conversation History</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">Find a past conversation and pick it back up.</p><p class="desc">Past conversations, listed and searchable, so a person can return to something rather than starting over.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-64" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-64" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=281-33237" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>conversation-history.png</span></div>
+</article><article class="item" id="navigation-ui" data-status="Design complete">
+  <div class="col">
+    <h3>Navigation UI</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">How a person moves around the product.</p><p class="desc">Top navigation, drawer and window behavior on desktop. The shell everything else sits inside.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-67" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-67" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=367-171456" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>navigation-ui.png</span></div>
+</article><p class="grouprule"><span>Journeys</span></p><article class="item" id="appointment-booking" data-status="In build">
+  <div class="col">
+    <h3>Appointment Booking</h3>
+    <p class="chips"><span class="chip">In build</span><span class="plat">All platforms</span></p>
+    <p class="one">Book a pharmacy appointment inside the conversation.</p><p class="desc">Booking without leaving the chat, from picking the service through to confirmation. Covers personal details, appointment review, response cards and the flows that follow a booking.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=1-79" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/MAtRqtz8WcCExs8oKUno4M/-Android--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=1-79" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/ideyDyx6aCezMp5BSZwVkp/Remedy---Web?node-id=1444-55668" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>appointment-booking.png</span></div>
+</article><article class="item" id="multi-patient-and-multi-service-booking" data-status="In build">
+  <div class="col">
+    <h3>Multi Patient and Multi Service Booking</h3>
+    <p class="chips"><span class="chip">In build</span><span class="plat">iOS</span></p>
+    <p class="one">Book for more than one person, or more than one service, in a single flow.</p><p class="desc">The harder version of booking. One conversation that handles several patients and several services without making the person start again.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=5154-2" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>multi-patient-and-multi-service-booking.png</span></div>
+</article><article class="item" id="rx-refills" data-status="In build">
+  <div class="col">
+    <h3>Rx Refills</h3>
+    <p class="chips"><span class="chip">In build</span><span class="plat">All platforms</span></p>
+    <p class="one">Refill a prescription without leaving the chat.</p><p class="desc">Refill request end to end. Covers finding the prescription, confirming it and confirming the pharmacy, including the empty and loading states.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=1-82" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/MAtRqtz8WcCExs8oKUno4M/-Android--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=1-82" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/ideyDyx6aCezMp5BSZwVkp/Remedy---Web?node-id=2114-49299" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>rx-refills.png</span></div>
+</article><article class="item" id="file-upload" data-status="In build">
+  <div class="col">
+    <h3>File Upload</h3>
+    <p class="chips"><span class="chip">In build</span><span class="plat">All platforms</span></p>
+    <p class="one">Add a photo or a document to the conversation.</p><p class="desc">Attaching an image or file so the assistant can use it in the answer. Covers picking, uploading, failure and retry states.</p>
+    <p class="btns"><span class="btn empty">No link yet</span></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>file-upload.png</span></div>
+</article><p class="grouprule"><span>Responses and safety</span></p><article class="item" id="long-summary" data-status="Design complete">
+  <div class="col">
+    <h3>Long Summary</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">A longer answer that stays readable.</p><p class="desc">How the assistant presents a long response without burying the useful part.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=154-21458" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/MAtRqtz8WcCExs8oKUno4M/-Android--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=154-21458" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/ideyDyx6aCezMp5BSZwVkp/Remedy---Web?node-id=1385-71008" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>long-summary.png</span></div>
+</article><article class="item" id="citations" data-status="Design complete">
+  <div class="col">
+    <h3>Citations</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">Show where an answer came from.</p><p class="desc">Sources attached to an answer so a person can check the claim behind it. A trust feature more than a content feature.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=24-3303" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=24-3303" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=347-17796" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>citations.png</span></div>
+</article><article class="item" id="red-flag-escalation" data-status="Design complete">
+  <div class="col">
+    <h3>Red Flag Escalation</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">Get a person to real care when the conversation needs it.</p><p class="desc">What the assistant does when an answer is not the right response. Recognizes the moment and routes the person to urgent or in person care.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-65" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-65" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=347-151783" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>red-flag-escalation.png</span></div>
+</article><article class="item" id="explain-enhanced" data-status="Design complete">
+  <div class="col">
+    <h3>Explain Enhanced</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">A fuller answer when a short one is not enough.</p><p class="desc">A richer explanation format for questions that need more than a paragraph, without turning the answer into a wall of text.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-71" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-71" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=374-229789" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>explain-enhanced.png</span></div>
+</article><article class="item" id="triage-enhanced-components" data-status="Design complete">
+  <div class="col">
+    <h3>Triage Enhanced Components</h3>
+    <p class="chips"><span class="chip">Design complete</span><span class="plat">All platforms</span></p>
+    <p class="one">The pieces behind a symptom conversation.</p><p class="desc">The components used when the assistant works through symptoms with a person, including the question and answer patterns that carry the conversation.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=1-72" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=1-72" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=374-241229" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>triage-enhanced-components.png</span></div>
+</article></section><section class="sec" id="design-system"><header class="sechead"><p class="eyebrow">Design System</p><h2>How it is built</h2><p class="lede">The source files, the tokens and the component libraries underneath every screen. The working material, not the polished output.</p></header><p class="grouprule"><span>Source files</span></p><article class="item" id="remedy-product-files" data-status="Shipped">
+  <div class="col">
+    <h3>Remedy Product Files</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">All platforms</span></p>
+    <p class="one">The design file behind the product on each platform.</p><p class="desc">Every screen and state designed for the September launch, organized by feature page. One file per platform, same structure across all three.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/yIzE3IWqhgtCP2Fo44aAvp/-IOS--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/MAtRqtz8WcCExs8oKUno4M/-Android--%E2%86%97%EF%B8%8F-Remedy---September-Launch?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a><a class="btn" href="https://www.figma.com/design/A4vBAxETLabvbTuPNxAvMt/-Desktop--Web-Designs--Copy-?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open Web</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>remedy-product-files.png</span></div>
+</article><article class="item" id="remedy-v1-0-handoff" data-status="Shipped">
+  <div class="col">
+    <h3>Remedy V1.0 Handoff</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">iOS and Android</span></p>
+    <p class="one">The earlier files the V1 userflows were handed off from.</p><p class="desc">Holds the eight V1 userflow pages on both platforms. The iOS file also carries component pages for composer, top navigation, chat and conversation starters. The Android file adds a set of example screens.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/9rGdmVvVfuH8vJh6WioKTs/-IOS--%E2%86%97%EF%B8%8F-Remedy-V1.0-Handoff?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a><a class="btn" href="https://www.figma.com/design/vwYE4FbvP5gnPKvflzpWxm/-Android--%F0%9F%A7%A9-Remedy-V1.0-Handoff?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open Android</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>remedy-v1-0-handoff.png</span></div>
+</article><p class="grouprule"><span>Libraries</span></p><article class="item" id="ui-kit" data-status="In build">
+  <div class="col">
+    <h3>UI Kit</h3>
+    <p class="chips"><span class="chip">In build</span><span class="plat">iOS and Android</span></p>
+    <p class="one">The component library the product is built from.</p><p class="desc">Structured as atoms, molecules and organisms, with card compositions, screen templates and patterns on top. Covers the conversation surface, booking and refill components, sheets and response cards.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/8D9FZMl9mvaPEm2718omVz/Loblaw---Remedy---iOS---UI-kit" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>ui-kit.png</span></div>
+</article><article class="item" id="foundations" data-status="Shipped">
+  <div class="col">
+    <h3>Foundations</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">All platforms</span></p>
+    <p class="one">The tokens everything else is built on.</p><p class="desc">Colour, typography, spacing, radius, stroke, elevation and gradients, organized as primitives and semantic tokens. Includes a page explaining how the token architecture works.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/Wpln6HWkrd8c0PlMqLOaEG/Loblaw---Remedy---Foundations" target="_blank" rel="noopener"><span class="dot figma"></span>Open in Figma</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>foundations.png</span></div>
+</article><article class="item" id="icon-library" data-status="Shipped">
+  <div class="col">
+    <h3>Icon Library</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">All platforms</span></p>
+    <p class="one">Every icon in the product, plus the wrapper that sizes them.</p><p class="desc">The full icon set and the icon wrapper component that controls sizing and colour wherever an icon appears.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/BKcnX9jsBeRetqkgkRHMNQ/Loblaw---Remedy---Icon-library" target="_blank" rel="noopener"><span class="dot figma"></span>Open in Figma</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>icon-library.png</span></div>
+</article><p class="grouprule"><span>Standards</span></p><article class="item" id="accessibility-audit" data-status="Shipped">
+  <div class="col">
+    <h3>Accessibility Audit</h3>
+    <p class="chips"><span class="chip">Shipped</span><span class="plat">iOS</span></p>
+    <p class="one">A pass over the iOS designs against accessibility standards.</p><p class="desc">A scoped audit of the core iOS userflows. Covers entry point and core chat, onboarding and consent, citations, red flag escalation, navigation, explain and triage components, with a scope page setting out what was checked.</p>
+    <p class="btns"><a class="btn" href="https://www.figma.com/design/KZ2IInV6OJH37JN9dsYMy2/-iOS--Accessibility-Audit?node-id=0-1" target="_blank" rel="noopener"><span class="dot figma"></span>Open iOS</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>accessibility-audit.png</span></div>
+</article></section><section class="sec" id="labs"><header class="sechead"><p class="eyebrow">Labs</p><h2>What we are exploring</h2><p class="lede">Concepts ahead of the roadmap. Each study opens with a question, then shows the prototype and what it serves.</p></header><p class="grouprule"><span>First use</span></p><article class="item" id="first-hello-test" data-status="Open">
+  <div class="col">
+    <h3>First hello test</h3>
+    <p class="chips"><span class="chip">Open</span><span class="plat">Not platform specific</span></p>
+    <p class="one">How does the agent introduce itself so the first chat starts a relationship?</p><p class="desc">Onboarding polish was cut from launch and the character explorations never got a verdict, so the first minute runs on a default line. The agent opens with a register chosen on purpose, warmth arriving in the same breath as competence, and a first question that proves it listened.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>first-hello-test.png</span></div>
+</article><article class="item" id="loyalty-scan-test" data-status="Prototype ready">
+  <div class="col">
+    <h3>Loyalty scan test</h3>
+    <p class="chips"><span class="chip">Prototype ready</span><span class="plat">Not platform specific</span></p>
+    <p class="one">How can we turn in store behaviors into an introduction to the agent?</p><p class="desc">Ninety percent of Canadians live within ten kilometres of a store, and acquisition is still imagined as campaigns. The Optimum scan becomes the first conversation, and one tap opens an agent that already knows the points balance and the pharmacy.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>loyalty-scan-test.png</span></div>
+</article><article class="item" id="prescription-doorway-test" data-status="Open">
+  <div class="col">
+    <h3>Prescription doorway test</h3>
+    <p class="chips"><span class="chip">Open</span><span class="plat">Not platform specific</span></p>
+    <p class="one">How does a new prescription turn into a care plan that brings someone back?</p><p class="desc">A new prescription is the highest intent moment in the business and today it ends with a leaflet. The pickup becomes the first step of a care plan, what changes, what to watch for, when to come back.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>prescription-doorway-test.png</span></div>
+</article><p class="grouprule"><span>Personalization and memory</span></p><article class="item" id="family-profile-test" data-status="In flight">
+  <div class="col">
+    <h3>Family profile test</h3>
+    <p class="chips"><span class="chip">In flight</span><span class="plat">Not platform specific</span></p>
+    <p class="one">Can the agent build a family profile without ever showing a form?</p><p class="desc">Dependents are the highest value context in the product and the hardest thing to ask for directly. A kid mentioned in passing becomes a confirmable card in the moment, so capture feels like being heard rather than being filed.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>family-profile-test.png</span></div>
+</article><article class="item" id="connection-test" data-status="Prototype ready">
+  <div class="col">
+    <h3>Connection test</h3>
+    <p class="chips"><span class="chip">Prototype ready</span><span class="plat">Not platform specific</span></p>
+    <p class="one">What value convinces someone to connect their health data, and what do they get back?</p><p class="desc">The connection is one tap and almost nobody takes it, because the ask arrives before any proof. Value gets shown before permission is asked, then paid off immediately by an answer that knows the dosage and the timing.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>connection-test.png</span></div>
+</article><article class="item" id="proof-test" data-status="In flight">
+  <div class="col">
+    <h3>Proof test</h3>
+    <p class="chips"><span class="chip">In flight</span><span class="plat">Not platform specific</span></p>
+    <p class="one">How does an answer feel personalized to you, and still clinically honest?</p><p class="desc">People test the agent for memory on purpose and watch for a thumb on the scale. Personalization shows its work, recall arrives inside the task it helps with and recommendations carry their reasoning.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>proof-test.png</span></div>
+</article><p class="grouprule"><span>One agent</span></p><article class="item" id="handoff-test" data-status="In flight">
+  <div class="col">
+    <h3>Handoff test</h3>
+    <p class="chips"><span class="chip">In flight</span><span class="plat">Not platform specific</span></p>
+    <p class="one">When a health question turns into a shopping one, what does a tasteful handoff look like?</p><p class="desc">The stated fear about one agent is a health question answered with a product and read as an upsell. The health answer completes first, the product arrives as the means to the plan, and the privacy wall is visible at the moment it matters.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>handoff-test.png</span></div>
+</article><article class="item" id="mode-control-test" data-status="In flight">
+  <div class="col">
+    <h3>Mode control test</h3>
+    <p class="chips"><span class="chip">In flight</span><span class="plat">Not platform specific</span></p>
+    <p class="one">How does someone understand what changes between health and shopping, and stay in control of it?</p><p class="desc">One agent with a health side and a shopping side needs the difference to be legible without anyone reading a manual. The shift announces itself the first time it happens, and leaving always takes one visible tap.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>mode-control-test.png</span></div>
+</article><p class="grouprule"><span>Trust</span></p><article class="item" id="clinical-signal-test" data-status="Prototype ready">
+  <div class="col">
+    <h3>Clinical signal test</h3>
+    <p class="chips"><span class="chip">Prototype ready</span><span class="plat">Not platform specific</span></p>
+    <p class="one">What tells someone the assessment is clinically real and their data is safe?</p><p class="desc">A retailer giving health advice is presumed to be selling until proven otherwise. One calm signal carries both promises, real medicine and protected data, in plain words rather than stacked badges and lock icons.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>clinical-signal-test.png</span></div>
+</article><article class="item" id="canadian-trust-test" data-status="Open">
+  <div class="col">
+    <h3>Canadian trust test</h3>
+    <p class="chips"><span class="chip">Open</span><span class="plat">Not platform specific</span></p>
+    <p class="one">Does advice built for Canada earn more trust than advice built for everyone?</p><p class="desc">The real competitor is the generic assistant already on the phone. Provincial coverage, Canadian guidelines and data that stays in the country get named right in the answer, where a global assistant has nothing to say back.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>canadian-trust-test.png</span></div>
+</article><p class="grouprule"><span>Earning loyalty</span></p><article class="item" id="lifestyle-surface-test" data-status="In flight">
+  <div class="col">
+    <h3>Lifestyle surface test</h3>
+    <p class="chips"><span class="chip">In flight</span><span class="plat">Not platform specific</span></p>
+    <p class="one">What makes a health surface worth opening on a day you feel fine?</p><p class="desc">Nothing today gives a healthy person a reason to open the product, so retention is being asked of a surface built for sick days. A surface that reflects the person back, plans mid flight, the family, one thing worth doing today.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>lifestyle-surface-test.png</span></div>
+</article><article class="item" id="programs-test" data-status="Open">
+  <div class="col">
+    <h3>Programs test</h3>
+    <p class="chips"><span class="chip">Open</span><span class="plat">Not platform specific</span></p>
+    <p class="one">What turns one good answer into a program someone follows and comes back to?</p><p class="desc">People treat the agent as a starting point they leave to finish elsewhere. The answer becomes a program, the next seven days proposed unasked, one step per day with a visible finish line.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>programs-test.png</span></div>
+</article><article class="item" id="head-start-test" data-status="Open">
+  <div class="col">
+    <h3>Head start test</h3>
+    <p class="chips"><span class="chip">Open</span><span class="plat">Not platform specific</span></p>
+    <p class="one">What makes switching from ChatGPT feel like an upgrade instead of starting over?</p><p class="desc">The switching cost is not features, it is history, and every month it goes untested the incumbent&#x27;s head start compounds. Connection and profile give the agent real context before the first question is finished.</p>
+    <p class="btns"><a class="btn" href="https://github.com/latecheckout/loblaw-labs-lite" target="_blank" rel="noopener"><span class="dot repo"></span>Open repo</a></p>
+  </div>
+  <div class="shot" aria-hidden="true"><span>head-start-test.png</span></div>
+</article></section>
+  <footer>Placeholder tiles name the image the page expects. Every row here comes from one line of the content sheet.</footer>
+</main>
+</div>
+<script>
+const links=[...document.querySelectorAll('.side a')];
+const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ const a=map.get(e.target.id); if(!a) return;
+    if(e.isIntersecting){ links.forEach(l=>l.classList.remove('on')); a.classList.add('on');
+      a.scrollIntoView({block:'nearest'}); } });
+},{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('.item').forEach(el=>io.observe(el));
+</script>
+</body></html>

@@ -1,0 +1,116 @@
+{
+  "slug": "memory-management",
+  "name": "Memory Management",
+  "status": "design-complete",
+  "order": 1,
+  "summary": "What the assistant remembers about you, where you see it, and how you correct or remove it.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaPageId": "7188:1982",
+  "figmaPageName": "Memory",
+  "overview": [
+    "Memory is the set of health details the assistant has been told, kept between conversations so a user does not have to re-explain their situation every time.",
+    "It is four screens. The list groups everything it holds and opens a summary of what it knows; a memory opens as its own page; a field opens as a sheet over that page; and deleting is a dialog that says what deleting does and does not take with it.",
+    "Viewing moved from a bottom sheet to a pushed page in this round, which changes how getting back works and is the main thing to confirm against the build."
+  ],
+  "states": [
+    {
+      "name": "Memory",
+      "screen": "memory--home",
+      "description": "The whole set, grouped: seven groups and thirty-two memories under a summary of what the assistant has been told."
+    },
+    {
+      "name": "Selecting",
+      "screen": "memory--selecting",
+      "description": "Select turns every row into a choice: a checkbox at the left, Select all and Cancel in the bar, and a Delete that counts what is ticked."
+    },
+    {
+      "name": "Viewing a memory",
+      "screen": "memory--viewing",
+      "description": "One memory as a pushed page — its category, the memory, when it changed, where it came from, and the fields it is made of."
+    },
+    {
+      "name": "Editing a memory",
+      "screen": "memory--editing",
+      "description": "One field at a time, in a sheet over the page, with the keyboard up and the required caption under the input."
+    },
+    {
+      "name": "Deleting a memory",
+      "screen": "memory--deleting",
+      "description": "The confirmation, naming the consequence: the detail can be saved again, and chat history is untouched."
+    },
+    {
+      "name": "After deletion",
+      "screen": "memory--deleted",
+      "description": "The list afterwards, with a toast naming what happened. A memory drawn in two groups leaves both."
+    }
+  ],
+  "behaviour": [
+    {
+      "rule": "What a memory is",
+      "detail": "A single statement in the user's own framing — “You’re 8 weeks pregnant”, “You have a peanut allergy” — carrying a category, a last-updated date, and a link to the conversation or file it came from.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Two representations",
+      "detail": "A written summary paragraph set, and the individual memories as list rows. The summary carries its own “Last updated today”; whether it regenerates when a memory is edited is not stated.",
+      "source": "partial"
+    },
+    {
+      "rule": "Grouping",
+      "detail": "Memories sit under titled groups — Top of mind, Your current health, Your vaccines — separated by 1px #DDDFEB rules. The same memory appears under more than one group.",
+      "source": "partial"
+    },
+    {
+      "rule": "Provenance",
+      "detail": "Every memory states where it came from and offers the originating chat as a tappable citation. File-derived memories say “from a file upload”; chat-derived ones say “from a chat”.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Deletion",
+      "detail": "Delete asks for confirmation and offers to also delete the chat the memory started in, defaulted off. The chat is kept unless that box is checked.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Editing",
+      "detail": "An “Edit memory” action exists on the detail sheet. What it opens is not drawn.",
+      "source": "open"
+    },
+    {
+      "rule": "Conflict detection",
+      "detail": "When new information contradicts a held memory the assistant raises an inline card naming the category, not the values. Reviewing opens a sheet with the existing memory above the suggested one.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Declining a conflict",
+      "detail": "The card offers “Not now”; the sheet offers “Don’t update”. The declined branch leaves no trace in the transcript, and the assistant keeps the old memory.",
+      "source": "partial"
+    },
+    {
+      "rule": "File consent",
+      "detail": "Uploading a document asks permission before details are retained, at three levels — always, this time, never. Two competing treatments are drawn: a modal dialog and an in-chat choice list.",
+      "source": "partial"
+    },
+    {
+      "rule": "Revoking consent",
+      "detail": "“Always remember” sets a standing preference. No surface is drawn where it can be reviewed or turned off.",
+      "source": "open"
+    },
+    {
+      "rule": "Empty state",
+      "detail": "Every frame shows a populated account. Nothing is drawn for a user who has no memories yet.",
+      "source": "open"
+    },
+    {
+      "rule": "Search",
+      "detail": "Search sits in the nav beside Select, where it used to be a pill pinned over the foot of the list. The surface it opens is not drawn.",
+      "source": "open"
+    },
+    {
+      "rule": "Incognito",
+      "detail": "The V1 handoff file carries an Incognito Mode block stating that activity is not saved and conversations will not appear in history. It is hidden at opacity 0 on both Conversation History frames and has no counterpart in the September Launch Memory designs.",
+      "source": "open"
+    }
+  ],
+  "thumbnail": "/demos/loblaw-handoff/thumbs/memory-summary.png",
+  "statesLabel": "States"
+}

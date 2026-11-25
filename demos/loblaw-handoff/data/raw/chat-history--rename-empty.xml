@@ -1,0 +1,98 @@
+<frame id="8200:16701" name="Renaming, empty" x="1399" y="100" width="393" height="852">
+  <frame id="8200:16702" name="Frame 2147231655" x="16" y="146" width="361" height="72">
+    <frame id="8200:16703" name="Top" x="0" y="0" width="361" height="32">
+      <frame id="8200:16704" name="Header" x="8" y="0" width="345" height="32">
+        <text id="8200:16705" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+      </frame>
+    </frame>
+    <frame id="8200:16706" name="Frame 2147231652" x="0" y="32" width="67" height="40">
+      <text id="8200:16707" name="4 chats" x="8" y="10" width="51" height="20" chars="4 chats" />
+    </frame>
+  </frame>
+  <frame id="8200:16708" name="List" x="16" y="230" width="361" height="252">
+    <frame id="8200:16709" name="List item" x="0" y="0" width="361" height="60">
+      <frame id="8200:16710" name="Tag + Text" x="8" y="8" width="285" height="44" chars="GLP-1 medications and heart health concerns &#183; Yesterday" />
+      <instance id="8200:16714" name="Button" x="309" y="8" width="44" height="44">
+        <instance id="I8200:16714;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+      </instance>
+    </frame>
+    <frame id="8200:16715" name="Frame 2147231642" x="0" y="64" width="361" height="60">
+      <frame id="8200:16716" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8200:16717" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Recipes for a summer dinner party &#183; Yesterday" />
+        <instance id="8200:16724" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8200:16724;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8200:16725" name="Frame 2147231644" x="0" y="128" width="361" height="60">
+      <frame id="8200:16726" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8200:16727" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Managing nausea after medication dose increase &#183; 3 days ago" />
+        <instance id="8200:16731" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8200:16731;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8200:16732" name="Frame 2147231645" x="0" y="192" width="361" height="60">
+      <frame id="8200:16733" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8200:16734" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Plan my groceries for the week &#183; 2 weeks ago" />
+        <instance id="8200:16738" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8200:16738;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8200:16739" name="Overlay" x="393" y="140" width="393" height="140" />
+  <frame id="8200:16740" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8200:16741" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8200:16741;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8200:16742" name="Frame 2147231679" x="94" y="66" width="275" height="46">
+      <instance id="8200:16743" name="Button" x="0" y="0" width="148" height="46">
+        <instance id="I8200:16743;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" />
+        <text id="I8200:16743;5:70" name="label" x="60" y="12" width="52" height="22" chars="Search" />
+        <instance id="I8200:16743;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8200:16744" name="Button" x="156" y="0" width="119" height="46">
+        <instance id="I8200:16744;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8200:16744;5:70" name="label" x="36" y="12" width="47" height="22" chars="Select" />
+        <instance id="I8200:16744;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8200:16745" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8200:16746" name="Isolated chat" x="0" y="0" width="393" height="852">
+    <frame id="8200:16747" name="Frame 2147231636" x="16" y="292" width="361" height="236" />
+    <frame id="8200:17212" name="Alert" x="47" y="280" width="300" height="221">
+      <instance id="8200:17213" name="BG" x="0" y="0" width="300" height="221" />
+      <frame id="8200:17214" name="Title and Description" x="14" y="14" width="272" height="54">
+        <text id="8200:17215" name="A Short Title Is Best" x="8" y="8" width="256" height="22" chars="Rename your chat" />
+      </frame>
+      <frame id="8200:17217" name="Text Field(s)" x="14" y="78" width="272" height="71">
+        <frame id="8200:17218" name="Fields" x="0" y="0" width="272" height="52">
+          <instance id="8200:17219" name="_Text Field Background" x="0" y="0" width="272" height="52" />
+          <frame id="8200:17245" name="Text Field" x="0" y="0" width="272" height="52">
+            <frame id="8200:17246" name="Contents" x="16" y="0" width="2" height="52">
+              <instance id="8200:17247" name="_Separator" x="0" y="0" width="370" height="1" />
+              <frame id="8200:17248" name="Text" x="0" y="1" width="2" height="51">
+                <frame id="8200:17249" name="Cursor and Value" x="0" y="0" width="2" height="51">
+                  <text id="8200:17250" name="Value" x="0" y="16" width="0" height="20" chars="" />
+                  <rectangle id="8200:17251" name="Cursor" x="0" y="15" width="2" height="22" />
+                </frame>
+                <text id="8200:17252" name="Clear" x="350" y="0" width="20" height="51" hidden="true" chars="&#63073;" />
+              </frame>
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <frame id="8200:17222" name="Buttons" x="14" y="159" width="272" height="48">
+        <instance id="8200:17223" name="Button 1" x="0" y="0" width="132" height="48">
+          <text id="I8200:17223;5446:6662" name="Label" x="39" y="13" width="55" height="22" chars="Cancel" />
+        </instance>
+        <instance id="8200:17224" name="Button 2" x="140" y="0" width="132" height="48">
+          <text id="I8200:17224;5446:6662" name="Label" x="47" y="13" width="39" height="22" chars="Save" />
+        </instance>
+      </frame>
+    </frame>
+    <instance id="8200:16749" name="Keyboard" x="0" y="535" width="393" height="317" />
+  </frame>
+</frame>

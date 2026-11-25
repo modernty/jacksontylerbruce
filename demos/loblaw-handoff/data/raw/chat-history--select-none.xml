@@ -1,0 +1,60 @@
+<frame id="8156:72723" name="Chat history, selections-none" x="3884" y="100" width="393" height="852">
+  <frame id="8156:72730" name="Top" x="16" y="146" width="361" height="32">
+    <frame id="8156:72731" name="Header" x="8" y="0" width="345" height="32">
+      <text id="8156:72732" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+    </frame>
+  </frame>
+  <frame id="8156:72733" name="Frame 2147231652" x="16" y="194" width="67" height="40">
+    <text id="8156:72734" name="4 chats" x="8" y="10" width="51" height="20" chars="4 chats" />
+  </frame>
+  <frame id="8156:72735" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:72736" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:72736;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8156:72737" name="Frame 2147231667" x="102" y="66" width="267" height="46">
+      <instance id="8156:72738" name="Button" x="0" y="0" width="140" height="46">
+        <instance id="I8156:72738;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:72738;5:70" name="label" x="36" y="12" width="68" height="22" chars="Select all" />
+        <instance id="I8156:72738;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8156:72739" name="Button" x="144" y="0" width="123" height="46">
+        <instance id="I8156:72739;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:72739;5:70" name="label" x="36" y="12" width="51" height="22" chars="Cancel" />
+        <instance id="I8156:72739;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+  <frame id="8156:72740" name="Frame 2147231663" x="16" y="230" width="361" height="252">
+    <frame id="8156:72741" name="List" x="0" y="0" width="361" height="252">
+      <frame id="8156:72742" name="List item" x="0" y="0" width="361" height="60">
+        <instance id="8156:72743" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72744" name="Tag + Text" x="48" y="8" width="245" height="44" chars="GLP-1 medications and heart health concerns &#183; Yesterday" />
+        <instance id="8156:72748" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72748;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72749" name="List item" x="0" y="64" width="361" height="60">
+        <instance id="8156:72750" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72751" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Recipes for a summer dinner party &#183; Yesterday" />
+        <instance id="8156:72758" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72758;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72759" name="List item" x="0" y="128" width="361" height="60">
+        <instance id="8156:72760" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72761" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Managing nausea after medication dose increase &#183; 3 days ago" />
+        <instance id="8156:72765" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72765;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72766" name="List item" x="0" y="192" width="361" height="60">
+        <instance id="8156:72767" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72768" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Plan my groceries for the week &#183; 2 weeks ago" />
+        <instance id="8156:72772" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72772;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8156:72724" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

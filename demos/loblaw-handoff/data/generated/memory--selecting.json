@@ -1,0 +1,1831 @@
+{
+  "slug": "memory--selecting",
+  "name": "Memory",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Select turns every row into a choice. A 24px checkbox appears at the left and the text indents 40 to make room; the bar becomes Select all and Cancel, and a Delete button counts what is ticked.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:264911",
+  "image": "/demos/loblaw-handoff/screens/memory--selecting.png",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 97,
+    "hiddenNodes": 0,
+    "assetNodes": 2,
+    "sectionNodes": 28,
+    "styledNodes": 0,
+    "looseEnds": 3
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "constraints": [],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "A memory in two groups ticks in both",
+      "detail": "“You’ve had a fever since August 14” is checked in Top of mind and again in Current symptoms & conditions, and the count says 3 rather than 4. The tick follows the memory, not the row — so ticking one row ticks its twin, and the count has to deduplicate.",
+      "nodes": [
+        "8156:264954",
+        "8156:265044",
+        "8156:265297"
+      ],
+      "ask": "Confirm the count is of memories, not rows, and that ticking one copy ticks the other."
+    },
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "The chevron stays on every row",
+      "detail": "Rows keep the chevron that opens the memory while they are also a checkbox target. Nothing says what a tap on the row body does in this mode — tick, or open.",
+      "nodes": [
+        "8156:264943"
+      ],
+      "ask": "In selection, does tapping the row tick it, and is the chevron inert or removed?"
+    },
+    {
+      "kind": "scope",
+      "severity": "low",
+      "title": "Nothing is drawn with zero ticked",
+      "detail": "Every selection frame has rows already checked. What the Delete button says and whether it is reachable before anything is ticked is undrawn.",
+      "nodes": [
+        "8156:265297"
+      ],
+      "ask": "Is Delete hidden, disabled, or does it read “Delete 0 memories”?"
+    }
+  ],
+  "code": {
+    "css": "/* Selection widens the row's left inset to make room for the box. */\n.row { display: flex; align-items: center; height: 58px; }\n.row__checkbox { width: 24px; height: 24px; margin-left: 8px; }\n\n/* Resting the text starts at 8; selecting it starts at 48. */\n.row__text { margin-left: 8px; width: 313px; }\n.row--selecting .row__text { margin-left: 48px; width: 273px; }\n\n/* The count sits in a pill at the foot, over the list. */\n.selection-delete { position: absolute; right: 24px; bottom: 24px; height: 54px; border-radius: 999px; }",
+    "jsx": "// Select is a mode on the list, not a screen of its own. Three things change:\n//\n//   every row gains a 24px checkbox and indents its text by 40\n//   the bar swaps Search + Select for Select all + Cancel\n//   a Delete button appears, counting the memories ticked\n//\n// The tick is held against the memory id, so a memory drawn in two groups shows\n// checked in both and still counts once.\n\n<MemoryRow memory={m} selecting checked={selected.has(m.id)} onToggle={toggle} />",
+    "swiftui": "// EditMode drives the same three changes.\nList(selection: $selected) {\n  ForEach(groups) { group in\n    Section(group.title) {\n      ForEach(group.memories) { MemoryRow(memory: $0) }\n    }\n  }\n}\n.environment(\\.editMode, .constant(selecting ? .active : .inactive))\n.toolbar {\n  ToolbarItem(placement: .topBarLeading) { Button(\"Select all\", action: selectAll) }\n  ToolbarItem(placement: .topBarTrailing) { Button(\"Cancel\", action: cancel) }\n}"
+  },
+  "stateGroup": {
+    "id": "memory",
+    "label": "Selecting",
+    "order": 6
+  },
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8156:264911",
+      "name": "Memory home, selection",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264912",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "8156:264911",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": -233,
+        "width": 393,
+        "height": 3097
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264913",
+      "name": "Top",
+      "type": "FRAME",
+      "parentId": "8156:264912",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": -209,
+        "width": 361,
+        "height": 154
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264914",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:264913",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": -209,
+        "width": 345,
+        "height": 154
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264915",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:264914",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": -209,
+        "width": 97,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264916",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:264914",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": -173,
+        "width": 345,
+        "height": 88
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264917",
+      "name": "Frame 2147231606",
+      "type": "FRAME",
+      "parentId": "8156:264914",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": -81,
+        "width": 112,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264918",
+      "name": "Last updated today",
+      "type": "TEXT",
+      "parentId": "8156:264917",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": -73,
+        "width": 112,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264919",
+      "name": "What I know about you",
+      "type": "FRAME",
+      "parentId": "8156:264912",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": -23,
+        "width": 359,
+        "height": 350
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264922",
+      "name": "ChatGPT Image Jul 15, 2026, 11_16_30 AM 2",
+      "type": "RECTANGLE",
+      "parentId": "8156:264919",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": -7,
+        "width": 32,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "image",
+        "inferred": "chatgpt",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:264923",
+      "name": "Frame 2147202619",
+      "type": "FRAME",
+      "parentId": "8156:264919",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": 33,
+        "width": 295,
+        "height": 28
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264924",
+      "name": "What you’ve told me",
+      "type": "TEXT",
+      "parentId": "8156:264923",
+      "depth": 4,
+      "bounds": {
+        "x": 32,
+        "y": 33,
+        "width": 295,
+        "height": 28
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264925",
+      "name": "You're 8 weeks pregnant. You've had a cough and fever for a few days, and you're working on managing your blood pressure — you take lisinopril for it, and there's a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now.",
+      "type": "TEXT",
+      "parentId": "8156:264919",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": 69,
+        "width": 327,
+        "height": 120
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264926",
+      "name": "You live in Ontario and see Dr. Sara Smith as your family physician. You've had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort.",
+      "type": "TEXT",
+      "parentId": "8156:264919",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": 197,
+        "width": 327,
+        "height": 80
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264927",
+      "name": "Frame 2147231606",
+      "type": "FRAME",
+      "parentId": "8156:264919",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": 285,
+        "width": 112,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264928",
+      "name": "Last updated today",
+      "type": "TEXT",
+      "parentId": "8156:264927",
+      "depth": 4,
+      "bounds": {
+        "x": 32,
+        "y": 293,
+        "width": 112,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264929",
+      "name": "Frame 2147231614",
+      "type": "FRAME",
+      "parentId": "8156:264912",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 359,
+        "width": 361,
+        "height": 2489
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264930",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 359,
+        "width": 361,
+        "height": 320
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264931",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:264930",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 359,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264932",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:264931",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 359,
+        "width": 87,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264933",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:264930",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 389,
+        "width": 361,
+        "height": 290
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264934",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264933",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 389,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264944",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264933",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 447,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264954",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264933",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 505,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264964",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264933",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 563,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264974",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264933",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 621,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264984",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 711,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264985",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 744,
+        "width": 361,
+        "height": 262
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264986",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:264985",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 744,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264987",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:264986",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 744,
+        "width": 81,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264988",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:264985",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 774,
+        "width": 361,
+        "height": 232
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:264989",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264988",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 774,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:264999",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264988",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 832,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265009",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264988",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 890,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265019",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:264988",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 948,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265029",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 1038,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265030",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 1071,
+        "width": 361,
+        "height": 320
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265031",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:265030",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 1071,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265032",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:265031",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 1071,
+        "width": 234,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265033",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:265030",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 1101,
+        "width": 361,
+        "height": 290
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265034",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265033",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1101,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265044",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265033",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1159,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265054",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265033",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1217,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265064",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265033",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1275,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265074",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265033",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1333,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265084",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 1423,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265085",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 1456,
+        "width": 361,
+        "height": 494
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265086",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:265085",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 1456,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265087",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:265086",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 1456,
+        "width": 355,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265088",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:265085",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 1486,
+        "width": 361,
+        "height": 464
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265089",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1486,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265099",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1544,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265109",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1602,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265119",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1660,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265129",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1718,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265139",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1776,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265149",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1834,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265159",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265088",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 1892,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265169",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 1982,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265170",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2015,
+        "width": 361,
+        "height": 320
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265171",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:265170",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2015,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265172",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:265171",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 2015,
+        "width": 113,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265173",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:265170",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2045,
+        "width": 361,
+        "height": 290
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265174",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265173",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2045,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265184",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265173",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2103,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265194",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265173",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2161,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265204",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265173",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2219,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265214",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265173",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2277,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265224",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2367,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265225",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2400,
+        "width": 361,
+        "height": 262
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265226",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:265225",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2400,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265227",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:265226",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 2400,
+        "width": 191,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265228",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:265225",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2430,
+        "width": 361,
+        "height": 232
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265229",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265228",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2430,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265239",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265228",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2488,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265249",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265228",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2546,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265259",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265228",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2604,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265269",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2694,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265270",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2727,
+        "width": 361,
+        "height": 88
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265271",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:265270",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2727,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265272",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:265271",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 2727,
+        "width": 213,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265273",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:265270",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 2757,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265274",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:265273",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 2757,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265284",
+      "name": "Rectangle 16022",
+      "type": "RECTANGLE",
+      "parentId": "8156:264929",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 2847,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265290",
+      "name": "Frame 2147231637",
+      "type": "FRAME",
+      "parentId": "8156:264911",
+      "depth": 1,
+      "bounds": {
+        "x": 393,
+        "y": 140,
+        "width": 393,
+        "height": 140
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265292",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "8156:264911",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:265293",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:265292",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 68,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:265293;892:44251",
+      "name": "CaretLeft",
+      "type": "INSTANCE",
+      "parentId": "8156:265293",
+      "depth": 3,
+      "bounds": {
+        "x": 38,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:265293;892:44251;7485:14911",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8156:265293;892:44251",
+      "depth": 4,
+      "bounds": {
+        "x": 42,
+        "y": 84,
+        "width": 7,
+        "height": 12
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:265294",
+      "name": "Frame 2147231667",
+      "type": "FRAME",
+      "parentId": "8156:265292",
+      "depth": 2,
+      "bounds": {
+        "x": 102,
+        "y": 66,
+        "width": 267,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265295",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:265294",
+      "depth": 3,
+      "bounds": {
+        "x": 102,
+        "y": 66,
+        "width": 140,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:265295;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:265295",
+      "depth": 4,
+      "bounds": {
+        "x": 138,
+        "y": 78,
+        "width": 68,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265296",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:265294",
+      "depth": 3,
+      "bounds": {
+        "x": 246,
+        "y": 66,
+        "width": 123,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:265296;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:265296",
+      "depth": 4,
+      "bounds": {
+        "x": 282,
+        "y": 78,
+        "width": 51,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265297",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:264911",
+      "depth": 1,
+      "bounds": {
+        "x": 150,
+        "y": 774,
+        "width": 219,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:265297;5:99",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:265297",
+      "depth": 2,
+      "bounds": {
+        "x": 190,
+        "y": 790,
+        "width": 139,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:265291",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "8156:264911",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

@@ -1,0 +1,2258 @@
+{
+  "slug": "memory--detail-sheet-legacy",
+  "name": "Memory detail sheet (historical)",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Kept only because the Try it still runs on it. The frame it records was deleted from the file, and the flow it draws — a detail sheet over the home — has been replaced by a Memory details page. A single memory opened in a bottom sheet — its category, its text, where it came from, and a link back to the originating chat.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "7294:42318",
+  "image": "/demos/loblaw-handoff/screens/memory--detail-sheet-legacy.png",
+  "extracted": true,
+  "extractedOn": "2026-09-21",
+  "tokenSet": "september-launch",
+  "stats": {
+    "totalNodes": 126,
+    "hiddenNodes": 17,
+    "assetNodes": 4,
+    "sectionNodes": 15,
+    "styledNodes": 0,
+    "looseEnds": 2
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "looseEnds": [
+    {
+      "kind": "copy-conflict",
+      "severity": "high",
+      "title": "Sheet heading, category and provenance all differ from the delete frame",
+      "detail": "This frame: heading 'About the memory', category 'Your vaccines', provenance 'This memory came from a past chat'. The delete frame (7294:43120) shows the same sheet as 'Memory details', category 'Vaccines', provenance 'Created last month from a conversation'. Three separate strings differ between two frames of one component.",
+      "nodes": [
+        "7294:42318"
+      ],
+      "ask": "Which set is current? The provenance difference matters most — one is vague, the other carries a date."
+    },
+    {
+      "kind": "undrawn",
+      "severity": "medium",
+      "title": "Edit memory has no destination",
+      "detail": "'Edit memory' is present on the sheet but no frame shows what it opens — a text field, a structured form, or a conversation with the assistant.",
+      "nodes": [
+        "7294:42318"
+      ],
+      "ask": "What does editing a memory actually look like, and is the edited memory still attributed to its source chat?"
+    }
+  ],
+  "code": {
+    "css": "/* Memory detail sheet */\n.memory-sheet {\n  background: #ffffffe5;\n  border-radius: 40px 40px 0 0;\n  padding: 24px;\n  backdrop-filter: blur(20px);\n}\n\n.memory-sheet__category {\n  font: 500 12px/18px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #565c79;\n}\n\n.memory-sheet__text {\n  font: 600 15px/22px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #1a1f3c;\n}\n\n.memory-sheet__provenance {\n  font: 400 12px/18px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #717794;\n}\n\n/* The chat this memory came from, as a tappable citation */\n.memory-sheet__citation {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  border-radius: 9999px;\n  border: 1px solid #dddfeb;\n  padding: 12px 16px;\n}",
+    "jsx": "// The detail sheet. Provenance is a link back to the conversation the memory was\n// derived from, which is what makes a memory auditable rather than asserted.\n\nfunction MemoryDetailSheet({ memory, onDelete, onEdit }) {\n  return (\n    <Sheet>\n      <h2 className=\"text-[18px] font-semibold\">About the memory</h2>\n\n      <p className=\"flex items-center gap-1.5 text-[12px] text-[--text-secondary]\">\n        <CategoryIcon name={memory.category.icon} />\n        {memory.category.label}\n      </p>\n\n      <p className=\"text-[15px] font-semibold\">{memory.text}</p>\n      <p className=\"text-[12px] text-[--text-tertiary]\">{memory.provenanceLabel}</p>\n\n      {memory.sourceChat && (\n        <a href={memory.sourceChat.href} className=\"flex items-center gap-2 rounded-full border px-4 py-3\">\n          <ChatIcon />\n          <span className=\"truncate\">{memory.sourceChat.title}</span>\n        </a>\n      )}\n\n      <div className=\"flex gap-3\">\n        <Button variant=\"destructive\" onClick={onDelete}>Delete memory</Button>\n        <Button variant=\"secondary\" onClick={onEdit}>Edit memory</Button>\n      </div>\n    </Sheet>\n  );\n}",
+    "swiftui": "// Hand-translated from the extracted tokens — verify against the iOS UI kit.\n\nstruct MemoryDetailSheet: View {\n    let memory: Memory\n\n    var body: some View {\n        VStack(alignment: .leading, spacing: 16) {\n            Text(\"About the memory\").font(.system(size: 18, weight: .semibold))\n\n            Label(memory.category.label, systemImage: memory.category.symbol)\n                .font(.system(size: 12, weight: .medium))\n                .foregroundStyle(Color.textSecondary)\n\n            Text(memory.text).font(.system(size: 15, weight: .semibold))\n            Text(memory.provenanceLabel)\n                .font(.system(size: 12))\n                .foregroundStyle(Color.textTertiary)\n\n            if let chat = memory.sourceChat {\n                SourceChatChip(chat: chat)\n            }\n\n            HStack(spacing: 12) {\n                Button(\"Delete memory\", role: .destructive) {}\n                Button(\"Edit memory\") {}\n            }\n        }\n        .padding(24)\n        .presentationDetents([.medium])\n    }\n}"
+  },
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "7294:42318",
+      "name": "Memory home, chips and summary",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42319",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "7294:42318",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": -414,
+        "width": 393,
+        "height": 1343
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42320",
+      "name": "Top",
+      "type": "FRAME",
+      "parentId": "7294:42319",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": -390,
+        "width": 361,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42321",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7294:42320",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": -390,
+        "width": 345,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42322",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42321",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": -390,
+        "width": 97,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42323",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42321",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": -354,
+        "width": 345,
+        "height": 88
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42324",
+      "name": "What I know about you",
+      "type": "FRAME",
+      "parentId": "7294:42319",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": -234,
+        "width": 359,
+        "height": 350
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42325",
+      "name": "Background Gradient",
+      "type": "INSTANCE",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 470,
+        "y": -313,
+        "width": 567,
+        "height": 320
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42326",
+      "name": "Background Gradient",
+      "type": "INSTANCE",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 646,
+        "y": 197.99996948242188,
+        "width": 1190.0000586606766,
+        "height": 670.9999819627992
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42327",
+      "name": "ChatGPT Image Jul 15, 2026, 11_16_30 AM 2",
+      "type": "ROUNDED-RECTANGLE",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": -218,
+        "width": 32,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "image",
+        "inferred": "chatgpt",
+        "exported": false
+      }
+    },
+    {
+      "id": "7294:42328",
+      "name": "Frame 2147202619",
+      "type": "FRAME",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": -178,
+        "width": 295,
+        "height": 28
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42329",
+      "name": "What you’ve told me",
+      "type": "TEXT",
+      "parentId": "7294:42328",
+      "depth": 4,
+      "bounds": {
+        "x": 32,
+        "y": -178,
+        "width": 295,
+        "height": 28
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42330",
+      "name": "You're 8 weeks pregnant. You've had a cough and fever for a few days, and you're working on managing your blood pressure — you take lisinopril for it, and there's a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now.",
+      "type": "TEXT",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": -142,
+        "width": 327,
+        "height": 120
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42331",
+      "name": "You live in Ontario and see Dr. Sara Smith as your family physician. You've had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort.",
+      "type": "TEXT",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": -14,
+        "width": 327,
+        "height": 80
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42332",
+      "name": "Frame 2147231606",
+      "type": "FRAME",
+      "parentId": "7294:42324",
+      "depth": 3,
+      "bounds": {
+        "x": 32,
+        "y": 74,
+        "width": 112,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42333",
+      "name": "Last updated today",
+      "type": "TEXT",
+      "parentId": "7294:42332",
+      "depth": 4,
+      "bounds": {
+        "x": 32,
+        "y": 82,
+        "width": 112,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42349",
+      "name": "Frame 2147231614",
+      "type": "FRAME",
+      "parentId": "7294:42319",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 148,
+        "width": 361,
+        "height": 765
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42350",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 148,
+        "width": 361,
+        "height": 264
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42351",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7294:42350",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 148,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42352",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7294:42351",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 148,
+        "width": 87,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42353",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7294:42350",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 178,
+        "width": 361,
+        "height": 234
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42354",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42353",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 178,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42355",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "7294:42354",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 187,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42356",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42355",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 187,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42357",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42356",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 187,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42358",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7294:42356",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 211,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42359",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42358",
+      "depth": 9,
+      "bounds": {
+        "x": 24,
+        "y": 211,
+        "width": 84,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42360",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42358",
+      "depth": 9,
+      "bounds": {
+        "x": 130,
+        "y": 211,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42361",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42358",
+      "depth": 9,
+      "bounds": {
+        "x": 145,
+        "y": 211,
+        "width": 98,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42362",
+      "name": "Tag",
+      "type": "FRAME",
+      "parentId": "7294:42355",
+      "depth": 7,
+      "bounds": {
+        "x": 324,
+        "y": 187,
+        "width": 45,
+        "height": 22
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42363",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42362",
+      "depth": 8,
+      "bounds": {
+        "x": 328,
+        "y": 189,
+        "width": 37,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42364",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42353",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 238,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42365",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "7294:42364",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 246,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42366",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42365",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 246,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42367",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42366",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 246,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42368",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7294:42366",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 270,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42369",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42368",
+      "depth": 9,
+      "bounds": {
+        "x": 24,
+        "y": 270,
+        "width": 108,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42370",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42368",
+      "depth": 9,
+      "bounds": {
+        "x": 98,
+        "y": 270,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42371",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42368",
+      "depth": 9,
+      "bounds": {
+        "x": 113,
+        "y": 270,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42372",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42353",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 296,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42373",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "7294:42372",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 304,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42374",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42373",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 304,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42375",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42374",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 304,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42376",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7294:42374",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 328,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42377",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42376",
+      "depth": 9,
+      "bounds": {
+        "x": 24,
+        "y": 328,
+        "width": 108,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42378",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42376",
+      "depth": 9,
+      "bounds": {
+        "x": 98,
+        "y": 328,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42379",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42376",
+      "depth": 9,
+      "bounds": {
+        "x": 113,
+        "y": 328,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42380",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42353",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 354,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42381",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42380",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 362,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42382",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42381",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 362,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42383",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42381",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 386,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42384",
+      "name": "Rectangle 16020",
+      "type": "ROUNDED-RECTANGLE",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 444,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42385",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 477,
+        "width": 361,
+        "height": 90
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42386",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7294:42385",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 477,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42387",
+      "name": "iOS/syringe",
+      "type": "INSTANCE",
+      "parentId": "7294:42386",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 478,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42388",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7294:42386",
+      "depth": 5,
+      "bounds": {
+        "x": 48,
+        "y": 477,
+        "width": 103,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42389",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7294:42385",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 507,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42390",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42389",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 507,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42391",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42390",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 515,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42392",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42391",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 515,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42393",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42391",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 539,
+        "width": 345,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42394",
+      "name": "Rectangle 16022",
+      "type": "ROUNDED-RECTANGLE",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 599,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42395",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 632,
+        "width": 361,
+        "height": 248
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42396",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7294:42395",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 632,
+        "width": 361,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42397",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7294:42396",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 632,
+        "width": 142,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42398",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7294:42395",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 662,
+        "width": 361,
+        "height": 218
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42399",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42398",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 662,
+        "width": 361,
+        "height": 58
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42400",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "7294:42399",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 670,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42401",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42400",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 670,
+        "width": 345,
+        "height": 42
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42402",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42401",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 670,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42403",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7294:42401",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 694,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42404",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42403",
+      "depth": 9,
+      "bounds": {
+        "x": 24,
+        "y": 694,
+        "width": 84,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42405",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42403",
+      "depth": 9,
+      "bounds": {
+        "x": 130,
+        "y": 694,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42406",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42403",
+      "depth": 9,
+      "bounds": {
+        "x": 145,
+        "y": 694,
+        "width": 98,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42407",
+      "name": "Tag",
+      "type": "FRAME",
+      "parentId": "7294:42400",
+      "depth": 7,
+      "bounds": {
+        "x": 324,
+        "y": 670,
+        "width": 45,
+        "height": 22
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42408",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42407",
+      "depth": 8,
+      "bounds": {
+        "x": 328,
+        "y": 672,
+        "width": 37,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42409",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42398",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 720,
+        "width": 361,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42410",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "7294:42409",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 731,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42411",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42410",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 731,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42413",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7294:42411",
+      "depth": 8,
+      "bounds": {
+        "x": 24,
+        "y": 731,
+        "width": 345,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42414",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42413",
+      "depth": 9,
+      "bounds": {
+        "x": 24,
+        "y": 731,
+        "width": 108,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42415",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42413",
+      "depth": 9,
+      "bounds": {
+        "x": 98,
+        "y": 731,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42416",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42413",
+      "depth": 9,
+      "bounds": {
+        "x": 113,
+        "y": 731,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7294:42417",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42398",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 760,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42418",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42417",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 768,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42419",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42418",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 768,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42420",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42418",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 792,
+        "width": 345,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42421",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7294:42398",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 820,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42422",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7294:42421",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 828,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42423",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7294:42422",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 828,
+        "width": 345,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42424",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7294:42422",
+      "depth": 7,
+      "bounds": {
+        "x": 24,
+        "y": 852,
+        "width": 345,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42425",
+      "name": "Rectangle 16021",
+      "type": "ROUNDED-RECTANGLE",
+      "parentId": "7294:42349",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 912,
+        "width": 361,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42426",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "7294:42318",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 54,
+        "width": 393,
+        "height": 68
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7294:42427",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "7294:42426",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 66,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42428",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "7294:42426",
+      "depth": 2,
+      "bounds": {
+        "x": 325,
+        "y": 66,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42429",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "7294:42318",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7340:57531",
+      "name": "Search with overlay",
+      "type": "FRAME",
+      "parentId": "7294:42318",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 712,
+        "width": 393,
+        "height": 140
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7340:57532",
+      "name": "Frame 2147231637",
+      "type": "FRAME",
+      "parentId": "7340:57531",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 712,
+        "width": 393,
+        "height": 140
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7340:57533",
+      "name": "Button",
+      "type": "FRAME",
+      "parentId": "7340:57531",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 776,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7340:57534",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "7340:57533",
+      "depth": 3,
+      "bounds": {
+        "x": 40,
+        "y": 790,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "7340:57535",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "7340:57533",
+      "depth": 3,
+      "bounds": {
+        "x": 64,
+        "y": 787,
+        "width": 51,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42707",
+      "name": "Citation w overlay",
+      "type": "FRAME",
+      "parentId": "7294:42318",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7294:42725",
+      "name": "Citation Drawer",
+      "type": "INSTANCE",
+      "parentId": "7294:42707",
+      "depth": 2,
+      "bounds": {
+        "x": 6,
+        "y": 519,
+        "width": 381,
+        "height": 317
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506",
+      "name": "Sheet",
+      "type": "INSTANCE",
+      "parentId": "7294:42725",
+      "depth": 3,
+      "bounds": {
+        "x": 6,
+        "y": 519,
+        "width": 381,
+        "height": 317
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22353",
+      "name": "Toolbar",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506",
+      "depth": 4,
+      "bounds": {
+        "x": 7,
+        "y": 520,
+        "width": 379,
+        "height": 27
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2587:48946",
+      "name": "Header",
+      "type": "INSTANCE",
+      "parentId": "I7294:42725;2847:30506;2276:22353",
+      "depth": 5,
+      "bounds": {
+        "x": 7,
+        "y": 520,
+        "width": 379,
+        "height": 27
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2365:31741",
+      "name": "Header",
+      "type": "SLOT",
+      "parentId": "I7294:42725;2847:30506",
+      "depth": 4,
+      "bounds": {
+        "x": 7,
+        "y": 568,
+        "width": 374,
+        "height": 44
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360",
+      "name": "Content",
+      "type": "SLOT",
+      "parentId": "I7294:42725;2847:30506",
+      "depth": 4,
+      "bounds": {
+        "x": 7,
+        "y": 547,
+        "width": 379,
+        "height": 288
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42710",
+      "name": "Group",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360",
+      "depth": 5,
+      "bounds": {
+        "x": 19,
+        "y": 559,
+        "width": 355,
+        "height": 198
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42711",
+      "name": "Heading",
+      "type": "INSTANCE",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42710",
+      "depth": 6,
+      "bounds": {
+        "x": 19,
+        "y": 559,
+        "width": 355,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7297:48916",
+      "name": "Frame 2147231637",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42710",
+      "depth": 6,
+      "bounds": {
+        "x": 19,
+        "y": 605,
+        "width": 284,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7297:48917",
+      "name": "Category",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7297:48916",
+      "depth": 7,
+      "bounds": {
+        "x": 19,
+        "y": 605,
+        "width": 101,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7297:48918",
+      "name": "Icon/iOS",
+      "type": "INSTANCE",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7297:48917",
+      "depth": 8,
+      "bounds": {
+        "x": 19,
+        "y": 606,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7297:48919",
+      "name": "Vaccines",
+      "type": "TEXT",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7297:48917",
+      "depth": 8,
+      "bounds": {
+        "x": 39,
+        "y": 605,
+        "width": 81,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7297:48920",
+      "name": "You got a COVID-19 vaccine last month",
+      "type": "TEXT",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7297:48916",
+      "depth": 7,
+      "bounds": {
+        "x": 19,
+        "y": 631,
+        "width": 284,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42807",
+      "name": "Frame 2147231635",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42710",
+      "depth": 6,
+      "bounds": {
+        "x": 19,
+        "y": 677,
+        "width": 345,
+        "height": 76
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42716",
+      "name": "Frame 2147231624",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42807",
+      "depth": 7,
+      "bounds": {
+        "x": 19,
+        "y": 677,
+        "width": 345,
+        "height": 76
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42783",
+      "name": "Frame 2147231635",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42716",
+      "depth": 8,
+      "bounds": {
+        "x": 19,
+        "y": 677,
+        "width": 345,
+        "height": 76
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42718",
+      "name": "Created on November 12th, 2025",
+      "type": "TEXT",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42783",
+      "depth": 9,
+      "bounds": {
+        "x": 19,
+        "y": 677,
+        "width": 203,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42719",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42783",
+      "depth": 9,
+      "bounds": {
+        "x": 19,
+        "y": 701,
+        "width": 345,
+        "height": 52
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42774",
+      "name": "Icon/iOS",
+      "type": "INSTANCE",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42719",
+      "depth": 10,
+      "bounds": {
+        "x": 36,
+        "y": 719,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42721",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42719",
+      "depth": 10,
+      "bounds": {
+        "x": 60,
+        "y": 717,
+        "width": 287,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42722",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "I7294:42725;2847:30506;2276:22360;7294:42721",
+      "depth": 11,
+      "bounds": {
+        "x": 60,
+        "y": 717,
+        "width": 287,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22360;7294:42724",
+      "name": "Button Group",
+      "type": "INSTANCE",
+      "parentId": "I7294:42725;2847:30506;2276:22360",
+      "depth": 5,
+      "bounds": {
+        "x": 19,
+        "y": 773,
+        "width": 361,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2365:31742",
+      "name": "Composer",
+      "type": "SLOT",
+      "parentId": "I7294:42725;2847:30506",
+      "depth": 4,
+      "bounds": {
+        "x": 6,
+        "y": 779,
+        "width": 376,
+        "height": 54
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "I7294:42725;2847:30506;2276:22361",
+      "name": "Footer",
+      "type": "SLOT",
+      "parentId": "I7294:42725;2847:30506",
+      "depth": 4,
+      "bounds": {
+        "x": 7,
+        "y": 812,
+        "width": 374,
+        "height": 64
+      },
+      "hidden": true,
+      "isSection": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+<frame id="8156:266774" name="Memory details, health record, condition" x="3191" y="100" width="393" height="852">
+  <frame id="8156:266775" name="Content" x="0" y="0" width="393" height="852">
+    <frame id="8156:266776" name="Memory header" x="16" y="146" width="361" height="118">
+      <frame id="8156:266777" name="Frame 2147231676" x="0" y="0" width="361" height="70">
+        <text id="8156:266778" name="Your conditions" x="0" y="0" width="350" height="20" />
+        <instance id="8156:266779" name="Header Row · Memory details" x="0" y="22" width="361" height="28">
+          <text id="I8156:266779;2273:21460" name="title" x="0" y="0" width="361" height="28" />
+        </instance>
+        <text id="8156:266780" name="Message timestamp" x="0" y="52" width="361" height="18" />
+      </frame>
+      <frame id="8156:266781" name="Source" x="0" y="82" width="105" height="36">
+        <instance id="8156:266782" name="Source chip" x="0" y="0" width="105" height="36">
+          <text id="I8156:266782;2817:26939" name="Label" x="12" y="8" width="81" height="20" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:266783" name="Details" x="16" y="288" width="361" height="113">
+      <frame id="8156:266784" name="Details card (detached — needs a Title row action slot upstream)" x="0" y="0" width="361" height="113">
+        <frame id="8156:266785" name="Info" x="0" y="0" width="361" height="113">
+          <frame id="8156:266787" name="Fields" x="2" y="2" width="357" height="109">
+            <instance id="8156:266788" name="Row · Condition" x="0" y="0" width="357" height="54">
+              <text id="I8156:266788;7815:173078" name="label" x="16" y="17" width="66" height="20" />
+              <text id="I8156:266788;7815:173079" name="value" x="94" y="16" width="219" height="22" />
+              <instance id="I8156:266788;7815:173080" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+            <rectangle id="8156:266789" name="Divider" x="0" y="54" width="357" height="1" />
+            <instance id="8156:266790" name="Row · Status" x="0" y="55" width="357" height="54">
+              <text id="I8156:266790;7815:173078" name="label" x="16" y="17" width="44" height="20" />
+              <text id="I8156:266790;7815:173079" name="value" x="72" y="16" width="241" height="22" />
+              <instance id="I8156:266790;7815:173080" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8156:266793" name="Delete memory (fixed)" x="16" y="782" width="361" height="54">
+    <instance id="I8156:266793;2273:16645" name="Primary action" x="0" y="0" width="361" height="54">
+      <text id="I8156:266793;2273:16645;5:99" name="label" x="124" y="16" width="113" height="22" />
+    </instance>
+  </instance>
+  <instance id="8156:266794" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8156:266795" name="Top nav" x="0" y="54" width="393" height="68">
+    <instance id="8156:266796" name="Button" x="24" y="12" width="44" height="44">
+      <instance id="I8156:266796;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16">
+        <vector id="I8156:266796;892:44251;7485:14911" name="Vector" x="4" y="2" width="7" height="12" />
+      </instance>
+    </instance>
+    <text id="8156:266797" name="Page title" x="68" y="23" width="257" height="22" />
+    <frame id="8156:266800" name="Spacer" x="325" y="12" width="44" height="44" />
+  </frame>
+  <frame id="8156:266801" name="Delete memory" x="0" y="0" width="393" height="852">
+    <frame id="8156:266802" name="Alert" x="16" y="317" width="361" height="218">
+      <frame id="8156:266803" name="Text" x="24" y="24" width="313" height="98">
+        <text id="8156:266804" name="Delete this memory?" x="0" y="0" width="313" height="28" />
+        <text id="8156:266805" name="The memory will be permanently deleted. If you share the detail again, we’ll save it as a new memory. Your chat history stays." x="0" y="32" width="313" height="66" />
+      </frame>
+      <frame id="8156:266806" name="Buttons" x="24" y="146" width="313" height="48">
+        <instance id="8156:266808" name="_Button" x="0" y="0" width="153" height="48">
+          <text id="I8156:266808;2985:25688" name="label" x="51" y="13" width="51" height="22" />
+        </instance>
+        <instance id="8156:266810" name="_Button" x="161" y="0" width="153" height="48">
+          <text id="I8156:266810;2985:25835" name="label" x="52" y="13" width="48" height="22" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+</frame>

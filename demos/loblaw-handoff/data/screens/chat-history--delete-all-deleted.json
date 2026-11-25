@@ -1,0 +1,67 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--delete-all-deleted",
+  "name": "Chat history, all chats deleted",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Everything gone",
+    "order": 8
+  },
+  "figmaNodeId": "8156:73076",
+  "summary": "The end of the flow: the empty state with a toast counting what was removed, and New chat at the foot.",
+  "looseEnds": [
+    {
+      "kind": "missing-content",
+      "severity": "high",
+      "title": "The whole nav goes after a bulk delete",
+      "detail": "Back, Search and Select are all absent — the nav holds nothing but its own 393x124 frame. The single-chat delete frame keeps all three, so this is specific to deleting a selection and leaves the user with no drawn way off the page.",
+      "nodes": [
+        "8156:73091"
+      ],
+      "ask": "Restore the nav after a bulk delete, or say what replaces it."
+    },
+    {
+      "kind": "inconsistent-content",
+      "severity": "high",
+      "title": "The toast carries an Undo that is switched off",
+      "detail": "The Toast component has an Action slot holding the word Undo. It is hidden in this frame, as it is in every other delete toast across Chat history and Memory — so no drawn state offers a way back from a delete, although the component is built for one.",
+      "nodes": [
+        "I8156:73093;7102:26288",
+        "I8156:73093;7102:26289"
+      ],
+      "ask": "Is Undo in scope? If it is, it needs a window and a drawn state; if it is not, the slot should come off the component so it stops reading as available."
+    },
+    {
+      "kind": "interaction",
+      "severity": "medium",
+      "title": "The toast overlaps the empty state's heading area",
+      "detail": "The toast sits at y=60 and the heading starts at y=146, so they do not collide — but the toast occupies the space the nav would, and with no Back button drawn there is nothing above the heading once it dismisses.",
+      "nodes": [
+        "8156:73093",
+        "8156:73083"
+      ],
+      "ask": "Confirm what the user sees after the toast clears on this frame."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--delete-all-deleted.png"
+}

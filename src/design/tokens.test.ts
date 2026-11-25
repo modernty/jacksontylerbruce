@@ -28,6 +28,6 @@ test("no raw colours in app or src outside the generated tokens", () => {
 
 test("ink and paper stay locked to the spec", () => {
   assert.equal(tokens.color.ink, "#111111")
-  assert.equal(tokens.color.paper, "#FBFBF8")
+  assert.equal(tokens.color.paper, "#FAFAFA")
   assert.equal(inkAt("hair"), "rgba(17,17,17,0.2)")
 })

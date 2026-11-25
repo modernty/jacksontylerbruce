@@ -1,0 +1,1356 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 64,
+    "hiddenNodes": 4,
+    "assetNodes": 8,
+    "sectionNodes": 16,
+    "styledNodes": 0,
+    "looseEnds": 2
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "slug": "chat-history--rename-empty",
+  "name": "Chat history, renaming — empty",
+  "stateGroup": {
+    "id": "chat-history-rename",
+    "label": "Cleared",
+    "order": 2
+  },
+  "figmaNodeId": "8200:16701",
+  "summary": "The field cleared, caret at the start. Save is still drawn active, which is the state that decides whether an empty name can be committed.",
+  "looseEnds": [
+    {
+      "kind": "missing-state",
+      "severity": "high",
+      "title": "An empty name is savable as drawn",
+      "detail": "With the field empty, Save carries exactly the same treatment it has with a full title. Nothing states whether the empty name is rejected, whether the chat reverts to its generated title, or whether it is saved blank.",
+      "nodes": [
+        "8200:17224",
+        "8200:17250"
+      ],
+      "ask": "Define the empty case, and draw Save disabled if that is the answer."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "The emptied field collapses to 2px",
+      "detail": "With no value the Contents frame hugs to 2px wide and the separator inside it still measures 370px, overflowing its parent. It renders acceptably but the layer tree is misleading.",
+      "nodes": [
+        "8200:17246",
+        "8200:17247"
+      ],
+      "ask": "Give the field a fill width so it does not hug its value."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--rename-empty.png",
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8200:16701",
+      "name": "Renaming, empty",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16702",
+      "name": "Frame 2147231655",
+      "type": "FRAME",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 146,
+        "width": 361,
+        "height": 72
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16703",
+      "name": "Top",
+      "type": "FRAME",
+      "parentId": "8200:16702",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 146,
+        "width": 361,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16704",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8200:16703",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 146,
+        "width": 345,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16705",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8200:16704",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 146,
+        "width": 145,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16706",
+      "name": "Frame 2147231652",
+      "type": "FRAME",
+      "parentId": "8200:16702",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 178,
+        "width": 67,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16707",
+      "name": "4 chats",
+      "type": "TEXT",
+      "parentId": "8200:16706",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 188,
+        "width": 51,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16708",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 230,
+        "width": 361,
+        "height": 252
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16709",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8200:16708",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 230,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16710",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8200:16709",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 238,
+        "width": 285,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16714",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16709",
+      "depth": 3,
+      "bounds": {
+        "x": 325,
+        "y": 238,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16714;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16714",
+      "depth": 4,
+      "bounds": {
+        "x": 339,
+        "y": 252,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16715",
+      "name": "Frame 2147231642",
+      "type": "FRAME",
+      "parentId": "8200:16708",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 294,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16716",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8200:16715",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 294,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16717",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8200:16716",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 302,
+        "width": 285,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16724",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16716",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 302,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16724;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16724",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 316,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16725",
+      "name": "Frame 2147231644",
+      "type": "FRAME",
+      "parentId": "8200:16708",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 358,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16726",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8200:16725",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 358,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16727",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8200:16726",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 366,
+        "width": 285,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16731",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16726",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 366,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16731;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16731",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 380,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16732",
+      "name": "Frame 2147231645",
+      "type": "FRAME",
+      "parentId": "8200:16708",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 422,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16733",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8200:16732",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 422,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16734",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8200:16733",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 430,
+        "width": 285,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16738",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16733",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 430,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16738;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16738",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 444,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16739",
+      "name": "Overlay",
+      "type": "FRAME",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 393,
+        "y": 140,
+        "width": 393,
+        "height": 140
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16740",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16741",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16740",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 68,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16741;892:44251",
+      "name": "CaretLeft",
+      "type": "INSTANCE",
+      "parentId": "8200:16741",
+      "depth": 3,
+      "bounds": {
+        "x": 38,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16742",
+      "name": "Frame 2147231679",
+      "type": "FRAME",
+      "parentId": "8200:16740",
+      "depth": 2,
+      "bounds": {
+        "x": 94,
+        "y": 66,
+        "width": 275,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16743",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16742",
+      "depth": 3,
+      "bounds": {
+        "x": 94,
+        "y": 66,
+        "width": 148,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8200:16743;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16743",
+      "depth": 4,
+      "bounds": {
+        "x": 130,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8200:16743;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8200:16743",
+      "depth": 4,
+      "bounds": {
+        "x": 154,
+        "y": 78,
+        "width": 52,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16743;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16743",
+      "depth": 4,
+      "bounds": {
+        "x": 205,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16744",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8200:16742",
+      "depth": 3,
+      "bounds": {
+        "x": 250,
+        "y": 66,
+        "width": 119,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8200:16744;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16744",
+      "depth": 4,
+      "bounds": {
+        "x": 286,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8200:16744;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8200:16744",
+      "depth": 4,
+      "bounds": {
+        "x": 286,
+        "y": 78,
+        "width": 47,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8200:16744;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8200:16744",
+      "depth": 4,
+      "bounds": {
+        "x": 361,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8200:16745",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16746",
+      "name": "Isolated chat",
+      "type": "FRAME",
+      "parentId": "8200:16701",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:16747",
+      "name": "Frame 2147231636",
+      "type": "FRAME",
+      "parentId": "8200:16746",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 292,
+        "width": 361,
+        "height": 236
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17212",
+      "name": "Alert",
+      "type": "FRAME",
+      "parentId": "8200:16746",
+      "depth": 2,
+      "bounds": {
+        "x": 47,
+        "y": 280,
+        "width": 300,
+        "height": 221
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:17213",
+      "name": "BG",
+      "type": "INSTANCE",
+      "parentId": "8200:17212",
+      "depth": 3,
+      "bounds": {
+        "x": 47,
+        "y": 280,
+        "width": 300,
+        "height": 221
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17214",
+      "name": "Title and Description",
+      "type": "FRAME",
+      "parentId": "8200:17212",
+      "depth": 3,
+      "bounds": {
+        "x": 61,
+        "y": 294,
+        "width": 272,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:17215",
+      "name": "A Short Title Is Best",
+      "type": "TEXT",
+      "parentId": "8200:17214",
+      "depth": 4,
+      "bounds": {
+        "x": 69,
+        "y": 302,
+        "width": 256,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17217",
+      "name": "Text Field(s)",
+      "type": "FRAME",
+      "parentId": "8200:17212",
+      "depth": 3,
+      "bounds": {
+        "x": 61,
+        "y": 358,
+        "width": 272,
+        "height": 71
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17218",
+      "name": "Fields",
+      "type": "FRAME",
+      "parentId": "8200:17217",
+      "depth": 4,
+      "bounds": {
+        "x": 61,
+        "y": 358,
+        "width": 272,
+        "height": 52
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:17219",
+      "name": "_Text Field Background",
+      "type": "INSTANCE",
+      "parentId": "8200:17218",
+      "depth": 5,
+      "bounds": {
+        "x": 61,
+        "y": 358,
+        "width": 272,
+        "height": 52
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17245",
+      "name": "Text Field",
+      "type": "FRAME",
+      "parentId": "8200:17218",
+      "depth": 5,
+      "bounds": {
+        "x": 61,
+        "y": 358,
+        "width": 272,
+        "height": 52
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17246",
+      "name": "Contents",
+      "type": "FRAME",
+      "parentId": "8200:17245",
+      "depth": 6,
+      "bounds": {
+        "x": 77,
+        "y": 358,
+        "width": 2,
+        "height": 52
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17247",
+      "name": "_Separator",
+      "type": "INSTANCE",
+      "parentId": "8200:17246",
+      "depth": 7,
+      "bounds": {
+        "x": 77,
+        "y": 358,
+        "width": 370,
+        "height": 1
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17248",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "8200:17246",
+      "depth": 7,
+      "bounds": {
+        "x": 77,
+        "y": 359,
+        "width": 2,
+        "height": 51
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17249",
+      "name": "Cursor and Value",
+      "type": "FRAME",
+      "parentId": "8200:17248",
+      "depth": 8,
+      "bounds": {
+        "x": 77,
+        "y": 359,
+        "width": 2,
+        "height": 51
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17250",
+      "name": "Value",
+      "type": "TEXT",
+      "parentId": "8200:17249",
+      "depth": 9,
+      "bounds": {
+        "x": 77,
+        "y": 375,
+        "width": 0,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17251",
+      "name": "Cursor",
+      "type": "RECTANGLE",
+      "parentId": "8200:17249",
+      "depth": 9,
+      "bounds": {
+        "x": 77,
+        "y": 374,
+        "width": 2,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17252",
+      "name": "Clear",
+      "type": "TEXT",
+      "parentId": "8200:17248",
+      "depth": 8,
+      "bounds": {
+        "x": 427,
+        "y": 359,
+        "width": 20,
+        "height": 51
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "8200:17222",
+      "name": "Buttons",
+      "type": "FRAME",
+      "parentId": "8200:17212",
+      "depth": 3,
+      "bounds": {
+        "x": 61,
+        "y": 439,
+        "width": 272,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8200:17223",
+      "name": "Button 1",
+      "type": "INSTANCE",
+      "parentId": "8200:17222",
+      "depth": 4,
+      "bounds": {
+        "x": 61,
+        "y": 439,
+        "width": 132,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8200:17223;5446:6662",
+      "name": "Label",
+      "type": "TEXT",
+      "parentId": "8200:17223",
+      "depth": 5,
+      "bounds": {
+        "x": 100,
+        "y": 452,
+        "width": 55,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:17224",
+      "name": "Button 2",
+      "type": "INSTANCE",
+      "parentId": "8200:17222",
+      "depth": 4,
+      "bounds": {
+        "x": 201,
+        "y": 439,
+        "width": 132,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8200:17224;5446:6662",
+      "name": "Label",
+      "type": "TEXT",
+      "parentId": "8200:17224",
+      "depth": 5,
+      "bounds": {
+        "x": 248,
+        "y": 452,
+        "width": 39,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8200:16749",
+      "name": "Keyboard",
+      "type": "INSTANCE",
+      "parentId": "8200:16746",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 535,
+        "width": 393,
+        "height": 317
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+<frame id="7294:43120" name="Memory home, chips and summary-delete" x="2174" y="100" width="393" height="852">
+  <frame id="7294:43121" name="Content" x="0" y="-414" width="393" height="1361">
+    <frame id="7294:43122" name="Top" x="16" y="24" width="361" height="124">
+      <frame id="7294:43123" name="Header" x="8" y="0" width="345" height="124">
+        <text id="7294:43124" name="Message title" x="0" y="0" width="97" height="32" />
+        <text id="7294:43125" name="Message title" x="0" y="36" width="345" height="88" />
+      </frame>
+    </frame>
+    <frame id="7294:43126" name="What I know about you" x="16" y="180" width="359" height="350">
+      <instance id="7294:43127" name="Background Gradient" x="454" y="-79" width="567" height="320" hidden="true" />
+      <instance id="7294:43128" name="Background Gradient" x="630" y="431.9999694824219" width="1190.0000586606766" height="670.9999819627992" hidden="true" />
+      <rounded-rectangle id="7294:43129" name="ChatGPT Image Jul 15, 2026, 11_16_30 AM 2" x="16" y="16" width="32" height="32" />
+      <frame id="7294:43130" name="Frame 2147202619" x="16" y="56" width="295" height="28">
+        <text id="7294:43131" name="What you’ve told me" x="0" y="0" width="295" height="28" />
+      </frame>
+      <text id="7294:43132" name="You&#39;re 8 weeks pregnant. You&#39;ve had a cough and fever for a few days, and you&#39;re working on managing your blood pressure — you take lisinopril for it, and there&#39;s a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now." x="16" y="92" width="327" height="120" />
+      <text id="7294:43133" name="You live in Ontario and see Dr. Sara Smith as your family physician. You&#39;ve had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort." x="16" y="220" width="327" height="80" />
+      <frame id="7294:43134" name="Frame 2147231606" x="16" y="308" width="112" height="26">
+        <text id="7294:43135" name="Last updated today" x="0" y="8" width="112" height="18" />
+      </frame>
+    </frame>
+    <frame id="7294:43151" name="Frame 2147231614" x="16" y="562" width="361" height="783">
+      <frame id="7294:43152" name="Vertical stack" x="0" y="0" width="361" height="264">
+        <frame id="7294:43153" name="Header" x="0" y="0" width="361" height="22">
+          <text id="7294:43154" name="Item title" x="8" y="0" width="87" height="22" />
+        </frame>
+        <frame id="7294:43155" name="List" x="0" y="30" width="361" height="234">
+          <frame id="7294:43156" name="List item" x="0" y="0" width="361" height="60">
+            <frame id="7294:43157" name="Tag + Text" x="8" y="9" width="345" height="42">
+              <frame id="7294:43158" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7294:43159" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7294:43160" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7294:43161" name="Message timestamp" x="0" y="0" width="84" height="18" />
+                  <text id="7294:43162" name="Message timestamp" x="106" y="0" width="7" height="20" hidden="true" />
+                  <text id="7294:43163" name="Message timestamp" x="121" y="0" width="98" height="20" hidden="true" />
+                </frame>
+              </frame>
+              <frame id="7294:43164" name="Tag" x="300" y="0" width="45" height="22" hidden="true">
+                <text id="7294:43165" name="Message timestamp" x="4" y="2" width="37" height="18" />
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7294:43166" name="List item" x="0" y="60" width="361" height="58">
+            <frame id="7294:43167" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7294:43168" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7294:43169" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7294:43170" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7294:43171" name="Message timestamp" x="0" y="0" width="108" height="18" />
+                  <text id="7294:43172" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="7294:43173" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7294:43174" name="List item" x="0" y="118" width="361" height="58">
+            <frame id="7294:43175" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7294:43176" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7294:43177" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7294:43178" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7294:43179" name="Message timestamp" x="0" y="0" width="108" height="18" />
+                  <text id="7294:43180" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="7294:43181" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7294:43182" name="List item" x="0" y="176" width="361" height="58">
+            <frame id="7294:43183" name="Text" x="8" y="8" width="345" height="42">
+              <text id="7294:43184" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7294:43185" name="Message timestamp" x="0" y="24" width="345" height="18" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <rounded-rectangle id="7294:43186" name="Rectangle 16020" x="0" y="296" width="361" height="1" />
+      <frame id="7294:43187" name="Vertical stack" x="0" y="329" width="361" height="90">
+        <frame id="7294:43188" name="Header" x="0" y="0" width="361" height="22">
+          <instance id="7294:43189" name="iOS/syringe" x="8" y="1" width="20" height="20" />
+          <text id="7294:43190" name="Item title" x="32" y="0" width="103" height="22" />
+        </frame>
+        <frame id="7294:43191" name="List" x="0" y="30" width="361" height="60">
+          <frame id="7294:43192" name="List item" x="0" y="0" width="361" height="60">
+            <frame id="7294:43193" name="Text" x="8" y="8" width="345" height="44">
+              <text id="7294:43194" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7294:43195" name="Message timestamp" x="0" y="24" width="345" height="20" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <rounded-rectangle id="7294:43196" name="Rectangle 16022" x="0" y="451" width="361" height="1" />
+      <frame id="7294:43197" name="Vertical stack" x="0" y="484" width="361" height="266">
+        <frame id="7294:43198" name="Header" x="0" y="0" width="361" height="22">
+          <text id="7294:43199" name="Item title" x="8" y="0" width="142" height="22" />
+        </frame>
+        <frame id="7294:43200" name="List" x="0" y="30" width="361" height="236">
+          <frame id="7294:43201" name="List item" x="0" y="0" width="361" height="58">
+            <frame id="7294:43202" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7294:43203" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7294:43204" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7294:43205" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7294:43206" name="Message timestamp" x="0" y="0" width="84" height="18" />
+                  <text id="7294:43207" name="Message timestamp" x="106" y="0" width="7" height="20" hidden="true" />
+                  <text id="7294:43208" name="Message timestamp" x="121" y="0" width="98" height="20" hidden="true" />
+                </frame>
+              </frame>
+              <frame id="7294:43209" name="Tag" x="300" y="0" width="45" height="22" hidden="true">
+                <text id="7294:43210" name="Message timestamp" x="4" y="2" width="37" height="18" />
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7294:43211" name="List item" x="0" y="58" width="361" height="58">
+            <frame id="7294:43212" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7294:43213" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7294:43214" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7294:43215" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7294:43216" name="Message timestamp" x="0" y="0" width="108" height="18" />
+                  <text id="7294:43217" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="7294:43218" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7294:43219" name="List item" x="0" y="116" width="361" height="60">
+            <frame id="7294:43220" name="Text" x="8" y="8" width="345" height="44">
+              <text id="7294:43221" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7294:43222" name="Message timestamp" x="0" y="24" width="345" height="20" />
+            </frame>
+          </frame>
+          <frame id="7294:43223" name="List item" x="0" y="176" width="361" height="60">
+            <frame id="7294:43224" name="Text" x="8" y="8" width="345" height="44">
+              <text id="7294:43225" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7294:43226" name="Message timestamp" x="0" y="24" width="345" height="20" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <rounded-rectangle id="7294:43227" name="Rectangle 16021" x="0" y="782" width="361" height="1" />
+    </frame>
+  </frame>
+  <frame id="7294:43228" name="Top nav" x="0" y="54" width="393" height="68">
+    <instance id="7294:43229" name="Button" x="24" y="12" width="44" height="44" />
+    <instance id="7294:43230" name="Button" x="325" y="12" width="44" height="44" />
+  </frame>
+  <instance id="7294:43231" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="7340:57538" name="Search with overlay" x="0" y="712" width="393" height="140">
+    <frame id="7340:57539" name="Frame 2147231637" x="0" y="0" width="393" height="140" />
+    <frame id="7340:57540" name="Button" x="24" y="64" width="345" height="44">
+      <instance id="7340:57541" name="Leading icon" x="16" y="14" width="16" height="16" />
+      <text id="7340:57542" name="label" x="40" y="11" width="51" height="22" />
+    </frame>
+  </frame>
+  <frame id="7294:43232" name="Citation w overlay" x="0" y="0" width="393" height="852">
+    <instance id="7294:43233" name="Citation Drawer" x="6" y="531" width="381" height="305">
+      <instance id="I7294:43233;2847:30506" name="Sheet" x="0" y="0" width="381" height="305">
+        <frame id="I7294:43233;2847:30506;2276:22353" name="Toolbar" x="1" y="1" width="379" height="27">
+          <instance id="I7294:43233;2847:30506;2587:48946" name="Header" x="0" y="0" width="379" height="27" />
+        </frame>
+        <slot id="I7294:43233;2847:30506;2365:31741" name="Header" x="1" y="49" width="374" height="44" hidden="true" />
+        <slot id="I7294:43233;2847:30506;2276:22360" name="Content" x="1" y="28" width="379" height="276">
+          <frame id="I7294:43233;2847:30506;2276:22360;7294:43235" name="Activity" x="12" y="12" width="355" height="190">
+            <frame id="I7294:43233;2847:30506;2276:22360;7294:43236" name="Group" x="0" y="0" width="355" height="190">
+              <instance id="I7294:43233;2847:30506;2276:22360;7294:43237" name="Heading" x="0" y="0" width="355" height="22" />
+              <frame id="I7294:43233;2847:30506;2276:22360;7294:43238" name="Frame 2147231635" x="0" y="38" width="345" height="136">
+                <frame id="I7294:43233;2847:30506;2276:22360;7294:43239" name="Category" x="0" y="0" width="72" height="18">
+                  <instance id="I7294:43233;2847:30506;2276:22360;7294:43240" name="Icon/iOS" x="0" y="1" width="16" height="16" />
+                  <text id="I7294:43233;2847:30506;2276:22360;7294:43241" name="Vaccines" x="20" y="0" width="52" height="18" />
+                </frame>
+                <frame id="I7294:43233;2847:30506;2276:22360;7294:43242" name="Frame 2147231624" x="0" y="26" width="345" height="110">
+                  <text id="I7294:43233;2847:30506;2276:22360;7294:43243" name="You got a COVID-19 vaccine last month" x="0" y="0" width="284" height="22" />
+                  <frame id="I7294:43233;2847:30506;2276:22360;7294:43244" name="Frame 2147231635" x="0" y="34" width="345" height="76">
+                    <text id="I7294:43233;2847:30506;2276:22360;7294:43245" name="Created on November 12th, 2025" x="0" y="0" width="224" height="18" />
+                    <frame id="I7294:43233;2847:30506;2276:22360;7294:43246" name="List" x="0" y="24" width="345" height="52">
+                      <instance id="I7294:43233;2847:30506;2276:22360;7294:43247" name="Icon/iOS" x="17" y="18" width="16" height="16" />
+                      <frame id="I7294:43233;2847:30506;2276:22360;7294:43248" name="Text" x="41" y="17" width="287" height="18">
+                        <text id="I7294:43233;2847:30506;2276:22360;7294:43249" name="Message title" x="0" y="0" width="287" height="18" />
+                      </frame>
+                    </frame>
+                  </frame>
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <instance id="I7294:43233;2847:30506;2276:22360;7294:43251" name="Button Group" x="12" y="214" width="361" height="46" />
+        </slot>
+        <slot id="I7294:43233;2847:30506;2365:31742" name="Composer" x="0" y="260" width="376" height="54" hidden="true" />
+        <slot id="I7294:43233;2847:30506;2276:22361" name="Footer" x="1" y="293" width="374" height="64" hidden="true" />
+      </instance>
+    </instance>
+  </frame>
+  <frame id="7294:43316" name="Delete memory" x="0" y="0" width="393" height="852">
+    <frame id="7294:43317" name="Alert" x="16" y="270" width="361" height="312">
+      <frame id="7294:43318" name="Text" x="24" y="24" width="313" height="76">
+        <text id="7294:43319" name="Delete this memory?" x="0" y="0" width="313" height="28" />
+        <text id="7294:43320" name="We won’t use the memory to personalize PC Chat™ answers going forward." x="0" y="32" width="313" height="44" />
+      </frame>
+      <frame id="7294:43321" name="Frame 2147231634" x="24" y="124" width="313" height="92">
+        <frame id="7294:43322" name="Controls" x="0" y="0" width="313" height="44">
+          <frame id="7294:43323" name="Control item" x="0" y="0" width="313" height="44">
+            <instance id="7294:43324" name="Checkbox" x="0" y="0" width="24" height="24" />
+            <text id="7294:43325" name="Text" x="32" y="0" width="281" height="44" />
+          </frame>
+        </frame>
+        <instance id="7294:43326" name="Note" x="0" y="56" width="313" height="36" />
+      </frame>
+      <frame id="7294:43327" name="Buttons" x="24" y="240" width="313" height="48">
+        <instance id="7294:43328" name="Button" x="0" y="0" width="122" height="43" hidden="true" />
+        <instance id="7294:43329" name="_Button" x="0" y="0" width="152.5" height="48" />
+        <instance id="7294:43330" name="_Button" x="0" y="112" width="252" height="48" hidden="true" />
+        <instance id="7294:43331" name="_Button" x="160.5" y="0" width="152.5" height="48" />
+      </frame>
+    </frame>
+  </frame>
+</frame>

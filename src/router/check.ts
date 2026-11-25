@@ -1,6 +1,6 @@
 import { containsBlocked, textIssues, wordCount } from "@/src/content/guard"
 
-const BANNED = ["remedy", "traveller", "defi redesign", "defi"]
+const BANNED = ["traveller", "defi redesign", "defi"]
 
 // The voice: answers have no subject (no "I", "he", "we" or "Tyler"), never close on a
 // question, and never say "architect".

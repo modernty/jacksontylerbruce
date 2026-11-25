@@ -1,0 +1,66 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--row-menu",
+  "name": "Chat history, context menu",
+  "stateGroup": {
+    "id": "chat-history-row",
+    "label": "Row menu",
+    "order": 1
+  },
+  "figmaNodeId": "8156:72662",
+  "summary": "The per-row overflow opens a two-item menu — Rename and Delete — anchored under the row's own button and overlapping the two rows beneath it.",
+  "looseEnds": [
+    {
+      "kind": "missing-state",
+      "severity": "medium",
+      "title": "Nothing is drawn behind the menu",
+      "detail": "The menu is a 225x112 panel laid over the list with no scrim and no dimming. The rows underneath stay at full contrast and partly show through, so it is not clear whether they are still tappable.",
+      "nodes": [
+        "8156:72710"
+      ],
+      "ask": "Does a scrim come in with the menu, and does tapping outside close it?"
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "The menu overhangs the frame's right margin by 24px",
+      "detail": "The panel runs from x=144 to x=369, which is flush with the nav's right edge but 16px past the list's. It is anchored to the button rather than to the content.",
+      "nodes": [
+        "8156:72710"
+      ],
+      "ask": "Confirm the anchor, and what happens for a row near the bottom of a long list."
+    },
+    {
+      "kind": "inconsistent-content",
+      "severity": "low",
+      "title": "Each menu item carries a hidden timestamp",
+      "detail": "Both rows of the menu are built from the conversation list item, so each one holds a hidden 'Yesterday' and a hidden chevron it has no use for.",
+      "nodes": [
+        "8156:72715",
+        "8156:72721"
+      ],
+      "ask": "Use a menu item component rather than the list row."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--row-menu.png"
+}

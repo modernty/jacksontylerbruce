@@ -1,0 +1,55 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--full-scrolled",
+  "name": "Chat history, full — scrolled",
+  "stateGroup": {
+    "id": "chat-history-page",
+    "label": "Scrolled",
+    "order": 3
+  },
+  "figmaNodeId": "8156:75398",
+  "summary": "The same twelve, scrolled. The content sits 36px up, the title passes under the nav's fade, and a 4px scroll indicator appears at the right edge.",
+  "looseEnds": [
+    {
+      "kind": "geometry",
+      "severity": "medium",
+      "title": "The scroll indicator is drawn, not derived",
+      "detail": "The thumb sits at y=463 in a 620px track — at the very end — while the content has moved only 36px of a possible 32. The same thumb, at the same offset and the same 157px height, is drawn on the 50-chat frame over a completely different scroll position.",
+      "nodes": [
+        "8156:75505"
+      ],
+      "ask": "Treat the indicator as native scroll chrome rather than a drawn element, or state the track and thumb maths."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "The title scrolls under the nav with no treatment of its own",
+      "detail": "At this offset 'Chat history' and '12 chats' are partly behind the nav's white fade. Nothing is drawn for a condensed or pinned title, so the heading simply disappears as the list moves.",
+      "nodes": [
+        "8156:75401"
+      ],
+      "ask": "Is a collapsing header in scope, or does the heading scroll away?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--full-scrolled.png"
+}

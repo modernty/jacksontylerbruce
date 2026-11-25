@@ -1,0 +1,826 @@
+{
+  "note": "Extracted from the Remedy work site (latecheckout/loblaw-latecheckout-handoff) as delivered. Copy is verbatim. Figma links are left out: they need access.",
+  "sections": [
+    {
+      "id": "labs",
+      "name": "Labs",
+      "heading": "Future state explorations",
+      "tiles": [
+        {
+          "slug": "first-hello-test",
+          "title": "First hello test",
+          "oneLiner": "How does the agent introduce itself so the first chat starts a relationship?",
+          "description": "Onboarding polish was cut from launch and the character explorations never got a verdict, so the first minute runs on a default line. The agent opens with a register chosen on purpose, warmth arriving in the same breath as competence, and a first question that proves it listened.",
+          "platform": "Not platform specific",
+          "status": "Open",
+          "video": {
+            "card": "/demos/remedy-work/labs/agent-intro-card.mp4",
+            "full": "/demos/remedy-work/labs/agent-intro.mp4",
+            "poster": "/demos/remedy-work/labs/agent-intro-poster.jpg"
+          },
+          "study": {
+            "number": "01",
+            "category": "Earning first use",
+            "question": "How does the agent introduce itself so the first chat starts a relationship?",
+            "testing": "The register of the first minute, warm, clinical, or brisk, measured by what people volunteer in turn two rather than what they say they liked.",
+            "method": "Register test",
+            "participants": "New to Remedy Canadians, AI wary quota seated",
+            "hypothesis": "People decide in the first exchange whether this is a someone or a something, and they tell a someone more. In health, warmth has to arrive in the same breath as competence. Charm alone reads as a toy. Pure clinical reads as a form with better manners.",
+            "why": "Onboarding polish was cut from launch and the character explorations never got a verdict, so the first minute is currently running on default. The first hello also sets the ceiling on disclosure for everything after it, which makes it an adoption question wearing a brand costume.",
+            "run": [
+              {
+                "lead": "Three hellos with identical capability.",
+                "detail": "The professional, credentialed and calm. The companion, warm and on a first name basis. The concierge, brisk and capable. Everyone meets all three in random order."
+              },
+              {
+                "lead": "A disclosure read after each hello,",
+                "detail": "measured by what people volunteer in their next turn rather than by what they say they liked. Volunteering is the honest signal."
+              },
+              {
+                "lead": "A comeback read a day later.",
+                "detail": "Which hello they remember, and whether they describe it as the app or as a someone."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The register, not the copy. The final script is a writing pass that comes after the register is chosen."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "loyalty-scan-test",
+          "title": "Loyalty scan test",
+          "oneLiner": "How can we turn in store behaviors into an introduction to the agent?",
+          "description": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is still imagined as campaigns. The Optimum scan becomes the first conversation, and one tap opens an agent that already knows the points balance and the pharmacy.",
+          "platform": "Not platform specific",
+          "status": "Prototype ready",
+          "video": {
+            "card": "/demos/remedy-work/labs/pc-one-loyalty-card.mp4",
+            "full": "/demos/remedy-work/labs/pc-one-loyalty.mp4",
+            "poster": "/demos/remedy-work/labs/pc-one-loyalty-poster.jpg"
+          },
+          "study": {
+            "number": "02",
+            "category": "Earning first use",
+            "question": "How can we turn in-store behaviors into an introduction to the agent?",
+            "testing": "The Optimum scan at checkout as the acquisition moment. Habits people already have in store, turned into first conversations instead of campaigns.",
+            "method": "Framing test",
+            "participants": "Optimum members, in and out of SDM",
+            "hypothesis": "The checkout scan is the one second Loblaw already has permission to speak. An introduction framed as something the card just unlocked lands as a perk. The identical message framed as a feature announcement lands as an ad and burns the moment. Same agent, opposite first impression, decided by the frame.",
+            "why": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is currently imagined as campaigns. If the scan works, the first conversation costs nothing per person and happens at the exact moment of proven loyalty. First frames are also close to impossible to re run. Whatever this moment says, it says once.",
+            "prototype": [
+              "The Optimum card scans at self checkout.",
+              "A notification arrives framed as something the card unlocked.",
+              "One tap opens the agent mid errand.",
+              "The greeting already knows the points balance and the pharmacy."
+            ],
+            "run": [
+              {
+                "lead": "Two framings of the same moment, traded off by every person.",
+                "detail": "The perk frame speaks in reward language and points context. The feature frame announces an assistant. Everyone sees both at a simulated checkout, in random order."
+              },
+              {
+                "lead": "An intercept read seconds after a real scan,",
+                "detail": "because a lab reaction to a mockup and a real reaction at a real register are different data. We measure open intent and the creepy read right there."
+              },
+              {
+                "lead": "The decline path, tested on purpose.",
+                "detail": "What a no thanks does next, whether it stays quiet or asks again, and how much resentment a re ask earns."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The winning frame and the moment. It does not settle national opt in rates, which need a live pilot. If the frame result warrants it, we will say that is the next study rather than dress this one up as the answer."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "prescription-doorway-test",
+          "title": "Prescription doorway test",
+          "oneLiner": "How does a new prescription turn into a care plan that brings someone back?",
+          "description": "A new prescription is the highest intent moment in the business and today it ends with a leaflet. The pickup becomes the first step of a care plan, what changes, what to watch for, when to come back.",
+          "platform": "Not platform specific",
+          "status": "Open",
+          "study": {
+            "number": "03",
+            "category": "Earning first use",
+            "question": "How does a new prescription turn into a care plan that brings someone back?",
+            "testing": "The pickup at the counter becomes the first step of a plan. Clinical advice, gentle product recommendations, and a reason to return, starting from the moment they already trust.",
+            "hypothesis": "The pickup becomes the first step of a care plan. The agent turns the prescription into a week, what changes, what to watch for, and when to come back, and folds in clinical advice and gentle product support along the way. The plan is the reason to return, and the return is where the relationship compounds.",
+            "why": "A new prescription is the highest intent moment in the business, and today it ends with a leaflet. The counter already owns the trust, the moment already has the person's attention, and nothing digital continues it.",
+            "run": [
+              {
+                "lead": "The counter handoff.",
+                "detail": "A code on the pharmacy slip opens a plan already started."
+              },
+              {
+                "lead": "The first week, laid out.",
+                "detail": "One step per day, written from the prescription itself."
+              },
+              {
+                "lead": "The return moment.",
+                "detail": "A check in that brings them back to the counter or the chat."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "family-profile-test",
+          "title": "Family profile test",
+          "oneLiner": "Can the agent build a family profile without ever showing a form?",
+          "description": "Dependents are the highest value context in the product and the hardest thing to ask for directly. A kid mentioned in passing becomes a confirmable card in the moment, so capture feels like being heard rather than being filed.",
+          "platform": "Not platform specific",
+          "status": "In flight",
+          "study": {
+            "number": "04",
+            "category": "Personalization and memory",
+            "question": "Can the agent build a family profile without ever showing a form?",
+            "testing": "A kid mentioned in passing becomes a confirmable profile the agent can use. Capture through conversation, with the consent line found rather than guessed.",
+            "method": "Concept test",
+            "participants": "Parents and caregivers managing two or more people",
+            "hypothesis": "People will not fill out family forms, but they mention family constantly in passing. If a mention becomes a confirmable card in the moment, my son Adam has diabetes becomes a profile with one tap, then capture feels like being heard instead of being filed.",
+            "why": "Dependents are the highest value context in the product and the hardest thing to ask for directly. Booking for family is one of the top jobs. Forms are historically where family features go to die, and the consent question, who confirms what about whom, has no pattern anywhere to copy.",
+            "receipts": [
+              {
+                "quote": "They also wanted a medication manager, a lab results explainer, proactive condition tracking, and profiles for dependent family care.",
+                "attribution": "Research finding"
+              }
+            ],
+            "prototype": [
+              "A parent mentions their son in passing.",
+              "An inline card offers to remember him, one tap.",
+              "A later booking asks, is this for Adam.",
+              "The family view in the menu shows what the agent holds."
+            ],
+            "run": [
+              {
+                "lead": "The conversational capture prototype in front of real caregivers.",
+                "detail": "Mentions become inline confirmation cards. The first measure is comprehension. Do people know a profile now exists, without being told to check."
+              },
+              {
+                "lead": "The correction moment, staged on purpose.",
+                "detail": "The agent gets one detail wrong. We watch whether fixing it builds trust, which ownership research predicts, or breaks it."
+              },
+              {
+                "lead": "The guardian question.",
+                "detail": "Testing who can see this framing at the moment of creation against the moment of first use, to find where the consent line has to sit."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The capture and confirm pattern. It does not settle the full household permission model, which is deep enough to be its own study."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "connection-test",
+          "title": "Connection test",
+          "oneLiner": "What value convinces someone to connect their health data, and what do they get back?",
+          "description": "The connection is one tap and almost nobody takes it, because the ask arrives before any proof. Value gets shown before permission is asked, then paid off immediately by an answer that knows the dosage and the timing.",
+          "platform": "Not platform specific",
+          "status": "Prototype ready",
+          "video": {
+            "card": "/demos/remedy-work/labs/connection-card.mp4",
+            "full": "/demos/remedy-work/labs/connection.mp4",
+            "poster": "/demos/remedy-work/labs/connection-poster.jpg"
+          },
+          "study": {
+            "number": "05",
+            "category": "Personalization and memory",
+            "question": "What value convinces someone to connect their health data, and what do they get back?",
+            "testing": "The value shown before the ask, and the visibly better answers after it. Includes whether people even know which records they have and what connecting does.",
+            "method": "Ask frame test",
+            "participants": "Wearable and Apple Health owners who shop SDM",
+            "hypothesis": "The connect ask fails because it arrives before any proof. Show one visibly better answer built on connected data, a preview, a sample, a named wall the agent cannot get past without it, and the tap follows. Value has to be visible before the permission is requested.",
+            "why": "The connection is one tap and almost nobody takes it. Connected labs and vitals change answer quality in a step, not a slope, which makes this single permission moment the growth lever for the entire personalization stage. Nobody has tested what the ask should look like.",
+            "receipts": [
+              {
+                "quote": "Not just Remedy knowing their medications, but really going so far as knowing and incorporating things like their dosage, the timing of their medications, knowing ahead of time if anything with our meds have changed.",
+                "attribution": "Research finding"
+              }
+            ],
+            "prototype": [
+              "Mid conversation, the agent names what it cannot see.",
+              "A preview shows the shape of a connected answer.",
+              "The consent sheet says in plain words what is shared.",
+              "The first connected answer proves the trade was worth it."
+            ],
+            "run": [
+              {
+                "lead": "Three asks, traded off by every person.",
+                "detail": "The cold ask as it exists today. The preview ask, a sample of what connected answers look like. The earned ask, three turns in, where the agent names the wall. With your labs I could answer this properly."
+              },
+              {
+                "lead": "Measure the tap and the comprehension together,",
+                "detail": "because a connection someone does not understand is a revocation waiting to happen. People explain back what is shared and with whom."
+              },
+              {
+                "lead": "A revoke read.",
+                "detail": "Whether knowing exactly how to disconnect raises willingness to connect, which is what autonomy research predicts."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The design of the ask. It does not settle whether people keep the connection over months, which is a live pilot question."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "proof-test",
+          "title": "Proof test",
+          "oneLiner": "How does an answer feel personalized to you, and still clinically honest?",
+          "description": "People test the agent for memory on purpose and watch for a thumb on the scale. Personalization shows its work, recall arrives inside the task it helps with and recommendations carry their reasoning.",
+          "platform": "Not platform specific",
+          "status": "In flight",
+          "study": {
+            "number": "06",
+            "category": "Personalization and memory",
+            "question": "How does an answer feel personalized to you, and still clinically honest?",
+            "testing": "People want it to remember their medications and their history, and they want zero sense of a thumb on the scale. Recall at the right moment, recommendations for you rather than for the store.",
+            "hypothesis": "Personalization that shows its work. Recall arrives inside the task it helps with, is this booking for Adam, and recommendations carry their reasoning, chosen for your history rather than for our shelf. The same surface proves memory and motive at once.",
+            "why": "Research found people testing for memory on purpose and watching for a thumb on the scale. The burden of proof runs both directions, that the agent remembers what matters, and that what it recommends is for the person rather than for the store.",
+            "receipts": [
+              {
+                "quote": "Someone typed, hi AI, do you remember me. They were assessing the responses to see how often it actually brought up something about their past.",
+                "attribution": "Research finding"
+              },
+              {
+                "quote": "They want to feel like their recommendations are objective and truly helpful. Not like Remedy is acting for itself.",
+                "attribution": "Research finding"
+              }
+            ],
+            "run": [
+              {
+                "lead": "A booking resurfaces a remembered detail.",
+                "detail": "At the exact moment it saves effort, never before."
+              },
+              {
+                "lead": "A recommendation explains itself in one line.",
+                "detail": "Why this, and why for you."
+              },
+              {
+                "lead": "The memory view shows what is held.",
+                "detail": "Editable, deletable, and never a surprise."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "handoff-test",
+          "title": "Handoff test",
+          "oneLiner": "When a health question turns into a shopping one, what does a tasteful handoff look like?",
+          "description": "The stated fear about one agent is a health question answered with a product and read as an upsell. The health answer completes first, the product arrives as the means to the plan, and the privacy wall is visible at the moment it matters.",
+          "platform": "Not platform specific",
+          "status": "In flight",
+          "video": {
+            "card": "/demos/remedy-work/labs/handoff-card.mp4",
+            "full": "/demos/remedy-work/labs/handoff.mp4",
+            "poster": "/demos/remedy-work/labs/handoff-poster.jpg"
+          },
+          "study": {
+            "number": "07",
+            "category": "Unified agent",
+            "question": "When a health question turns into a shopping one, what does a tasteful handoff look like?",
+            "testing": "The Tylenol moment designed instead of feared. The transition, the privacy wall, and the product that arrives as care instead of upsell.",
+            "hypothesis": "The handoff designed instead of feared. The health answer completes first, the product arrives as the means to the plan rather than the point of it, and the privacy wall is visible at the moment it matters. Done tastefully, the moment the strategy fears becomes the moment it pays for itself.",
+            "why": "The stated fear about one agent is the Tylenol moment, a health question answered with a product and read as an upsell. The fear is legitimate, and the current answer is separation, which gives away the very cross pollination the strategy wants.",
+            "run": [
+              {
+                "lead": "A health question gets a clinically grounded answer.",
+                "detail": "No product in sight."
+              },
+              {
+                "lead": "The plan needs something, and the product arrives inside the plan.",
+                "detail": "The means, never the point."
+              },
+              {
+                "lead": "The privacy line is visible right there.",
+                "detail": "Health data stays on the health side, and says so."
+              },
+              {
+                "lead": "The conversation moves on without ceremony.",
+                "detail": "The unremarkable exit is the proof."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "mode-control-test",
+          "title": "Mode control test",
+          "oneLiner": "How does someone understand what changes between health and shopping, and stay in control of it?",
+          "description": "One agent with a health side and a shopping side needs the difference to be legible without anyone reading a manual. The shift announces itself the first time it happens, and leaving always takes one visible tap.",
+          "platform": "Not platform specific",
+          "status": "In flight",
+          "video": {
+            "card": "/demos/remedy-work/labs/mode-control-card.mp4",
+            "full": "/demos/remedy-work/labs/mode-control.mp4",
+            "poster": "/demos/remedy-work/labs/mode-control-poster.jpg"
+          },
+          "study": {
+            "number": "08",
+            "category": "Unified agent",
+            "question": "How does someone understand what changes between health and shopping, and stay in control of it?",
+            "testing": "The differentiation a unified agent carries between its health side and its shopping side. Learned in one exposure, switchable by the person, never a trap.",
+            "method": "First exposure test",
+            "participants": "New users, no prior mode products required",
+            "hypothesis": "Modes are learned by seeing them happen, not by being told. An auto trigger with a visible, named shift teaches the system in one exposure. A picker, like choosing research in Gemini, is for the second use. And no mode can ever be a trap.",
+            "why": "The mode model has two failure states and the product is exposed to both. Confusion, where people do not know a clinical mode exists or what it protects. And the trap, an incognito style stuck state that people cannot see their way out of. Both leak trust in opposite directions.",
+            "prototype": [
+              "A mode selector sits in the composer, optional.",
+              "A clinical question auto triggers the shift instead.",
+              "A coach mark names what just happened.",
+              "Leaving the mode takes one visible tap."
+            ],
+            "run": [
+              {
+                "lead": "Three teaching patterns at first exposure.",
+                "detail": "Auto trigger with a visible signal. Picker first. And the hybrid, auto trigger with a coach mark saying you can also choose this."
+              },
+              {
+                "lead": "A comprehension read after one session.",
+                "detail": "Can people name the modes, say what each is for, and describe how to leave one. One exposure is the bar, because nobody rereads onboarding."
+              },
+              {
+                "lead": "The exit test.",
+                "detail": "How visible the way out must be before the trapped feeling disappears, measured, not assumed."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The teaching pattern. It does not settle how many modes should exist, which is a product decision this evidence will inform."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "clinical-signal-test",
+          "title": "Clinical signal test",
+          "oneLiner": "What tells someone the assessment is clinically real and their data is safe?",
+          "description": "A retailer giving health advice is presumed to be selling until proven otherwise. One calm signal carries both promises, real medicine and protected data, in plain words rather than stacked badges and lock icons.",
+          "platform": "Not platform specific",
+          "status": "Prototype ready",
+          "video": {
+            "card": "/demos/remedy-work/labs/clinical-signal-card.mp4",
+            "full": "/demos/remedy-work/labs/clinical-signal.mp4",
+            "poster": "/demos/remedy-work/labs/clinical-signal-poster.jpg"
+          },
+          "study": {
+            "number": "09",
+            "category": "Creating trust",
+            "question": "What tells someone the assessment is clinically real and their data is safe?",
+            "testing": "One calm signal carrying two promises. The plain words that make the protection land, and sourcing that holds up within what the engine can actually show.",
+            "method": "Signal ladder test",
+            "participants": "SDM shoppers, mixed AI comfort",
+            "hypothesis": "Two promises have to land in the same moment. This is real medicine, and this stays private. One calm signal can carry both, a visible state change with plain words. Stacked badges and lock icons carry neither, because decoration is what selling looks like.",
+            "why": "A retail surface makes clinical credibility non obvious. The retailer is presumed to be selling until proven otherwise. Overclaiming the assessment is a liability, underclaiming wastes the pharmacy trust the whole product stands on, and the security promise currently has no words at all.",
+            "receipts": [
+              {
+                "quote": "The moment you open your profile, I want to know the data is encrypted. I want you to say something about the protection of the data.",
+                "attribution": "Research finding"
+              }
+            ],
+            "prototype": [
+              "A shopping question turns into a symptom question.",
+              "The surface visibly shifts state, named in plain words.",
+              "Assessment components carry the clinical moment.",
+              "The conversation returns to normal, and says so."
+            ],
+            "run": [
+              {
+                "lead": "A signal ladder with four intensities,",
+                "detail": "from a quiet shift in the chrome to a full banner with credentials. We find where I noticed meets I believe."
+              },
+              {
+                "lead": "The security half in the same moment.",
+                "detail": "The state change runs with and without a plain words data line, and we test which single word actually carries. Private, encrypted, never used for marketing."
+              },
+              {
+                "lead": "The overclaim check.",
+                "detail": "Whether stronger signals raise expectations past what a triage conversation can deliver, which would trade a launch problem for a bigger one."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The signal and the words. It does not settle the legal copy, which routes through privacy review no matter what wins."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "canadian-trust-test",
+          "title": "Canadian trust test",
+          "oneLiner": "Does advice built for Canada earn more trust than advice built for everyone?",
+          "description": "The real competitor is the generic assistant already on the phone. Provincial coverage, Canadian guidelines and data that stays in the country get named right in the answer, where a global assistant has nothing to say back.",
+          "platform": "Not platform specific",
+          "status": "Open",
+          "study": {
+            "number": "10",
+            "category": "Creating trust",
+            "question": "Does advice built for Canada earn more trust than advice built for everyone?",
+            "testing": "Provincial coverage, Canadian guidelines, data that stays in the country, named plainly against what a global assistant says. No receipt yet, and the one card no US product can copy.",
+            "method": "Provenance test",
+            "participants": "Canadians who already ask AI health questions",
+            "hypothesis": "Built for here is a trust multiplier the global assistants cannot copy. Provincial coverage, Canadian guidelines, data that stays in the country, named plainly, moves belief more than any generic accuracy claim. If it does not, the flag is decoration.",
+            "why": "The real competitor is already on the phone, and it is not another pharmacy, it is the generic assistant. Sentiment toward AI is the named executive worry. The Canadian card is the one differentiator that costs nothing but placement, if it turns out to carry weight.",
+            "run": [
+              {
+                "lead": "Same answer, three provenance frames.",
+                "detail": "No provenance. Generic, evidence based. Canadian, with the guideline named, the province acknowledged, and a data residency line."
+              },
+              {
+                "lead": "A live comparator, not a vacuum.",
+                "detail": "Each frame gets judged next to what a global assistant says to the same question, because that is the real bar in the real world."
+              },
+              {
+                "lead": "A which line test.",
+                "detail": "Coverage, guidelines, residency. Which single line does the lifting, so the product leads with the one that works."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The frame and the lead line. It does not settle regulatory copy, which has its own review."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "lifestyle-surface-test",
+          "title": "Lifestyle surface test",
+          "oneLiner": "What makes a health surface worth opening on a day you feel fine?",
+          "description": "Nothing today gives a healthy person a reason to open the product, so retention is being asked of a surface built for sick days. A surface that reflects the person back, plans mid flight, the family, one thing worth doing today.",
+          "platform": "Not platform specific",
+          "status": "In flight",
+          "study": {
+            "number": "11",
+            "category": "Earning loyalty",
+            "question": "What makes a health surface worth opening on a day you feel fine?",
+            "testing": "The surface that reflects the person back. Plans mid flight, family, one next step. The reason to open it on the first visit and still on the fifteenth.",
+            "method": "Week long field test",
+            "participants": "PC Health users, mixed engagement",
+            "hypothesis": "Symptom less opens come from a surface that reflects the person back. Their plans mid flight, their family, one thing worth doing today. Recognition is the pull, not information. Content feeds are where health apps go to be ignored.",
+            "why": "The retention story depends on healthy day opens, and nothing in the product today gives a healthy person a reason to look. The smart surface work already exists to port, and the feed alternative has failed publicly enough times that testing before building is the whole point.",
+            "receipts": [
+              {
+                "quote": "For most people it didn't feel like it had these really compelling differentiators to draw loyalty yet.",
+                "attribution": "Research finding"
+              }
+            ],
+            "prototype": [
+              "The morning surface reflects the household back.",
+              "A plan card shows the week mid flight.",
+              "A family card holds the next thing for Adam.",
+              "One next step, and nothing else asking for attention."
+            ],
+            "run": [
+              {
+                "lead": "Two surfaces, one week each.",
+                "detail": "The mirror. Your plans, your people, one next step. The feed. Tips, articles, seasonal content. Same participants, both weeks, order randomized."
+              },
+              {
+                "lead": "Count the symptom less opens and what followed.",
+                "detail": "An open that leads to a completed step is worth more than three that lead nowhere."
+              },
+              {
+                "lead": "An emptiness test.",
+                "detail": "What the mirror shows a brand new user before there is anything to reflect, because the cold start is where mirror surfaces usually die."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The surface model. It does not settle the card taxonomy, which follows once the model wins."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "programs-test",
+          "title": "Programs test",
+          "oneLiner": "What turns one good answer into a program someone follows and comes back to?",
+          "description": "People treat the agent as a starting point they leave to finish elsewhere. The answer becomes a program, the next seven days proposed unasked, one step per day with a visible finish line.",
+          "platform": "Not platform specific",
+          "status": "Open",
+          "study": {
+            "number": "12",
+            "category": "Earning loyalty",
+            "question": "What turns one good answer into a program someone follows and comes back to?",
+            "testing": "From starting point to routine. A Shoppers program anchored in medication and condition support, a lifestyle one for sleep or quitting, built so following it becomes the relationship.",
+            "method": "Longitudinal concept test",
+            "participants": "People with an active goal, sleep, quitting, a new routine",
+            "hypothesis": "Answers end conversations. Programs continue them. A good answer becomes a followed program when the agent proposes the next seven days unasked, one step per day, with a finish line the person can see. People follow structure they can see the end of.",
+            "why": "The steering outcome for the whole page is goals completed, and the conversion moment from answer to plan is the least understood step in that chain. Two program families fit naturally, a Shoppers program anchored in medication and condition support, and a lifestyle program for sleep or quitting. Neither has a tested front door.",
+            "receipts": [
+              {
+                "quote": "They very much have a mental model that the AI is a starting point. It's not meant to be an absolute answer. It's seven out of ten as a first start internet resource.",
+                "attribution": "Research finding"
+              }
+            ],
+            "run": [
+              {
+                "lead": "The offer moment, three ways.",
+                "detail": "No offer as control. The soft ask, want a plan for this. The assembled offer, here is your week, accept or edit it."
+              },
+              {
+                "lead": "Follow through over ten days,",
+                "detail": "with light check ins, because a program that converts starts and loses everyone by day four has not converted anything."
+              },
+              {
+                "lead": "The edit read.",
+                "detail": "Whether people who edit day one follow longer, which ownership research predicts and which would change how the offer is built."
+              },
+              {
+                "lead": "What this settles, stated plainly.",
+                "detail": "The offer pattern and early follow through. It does not settle clinical program content, which routes through validation."
+              }
+            ]
+          }
+        },
+        {
+          "slug": "head-start-test",
+          "title": "Head start test",
+          "oneLiner": "What makes switching from ChatGPT feel like an upgrade instead of starting over?",
+          "description": "The switching cost is not features, it is history, and every month it goes untested the incumbent's head start compounds. Connection and profile give the agent real context before the first question is finished.",
+          "platform": "Not platform specific",
+          "status": "Open",
+          "study": {
+            "number": "13",
+            "category": "Earning loyalty",
+            "question": "What makes switching from ChatGPT feel like an upgrade instead of starting over?",
+            "testing": "Day one context from connection and profile against the incumbent's accumulated memory. The switching story, designed and measured.",
+            "hypothesis": "Day one that feels like year two. Connection and profile give the agent real context before the first question is even finished, the prescriptions, the family, the pharmacy relationship, so the first answer already knows things the incumbent never will. Switching framed as an upgrade, not a restart.",
+            "why": "The switching cost is not features, it is history. Research participants named the incumbent's accumulated memory as the reason to stay, and every month it goes untested, the head start compounds.",
+            "receipts": [
+              {
+                "quote": "They've established a long history of use already. So long history and profile and memory. That's a benefit of using something else that we will be considering when thinking about whether to switch or adopt the habit of using Remedy.",
+                "attribution": "Research finding"
+              }
+            ],
+            "run": [
+              {
+                "lead": "The first conversation opens already knowing the pharmacy context.",
+                "detail": "No cold start, no interview."
+              },
+              {
+                "lead": "A side by side of the same question.",
+                "detail": "With the head start and without it."
+              },
+              {
+                "lead": "The moment people notice it knows.",
+                "detail": "Found and measured, because that moment is the pitch."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "name": "Features",
+      "heading": "Our contributions as your partners",
+      "tiles": [
+        {
+          "slug": "remedy-chat-core",
+          "title": "Remedy Chat Core",
+          "oneLiner": "The assistant itself, from first message to answer.",
+          "description": "The core conversation surface. Composer, response states, thinking and loading states, safety and escalation moments. Everything else in this section sits inside it.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/remedy-chat-core.png"
+        },
+        {
+          "slug": "personalization-and-menu",
+          "title": "Personalization and Menu",
+          "oneLiner": "Entry points that change based on what the person has done before.",
+          "description": "The menu and personalized surfaces that meet the person before they type. Prioritizes the most relevant next action without hiding the alternatives.",
+          "platform": "iOS",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/personalization-and-menu.png"
+        },
+        {
+          "slug": "onboarding-and-consent",
+          "title": "Onboarding and Consent",
+          "oneLiner": "What a person agrees to before the first health question.",
+          "description": "First run through the product. Explains what the assistant is, what it does with what you tell it, and gets consent before any health conversation starts.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/onboarding-and-consent.png"
+        },
+        {
+          "slug": "conversation-history",
+          "title": "Conversation History",
+          "oneLiner": "Find a past conversation and pick it back up.",
+          "description": "Past conversations, listed and searchable, so a person can return to something rather than starting over.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/conversation-history.png"
+        },
+        {
+          "slug": "navigation-ui",
+          "title": "Navigation UI",
+          "oneLiner": "How a person moves around the product.",
+          "description": "Top navigation, drawer and window behavior on desktop. The shell everything else sits inside.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/navigation-ui.png"
+        },
+        {
+          "slug": "appointment-booking",
+          "title": "Appointment Booking",
+          "oneLiner": "Book a pharmacy appointment inside the conversation.",
+          "description": "Booking without leaving the chat, from picking the service through to confirmation. Covers personal details, appointment review, response cards and the flows that follow a booking.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/appointment-booking.png"
+        },
+        {
+          "slug": "multi-patient-and-multi-service-booking",
+          "title": "Multi Patient and Multi Service Booking",
+          "oneLiner": "Book for more than one person, or more than one service, in a single flow.",
+          "description": "The harder version of booking. One conversation that handles several patients and several services without making the person start again.",
+          "platform": "iOS",
+          "status": "In build",
+          "image": "/demos/remedy-work/previews/multi-patient-and-multi-service-booking.png"
+        },
+        {
+          "slug": "rx-refills",
+          "title": "Rx Refills",
+          "oneLiner": "Refill a prescription without leaving the chat.",
+          "description": "Refill request end to end. Covers finding the prescription, confirming it and confirming the pharmacy, including the empty and loading states.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/rx-refills.png"
+        },
+        {
+          "slug": "file-upload",
+          "title": "File Upload",
+          "oneLiner": "Add a photo or a document to the conversation.",
+          "description": "Attaching an image or file so the assistant can use it in the answer. Covers picking, uploading, failure and retry states.",
+          "platform": "All platforms",
+          "status": "In build",
+          "image": "/demos/remedy-work/previews/file-upload.png"
+        },
+        {
+          "slug": "long-summary",
+          "title": "Long Summary",
+          "oneLiner": "A longer answer that stays readable.",
+          "description": "How the assistant presents a long response without burying the useful part.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/long-summary.png"
+        },
+        {
+          "slug": "citations",
+          "title": "Citations",
+          "oneLiner": "Show where an answer came from.",
+          "description": "Sources attached to an answer so a person can check the claim behind it. A trust feature more than a content feature.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/citations.png"
+        },
+        {
+          "slug": "red-flag-escalation",
+          "title": "Red Flag Escalation",
+          "oneLiner": "Get a person to real care when the conversation needs it.",
+          "description": "What the assistant does when an answer is not the right response. Recognizes the moment and routes the person to urgent or in person care.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/red-flag-escalation.png"
+        },
+        {
+          "slug": "explain-enhanced",
+          "title": "Explain Enhanced",
+          "oneLiner": "A fuller answer when a short one is not enough.",
+          "description": "A richer explanation format for questions that need more than a paragraph, without turning the answer into a wall of text.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/explain-enhanced.png"
+        },
+        {
+          "slug": "triage-enhanced-components",
+          "title": "Triage Enhanced Components",
+          "oneLiner": "The pieces behind a symptom conversation.",
+          "description": "The components used when the assistant works through symptoms with a person, including the question and answer patterns that carry the conversation.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/triage-enhanced-components.png"
+        }
+      ]
+    },
+    {
+      "id": "design-system",
+      "name": "Design System",
+      "heading": "Design System and Components",
+      "tiles": [
+        {
+          "slug": "ui-kit",
+          "title": "UI Kit",
+          "oneLiner": "The component library the product is built from.",
+          "description": "Structured as atoms, molecules and organisms, with card compositions, screen templates and patterns on top. Covers the conversation surface, booking and refill components, sheets and response cards.",
+          "platform": "iOS and Android",
+          "status": "In build",
+          "image": "/demos/remedy-work/previews/ui-kit.png"
+        },
+        {
+          "slug": "foundations",
+          "title": "Foundations",
+          "oneLiner": "The tokens everything else is built on.",
+          "description": "Colour, typography, spacing, radius, stroke, elevation and gradients, organized as primitives and semantic tokens. Includes a page explaining how the token architecture works.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/foundations.png"
+        },
+        {
+          "slug": "icon-library",
+          "title": "Icon Library",
+          "oneLiner": "Every icon in the product, plus the wrapper that sizes them.",
+          "description": "The full icon set and the icon wrapper component that controls sizing and colour wherever an icon appears.",
+          "platform": "All platforms",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/icon-library.png"
+        },
+        {
+          "slug": "accessibility-audit",
+          "title": "Accessibility Audit",
+          "oneLiner": "A pass over the iOS designs against accessibility standards.",
+          "description": "A scoped audit of the core iOS userflows. Covers entry point and core chat, onboarding and consent, citations, red flag escalation, navigation, explain and triage components, with a scope page setting out what was checked.",
+          "platform": "iOS",
+          "status": "Design complete",
+          "image": "/demos/remedy-work/previews/accessibility-audit.png"
+        }
+      ],
+      "overview": {
+        "intro": "Two libraries. Foundations holds the tokens; the iOS UI kit builds every component from them, small parts up to whole screens.",
+        "layers": [
+          {
+            "name": "Foundations",
+            "count": 8,
+            "unit": "token sets",
+            "note": "Semantic and primitive colour, type, spacing, radius, stroke and elevation.",
+            "examples": [
+              "Colour",
+              "Typography",
+              "Spacing and radius",
+              "Elevation"
+            ]
+          },
+          {
+            "name": "Atoms",
+            "count": 29,
+            "unit": "components",
+            "note": "The smallest parts, each with its states.",
+            "examples": [
+              "Button",
+              "Chip",
+              "Input field",
+              "Message bubble"
+            ]
+          },
+          {
+            "name": "Molecules",
+            "count": 27,
+            "unit": "components",
+            "note": "Atoms combined into a single job.",
+            "examples": [
+              "Form field",
+              "Suggestion row",
+              "Calendar",
+              "Toast"
+            ]
+          },
+          {
+            "name": "Organisms",
+            "count": 16,
+            "unit": "components",
+            "note": "The pieces of the chat itself.",
+            "examples": [
+              "Composer",
+              "Response",
+              "Citation drawer",
+              "Consent sheet"
+            ]
+          },
+          {
+            "name": "Cards",
+            "count": 12,
+            "unit": "compositions",
+            "note": "What the agent hands back mid-conversation.",
+            "examples": [
+              "Appointment",
+              "Refill status",
+              "Prescription selection",
+              "Care plan"
+            ]
+          },
+          {
+            "name": "Templates",
+            "count": 4,
+            "unit": "shells",
+            "note": "The frames every screen is assembled in.",
+            "examples": [
+              "Chat screen",
+              "Bottom sheet",
+              "Card",
+              "Overlay"
+            ]
+          }
+        ],
+        "note": "For more information on how this design system was built, reach out."
+      }
+    }
+  ]
+}

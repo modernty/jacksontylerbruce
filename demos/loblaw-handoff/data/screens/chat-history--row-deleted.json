@@ -1,0 +1,66 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--row-deleted",
+  "name": "Chat history, chat deleted",
+  "stateGroup": {
+    "id": "chat-history-row",
+    "label": "Deleted",
+    "order": 3
+  },
+  "figmaNodeId": "8156:72561",
+  "summary": "After the delete: three chats, the count corrected, and a toast at the top of the frame. The nav survives here, unlike after a bulk delete.",
+  "looseEnds": [
+    {
+      "kind": "inconsistent-content",
+      "severity": "high",
+      "title": "The toast carries an Undo that is switched off",
+      "detail": "The Toast component has an Action slot holding the word Undo. It is hidden in this frame, as it is in every other delete toast across Chat history and Memory — so no drawn state offers a way back from a delete, although the component is built for one.",
+      "nodes": [
+        "I8156:72603;7102:26288",
+        "I8156:72603;7102:26289"
+      ],
+      "ask": "Is Undo in scope? If it is, it needs a window and a drawn state; if it is not, the slot should come off the component so it stops reading as available."
+    },
+    {
+      "kind": "missing-state",
+      "severity": "medium",
+      "title": "The row leaves with no transition drawn",
+      "detail": "The deleted conversation is simply absent and the three below have moved up 64px. Nothing states whether the row collapses, fades, or is replaced on a reload.",
+      "nodes": [
+        "8156:72562"
+      ],
+      "ask": "Specify the removal, since an Undo would have to put the row back the same way."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The pill group sits 4px further left here than on the same nav elsewhere",
+      "detail": "Search and Select are the same two components throughout, but the group that holds them is 275 wide with an 8px gap on the History frames and 271 wide with a 4px gap on the Deleting frames and on Memory. Both end flush at x=369, so the difference shows up on the left edge.",
+      "nodes": [
+        "8156:72601"
+      ],
+      "ask": "Pick one gap. 4px matches Memory, which a developer will build from the same component."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--row-deleted.png"
+}

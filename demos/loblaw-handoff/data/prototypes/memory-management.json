@@ -1,0 +1,376 @@
+{
+  "slug": "memory-management",
+  "title": "Memory",
+  "blurb": "What the assistant remembers, as a running screen. The list groups everything it holds; a memory opens as its own page; deleting is a dialog that says what it does not take with it.",
+  "sources": [
+    "memory--home",
+    "memory--viewing",
+    "memory--deleting",
+    "memory--deleted",
+    "memory--selecting"
+  ],
+  "copy": {
+    "title": {
+      "text": "Memory",
+      "node": "8156:263851",
+      "source": "figma-node"
+    },
+    "intro": {
+      "text": "Memories are health details you've shared about yourself and your family members. They help personalize PC Chat™ answers and you can update or delete them anytime.",
+      "node": "8156:263852",
+      "source": "figma-node"
+    },
+    "summaryHeading": {
+      "text": "What you’ve told PC Chat™",
+      "node": "8156:263864",
+      "source": "figma-node"
+    },
+    "summaryParagraphs": [
+      {
+        "text": "You're 8 weeks pregnant. You've had a cough and fever for a few days, and you're working on managing your blood pressure — you take lisinopril for it, and there's a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now.",
+        "node": "8156:263865",
+        "source": "figma-node"
+      },
+      {
+        "text": "You live in Ontario and see Dr. Sara Smith as your family physician. You've had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort.",
+        "node": "8156:263866",
+        "source": "figma-node"
+      }
+    ],
+    "summaryUpdated": {
+      "text": "Last updated today",
+      "node": "8156:263868",
+      "source": "figma-node"
+    },
+    "search": {
+      "text": "Search",
+      "node": "I8156:269428;5:70",
+      "source": "figma-node"
+    },
+    "dialogTitle": {
+      "text": "Delete this memory?",
+      "node": "8156:266804",
+      "source": "figma-node"
+    },
+    "dialogBody": {
+      "text": "The memory will be permanently deleted. If you share the detail again, we’ll save it as a new memory. Your chat history stays.",
+      "node": "8156:266805",
+      "source": "figma-node"
+    },
+    "dialogCancel": {
+      "text": "Cancel",
+      "node": "I8156:266808;2985:25688",
+      "source": "figma-node"
+    },
+    "dialogConfirm": {
+      "text": "Delete",
+      "node": "I8156:266810;2985:25835",
+      "source": "figma-node"
+    },
+    "deletedToast": {
+      "text": "Memory deleted",
+      "node": "I8156:265992;7102:26287",
+      "source": "figma-node"
+    },
+    "undo": {
+      "text": "Undo",
+      "node": "I8156:265992;7102:26289",
+      "source": "figma-node"
+    },
+    "selectLabel": {
+      "text": "Select",
+      "node": "I8156:264202;5:70",
+      "source": "figma-node"
+    },
+    "pageTitle": {
+      "text": "Memory details",
+      "node": "8156:266770",
+      "source": "figma-node"
+    },
+    "pageDelete": {
+      "text": "Delete memory",
+      "node": "I8156:266766;2273:16645;5:99",
+      "source": "figma-node"
+    }
+  },
+  "groups": [
+    {
+      "id": "top-of-mind",
+      "title": "Top of mind",
+      "node": "8156:263870",
+      "titleNode": "8156:263872",
+      "listNode": "8156:263873",
+      "source": "figma-node"
+    },
+    {
+      "id": "current-health",
+      "title": "Current symptoms & conditions",
+      "node": "8156:263961",
+      "titleNode": "8156:263963",
+      "listNode": "8156:263964",
+      "source": "figma-node"
+    }
+  ],
+  "memories": [
+    {
+      "id": "mem-penicillin",
+      "text": "You’re allergic to penicillin",
+      "updatedLabel": "Updated 2 weeks ago",
+      "groupIds": [
+        "top-of-mind",
+        "current-health"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Penicillin reaction and alternatives"
+      },
+      "nodes": {
+        "row": {
+          "top-of-mind": "8156:263874",
+          "current-health": "8156:263992"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-pregnant",
+      "text": "You’re 8 weeks pregnant",
+      "updatedLabel": "Updated today",
+      "groupIds": [
+        "top-of-mind"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Early pregnancy and blood pressure"
+      },
+      "nodes": {
+        "row": {
+          "top-of-mind": "8156:263883"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-fever",
+      "text": "You’ve had a fever since August 14",
+      "updatedLabel": "Updated today",
+      "groupIds": [
+        "top-of-mind",
+        "current-health"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Managing a fever at home"
+      },
+      "nodes": {
+        "row": {
+          "top-of-mind": "8156:263892",
+          "current-health": "8156:263974"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-son-cold",
+      "text": "Your son has a cold",
+      "updatedLabel": "Updated yesterday",
+      "groupIds": [
+        "top-of-mind"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "What to give a child with a cold"
+      },
+      "nodes": {
+        "row": {
+          "top-of-mind": "8156:263901"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-lisinopril",
+      "text": "You take Lisinopril 10 mg once daily",
+      "updatedLabel": "Updated yesterday",
+      "groupIds": [
+        "top-of-mind"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Lisinopril and blood pressure"
+      },
+      "nodes": {
+        "row": {
+          "top-of-mind": "8156:263910"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-blood-pressure",
+      "text": "You have high blood pressure",
+      "updatedLabel": "Updated yesterday",
+      "groupIds": [
+        "current-health"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Lowering blood pressure without medication"
+      },
+      "nodes": {
+        "row": {
+          "current-health": "8156:263965"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-hives",
+      "text": "You’ve had hives since the night of September 21",
+      "updatedLabel": "Updated 3 days ago",
+      "groupIds": [
+        "current-health"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "Hives and what brings them on"
+      },
+      "nodes": {
+        "row": {
+          "current-health": "8156:263983"
+        }
+      },
+      "source": "figma-node"
+    },
+    {
+      "id": "mem-allergies",
+      "text": "You have seasonal allergies",
+      "updatedLabel": "Updated 2 months ago",
+      "groupIds": [
+        "current-health"
+      ],
+      "category": {
+        "label": "Your current health",
+        "icon": "syringe"
+      },
+      "provenanceLabel": "This memory came from a past chat",
+      "sourceChat": {
+        "title": "What to take for seasonal allergies"
+      },
+      "nodes": {
+        "row": {
+          "current-health": "8156:264001"
+        }
+      },
+      "source": "figma-node"
+    }
+  ],
+  "anchors": {
+    "frame": "8156:263847",
+    "content": "8156:263848",
+    "header": "8156:263850",
+    "summaryCard": "8156:263855",
+    "brandMark": "8156:263858",
+    "topNav": "8156:264199",
+    "back": "8156:264200",
+    "navActions": "8156:264201",
+    "searchButton": "8156:269428",
+    "searchIcon": "I8156:269428;2046:16015",
+    "select": "8156:264202",
+    "page": "8156:266748",
+    "pageNav": "8156:266768",
+    "pageBack": "8156:266769",
+    "pageTitle": "8156:266770",
+    "pageHeader": "8156:266749",
+    "pageCategory": "8156:266751",
+    "pageMemoryText": "I8156:266752;2273:21460",
+    "pageTimestamp": "8156:266753",
+    "pageChip": "8156:266755",
+    "pageChipText": "I8156:266755;2817:26939",
+    "pageFields": "8156:266760",
+    "pageRowCondition": "8156:266761",
+    "pageRowStatus": "8156:266763",
+    "pageDelete": "8156:266766",
+    "dialog": "8156:266801",
+    "dialogAlert": "8156:266802",
+    "dialogText": "8156:266804",
+    "dialogBodyNode": "8156:266805",
+    "dialogButtons": "8156:266806",
+    "dialogCancel": "8156:266808",
+    "dialogConfirm": "8156:266810",
+    "toast": "8156:265992",
+    "toastMessage": "I8156:265992;7102:26287",
+    "toastAction": "I8156:265992;7102:26288",
+    "toastDismiss": "I8156:265992;7102:26290",
+    "selectAll": "8156:265295",
+    "selectCancel": "8156:265296",
+    "selectActions": "8156:265294",
+    "selectDelete": "8156:265297"
+  },
+  "moments": [
+    {
+      "id": "browse",
+      "label": "Browse",
+      "screen": "memory--home",
+      "anchor": "8156:263855",
+      "note": "Seven groups under a summary of what the assistant has been told. Two memories appear twice — Top of mind repeats them."
+    },
+    {
+      "id": "selecting",
+      "label": "Select",
+      "screen": "memory--selecting",
+      "anchor": "8156:264911",
+      "note": "A 24px checkbox arrives at the left of every row and the text indents 40 to make room. The bar swaps Search and Select for Select all and Cancel, and a counted Delete appears. The tick follows the memory, so one drawn in two groups shows checked twice and still counts once."
+    },
+    {
+      "id": "detail",
+      "label": "Open a memory",
+      "screen": "memory--viewing",
+      "anchor": "8156:266748",
+      "note": "A pushed page with its own back and title, not a drawer. The fields are rows on a card, and Delete sits fixed at the foot."
+    },
+    {
+      "id": "confirm",
+      "label": "Confirm the delete",
+      "screen": "memory--deleting",
+      "anchor": "8156:266801",
+      "note": "The dialog names what deleting does not take: the detail can be saved again, and chat history stays. There is no longer an option to delete the originating chat."
+    },
+    {
+      "id": "deleted",
+      "label": "After deletion",
+      "screen": "memory--deleted",
+      "anchor": "8156:265992",
+      "note": "The list comes back with a toast at the top saying “Memory deleted”. The component carries an Undo beside the message; this frame switches it off, so the dismiss is the only control."
+    }
+  ],
+  "code": {}
+}

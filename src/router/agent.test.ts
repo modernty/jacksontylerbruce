@@ -21,17 +21,17 @@ const reads = (slugs: string[], reply: Record<string, unknown>, seen: string[] =
   }
 }
 
-const COMPARE = "Intuit folds invoicing into a conversation inside ChatGPT, so the interface recedes. Loblaw / PC Health puts a front door to care inside a loyalty app. Both make a complex service feel like one place."
+const COMPARE = "Intuit folds invoicing into a conversation inside ChatGPT, so the interface recedes. Loblaws / PC Health puts a front door to care inside a loyalty app. Both make a complex service feel like one place."
 
 test("a project question reads the project before replying, and the reply keeps only public slugs", async () => {
   const seen: string[] = []
   const statuses: string[] = []
   const out = await workAgent("What's the difference between Intuit and Loblaw?", [], {
-    client: reads(["intuit", "loblaw"], { answer: COMPARE, projects: ["intuit", "loblaw", "remedy"], followUps: ["What are the seven touchpoints in the Intuit flow?", "What does the PC Health care team include?", "How was the Intuit prototype approved?"] }, seen),
+    client: reads(["intuit", "loblaws"], { answer: COMPARE, projects: ["intuit", "loblaws", "traveller"], followUps: ["What are the seven touchpoints in the Intuit flow?", "What does the PC Health care team include?", "How was the Intuit prototype approved?"] }, seen),
     onStatus: (status) => statuses.push(status),
   })
   assert.ok(out)
-  assert.deepEqual(out.projects, ["intuit", "loblaw"])
+  assert.deepEqual(out.projects, ["intuit", "loblaws"])
   assert.equal(out.followUps.length, 3)
   assert.match(seen.join("\n"), /Seven touchpoints/)
   assert.match(seen.join("\n"), /front door to care/)
@@ -47,17 +47,17 @@ test("tools never return a hidden project", () => {
 })
 
 test("an answer that names a hidden project, breaks the voice or runs long is not shown", async () => {
-  assert.equal(workAllowed("Remedy is a health chat with citations."), false)
+  assert.equal(workAllowed("Traveller is a trip planner."), false)
   assert.equal(workAllowed("Tyler designed the flow."), false)
   assert.equal(workAllowed("Want to see more?"), false)
   assert.equal(workAllowed(Array.from({ length: 140 }, () => "word").join(" ") + "."), false)
   assert.equal(workAllowed(COMPARE), true)
-  const out = await workAgent("Tell me about the health work", [], { client: reads([], { answer: "Remedy handles consent.", projects: [], followUps: [] }) })
+  const out = await workAgent("Tell me about the health work", [], { client: reads([], { answer: "Traveller handles consent.", projects: [], followUps: [] }) })
   assert.equal(out, null)
 })
 
 test("showing a project stays instant; asking about one, or comparing, goes to the agent", () => {
-  for (const q of ["Show me loblaw", "loblaw", "Tell me about Intuit", "open intuit", "Show me Intuit and Loblaw"]) assert.equal(wantsWork(q, catalog), false, q)
+  for (const q of ["Show me loblaw", "loblaws", "Tell me about Intuit", "open intuit", "Show me Intuit and Loblaw"]) assert.equal(wantsWork(q, catalog), false, q)
   for (const q of ["What is the core challenge of Loblaw project", "What's the difference between intuit and Loblaw", "How was the Intuit prototype approved?", "Compare Intuit with Overmatch AI"]) assert.equal(wantsWork(q, catalog), true, q)
   assert.equal(wantsWork("what was the outcome?", catalog, { open: "intuit" }), true)
   assert.equal(wantsWork("why?", catalog, { last: { q: "x", a: "y", source: "work" } }), true)
@@ -69,13 +69,13 @@ test("the chat answers a project question with the agent's words, linked project
   const reply = await handleChatAsk(
     { q: "What's the difference between Intuit and Loblaw?", sessionId: "s" },
     { ip: "1" },
-    { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: reads(["intuit", "loblaw"], { answer: COMPARE, projects: ["intuit", "loblaw"], followUps: follow }) },
+    { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: reads(["intuit", "loblaws"], { answer: COMPARE, projects: ["intuit", "loblaws"], followUps: follow }) },
   )
   assert.equal(reply.status, 200)
   assert.ok("answer" in reply.body)
   assert.equal(reply.body.answer, COMPARE)
   assert.equal(reply.body.source, "work")
-  assert.deepEqual(reply.body.projects, ["intuit", "loblaw"])
+  assert.deepEqual(reply.body.projects, ["intuit", "loblaws"])
   assert.deepEqual(reply.body.followUps, follow)
 })
 

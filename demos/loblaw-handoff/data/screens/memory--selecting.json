@@ -1,0 +1,67 @@
+{
+  "slug": "memory--selecting",
+  "name": "Memory",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Select turns every row into a choice. A 24px checkbox appears at the left and the text indents 40 to make room; the bar becomes Select all and Cancel, and a Delete button counts what is ticked.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:264911",
+  "image": "/demos/loblaw-handoff/screens/memory--selecting.png",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "constraints": [],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "A memory in two groups ticks in both",
+      "detail": "“You’ve had a fever since August 14” is checked in Top of mind and again in Current symptoms & conditions, and the count says 3 rather than 4. The tick follows the memory, not the row — so ticking one row ticks its twin, and the count has to deduplicate.",
+      "nodes": [
+        "8156:264954",
+        "8156:265044",
+        "8156:265297"
+      ],
+      "ask": "Confirm the count is of memories, not rows, and that ticking one copy ticks the other."
+    },
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "The chevron stays on every row",
+      "detail": "Rows keep the chevron that opens the memory while they are also a checkbox target. Nothing says what a tap on the row body does in this mode — tick, or open.",
+      "nodes": [
+        "8156:264943"
+      ],
+      "ask": "In selection, does tapping the row tick it, and is the chevron inert or removed?"
+    },
+    {
+      "kind": "scope",
+      "severity": "low",
+      "title": "Nothing is drawn with zero ticked",
+      "detail": "Every selection frame has rows already checked. What the Delete button says and whether it is reachable before anything is ticked is undrawn.",
+      "nodes": [
+        "8156:265297"
+      ],
+      "ask": "Is Delete hidden, disabled, or does it read “Delete 0 memories”?"
+    }
+  ],
+  "code": {
+    "css": "/* Selection widens the row's left inset to make room for the box. */\n.row { display: flex; align-items: center; height: 58px; }\n.row__checkbox { width: 24px; height: 24px; margin-left: 8px; }\n\n/* Resting the text starts at 8; selecting it starts at 48. */\n.row__text { margin-left: 8px; width: 313px; }\n.row--selecting .row__text { margin-left: 48px; width: 273px; }\n\n/* The count sits in a pill at the foot, over the list. */\n.selection-delete { position: absolute; right: 24px; bottom: 24px; height: 54px; border-radius: 999px; }",
+    "jsx": "// Select is a mode on the list, not a screen of its own. Three things change:\n//\n//   every row gains a 24px checkbox and indents its text by 40\n//   the bar swaps Search + Select for Select all + Cancel\n//   a Delete button appears, counting the memories ticked\n//\n// The tick is held against the memory id, so a memory drawn in two groups shows\n// checked in both and still counts once.\n\n<MemoryRow memory={m} selecting checked={selected.has(m.id)} onToggle={toggle} />",
+    "swiftui": "// EditMode drives the same three changes.\nList(selection: $selected) {\n  ForEach(groups) { group in\n    Section(group.title) {\n      ForEach(group.memories) { MemoryRow(memory: $0) }\n    }\n  }\n}\n.environment(\\.editMode, .constant(selecting ? .active : .inactive))\n.toolbar {\n  ToolbarItem(placement: .topBarLeading) { Button(\"Select all\", action: selectAll) }\n  ToolbarItem(placement: .topBarTrailing) { Button(\"Cancel\", action: cancel) }\n}"
+  },
+  "stateGroup": {
+    "id": "memory",
+    "label": "Selecting",
+    "order": 6
+  }
+}

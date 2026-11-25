@@ -1,0 +1,751 @@
+{
+  "slug": "chat-history--search-one-letter",
+  "name": "Chat history search",
+  "feature": "chat-history",
+  "section": "Search",
+  "pending": false,
+  "summary": "A single character typed. Nothing fires and the prompt does not change: below the threshold the screen is deliberately inert.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8152:70999",
+  "image": "/demos/loblaw-handoff/screens/chat-history--search-one-letter.png",
+  "extracted": true,
+  "extractedOn": "2026-10-08",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 23,
+    "hiddenNodes": 2,
+    "assetNodes": 8,
+    "sectionNodes": 2,
+    "styledNodes": 0,
+    "looseEnds": 3
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "The correction is applied but never announced",
+      "detail": "The spell-check frame searches for “medications” while the field still reads “mdeications”, and nothing on screen says a correction happened. The user cannot tell these are not results for what they typed, and has no way back to the literal query.",
+      "nodes": [
+        "8152:71684",
+        "8152:71688"
+      ],
+      "ask": "Add a line naming the spelling used, with a way to search the original instead — or state that silent correction is intended."
+    },
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "Nothing marks the threshold between the bands",
+      "detail": "One letter is inert, two letters fire a query. The screens differ only in the query text, so the rule lives in the frame names rather than in anything drawn. A developer reading the screens alone cannot tell where the cut is.",
+      "nodes": [
+        "8152:71107",
+        "8152:71123"
+      ],
+      "ask": "Confirm the threshold is two characters, and whether a two-letter whole-word match (BP, ER) is in or out for MVP."
+    },
+    {
+      "kind": "scope",
+      "severity": "low",
+      "title": "No cancelled or dismissed state is drawn",
+      "detail": "Cancel sits in the bar on every frame and no frame shows what it returns to. The keyboard is up in all eight, so the list-with-keyboard-dismissed case is undrawn too.",
+      "nodes": [
+        "8152:70800"
+      ],
+      "ask": "Does Cancel clear the query and stay, or leave search entirely?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "/* Search replaces the title bar rather than sitting under it. */\n.search-bar {\n  position: absolute;\n  inset: 0 0 auto 0;\n  height: 124px;\n  display: flex;\n  align-items: flex-end;\n  gap: 8px;\n  padding: 12px 24px;\n}\n\n.search-bar__field {\n  flex: 1;\n  height: 46px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 15px 16px;\n  border-radius: 999px;\n}\n\n/* The results area starts where the bar ends and runs to the keyboard. */\n.search-results { position: absolute; top: 124px; left: 0; right: 0; padding: 16px; }\n.search-results__spinner { height: 411px; display: grid; place-items: center; }",
+    "jsx": "// Eight frames, one screen. What differs is the query and which of four bodies\n// the results area holds:\n//\n//   prompt   — the fixed line, shown under the threshold and alongside an empty result\n//   spinner  — while the query runs\n//   empty    — “No chats found”, with the prompt repeated beneath it\n//   results  — the Chat history row, with the matched run in Semibold\n//\n// The keyboard is up in all eight: none of them is a state you reach by dismissing it.",
+    "swiftui": "// The bar is a search field and a Cancel, bottom-aligned in a 124pt header.\nstruct HistorySearchBar: View {\n  @Binding var query: String\n  var onCancel: () -> Void\n\n  var body: some View {\n    HStack(spacing: 8) {\n      HStack(spacing: 8) {\n        Image(systemName: \"magnifyingglass\")\n        TextField(\"Search history\", text: $query)\n      }\n      .padding(.horizontal, 16)\n      .frame(height: 46)\n      .background(Capsule().fill(Color(.systemGray6)))\n\n      Button(\"Cancel\", action: onCancel)\n        .font(.system(size: 12, weight: .medium))\n    }\n    .padding(.horizontal, 24)\n    .frame(height: 124, alignment: .bottom)\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "chat-history-search",
+    "label": "One letter",
+    "order": 2
+  },
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8152:70999",
+      "name": "History, Search-still not loading",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71000",
+      "name": "Frame 2147231672",
+      "type": "FRAME",
+      "parentId": "8152:70999",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 124,
+        "width": 393,
+        "height": 728
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71001",
+      "name": "Vertical stack, search results",
+      "type": "FRAME",
+      "parentId": "8152:71000",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 140,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71002",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8152:71001",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 140,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71006",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8152:71002",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 148,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71007",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "8152:71006",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 148,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71008",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8152:71007",
+      "depth": 6,
+      "bounds": {
+        "x": 24,
+        "y": 148,
+        "width": 345,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71009",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "8152:70999",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71010",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "8152:70999",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71011",
+      "name": "Frame 2147231679",
+      "type": "FRAME",
+      "parentId": "8152:71010",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 66,
+        "width": 345,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71012",
+      "name": "Button",
+      "type": "FRAME",
+      "parentId": "8152:71011",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 66,
+        "width": 265,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8152:71013",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8152:71012",
+      "depth": 4,
+      "bounds": {
+        "x": 40,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71013;7485:9536",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "8152:71013",
+      "depth": 5,
+      "bounds": {
+        "x": 41,
+        "y": 82,
+        "width": 14,
+        "height": 14
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8152:71107",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8152:71012",
+      "depth": 4,
+      "bounds": {
+        "x": 64,
+        "y": 78,
+        "width": 18,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8152:71015",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8152:71011",
+      "depth": 3,
+      "bounds": {
+        "x": 297,
+        "y": 76,
+        "width": 72,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8152:71015;2046:16114",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8152:71015",
+      "depth": 4,
+      "bounds": {
+        "x": 313,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71015;2046:16114;9:2173",
+      "name": "iOS/arrow.up",
+      "type": "INSTANCE",
+      "parentId": "I8152:71015;2046:16114",
+      "depth": 5,
+      "bounds": {
+        "x": 313,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71015;2046:16114;9:2173;10:3160",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8152:71015;2046:16114;9:2173",
+      "depth": 6,
+      "bounds": {
+        "x": 315,
+        "y": 83,
+        "width": 11,
+        "height": 14
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71015;5:129",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8152:71015",
+      "depth": 4,
+      "bounds": {
+        "x": 313,
+        "y": 80,
+        "width": 40,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8152:71015;2046:16117",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8152:71015",
+      "depth": 4,
+      "bounds": {
+        "x": 382,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71015;2046:16117;9:2173",
+      "name": "iOS/arrow.up",
+      "type": "INSTANCE",
+      "parentId": "I8152:71015;2046:16117",
+      "depth": 5,
+      "bounds": {
+        "x": 382,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8152:71015;2046:16117;9:2173;10:3160",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8152:71015;2046:16117;9:2173",
+      "depth": 6,
+      "bounds": {
+        "x": 384,
+        "y": 83,
+        "width": 11,
+        "height": 14
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8152:71016",
+      "name": "Keyboard",
+      "type": "INSTANCE",
+      "parentId": "8152:70999",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 535,
+        "width": 393,
+        "height": 317
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

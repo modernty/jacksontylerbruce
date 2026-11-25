@@ -1,0 +1,63 @@
+<frame id="8156:266747" name="Memory details, health record, condition" x="2758" y="100" width="393" height="852">
+  <frame id="8156:266748" name="Content" x="0" y="0" width="393" height="852">
+    <frame id="8156:266749" name="Memory header" x="16" y="146" width="361" height="118">
+      <frame id="8156:266750" name="Frame 2147231676" x="0" y="0" width="361" height="70">
+        <text id="8156:266751" name="Your conditions" x="0" y="0" width="350" height="20" />
+        <instance id="8156:266752" name="Header Row · Memory details" x="0" y="22" width="361" height="28">
+          <text id="I8156:266752;2273:21460" name="title" x="0" y="0" width="361" height="28" />
+        </instance>
+        <text id="8156:266753" name="Message timestamp" x="0" y="52" width="361" height="18" />
+      </frame>
+      <frame id="8156:266754" name="Source" x="0" y="82" width="105" height="36">
+        <instance id="8156:266755" name="Source chip" x="0" y="0" width="105" height="36">
+          <text id="I8156:266755;2817:26939" name="Label" x="12" y="8" width="81" height="20" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:266756" name="Details" x="16" y="288" width="361" height="113">
+      <frame id="8156:266757" name="Details card (detached — needs a Title row action slot upstream)" x="0" y="0" width="361" height="113">
+        <frame id="8156:266758" name="Info" x="0" y="0" width="361" height="113">
+          <instance id="8156:266759" name="Header Row · Memory details" x="18" y="22" width="325" height="22" hidden="true">
+            <text id="I8156:266759;2273:21460" name="title" x="0" y="0" width="325" height="22" />
+          </instance>
+          <frame id="8156:266760" name="Fields" x="2" y="2" width="357" height="109">
+            <instance id="8156:266761" name="Row · Condition" x="0" y="0" width="357" height="54">
+              <text id="I8156:266761;7815:173078" name="label" x="16" y="17" width="66" height="20" />
+              <text id="I8156:266761;7815:173079" name="value" x="94" y="16" width="219" height="22" />
+              <instance id="I8156:266761;7815:173080" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+            <rectangle id="8156:266762" name="Divider" x="0" y="54" width="357" height="1" />
+            <instance id="8156:266763" name="Row · Status" x="0" y="55" width="357" height="54">
+              <text id="I8156:266763;7815:173078" name="label" x="16" y="17" width="44" height="20" />
+              <text id="I8156:266763;7815:173079" name="value" x="72" y="16" width="241" height="22" />
+              <instance id="I8156:266763;7815:173080" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+          </frame>
+        </frame>
+        <frame id="8156:266764" name="Disclaimer" x="0" y="537" width="345" height="144" hidden="true">
+          <text id="8156:266765" name="Disclaimer text" x="8" y="0" width="329" height="144" />
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8156:266766" name="Delete memory (fixed)" x="16" y="782" width="361" height="54">
+    <instance id="I8156:266766;2273:16645" name="Primary action" x="0" y="0" width="361" height="54">
+      <text id="I8156:266766;2273:16645;5:99" name="label" x="124" y="16" width="113" height="22" />
+    </instance>
+  </instance>
+  <instance id="8156:266767" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8156:266768" name="Top nav" x="0" y="54" width="393" height="68">
+    <instance id="8156:266769" name="Button" x="24" y="12" width="44" height="44">
+      <instance id="I8156:266769;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16">
+        <vector id="I8156:266769;892:44251;7485:14911" name="Vector" x="4" y="2" width="7" height="12" />
+      </instance>
+    </instance>
+    <text id="8156:266770" name="Page title" x="68" y="23" width="257" height="22" />
+    <frame id="8156:266771" name="Frame 2147231667" x="173" y="11" width="196" height="46" hidden="true">
+      <instance id="8156:266772" name="Button" x="0" y="0" width="196" height="46">
+        <text id="I8156:266772;5:70" name="label" x="36" y="12" width="124" height="22" />
+      </instance>
+    </frame>
+    <frame id="8156:266773" name="Spacer" x="325" y="12" width="44" height="44" />
+  </frame>
+</frame>

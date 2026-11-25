@@ -1,0 +1,1503 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 69,
+    "hiddenNodes": 13,
+    "assetNodes": 16,
+    "sectionNodes": 11,
+    "styledNodes": 0,
+    "looseEnds": 5
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "slug": "chat-history--paginated",
+  "name": "Chat history, 50 chats — paginated",
+  "stateGroup": {
+    "id": "chat-history-page",
+    "label": "Paginated",
+    "order": 4
+  },
+  "figmaNodeId": "8156:232649",
+  "summary": "Fifty conversations, ten to a page, with a pager at the foot: previous, pages one to five, next. The only frame in the feature that pages rather than scrolls.",
+  "looseEnds": [
+    {
+      "kind": "missing-rule",
+      "severity": "high",
+      "title": "Nothing says when the list starts paging",
+      "detail": "Twelve chats scroll with no pager; fifty page at ten a time. The threshold between the two is not drawn and not stated, and neither is what happens at eleven, at twenty, or past five pages — the pager draws exactly five numbers with no overflow or ellipsis state.",
+      "nodes": [
+        "8156:232857",
+        "8156:232809"
+      ],
+      "ask": "State the page size and the length at which paging starts, and draw the pager past five pages."
+    },
+    {
+      "kind": "interaction",
+      "severity": "medium",
+      "title": "The pager sits inside the scrolling content",
+      "detail": "The pagination band is the last child of the content frame at y=732, so it scrolls with the list rather than staying at the foot of the screen. On page one the user must scroll ten rows to reach it, which this frame shows by being drawn already scrolled to the bottom.",
+      "nodes": [
+        "8156:232857"
+      ],
+      "ask": "Should the pager be pinned, or is scrolling to it intended?"
+    },
+    {
+      "kind": "missing-state",
+      "severity": "medium",
+      "title": "Only the current page is drawn",
+      "detail": "Page 1 carries a filled background and the other four are plain. There is no hover, pressed or disabled state, and Previous is not drawn disabled although there is no page before the first.",
+      "nodes": [
+        "8156:232810",
+        "8156:232811",
+        "8156:232814"
+      ],
+      "ask": "Confirm Previous is disabled on page one and Next on the last, and what disabled looks like."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The current page chip is 2px narrower than the others",
+      "detail": "Page 1 is 38x26 where pages 2 to 5 are 40x26, because the current chip is a different component rather than a state of the same one. The gap after it reads as 4px against the others' 4px, so the row is 2px short of even.",
+      "nodes": [
+        "8156:232811",
+        "8156:232812"
+      ],
+      "ask": "Make current a state of the page chip so the widths match."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The pill group sits 4px further left here than on the same nav elsewhere",
+      "detail": "Search and Select are the same two components throughout, but the group that holds them is 275 wide with an 8px gap on the History frames and 271 wide with a 4px gap on the Deleting frames and on Memory. Both end flush at x=369, so the difference shows up on the left edge.",
+      "nodes": [
+        "8156:232902"
+      ],
+      "ask": "Pick one gap. 4px matches Memory, which a developer will build from the same component."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--paginated.png",
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8156:232649",
+      "name": "Chat history, 50 chats — paginated",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232650",
+      "name": "Frame 2147231662",
+      "type": "FRAME",
+      "parentId": "8156:232649",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 28,
+        "width": 361,
+        "height": 808
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232651",
+      "name": "Frame 2147231656",
+      "type": "FRAME",
+      "parentId": "8156:232650",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 28,
+        "width": 361,
+        "height": 72
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232652",
+      "name": "Top",
+      "type": "FRAME",
+      "parentId": "8156:232651",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 28,
+        "width": 361,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232653",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:232652",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 28,
+        "width": 345,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:232654",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:232653",
+      "depth": 5,
+      "bounds": {
+        "x": 24,
+        "y": 28,
+        "width": 145,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232655",
+      "name": "Frame 2147231652",
+      "type": "FRAME",
+      "parentId": "8156:232651",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 60,
+        "width": 75,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232656",
+      "name": "50 chats",
+      "type": "TEXT",
+      "parentId": "8156:232655",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 70,
+        "width": 59,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232657",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:232650",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 112,
+        "width": 361,
+        "height": 636
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:232658",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 112,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232664",
+      "name": "Frame 2147231642",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 176,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232665",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232664",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 176,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232674",
+      "name": "Frame 2147231644",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 240,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232675",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232674",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 240,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232681",
+      "name": "Frame 2147231645",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 304,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232682",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232681",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 304,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232688",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 368,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232694",
+      "name": "Frame 2147231646",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 432,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232695",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232694",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 432,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232704",
+      "name": "Frame 2147231647",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 496,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232705",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232704",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 496,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232711",
+      "name": "Frame 2147231648",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 560,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232712",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232711",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 560,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232718",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 624,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232724",
+      "name": "Frame 2147231649",
+      "type": "FRAME",
+      "parentId": "8156:232657",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 688,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232725",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:232724",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 688,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232857",
+      "name": "Pagination band",
+      "type": "FRAME",
+      "parentId": "8156:232650",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 760,
+        "width": 361,
+        "height": 76
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232809",
+      "name": "Pagination",
+      "type": "FRAME",
+      "parentId": "8156:232857",
+      "depth": 3,
+      "bounds": {
+        "x": 42,
+        "y": 780,
+        "width": 310,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:232810",
+      "name": "Previous",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 42,
+        "y": 780,
+        "width": 44,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232810;2046:16129",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232810",
+      "depth": 5,
+      "bounds": {
+        "x": 56,
+        "y": 788,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232811",
+      "name": "Page 1 · current",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 90,
+        "y": 783,
+        "width": 38,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232811;5:62",
+      "name": "Rectangle",
+      "type": "RECTANGLE",
+      "parentId": "8156:232811",
+      "depth": 5,
+      "bounds": {
+        "x": 90,
+        "y": 783,
+        "width": 38,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232811;2046:16006",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232811",
+      "depth": 5,
+      "bounds": {
+        "x": 106,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232811;5:64",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232811",
+      "depth": 5,
+      "bounds": {
+        "x": 106,
+        "y": 787,
+        "width": 6,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232811;2046:16009",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232811",
+      "depth": 5,
+      "bounds": {
+        "x": 175,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232812",
+      "name": "Page 2",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 132,
+        "y": 783,
+        "width": 40,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232812;2046:16114",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232812",
+      "depth": 5,
+      "bounds": {
+        "x": 148,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232812;5:129",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232812",
+      "depth": 5,
+      "bounds": {
+        "x": 148,
+        "y": 787,
+        "width": 8,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232812;2046:16117",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232812",
+      "depth": 5,
+      "bounds": {
+        "x": 217,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232813",
+      "name": "Page 3",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 176,
+        "y": 783,
+        "width": 40,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232813;2046:16114",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232813",
+      "depth": 5,
+      "bounds": {
+        "x": 192,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232813;5:129",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232813",
+      "depth": 5,
+      "bounds": {
+        "x": 192,
+        "y": 787,
+        "width": 8,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232813;2046:16117",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232813",
+      "depth": 5,
+      "bounds": {
+        "x": 261,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232841",
+      "name": "Page 4",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 220,
+        "y": 783,
+        "width": 40,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232841;2046:16114",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232841",
+      "depth": 5,
+      "bounds": {
+        "x": 236,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232841;5:129",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232841",
+      "depth": 5,
+      "bounds": {
+        "x": 236,
+        "y": 787,
+        "width": 8,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232841;2046:16117",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232841",
+      "depth": 5,
+      "bounds": {
+        "x": 305,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232849",
+      "name": "Page 5",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 264,
+        "y": 783,
+        "width": 40,
+        "height": 26
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232849;2046:16114",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232849",
+      "depth": 5,
+      "bounds": {
+        "x": 280,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232849;5:129",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232849",
+      "depth": 5,
+      "bounds": {
+        "x": 280,
+        "y": 787,
+        "width": 8,
+        "height": 18
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232849;2046:16117",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232849",
+      "depth": 5,
+      "bounds": {
+        "x": 349,
+        "y": 789,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232814",
+      "name": "Next",
+      "type": "INSTANCE",
+      "parentId": "8156:232809",
+      "depth": 4,
+      "bounds": {
+        "x": 308,
+        "y": 780,
+        "width": 44,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232814;2046:16129",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232814",
+      "depth": 5,
+      "bounds": {
+        "x": 322,
+        "y": 788,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232858",
+      "name": "Scroll Indicator",
+      "type": "INSTANCE",
+      "parentId": "8156:232649",
+      "depth": 1,
+      "bounds": {
+        "x": 385,
+        "y": 128,
+        "width": 4,
+        "height": 620
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232858;2365:33110",
+      "name": "Thumb",
+      "type": "FRAME",
+      "parentId": "8156:232858",
+      "depth": 2,
+      "bounds": {
+        "x": 385,
+        "y": 591,
+        "width": 4,
+        "height": 157
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232899",
+      "name": "Overlay",
+      "type": "FRAME",
+      "parentId": "8156:232649",
+      "depth": 1,
+      "bounds": {
+        "x": 393,
+        "y": 140,
+        "width": 393,
+        "height": 140
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232900",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "8156:232649",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:232901",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:232900",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 68,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232901;892:44251",
+      "name": "CaretLeft",
+      "type": "INSTANCE",
+      "parentId": "8156:232901",
+      "depth": 3,
+      "bounds": {
+        "x": 38,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232902",
+      "name": "Frame 2147231679",
+      "type": "FRAME",
+      "parentId": "8156:232900",
+      "depth": 2,
+      "bounds": {
+        "x": 94,
+        "y": 66,
+        "width": 275,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:232903",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:232902",
+      "depth": 3,
+      "bounds": {
+        "x": 94,
+        "y": 66,
+        "width": 148,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232903;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232903",
+      "depth": 4,
+      "bounds": {
+        "x": 130,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232903;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232903",
+      "depth": 4,
+      "bounds": {
+        "x": 154,
+        "y": 78,
+        "width": 52,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232903;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232903",
+      "depth": 4,
+      "bounds": {
+        "x": 205,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232904",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:232902",
+      "depth": 3,
+      "bounds": {
+        "x": 250,
+        "y": 66,
+        "width": 119,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:232904;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232904",
+      "depth": 4,
+      "bounds": {
+        "x": 286,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:232904;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:232904",
+      "depth": 4,
+      "bounds": {
+        "x": 286,
+        "y": 78,
+        "width": 47,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:232904;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:232904",
+      "depth": 4,
+      "bounds": {
+        "x": 361,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:232748",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "8156:232649",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

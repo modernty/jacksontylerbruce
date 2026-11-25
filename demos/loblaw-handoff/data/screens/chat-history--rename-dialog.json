@@ -1,0 +1,76 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--rename-dialog",
+  "name": "Chat history, rename",
+  "stateGroup": {
+    "id": "chat-history-rename",
+    "label": "Rename",
+    "order": 1
+  },
+  "figmaNodeId": "8156:232934",
+  "summary": "Rename opens a 300px alert over the list with the keyboard up. The field is prefilled with the existing title, scrolled to its end with the caret after the last character.",
+  "looseEnds": [
+    {
+      "kind": "duplicate",
+      "severity": "medium",
+      "title": "Rename and Renaming are the same frame drawn twice",
+      "detail": "The file holds two frames, 'Rename' and 'Renaming', with 223 nodes each. The only difference between them is the position of a separator inside the keyboard instance. Nothing shows the typing state as distinct from the opened state, so only one is published here.",
+      "nodes": [
+        "8156:233031"
+      ],
+      "ask": "Delete one, or make the second show what actually changes while typing."
+    },
+    {
+      "kind": "missing-state",
+      "severity": "high",
+      "title": "Save has no disabled state and the field has no validation",
+      "detail": "Save is drawn identically whether the field holds the original title or nothing at all. The Button set has no Disabled variant, and no error or character limit is drawn for a name that is empty, unchanged, or very long.",
+      "nodes": [
+        "I8156:233031;5446:7014"
+      ],
+      "ask": "Specify when Save is available, and what happens on an empty or over-long name."
+    },
+    {
+      "kind": "content",
+      "severity": "low",
+      "title": "The alert carries a hidden second line",
+      "detail": "Under the title sits a switched-off description reading 'Enter a new name'. It is part of the component's defaults rather than written copy.",
+      "nodes": [
+        "I8156:233031;65:57152"
+      ],
+      "ask": "Decide whether the dialog wants a second line; if not, remove it from the instance."
+    },
+    {
+      "kind": "geometry",
+      "severity": "medium",
+      "title": "The existing title overflows the field by 116px",
+      "detail": "The value is a 356px text node inside a 240px content box, positioned at x=-118 so the end of the title is visible. Nothing is drawn for how a user reaches the beginning of the name, and no clear button is shown — the component's Clear glyph is hidden.",
+      "nodes": [
+        "I8156:233031;5469:8621;5433:15640",
+        "I8156:233031;5469:8621;5433:15643"
+      ],
+      "ask": "Should the field select all on open, scroll to the start, or offer Clear?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--rename-dialog.png"
+}

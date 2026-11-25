@@ -1,0 +1,45 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-three",
+  "name": "Chat history, selections — all returns",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Three picked",
+    "order": 3
+  },
+  "figmaNodeId": "8156:72876",
+  "summary": "Three of four. Select all is still offered, and the button counts three — the state immediately before and after the all-selected one.",
+  "looseEnds": [
+    {
+      "kind": "missing-state",
+      "severity": "low",
+      "title": "Select all is never drawn as a toggle",
+      "detail": "At three of four Select all is still offered, and at four it disappears rather than becoming Deselect all. Memory's selection uses Deselect all at the same point, so the two features resolve the same moment differently.",
+      "nodes": [
+        "8156:72926"
+      ],
+      "ask": "Pick one: a Select all that becomes Deselect all, or one that is removed at full."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-three.png"
+}

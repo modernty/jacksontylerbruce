@@ -1,0 +1,57 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--rename-empty",
+  "name": "Chat history, renaming — empty",
+  "stateGroup": {
+    "id": "chat-history-rename",
+    "label": "Cleared",
+    "order": 2
+  },
+  "figmaNodeId": "8200:16701",
+  "summary": "The field cleared, caret at the start. Save is still drawn active, which is the state that decides whether an empty name can be committed.",
+  "looseEnds": [
+    {
+      "kind": "missing-state",
+      "severity": "high",
+      "title": "An empty name is savable as drawn",
+      "detail": "With the field empty, Save carries exactly the same treatment it has with a full title. Nothing states whether the empty name is rejected, whether the chat reverts to its generated title, or whether it is saved blank.",
+      "nodes": [
+        "8200:17224",
+        "8200:17250"
+      ],
+      "ask": "Define the empty case, and draw Save disabled if that is the answer."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "The emptied field collapses to 2px",
+      "detail": "With no value the Contents frame hugs to 2px wide and the separator inside it still measures 370px, overflowing its parent. It renders acceptably but the layer tree is misleading.",
+      "nodes": [
+        "8200:17246",
+        "8200:17247"
+      ],
+      "ask": "Give the field a fill width so it does not hug its value."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--rename-empty.png"
+}

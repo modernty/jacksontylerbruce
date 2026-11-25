@@ -1,0 +1,68 @@
+{
+  "slug": "memory--editing",
+  "name": "Memory",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Editing one field. The sheet carries that field alone, with the keyboard up and the required caption below it; the page it belongs to stays behind the scrim.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:240359",
+  "image": "/demos/loblaw-handoff/screens/memory--editing.png",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "Viewing moved from a sheet to a page",
+      "detail": "A memory used to open as a bottom sheet over the home. It is now a pushed page with its own back and title, and the fields are rows on a card. Nothing records what happens to the scroll position of the list behind it on the way back.",
+      "nodes": [
+        "8156:266768",
+        "8156:266756"
+      ],
+      "ask": "Does returning restore the list where it was, or land at the top?"
+    },
+    {
+      "kind": "scope",
+      "severity": "medium",
+      "title": "Only two of the memory's fields are drawn",
+      "detail": "The details page shows Condition and Status. The field-states section documents between two and eight fields depending on the memory type, and nothing here says how the page grows — or whether the card scrolls.",
+      "nodes": [
+        "8156:266760"
+      ],
+      "ask": "Confirm the page is the same card for every memory type, and what it does at eight rows."
+    },
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "The sheet confirms with a tick, not a button",
+      "detail": "Close and confirm are the two 44pt controls in the sheet's toolbar. There is no Save in the footer — that slot is drawn and switched off — so the only commit is the tick at the top right.",
+      "nodes": [
+        "I8156:240387;2587:48946;2587:48333",
+        "I8156:240387;2587:48946;2587:48339",
+        "I8156:240387;2276:22361"
+      ],
+      "ask": "Is the tick the commit, and does closing discard silently?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "/* The details page: a pushed screen, not a sheet. */\n.memory-details { padding-top: 146px; }\n.memory-details__header { display: flex; flex-direction: column; gap: 4px; }\n.memory-details__fields {\n  border-radius: 20px;\n  background: var(--bg-surface);\n}\n.memory-details__row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  height: 54px;\n  padding: 0 16px;\n}\n\n/* Delete sits fixed at the foot, clear of the rows. */\n.memory-details__delete { position: absolute; inset: auto 16px 16px; height: 54px; }",
+    "jsx": "// Four screens, one route: the list pushes the details page, the page opens an edit\n// sheet per field, and delete is a dialog over the page.\n//\n//   Memory            → the grouped list\n//   Viewing a memory  → category, memory, timestamp, source, fields\n//   Editing a memory  → one field in a sheet, keyboard up, page behind the scrim\n//   Deleting a memory → the confirmation over the page\n//\n// The rows are the same component in all four; what changes is what is over them.",
+    "swiftui": "// The details page is pushed, so it owns its own nav.\nstruct MemoryDetails: View {\n  let memory: Memory\n\n  var body: some View {\n    VStack(alignment: .leading, spacing: 24) {\n      VStack(alignment: .leading, spacing: 4) {\n        Text(memory.category).font(.system(size: 14, weight: .medium))\n        Text(memory.text).font(.system(size: 20, weight: .semibold))\n        Text(memory.updated).font(.system(size: 12))\n      }\n      SourceChip(label: memory.source)\n      VStack(spacing: 0) {\n        ForEach(memory.fields) { FieldRow(field: $0) }\n      }\n      .background(RoundedRectangle(cornerRadius: 20).fill(.background))\n    }\n    .padding(.horizontal, 16)\n    .navigationTitle(\"Memory details\")\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "memory",
+    "label": "Editing a memory",
+    "order": 3
+  }
+}

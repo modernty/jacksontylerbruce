@@ -1,0 +1,55 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-confirm",
+  "name": "Chat history, confirm deletion",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Confirm the count",
+    "order": 5
+  },
+  "figmaNodeId": "8156:72928",
+  "summary": "The counted path's gate. The title carries the number and the body is plural, with the same note that saved memories outlive the chats.",
+  "looseEnds": [
+    {
+      "kind": "missing-rule",
+      "severity": "medium",
+      "title": "The count in the title is drawn, not derived",
+      "detail": "'Delete 3 chats?' is a text node. Nothing states the singular, so one selected chat would read '1 chats?' unless a developer decides otherwise — and the all-selected path uses different wording again.",
+      "nodes": [
+        "8156:72983"
+      ],
+      "ask": "Give the title one inflected string covering one, several and all."
+    },
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "The dialog layer is called 'Delete memory'",
+      "detail": "The alert is a layer named 'Delete memory', copied from the Memory section. The copy inside is about chats.",
+      "nodes": [
+        "8156:72980"
+      ],
+      "ask": "Rename the layer."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-confirm.png"
+}

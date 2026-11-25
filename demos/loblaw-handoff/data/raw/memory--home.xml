@@ -1,0 +1,152 @@
+<frame id="8156:263847" name="Memory home" x="100" y="100" width="393" height="852">
+  <frame id="8156:263848" name="Content" x="0" y="122" width="393" height="3097">
+    <frame id="8156:263849" name="Top" x="16" y="24" width="361" height="154">
+      <frame id="8156:263850" name="Header" x="8" y="0" width="345" height="154">
+        <text id="8156:263851" name="Message title" x="0" y="0" width="97" height="32" />
+        <text id="8156:263852" name="Message title" x="0" y="36" width="345" height="88" />
+        <frame id="8156:263853" name="Frame 2147231606" x="0" y="128" width="112" height="26">
+          <text id="8156:263854" name="Last updated today" x="0" y="8" width="112" height="18" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="8156:263855" name="What I know about you" x="16" y="210" width="359" height="350">
+      <instance id="8156:263856" name="Background Gradient" x="454" y="-79" width="567" height="320" hidden="true" />
+      <instance id="8156:263857" name="Background Gradient" x="630" y="432" width="1190" height="671" hidden="true" />
+      <frame id="8156:263858" name="Symbol + Wordmark Stacked 1_WIP 1" x="16" y="16" width="32" height="32" />
+      <frame id="8156:263863" name="Frame 2147202619" x="16" y="56" width="295" height="28">
+        <text id="8156:263864" name="What you’ve told PC Chat™" x="0" y="0" width="295" height="28" />
+      </frame>
+      <text id="8156:263865" name="You&#39;re 8 weeks pregnant. You&#39;ve had a cough and fever for a few days, and you&#39;re working on managing your blood pressure — you take lisinopril for it, and there&#39;s a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now." x="16" y="92" width="327" height="120" />
+      <text id="8156:263866" name="You live in Ontario and see Dr. Sara Smith as your family physician. You&#39;ve had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort." x="16" y="220" width="327" height="80" />
+      <frame id="8156:263867" name="Frame 2147231606" x="16" y="308" width="112" height="26">
+        <text id="8156:263868" name="Last updated today" x="0" y="8" width="112" height="18" />
+      </frame>
+    </frame>
+    <frame id="8156:263869" name="Frame 2147231614" x="16" y="592" width="361" height="2489">
+      <frame id="8156:263870" name="Vertical stack" x="0" y="0" width="361" height="320">
+        <frame id="8156:263871" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:263872" name="Item title" x="8" y="0" width="87" height="22" />
+        </frame>
+        <frame id="8156:263873" name="List" x="0" y="30" width="361" height="290">
+          <frame id="8156:263874" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:263883" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:263892" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:263901" name="List item" x="0" y="174" width="361" height="58" />
+          <frame id="8156:263910" name="List item" x="0" y="232" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:263919" name="Rectangle 16022" x="0" y="352" width="361" height="1" />
+      <frame id="8156:263920" name="Vertical stack" x="0" y="385" width="361" height="262">
+        <frame id="8156:263921" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:263922" name="Item title" x="8" y="0" width="81" height="22" />
+        </frame>
+        <frame id="8156:263923" name="List" x="0" y="30" width="361" height="232">
+          <frame id="8156:263924" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:263933" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:263942" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:263951" name="List item" x="0" y="174" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:263960" name="Rectangle 16022" x="0" y="679" width="361" height="1" />
+      <frame id="8156:263961" name="Vertical stack" x="0" y="712" width="361" height="320">
+        <frame id="8156:263962" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:263963" name="Item title" x="8" y="0" width="234" height="22" />
+        </frame>
+        <frame id="8156:263964" name="List" x="0" y="30" width="361" height="290">
+          <frame id="8156:263965" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:263974" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:263983" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:263992" name="List item" x="0" y="174" width="361" height="58" />
+          <frame id="8156:264001" name="List item" x="0" y="232" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:264010" name="Rectangle 16022" x="0" y="1064" width="361" height="1" />
+      <frame id="8156:264011" name="Vertical stack" x="0" y="1097" width="361" height="494">
+        <frame id="8156:264012" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:264013" name="Item title" x="8" y="0" width="355" height="22" />
+        </frame>
+        <frame id="8156:264014" name="List" x="0" y="30" width="361" height="464">
+          <frame id="8156:264015" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:264024" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:264033" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:264042" name="List item" x="0" y="174" width="361" height="58" />
+          <frame id="8156:264051" name="List item" x="0" y="232" width="361" height="58" />
+          <frame id="8156:264060" name="List item" x="0" y="290" width="361" height="58" />
+          <frame id="8156:264069" name="List item" x="0" y="348" width="361" height="58" />
+          <frame id="8156:264078" name="List item" x="0" y="406" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:264087" name="Rectangle 16022" x="0" y="1623" width="361" height="1" />
+      <frame id="8156:264088" name="Vertical stack" x="0" y="1656" width="361" height="320">
+        <frame id="8156:264089" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:264090" name="Item title" x="8" y="0" width="113" height="22" />
+        </frame>
+        <frame id="8156:264091" name="List" x="0" y="30" width="361" height="290">
+          <frame id="8156:264092" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:264101" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:264110" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:264119" name="List item" x="0" y="174" width="361" height="58" />
+          <frame id="8156:264128" name="List item" x="0" y="232" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:264137" name="Rectangle 16022" x="0" y="2008" width="361" height="1" />
+      <frame id="8156:264138" name="Vertical stack" x="0" y="2041" width="361" height="262">
+        <frame id="8156:264139" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:264140" name="Item title" x="8" y="0" width="191" height="22" />
+        </frame>
+        <frame id="8156:264141" name="List" x="0" y="30" width="361" height="232">
+          <frame id="8156:264142" name="List item" x="0" y="0" width="361" height="58" />
+          <frame id="8156:264151" name="List item" x="0" y="58" width="361" height="58" />
+          <frame id="8156:264160" name="List item" x="0" y="116" width="361" height="58" />
+          <frame id="8156:264169" name="List item" x="0" y="174" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:264178" name="Rectangle 16022" x="0" y="2335" width="361" height="1" />
+      <frame id="8156:264179" name="Vertical stack" x="0" y="2368" width="361" height="88">
+        <frame id="8156:264180" name="Header" x="0" y="0" width="361" height="22">
+          <text id="8156:264181" name="Item title" x="8" y="0" width="213" height="22" />
+        </frame>
+        <frame id="8156:264182" name="List" x="0" y="30" width="361" height="58">
+          <frame id="8156:264183" name="List item" x="0" y="0" width="361" height="58" />
+        </frame>
+      </frame>
+      <rectangle id="8156:264192" name="Rectangle 16022" x="0" y="2488" width="361" height="1" />
+    </frame>
+  </frame>
+  <frame id="8156:264199" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:264200" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:264200;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16">
+        <vector id="I8156:264200;892:44251;7485:14911" name="Vector" x="4" y="2" width="7" height="12" />
+      </instance>
+    </instance>
+    <frame id="8156:264201" name="Frame 2147231679" x="98" y="66" width="271" height="46">
+      <instance id="8156:269428" name="Button" x="0" y="0" width="148" height="46">
+        <instance id="I8156:269428;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16">
+          <instance id="I8156:269428;2046:16015;9:2173" name="iOS/magnifyingglass" x="0" y="0" width="16" height="16">
+            <vector id="I8156:269428;2046:16015;9:2173;10:7747" name="Vector" x="1" y="2" width="13" height="13" />
+          </instance>
+        </instance>
+        <text id="I8156:269428;5:70" name="label" x="60" y="12" width="52" height="22" />
+        <instance id="I8156:269428;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true">
+          <instance id="I8156:269428;2046:16018;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8156:269428;2046:16018;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+      </instance>
+      <instance id="8156:264202" name="Button" x="152" y="0" width="119" height="46">
+        <instance id="I8156:264202;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true">
+          <instance id="I8156:264202;2046:16015;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8156:264202;2046:16015;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+        <text id="I8156:264202;5:70" name="label" x="36" y="12" width="47" height="22" />
+        <instance id="I8156:264202;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true">
+          <instance id="I8156:264202;2046:16018;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8156:264202;2046:16018;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8156:264193" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

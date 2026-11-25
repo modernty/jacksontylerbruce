@@ -1,0 +1,43 @@
+<frame id="8156:73076" name="Chat history, chats deleted-toast" x="7075" y="100" width="393" height="852">
+  <frame id="8156:73083" name="Frame 2147231673" x="16" y="146" width="361" height="96">
+    <frame id="8156:73084" name="Frame 2147231656" x="0" y="0" width="361" height="32">
+      <frame id="8156:73085" name="Top" x="0" y="0" width="361" height="32">
+        <frame id="8156:73086" name="Header" x="8" y="0" width="345" height="32">
+          <text id="8156:73087" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="8156:73088" name="Frame 2147231669" x="0" y="44" width="361" height="52">
+      <text id="8156:73089" name="Message title" x="8" y="0" width="85" height="20" chars="No chats yet" />
+      <text id="8156:73090" name="Ask PC Chat&#8482; a question today." x="8" y="32" width="345" height="20" chars="Ask PC Chat&#8482; a question today." />
+    </frame>
+  </frame>
+  <frame id="8156:73091" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:73092" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:73092;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+  </frame>
+  <instance id="8156:73093" name="Toast" x="16" y="60" width="361" height="56">
+    <frame id="I8156:73093;7102:26285" name="Header container" x="8" y="8" width="345" height="40">
+      <frame id="I8156:73093;7102:26286" name="Message wrapper" x="0" y="11" width="257" height="18">
+        <text id="I8156:73093;7102:26287" name="Message" x="16" y="0" width="225" height="18" chars="4 chats deleted" />
+      </frame>
+      <frame id="I8156:73093;7102:26288" name="Action" x="267" y="11" width="47" height="18" hidden="true">
+        <text id="I8156:73093;7102:26289" name="Action label" x="8" y="0" width="31" height="18" chars="Undo" />
+      </frame>
+      <instance id="I8156:73093;7102:26290" name="Dismiss" x="305" y="0" width="40" height="40">
+        <frame id="I8156:73093;7102:26290;673:1335" name="Send button" x="0" y="0" width="40" height="40">
+          <instance id="I8156:73093;7102:26290;688:1443" name="X" x="12" y="12" width="16" height="16">
+            <vector id="I8156:73093;7102:26290;688:1443;7485:17661" name="Vector" x="3" y="3" width="11" height="11" />
+          </instance>
+        </frame>
+      </instance>
+    </frame>
+  </instance>
+  <instance id="8156:73094" name="Button" x="196" y="774" width="173" height="54">
+    <instance id="I8156:73094;2046:16060" name="Leading icon" x="40" y="19" width="16" height="16" />
+    <text id="I8156:73094;5:99" name="label" x="64" y="16" width="69" height="22" chars="New chat" />
+    <instance id="I8156:73094;2046:16063" name="Trailing icon" x="115" y="18" width="16" height="16" hidden="true" />
+  </instance>
+  <instance id="8156:73077" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

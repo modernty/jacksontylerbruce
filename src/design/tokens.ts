@@ -4,8 +4,22 @@ export const tokens = {
     "ink": "#111111",
     "accent": "#2E3A87",
     "accentSoft": "#E3E8FA",
-    "paper": "#FBFBF8",
-    "surface": "#FFFFFF"
+    "paper": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "well": "#F1F1EF",
+    "studyMark": "#E66B36",
+    "studyScreen": "#F4F3F1",
+    "studySage": "#C4C8AA",
+    "studySageDeep": "#D5D4B6",
+    "studyLilac": "#DCD2DD",
+    "studyMist": "#ECE9EC",
+    "studySky": "#B6D6EE",
+    "studyLily": "#A9B4F0",
+    "studyLilyInk": "#2B3486",
+    "studyLilySoft": "#ECEFFD",
+    "remedyWashSky": "#EDF0F8",
+    "remedyWashMist": "#F3F4F9",
+    "remedyWashBlush": "#F6F3F7"
   },
   "inkAlpha": {
     "hover": 0.05,
@@ -13,7 +27,7 @@ export const tokens = {
     "shadow": 0.07,
     "rule": 0.12,
     "hair": 0.2,
-    "placeholder": 0.38,
+    "placeholder": 0.58,
     "muted": 0.45,
     "meta": 0.6,
     "quiet": 0.7

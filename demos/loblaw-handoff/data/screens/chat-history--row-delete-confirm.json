@@ -1,0 +1,56 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--row-delete-confirm",
+  "name": "Chat history, delete confirmation",
+  "stateGroup": {
+    "id": "chat-history-row",
+    "label": "Confirm",
+    "order": 2
+  },
+  "figmaNodeId": "8156:72604",
+  "summary": "Deleting one chat gates behind an alert. The body is explicit that memories saved from the conversation outlive it.",
+  "looseEnds": [
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "The dialog layer is called 'Delete memory'",
+      "detail": "The alert on all three Chat history confirmation frames is a layer named 'Delete memory', copied from the Memory section. The copy inside is about chats.",
+      "nodes": [
+        "8156:72652"
+      ],
+      "ask": "Rename the layer so a developer searching the file does not land in the wrong flow."
+    },
+    {
+      "kind": "inconsistent-content",
+      "severity": "low",
+      "title": "The alert carries two hidden 'Not this time' buttons",
+      "detail": "Besides Cancel and Delete the Buttons frame holds two switched-off variants labelled 'Not this time', left over from the component's defaults.",
+      "nodes": [
+        "8156:72658",
+        "8156:72660"
+      ],
+      "ask": "Strip the unused variants from the instance."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--row-delete-confirm.png"
+}

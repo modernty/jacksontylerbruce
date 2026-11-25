@@ -18,3 +18,8 @@ data/engine/models/
 *.woff2
 !fonts/courier-prime-regular.woff2
 design/source/resume-timeline.svg
+
+# Demo builds (sources in demos/, published output in public/demos/)
+demos/*/.next/
+demos/*/out/
+demos/*/next-env.d.ts

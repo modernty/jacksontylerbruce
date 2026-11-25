@@ -1,0 +1,43 @@
+<frame id="8152:71220" name="History, Search-load triggered for two letters, nothing found" x="1832" y="100" width="393" height="852">
+  <instance id="8152:71223" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8152:71224" name="Top nav" x="0" y="0" width="393" height="124">
+    <frame id="8152:71225" name="Frame 2147231679" x="24" y="66" width="345" height="46">
+      <frame id="8152:71226" name="Button" x="0" y="0" width="265" height="46">
+        <instance id="8152:71227" name="Leading icon" x="16" y="15" width="16" height="16">
+          <vector id="I8152:71227;7485:9536" name="Vector" x="1" y="1" width="14" height="14" />
+        </instance>
+        <text id="8152:71228" name="label" x="40" y="12" width="27" height="22" />
+      </frame>
+      <instance id="8152:71229" name="Button" x="273" y="10" width="72" height="26">
+        <instance id="I8152:71229;2046:16114" name="Leading icon" x="16" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:71229;2046:16114;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:71229;2046:16114;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+        <text id="I8152:71229;5:129" name="label" x="16" y="4" width="40" height="18" />
+        <instance id="I8152:71229;2046:16117" name="Trailing icon" x="85" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:71229;2046:16117;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:71229;2046:16117;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8152:71230" name="Keyboard" x="0" y="535" width="393" height="317" />
+  <frame id="8152:71323" name="Frame 2147231672" x="0" y="124" width="393" height="728">
+    <frame id="8152:71324" name="Vertical stack, search results" x="16" y="16" width="361" height="84">
+      <frame id="8152:71325" name="List item" x="0" y="0" width="361" height="84">
+        <frame id="8152:71326" name="Tag + Text" x="8" y="8" width="345" height="68">
+          <frame id="8152:71327" name="Text" x="0" y="0" width="345" height="68">
+            <frame id="8152:71334" name="Tag + Text" x="0" y="0" width="345" height="22">
+              <frame id="8152:71335" name="Text" x="0" y="0" width="345" height="22">
+                <text id="8152:71336" name="Message title" x="0" y="0" width="345" height="22" />
+              </frame>
+            </frame>
+            <text id="8152:71328" name="Message title" x="0" y="24" width="345" height="44" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+</frame>

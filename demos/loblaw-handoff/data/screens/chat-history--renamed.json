@@ -1,0 +1,55 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--renamed",
+  "name": "Chat history, renamed",
+  "stateGroup": {
+    "id": "chat-history-rename",
+    "label": "After saving",
+    "order": 3
+  },
+  "figmaNodeId": "8156:233358",
+  "summary": "The result: the first row now reads 'GLP-1 medications'. No toast, no confirmation — the list simply holds the new name.",
+  "looseEnds": [
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "The frame is called 'Context menu'",
+      "detail": "This frame shows the renamed list with no menu open. Its name is left over from the frame it was duplicated from, which makes the rename flow hard to follow in the file.",
+      "nodes": [
+        "8156:233358"
+      ],
+      "ask": "Rename the frame to what it shows."
+    },
+    {
+      "kind": "missing-state",
+      "severity": "medium",
+      "title": "Nothing confirms the rename",
+      "detail": "Deleting a chat raises a toast; renaming one does not. The only feedback is the row's own text changing, which is off-screen if the renamed row has scrolled away.",
+      "nodes": [
+        "8156:233367"
+      ],
+      "ask": "Should a rename raise a toast, and is it undoable?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--renamed.png"
+}

@@ -1,0 +1,79 @@
+<frame id="8156:72773" name="Chat history, selection" x="4317" y="100" width="393" height="852">
+  <frame id="8156:72774" name="Frame 2147231663" x="16" y="230" width="361" height="252">
+    <frame id="8156:72775" name="List" x="0" y="0" width="361" height="252">
+      <frame id="8156:72776" name="List item" x="0" y="0" width="361" height="60">
+        <instance id="8156:72777" name="Checkbox" x="8" y="18" width="24" height="24">
+          <frame id="I8156:72777;5:2617" name="Radio Button" x="4" y="4" width="16" height="16">
+            <instance id="I8156:72777;5:2618" name="check" x="2" y="2" width="12" height="12">
+              <vector id="I8156:72777;5:2618;155:67240" name="Vector" x="2" y="3" width="8" height="6" />
+            </instance>
+          </frame>
+        </instance>
+        <frame id="8156:72778" name="Tag + Text" x="48" y="8" width="245" height="44" chars="GLP-1 medications and heart health concerns &#183; Yesterday" />
+        <instance id="8156:72782" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72782;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72783" name="List item" x="0" y="64" width="361" height="60">
+        <instance id="8156:72784" name="Checkbox" x="8" y="18" width="24" height="24">
+          <frame id="I8156:72784;5:2617" name="Radio Button" x="4" y="4" width="16" height="16">
+            <instance id="I8156:72784;5:2618" name="check" x="2" y="2" width="12" height="12">
+              <vector id="I8156:72784;5:2618;155:67240" name="Vector" x="2" y="3" width="8" height="6" />
+            </instance>
+          </frame>
+        </instance>
+        <frame id="8156:72785" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Recipes for a summer dinner party &#183; Yesterday" />
+        <instance id="8156:72792" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72792;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72793" name="List item" x="0" y="128" width="361" height="60">
+        <instance id="8156:72794" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72795" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Managing nausea after medication dose increase &#183; 3 days ago" />
+        <instance id="8156:72799" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72799;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:72800" name="List item" x="0" y="192" width="361" height="60">
+        <instance id="8156:72801" name="Checkbox" x="8" y="18" width="24" height="24" />
+        <frame id="8156:72802" name="Tag + Text" x="48" y="8" width="245" height="44" chars="Plan my groceries for the week &#183; 2 weeks ago" />
+        <instance id="8156:72806" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:72806;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:72813" name="Frame 2147231656" x="16" y="146" width="361" height="72">
+    <frame id="8156:72814" name="Top" x="0" y="0" width="361" height="32">
+      <frame id="8156:72815" name="Header" x="8" y="0" width="345" height="32">
+        <text id="8156:72816" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+      </frame>
+    </frame>
+    <frame id="8156:72817" name="Frame 2147231652" x="0" y="32" width="67" height="40">
+      <text id="8156:72818" name="4 chats" x="8" y="10" width="51" height="20" chars="4 chats" />
+    </frame>
+  </frame>
+  <frame id="8156:72819" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:72820" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:72820;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8156:72821" name="Frame 2147231667" x="102" y="66" width="267" height="46">
+      <instance id="8156:72822" name="Button" x="0" y="0" width="140" height="46">
+        <instance id="I8156:72822;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:72822;5:70" name="label" x="36" y="12" width="68" height="22" chars="Select all" />
+        <instance id="I8156:72822;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8156:72823" name="Button" x="144" y="0" width="123" height="46">
+        <instance id="I8156:72823;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:72823;5:70" name="label" x="36" y="12" width="51" height="22" chars="Cancel" />
+        <instance id="I8156:72823;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8156:72824" name="Button" x="183" y="774" width="186" height="54">
+    <instance id="I8156:72824;2046:16060" name="Leading icon" x="40" y="18" width="16" height="16" hidden="true" />
+    <text id="I8156:72824;5:99" name="label" x="40" y="16" width="106" height="22" chars="Delete 2 chats" />
+    <instance id="I8156:72824;2046:16063" name="Trailing icon" x="115" y="18" width="16" height="16" hidden="true" />
+  </instance>
+  <instance id="8156:72807" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

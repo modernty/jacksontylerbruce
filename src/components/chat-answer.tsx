@@ -96,7 +96,7 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
           })}
         </ol>
         {turn.panel === "timeline" ? (
-          <button type="button" className="chat-link" aria-pressed={current === "timeline"} onClick={() => onPanel("timeline")}>
+          <button type="button" className="chat-link chat-action" aria-pressed={current === "timeline"} onClick={() => onPanel("timeline")}>
             Open timeline
           </button>
         ) : null}
@@ -109,12 +109,14 @@ export function chatAnswer({ turn, names, careers, onProject, onPanel, current, 
     return [
       turn.answer,
       " ",
-      <button key="view" type="button" className="chat-link" aria-pressed={current === kind} onClick={() => onPanel(kind, turn.placeKind)}>
+      <button key="view" type="button" className="chat-link chat-action" aria-pressed={current === kind} onClick={() => onPanel(kind, turn.placeKind)}>
         {kind === "globe" ? (turn.placeKind === "lived" ? "Open places lived" : "Open globe") : "Open timeline"}
       </button>,
     ]
   }
 
+  // Projects shown as cards under the answer need no links in it.
+  if (turn.cards) return null
   const list = (turn.projects ?? []).filter((slug) => names[slug])
   if (!list.length) return null
   const listed = list.map((slug) => ({ slug, name: names[slug] }))

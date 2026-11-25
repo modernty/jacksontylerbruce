@@ -132,7 +132,7 @@ def pill(x1, y1, x2, y2, cur, h=12, sw=1.5, op=1):
         rect = f'<rect x="{x1 - r}" y="{y1 - r}" width="{x2 - x1 + h}" height="{h}" rx="{r}"'
     else:
         rect = f'<rect x="{x1 - r}" y="{y1 - r}" width="{h}" height="{y2 - y1 + h}" rx="{r}"'
-    drawing = rect + f' class="pr" fill="#FBFBF8" stroke="{INK}" stroke-width="{sw}" stroke-opacity="{op}"/>'
+    drawing = rect + f' class="pr" fill="#FAFAFA" stroke="{INK}" stroke-width="{sw}" stroke-opacity="{op}"/>'
     dot = 2.6 if h >= 12 else 2
     drawing += f'<circle class="d0" cx="{x1}" cy="{y1}" r="{dot}" fill="{INK}" fill-opacity="{op}"/>'
     if not cur:
@@ -183,7 +183,7 @@ def desktop(model=None, width=1120, height=340, embed=False):
         f'<svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg" font-family="Aeonik Pro" fill="{INK}">'
     ]
     if embed:
-        parts.append(f'<style>{ff()}.mode:not([data-m=timeline]){{display:none}}</style><rect width="{width}" height="{height}" fill="#FBFBF8"/>')
+        parts.append(f'<style>{ff()}.mode:not([data-m=timeline]){{display:none}}</style><rect width="{width}" height="{height}" fill="#FAFAFA"/>')
     parts.append(
         f'<line class="nowl" x1="{x1}" y1="30" x2="{x1}" y2="{height - 16}" stroke="{INK}" stroke-opacity=".35" stroke-dasharray="2 3"/>'
         f'<text x="{x1}" y="{height - 4}" text-anchor="middle" font-size="10" font-weight="600" letter-spacing=".08em" class="nowt">NOW</text>'

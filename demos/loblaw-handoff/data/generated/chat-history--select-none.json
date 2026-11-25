@@ -1,0 +1,1012 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 41,
+    "hiddenNodes": 4,
+    "assetNodes": 8,
+    "sectionNodes": 9,
+    "styledNodes": 0,
+    "looseEnds": 2
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "slug": "chat-history--select-none",
+  "name": "Chat history, selections — none",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Nothing picked",
+    "order": 1
+  },
+  "figmaNodeId": "8156:72723",
+  "summary": "Select turns every row into a choice: a 24px checkbox appears at the left and the text indents to 48. The nav swaps Search and Select for Select all and Cancel.",
+  "looseEnds": [
+    {
+      "kind": "missing-content",
+      "severity": "medium",
+      "title": "There is no Delete button until something is ticked",
+      "detail": "With nothing selected the foot of the screen is empty. The button appears only once a row is picked, so nothing tells a user what selection is for before they commit to it.",
+      "nodes": [
+        "8156:72740"
+      ],
+      "ask": "Is the button absent, or present and disabled, before the first tick?"
+    },
+    {
+      "kind": "interaction",
+      "severity": "medium",
+      "title": "The overflow control stays on every row while the row is also a checkbox",
+      "detail": "Selection adds a 24px checkbox at the left but leaves the per-row overflow button in place at x=309. Nothing says what tapping the row body does in this mode, or what the overflow menu offers when other chats are already ticked.",
+      "nodes": [
+        "8156:72748",
+        "8156:72758",
+        "8156:72765",
+        "8156:72772"
+      ],
+      "ask": "Does the row body toggle the tick in selection, and is the overflow menu reachable at all?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-none.png",
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 393,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8156:72723",
+      "name": "Chat history, selections-none",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72730",
+      "name": "Top",
+      "type": "FRAME",
+      "parentId": "8156:72723",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 146,
+        "width": 361,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72731",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:72730",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 146,
+        "width": 345,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72732",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:72731",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 146,
+        "width": 145,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72733",
+      "name": "Frame 2147231652",
+      "type": "FRAME",
+      "parentId": "8156:72723",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 194,
+        "width": 67,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72734",
+      "name": "4 chats",
+      "type": "TEXT",
+      "parentId": "8156:72733",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 204,
+        "width": 51,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72735",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "8156:72723",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 124
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72736",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72735",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 68,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72736;892:44251",
+      "name": "CaretLeft",
+      "type": "INSTANCE",
+      "parentId": "8156:72736",
+      "depth": 3,
+      "bounds": {
+        "x": 38,
+        "y": 82,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72737",
+      "name": "Frame 2147231667",
+      "type": "FRAME",
+      "parentId": "8156:72735",
+      "depth": 2,
+      "bounds": {
+        "x": 102,
+        "y": 66,
+        "width": 267,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72738",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72737",
+      "depth": 3,
+      "bounds": {
+        "x": 102,
+        "y": 66,
+        "width": 140,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:72738;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72738",
+      "depth": 4,
+      "bounds": {
+        "x": 138,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:72738;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:72738",
+      "depth": 4,
+      "bounds": {
+        "x": 138,
+        "y": 78,
+        "width": 68,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72738;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72738",
+      "depth": 4,
+      "bounds": {
+        "x": 213,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72739",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72737",
+      "depth": 3,
+      "bounds": {
+        "x": 246,
+        "y": 66,
+        "width": 123,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:72739;2046:16015",
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72739",
+      "depth": 4,
+      "bounds": {
+        "x": 282,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "leading",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:72739;5:70",
+      "name": "label",
+      "type": "TEXT",
+      "parentId": "8156:72739",
+      "depth": 4,
+      "bounds": {
+        "x": 282,
+        "y": 78,
+        "width": 51,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72739;2046:16018",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72739",
+      "depth": 4,
+      "bounds": {
+        "x": 357,
+        "y": 81,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": true,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72740",
+      "name": "Frame 2147231663",
+      "type": "FRAME",
+      "parentId": "8156:72723",
+      "depth": 1,
+      "bounds": {
+        "x": 16,
+        "y": 230,
+        "width": 361,
+        "height": 252
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72741",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "8156:72740",
+      "depth": 2,
+      "bounds": {
+        "x": 16,
+        "y": 230,
+        "width": 361,
+        "height": 252
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72742",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:72741",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 230,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72743",
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "parentId": "8156:72742",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 248,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72744",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8156:72742",
+      "depth": 4,
+      "bounds": {
+        "x": 64,
+        "y": 238,
+        "width": 245,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72748",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72742",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 238,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72748;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72748",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 252,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72749",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:72741",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 294,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72750",
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "parentId": "8156:72749",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 312,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72751",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8156:72749",
+      "depth": 4,
+      "bounds": {
+        "x": 64,
+        "y": 302,
+        "width": 245,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72758",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72749",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 302,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72758;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72758",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 316,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72759",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:72741",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 358,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72760",
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "parentId": "8156:72759",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 376,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72761",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8156:72759",
+      "depth": 4,
+      "bounds": {
+        "x": 64,
+        "y": 366,
+        "width": 245,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72765",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72759",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 366,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72765;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72765",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 380,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72766",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "8156:72741",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 422,
+        "width": 361,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:72767",
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "parentId": "8156:72766",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 440,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72768",
+      "name": "Tag + Text",
+      "type": "FRAME",
+      "parentId": "8156:72766",
+      "depth": 4,
+      "bounds": {
+        "x": 64,
+        "y": 430,
+        "width": 245,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:72772",
+      "name": "Button",
+      "type": "INSTANCE",
+      "parentId": "8156:72766",
+      "depth": 4,
+      "bounds": {
+        "x": 325,
+        "y": 430,
+        "width": 44,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:72772;2046:16123",
+      "name": "Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:72772",
+      "depth": 5,
+      "bounds": {
+        "x": 339,
+        "y": 444,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "icon",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:72724",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "8156:72723",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

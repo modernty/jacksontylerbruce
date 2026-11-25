@@ -30,10 +30,35 @@ test("a project page keeps its own questions, and comparisons stay put", () => {
   assert.equal(onProject("How does this compare to Model Playground?"), null)
 })
 
-test("asking for images opens them, or says there are none yet", () => {
-  assert.equal(onProject("Show me images")?.view, "images")
-  const empty = onProject("Show me images", "overmatch-ai")
-  assert.equal(empty?.view, undefined)
-  assert.match(empty?.answer ?? "", /^No images for Overmatch AI yet\./)
+test("asking to see the work opens the media, in any of the ways people ask", () => {
+  const asks = [
+    "Show me images", "Show the media", "Show me the media", "Media", "the demo?", "Screens",
+    "Can I see it?", "Open it", "let me see that", "Show me the demo", "Play the prototype",
+    "Show me the designs", "What does it look like?", "What did the app look like?", "Show me how it works",
+    "Can you show me the case study?", "Walk me through the screens", "I'd like to see the work",
+    "Open the gallery", "View the project visuals", "Pull up the screenshots", "show me some examples",
+    "Got anything visual for me?", "can I see what it looks like?", "What it looked like", "can I see what you built?", "show me what you designed", "see it in action", "Is there a demo?", "Do you have screenshots?", "any designs to look at?",
+  ]
+  for (const ask of asks) assert.equal(onProject(ask, "botpress")?.view, "images", ask)
 })
 
+test("questions about the work stay as answers, not the media", () => {
+  for (const ask of ["What was your role?", "How did you approach the design?", "Why did it matter?", "Show me why it worked", "What was the outcome?", "Tell me about it", "Is there anything you would change?", "Do you have any regrets?", "How did you look at the problem?", "What did you look for in research?"]) {
+    assert.equal(onProject(ask, "botpress")?.view, undefined, ask)
+  }
+})
+
+test("a project's demo and study count as media, not only its images", () => {
+  // Botpress has no gallery images; its media is the study's chapters.
+  assert.equal(onProject("Show the media", "botpress")?.view, "images")
+  assert.equal(onProject("Show me the demo", "intuit")?.view, "images")
+})
+
+test("a project with nothing to show says so", () => {
+  const empty = catalog.projects.find((project) => !project.media?.cover && !project.media?.images.length && !["intuit", "loblaws", "botpress", "pc-chat", "pc-chat-memory"].includes(project.slug))
+  if (!empty) return
+  const reply = onProject("Show me images", empty.slug)
+  assert.equal(reply?.view, undefined)
+  assert.match(reply?.answer ?? "", /^There's no media for /)
+  assert.deepEqual(textIssues(reply?.answer ?? ""), [])
+})

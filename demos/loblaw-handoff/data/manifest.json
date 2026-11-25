@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "version": "0.2.0",
+    "project": "Loblaw Digital",
+    "title": "Features and Specs",
+    "lastUpdated": "2026-10-07",
+    "platform": "iOS",
+    "files": [
+      {
+        "key": "yIzE3IWqhgtCP2Fo44aAvp",
+        "name": "[iOS] Remedy — September Launch",
+        "note": "The single source for every screen on this site."
+      }
+    ],
+    "blurb": "Review new features for PC Chat and the specs associated with them."
+  },
+  "features": [
+    "chat-history",
+    "memory-management",
+    "side-panel",
+    "chat-settings"
+  ]
+}

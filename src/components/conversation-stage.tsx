@@ -16,8 +16,9 @@ import { StarterPrompts, askHere } from "./starter-prompts"
 import { ChatThread, readLines, HOME_CHAT, HOME_PREVIEW, CHAT_CLOSE_PANEL, follow, resetChat, sessionId, type Asker, type Go, type Panel, type ReplyExtra } from "./chat-thread"
 import { openTab } from "./project-tabs"
 import { holdComposer } from "./composer"
+import { DemoCards } from "./demo-cards"
 
-export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null }
+export type ProjectPreview = { slug: string; name: string; summary: string; meta: string; cover: MediaImage | null; logo?: string }
 
 type Picked = { slug: string; list: string[] }
 /** What sits beside the chat: a project preview, or a view the answer called for. */
@@ -25,8 +26,9 @@ type Picked = { slug: string; list: string[] }
 type Shown = ({ kind: "project" } & Picked) | { kind: Panel; only?: "lived" }
 
 const SCROLL_KEY = "home-chat-scroll"
-const WELCOME = ["Welcome, how can I help you?", "One craft, many mediums. Every project starts with one core idea and time spent inside the problem."]
-const GREETING_TEXT = "min-h-0 max-w-none text-[18px] leading-[26px] tracking-[-0.01em]"
+// The context first, then the welcome, so the question sits right above the composer it invites.
+const WELCOME = ["One craft, many mediums. Every project starts with one core idea and time spent inside the problem.", "Welcome, how can I help you?"]
+const GREETING_TEXT = "min-h-0 max-w-none text-[16px] leading-[24px] tracking-[-0.01em]"
 /** How long the greeting fades before the exchange takes its place. Matches --motion-page. */
 const HANDOFF_MS = 320
 /** How long the chat takes to slide aside for a preview. Matches --motion-slide. */
@@ -45,7 +47,8 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
   useEffect(() => {
     if (!finished) return
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
-    const hold = window.setTimeout(() => setReady(true), reduce ? 0 : HANDOFF_MS)
+    // The composer takes twice the handoff to arrive, so it settles in after the greeting rather than with it.
+    const hold = window.setTimeout(() => setReady(true), reduce ? 0 : HANDOFF_MS * 2)
     return () => window.clearTimeout(hold)
   }, [finished])
 
@@ -58,14 +61,14 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
   return (
     <div className={leaving ? "conv-empty ready leaving" : ready ? "conv-empty ready" : "conv-empty"}>
       <div className="opening-group opening-welcome">
-        <IntroStream id="home-welcome" paragraphs={WELCOME} remember={false} heading textClassName={GREETING_TEXT} tint={false} emphasis={0} onDone={finish} />
+        <IntroStream id="home-welcome" paragraphs={WELCOME} remember={false} heading textClassName={GREETING_TEXT} tint={false} emphasis={1} onDone={finish} />
       </div>
       <div className="opening-group opening-composer">
         <div className="composer-slot" ref={slotRef} aria-hidden="true" />
       </div>
       <div className="opening-group quick">
         <p className="quick-label">Quick start</p>
-        <StarterPrompts className="quick-links" onPick={askHere} />
+        <StarterPrompts className="quick-links" onPick={askHere} stream={ready} />
       </div>
     </div>
   )
@@ -232,7 +235,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
         if (data.panel === "globe" || data.panel === "timeline") setShown({ kind: data.panel, only: data.placeKind })
         if (data.go) follow(data.go, q, router)
         const roles = data.roles?.filter((id) => id in byRole.current)
-        return { answer: data.answer ?? data.error ?? "Something went wrong. Try asking again.", projects, roles, expects: data.expects, panel: data.panel, followUps: data.followUps, contact: data.contact, source: data.source, sources: data.sources, nudge: data.nudge, placeKind: data.placeKind }
+        return { answer: data.answer ?? data.error ?? "Something went wrong. Try asking again.", projects, roles, expects: data.expects, panel: data.panel, followUps: data.followUps, contact: data.contact, source: data.source, sources: data.sources, nudge: data.nudge, placeKind: data.placeKind, cards: data.cards }
       } catch {
         return "The site couldn't be reached just now. Try asking again."
       }
@@ -240,7 +243,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     [router, setPicked, setShown],
   )
 
+  // Picking the project already open closes it again, back to the conversation alone.
   const pick = (slug: string, list: string[]) => {
+    if (picked?.slug === slug) {
+      setPicked(null)
+      return
+    }
     setPicked({ slug, list })
     track("project_previewed", { slug })
   }
@@ -250,10 +258,11 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
   const previous = picked && at > 0 ? picked.list[at - 1] : null
   const next = picked && at >= 0 && at < picked.list.length - 1 ? picked.list[at + 1] : null
 
-  const openFull = (slug: string) => {
+  /** Opens the project; with media, its media opens beside it straight away (a demo picked in the chat). */
+  const openFull = (slug: string, media = false) => {
     openTab(slug)
     track("project_opened_from_chat", { slug })
-    router.push(`/work/${slug}`)
+    router.push(media ? `/work/${slug}?media` : `/work/${slug}`)
   }
 
   const [expanded, setExpanded] = useState(false)
@@ -333,6 +342,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
           renderAnswer={(turn) =>
             chatAnswer({ turn, names: names.current, careers: byRole.current, onProject: pick, onPanel: (kind, only) => setShown({ kind, only }), current: picked?.slug ?? panel ?? undefined })
           }
+          after={(turn) => {
+            if (turn.cards !== "demo" || !turn.projects?.length) return null
+            const list = turn.projects
+            // A demo card opens the demo itself, full screen, not the preview.
+            return <DemoCards projects={list.flatMap((slug) => bySlug.current.get(slug) ?? [])} onPick={(slug) => openFull(slug, true)} />
+          }}
         />
       </div>
       <TimelineModal open={expanded} onClose={() => setExpanded(false)} desktop={timeline.desktop} mobile={timeline.mobile} />
@@ -371,7 +386,7 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
       {preview && landed ? (
         <>
           <button type="button" className="sheet-scrim" aria-label="Close preview" onClick={() => setPicked(null)} />
-          <aside className="preview" aria-label={`${preview.name} preview`}>
+          <aside className="preview view-project" aria-label={`${preview.name} preview`}>
             <header className="preview-head">
               <div className="preview-bar">
                 <button type="button" className="icon-btn prev" onClick={() => previous && pick(previous, picked?.list ?? [])} disabled={!previous} aria-label="Previous project">
@@ -382,11 +397,8 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 </button>
                 {closeButton(() => setPicked(null))}
               </div>
-              <div className="preview-info">
-                <h2>{preview.name}</h2>
-                {preview.meta ? <p className="meta">{preview.meta}</p> : null}
-                <p className="summary">{preview.summary}</p>
-              </div>
+              {/* The chat already says what the project is; the preview shows it. Named for screen readers. */}
+              <h2 className="sr-only">{preview.name}</h2>
             </header>
             {preview.cover ? (
               <figure className="frame">

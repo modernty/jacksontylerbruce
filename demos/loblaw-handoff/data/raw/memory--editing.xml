@@ -1,0 +1,77 @@
+<frame id="8156:240359" name="Condition — edit Condition (open text, mandatory)" x="100" y="100" width="393" height="852">
+  <frame id="8156:240360" name="Content" x="0" y="0" width="393" height="852">
+    <frame id="8156:240361" name="Memory header" x="16" y="146" width="361" height="118">
+      <frame id="8156:240362" name="Frame 2147231676" x="0" y="0" width="361" height="70">
+        <text id="8156:240363" name="Your conditions" x="0" y="0" width="350" height="20" />
+        <instance id="8156:240364" name="Header Row · Memory details" x="0" y="22" width="361" height="28">
+          <text id="I8156:240364;2273:21460" name="title" x="0" y="0" width="361" height="28" />
+        </instance>
+        <text id="8156:240365" name="Message timestamp" x="0" y="52" width="361" height="18" />
+      </frame>
+      <frame id="8156:240366" name="Source" x="0" y="82" width="105" height="36">
+        <instance id="8156:240367" name="Source chip" x="0" y="0" width="105" height="36">
+          <text id="I8156:240367;2817:26939" name="Label" x="12" y="8" width="81" height="20" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:240368" name="Details" x="16" y="288" width="361" height="113">
+      <frame id="8156:240369" name="Details card (detached — needs a Title row action slot upstream)" x="0" y="0" width="361" height="113">
+        <frame id="8156:240370" name="Info" x="0" y="0" width="361" height="113">
+          <frame id="8156:240372" name="Fields" x="2" y="2" width="357" height="109">
+            <instance id="8156:240373" name="Row · Condition" x="0" y="0" width="357" height="54">
+              <text id="I8156:240373;7815:173084" name="label" x="16" y="17" width="66" height="20" />
+              <text id="I8156:240373;7815:173085" name="value" x="94" y="16" width="219" height="22" />
+              <instance id="I8156:240373;7815:173086" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+            <rectangle id="8156:240374" name="Divider" x="0" y="54" width="357" height="1" />
+            <instance id="8156:240375" name="Row · Status" x="0" y="55" width="357" height="54">
+              <text id="I8156:240375;7815:173078" name="label" x="16" y="17" width="44" height="20" />
+              <text id="I8156:240375;7815:173079" name="value" x="72" y="16" width="241" height="22" />
+              <instance id="I8156:240375;7815:173080" name="chevron" x="325" y="19" width="16" height="16" />
+            </instance>
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8156:240378" name="Delete memory (fixed)" x="16" y="782" width="361" height="54">
+    <instance id="I8156:240378;2273:16645" name="Primary action" x="0" y="0" width="361" height="54">
+      <text id="I8156:240378;2273:16645;5:99" name="label" x="124" y="16" width="113" height="22" />
+    </instance>
+  </instance>
+  <instance id="8156:240379" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8156:240380" name="Top nav" x="0" y="54" width="393" height="68">
+    <instance id="8156:240381" name="Button" x="24" y="12" width="44" height="44">
+      <instance id="I8156:240381;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16">
+        <vector id="I8156:240381;892:44251;7485:14911" name="Vector" x="4" y="2" width="7" height="12" />
+      </instance>
+    </instance>
+    <text id="8156:240382" name="Page title" x="68" y="23" width="257" height="22" />
+    <frame id="8156:240385" name="Spacer" x="325" y="12" width="44" height="44" />
+  </frame>
+  <frame id="8156:240386" name="Scrim" x="0" y="0" width="393" height="852" />
+  <instance id="8156:240387" name="Edit sheet — Condition" x="9" y="353" width="376" height="483">
+    <frame id="I8156:240387;2276:22353" name="Toolbar" x="1" y="1" width="374" height="70">
+      <instance id="I8156:240387;2587:48946" name="Header" x="0" y="0" width="374" height="70">
+        <frame id="I8156:240387;2587:48946;2587:48329" name="Grabber" x="0" y="0" width="374" height="16" />
+        <frame id="I8156:240387;2587:48946;2587:48332" name="Actions" x="0" y="16" width="374" height="44">
+          <instance id="I8156:240387;2587:48946;2587:48333" name="Leading action" x="16" y="0" width="44" height="44" />
+          <text id="I8156:240387;2587:48946;2587:48338" name="Title" x="68" y="11" width="238" height="22" />
+          <instance id="I8156:240387;2587:48946;2587:48339" name="Trailing action" x="314" y="0" width="44" height="44" />
+        </frame>
+      </instance>
+    </frame>
+    <frame id="I8156:240387;2365:31741" name="Header" x="1" y="49" width="374" height="44" hidden="true" />
+    <frame id="I8156:240387;2276:22360" name="Content" x="1" y="71" width="374" height="110">
+      <instance id="I8156:240387;2276:22360;8156:242538" name="Input Field" x="16" y="16" width="342" height="48">
+        <text id="I8156:240387;2276:22360;8156:242538;2009:4701" name="value" x="17" y="13" width="308" height="22" />
+      </instance>
+      <frame id="I8156:240387;2276:22360;8156:242539" name="Frame 2147231691" x="16" y="76" width="342" height="18">
+        <text id="I8156:240387;2276:22360;8156:242540" name="Field caption" x="8" y="0" width="326" height="18" />
+      </frame>
+    </frame>
+    <frame id="I8156:240387;2365:31742" name="Composer" x="0" y="260" width="376" height="54" hidden="true" />
+    <frame id="I8156:240387;2276:22361" name="Footer" x="1" y="293" width="374" height="64" hidden="true" />
+  </instance>
+  <instance id="8156:240388" name="Keyboard" x="0" y="535" width="393" height="317" />
+</frame>

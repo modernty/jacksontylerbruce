@@ -82,7 +82,7 @@ export function sheetAnswer(topic: string, catalog: PublicCatalog = publishCatal
     const facts = [catalog.profile.name, catalog.profile.title]
     return {
       title: catalog.profile.title,
-      body: "Designer. Product, digital and spatial work. One craft across mediums.",
+      body: "Designer. AI products people trust, in health, finance and support. One craft across product, digital and spatial work.",
       facts,
       cta: projects,
     }

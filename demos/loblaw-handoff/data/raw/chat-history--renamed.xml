@@ -1,0 +1,63 @@
+<frame id="8156:233358" name="Context menu" x="1832" y="100" width="393" height="852">
+  <frame id="8156:233359" name="Frame 2147231655" x="16" y="146" width="361" height="72">
+    <frame id="8156:233360" name="Top" x="0" y="0" width="361" height="32">
+      <frame id="8156:233361" name="Header" x="8" y="0" width="345" height="32">
+        <text id="8156:233362" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+      </frame>
+    </frame>
+    <frame id="8156:233363" name="Frame 2147231652" x="0" y="32" width="67" height="40">
+      <text id="8156:233364" name="4 chats" x="8" y="10" width="51" height="20" chars="4 chats" />
+    </frame>
+  </frame>
+  <frame id="8156:233365" name="List" x="16" y="230" width="361" height="252">
+    <frame id="8156:233366" name="List item" x="0" y="0" width="361" height="60">
+      <frame id="8156:233367" name="Tag + Text" x="8" y="8" width="285" height="44" chars="GLP-1 medications &#183; Yesterday" />
+      <instance id="8156:233371" name="Button" x="309" y="8" width="44" height="44">
+        <instance id="I8156:233371;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+      </instance>
+    </frame>
+    <frame id="8156:233372" name="Frame 2147231642" x="0" y="64" width="361" height="60">
+      <frame id="8156:233373" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:233374" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Recipes for a summer dinner party &#183; Yesterday" />
+        <instance id="8156:233381" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:233381;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:233382" name="Frame 2147231644" x="0" y="128" width="361" height="60">
+      <frame id="8156:233383" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:233384" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Managing nausea after medication dose increase &#183; 3 days ago" />
+        <instance id="8156:233388" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:233388;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:233389" name="Frame 2147231645" x="0" y="192" width="361" height="60">
+      <frame id="8156:233390" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:233391" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Plan my groceries for the week &#183; 2 weeks ago" />
+        <instance id="8156:233395" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:233395;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:233409" name="Overlay" x="393" y="140" width="393" height="140" />
+  <frame id="8156:233410" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:233411" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:233411;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8156:233412" name="Frame 2147231679" x="94" y="66" width="275" height="46">
+      <instance id="8156:233413" name="Button" x="0" y="0" width="148" height="46">
+        <instance id="I8156:233413;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" />
+        <text id="I8156:233413;5:70" name="label" x="60" y="12" width="52" height="22" chars="Search" />
+        <instance id="I8156:233413;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8156:233414" name="Button" x="156" y="0" width="119" height="46">
+        <instance id="I8156:233414;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:233414;5:70" name="label" x="36" y="12" width="47" height="22" chars="Select" />
+        <instance id="I8156:233414;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8156:233415" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

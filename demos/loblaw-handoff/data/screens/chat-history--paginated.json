@@ -1,0 +1,89 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--paginated",
+  "name": "Chat history, 50 chats — paginated",
+  "stateGroup": {
+    "id": "chat-history-page",
+    "label": "Paginated",
+    "order": 4
+  },
+  "figmaNodeId": "8156:232649",
+  "summary": "Fifty conversations, ten to a page, with a pager at the foot: previous, pages one to five, next. The only frame in the feature that pages rather than scrolls.",
+  "looseEnds": [
+    {
+      "kind": "missing-rule",
+      "severity": "high",
+      "title": "Nothing says when the list starts paging",
+      "detail": "Twelve chats scroll with no pager; fifty page at ten a time. The threshold between the two is not drawn and not stated, and neither is what happens at eleven, at twenty, or past five pages — the pager draws exactly five numbers with no overflow or ellipsis state.",
+      "nodes": [
+        "8156:232857",
+        "8156:232809"
+      ],
+      "ask": "State the page size and the length at which paging starts, and draw the pager past five pages."
+    },
+    {
+      "kind": "interaction",
+      "severity": "medium",
+      "title": "The pager sits inside the scrolling content",
+      "detail": "The pagination band is the last child of the content frame at y=732, so it scrolls with the list rather than staying at the foot of the screen. On page one the user must scroll ten rows to reach it, which this frame shows by being drawn already scrolled to the bottom.",
+      "nodes": [
+        "8156:232857"
+      ],
+      "ask": "Should the pager be pinned, or is scrolling to it intended?"
+    },
+    {
+      "kind": "missing-state",
+      "severity": "medium",
+      "title": "Only the current page is drawn",
+      "detail": "Page 1 carries a filled background and the other four are plain. There is no hover, pressed or disabled state, and Previous is not drawn disabled although there is no page before the first.",
+      "nodes": [
+        "8156:232810",
+        "8156:232811",
+        "8156:232814"
+      ],
+      "ask": "Confirm Previous is disabled on page one and Next on the last, and what disabled looks like."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The current page chip is 2px narrower than the others",
+      "detail": "Page 1 is 38x26 where pages 2 to 5 are 40x26, because the current chip is a different component rather than a state of the same one. The gap after it reads as 4px against the others' 4px, so the row is 2px short of even.",
+      "nodes": [
+        "8156:232811",
+        "8156:232812"
+      ],
+      "ask": "Make current a state of the page chip so the widths match."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The pill group sits 4px further left here than on the same nav elsewhere",
+      "detail": "Search and Select are the same two components throughout, but the group that holds them is 275 wide with an 8px gap on the History frames and 271 wide with a 4px gap on the Deleting frames and on Memory. Both end flush at x=369, so the difference shows up on the left edge.",
+      "nodes": [
+        "8156:232902"
+      ],
+      "ask": "Pick one gap. 4px matches Memory, which a developer will build from the same component."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--paginated.png"
+}

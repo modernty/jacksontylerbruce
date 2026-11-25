@@ -28,7 +28,7 @@ test("profile is Miami, and the current role is one employer", () => {
   assert.equal(employer?.title, "Senior Product Designer")
   assert.equal(employer?.since, "Jan 2026")
   assert.equal(employer?.end, null)
-  assert.deepEqual(employer?.clientIds, ["client:loblaw-pc-health", "client:intuit", "client:rv"])
+  assert.deepEqual(employer?.clientIds, ["client:loblaw-pc-health", "client:intuit", "client:rv", "client:botpress"])
   const overmatch = catalog.roles.find((role) => role.id === "role:overmatch")
   assert.equal(overmatch?.title, "Design Lead")
   assert.equal(overmatch?.since, "May 2026")
@@ -36,20 +36,20 @@ test("profile is Miami, and the current role is one employer", () => {
   const banner = catalog.clients.find((item) => item.id === "client:loblaw-pc-health")
   const intuit = catalog.clients.find((item) => item.id === "client:intuit")
   assert.equal(banner?.usesEmployerName, false)
-  assert.equal(banner?.name, "Loblaw / PC Health")
+  assert.equal(banner?.name, "Loblaws / PC Health")
   assert.equal(banner?.roleId, "role:employer")
-  assert.deepEqual(banner?.projectIds, ["project:loblaw", "project:remedy"])
+  assert.deepEqual(banner?.projectIds, ["project:loblaw", "project:pc-chat", "project:pc-chat-memory"])
   assert.equal(intuit?.name, "Intuit")
   assert.equal(intuit?.roleId, "role:employer")
   assert.deepEqual(intuit?.projectIds, ["project:intuit"])
   const loblaw = catalog.projects.find((project) => project.id === "project:loblaw")
-  assert.equal(loblaw?.name, "Loblaw / PC Health")
+  assert.equal(loblaw?.name, "Loblaws / PC Health")
   assert.equal(loblaw?.roleId, "role:employer")
   assert.equal(loblaw?.clientId, "client:loblaw-pc-health")
   assert.equal(loblaw?.start, 2026.04)
   assert.equal(loblaw?.end, null)
   assert.equal(loblaw?.flagged, false)
-  assert.equal(catalog.projects.find((project) => project.name === "Remedy")?.flagged, true)
+  assert.equal(catalog.projects.some((project) => project.slug === "remedy"), false)
   assert.equal(catalog.projects.find((project) => project.name === "Intuit")?.clientId, "client:intuit")
   assert.equal(catalog.projects.some((project) => project.name === "PC Health app"), false)
 })
@@ -57,17 +57,17 @@ test("profile is Miami, and the current role is one employer", () => {
 test("the public project list is the approved one, in order", () => {
   const slugs = byRecent(publishCatalog().projects).map((project) => project.slug)
   assert.deepEqual(slugs, [
-    "overmatch-ai", "intuit", "loblaw", "lzr-2", "usm-milan", "model-playground", "talent-management", "whitelist",
+    "overmatch-ai", "botpress", "intuit", "pc-chat-memory", "loblaws", "pc-chat", "lzr-2", "usm-milan", "model-playground", "talent-management", "whitelist",
     "lazarus-brand", "chatter", "novart", "fixed-rate-fixed-term", "the-terminal", "corelogic", "nestle", "usm-hue-man",
   ])
   const hidden = loadCatalog().projects.filter((project) => project.flagged).map((project) => project.slug).sort()
-  assert.deepEqual(hidden, ["remedy", "rv", "traveller"])
+  assert.deepEqual(hidden, ["rv", "traveller"])
 })
 
 test("flagged work is absent from public output", () => {
   const catalog = loadCatalog()
   const flagged = catalog.projects.filter((project) => project.flagged).map((project) => project.name).sort()
-  assert.deepEqual(flagged, ["RV", "Remedy", "Traveller"])
+  assert.deepEqual(flagged, ["RV", "Traveller"])
   const published = publishCatalog()
   const blob = JSON.stringify(published)
   // Whole names only: "RV" is also inside other words.
@@ -100,7 +100,7 @@ test("blocklist matches the python digests", () => {
   assert.equal(parsed.safe, false)
   assert.equal(containsBlocked("Tyler is based in Medellín."), false)
   assert.equal(containsBlocked("Design Lead at Overmatch AI"), false)
-  assert.equal(containsBlocked("Remedy"), true)
+  assert.equal(containsBlocked("Remedy"), false)
   assert.equal(containsBlocked("Traveller"), true)
 })
 

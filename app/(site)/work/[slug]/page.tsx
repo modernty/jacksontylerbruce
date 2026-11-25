@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { TrackOnMount } from "@/src/components/analytics"
 import { SectionAnchor } from "@/src/components/section-anchor"
 import { WorkView } from "@/src/components/work-view"
 import { careerEntries } from "@/src/content/career"
+import { openableFor } from "@/src/content/demos"
+import { portalSections } from "@/src/content/portals"
 import { publishCatalog } from "@/src/content/publish"
 import type { Section } from "@/src/content/schema"
-import { projectTitle } from "@/src/content/titles"
 import { Grain } from "@/src/plates/grain"
 import { MediaFrame } from "@/src/plates/media-frame"
 
@@ -28,10 +28,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function Body({ section }: { section: Section }) {
+/** A section's links and notes, shown after its text. */
+function Items({ section }: { section: Section }) {
   return (
     <>
-      {section.body.split("\n\n").filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       {section.items.length ? (
         <ul className="items">
           {section.items.map((item) => (
@@ -47,9 +47,9 @@ function Body({ section }: { section: Section }) {
 }
 
 /**
- * The base state is a prompt to talk: the title, where the work lives, and one lead paragraph.
- * Everything else waits behind "more info", in the same column the conversation will use.
- * Boring view lays the same pieces out as info beside photos, with no conversation.
+ * A project reads like an answer in the chat: the title, then the description, the facts and each
+ * section arriving in turn, with the media beside it. Boring view lays the same pieces out as info
+ * beside the media, with no conversation.
  */
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
   const found = find((await params).slug)
@@ -69,8 +69,12 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   const lead = context ?? summary
   const external = byId.get("links")?.items ?? []
   const rest = project.sections.filter((section) => section !== lead && section.id !== "links" && section.id !== "summary")
-  // The cover leads the gallery; an image listed again after it (the same file) shows once.
-  const images = [project.media.cover, ...project.media.images]
+  // The cover leads the gallery; an image listed again after it (the same file) shows once. A project
+  // told by its study chapters, or by a reel or portal, has no gallery images of its own, so its
+  // cover (often a recording of the same demo) is not repeated there.
+  const openable = openableFor(project.slug)
+  const toldElsewhere = !!(openable.study || openable.reel || openable.portal)
+  const images = (project.media.images.length || !toldElsewhere ? [project.media.cover, ...project.media.images] : [])
     .filter((image) => image !== null)
     .filter((image, index, all) => all.findIndex((other) => other.src === image.src) === index)
   const leadIds = [lead?.id ?? "summary", ...(summary && lead !== summary ? ["summary"] : [])]
@@ -81,6 +85,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       <TrackOnMount name="project_opened" props={{ slug: project.slug }} />
       <WorkView
         slug={project.slug}
+        openable={openable}
+        portal={openable.portal ? portalSections(openable.portal.id) : undefined}
         head={
           <header className="column-head">
             <h1>{project.name}</h1>
@@ -97,24 +103,16 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         lead={lead ? lead.body.split("\n\n").filter(Boolean) : []}
         meta={
           <div className="facts">
-            <p className="meta">{[org, projectTitle(project, role), project.circa ?? role?.yearLabel].filter(Boolean).join(" · ")}</p>
+            <p className="meta">{[org, project.circa ?? role?.yearLabel].filter(Boolean).join(" · ")}</p>
             <p className="themes">{themes}</p>
           </div>
         }
-        sections={
-          rest.length ? (
-            <div className="accordions">
-              {rest.map((section) => (
-                <details key={section.id} id={section.id} suppressHydrationWarning>
-                  <summary>{section.title}</summary>
-                  <div className="panel">
-                    <Body section={section} />
-                  </div>
-                </details>
-              ))}
-            </div>
-          ) : null
-        }
+        sections={rest.map((section) => ({
+          id: section.id,
+          title: section.title,
+          paragraphs: section.body.split("\n\n").filter(Boolean),
+          tail: section.items.length ? <Items key={section.id} section={section} /> : undefined,
+        }))}
         media={
           images.length ? (
             <section className="media" aria-label={`${project.name} images`}>
@@ -133,7 +131,6 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         hasImages={images.length > 0}
         names={Object.fromEntries(catalog.projects.map((item) => [item.slug, item.name]))}
         careers={Object.fromEntries(careerEntries(catalog).map((entry) => [entry.id, entry]))}
-        cta={<p className="cta"><Link href="/timeline">Back to the timeline →</Link></p>}
       />
     </main>
   )

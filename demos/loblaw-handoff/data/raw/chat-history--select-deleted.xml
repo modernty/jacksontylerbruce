@@ -1,0 +1,50 @@
+<frame id="8156:73052" name="Chat history, chats deleted-toast" x="6049" y="100" width="393" height="852">
+  <frame id="8156:73053" name="Frame 2147231663" x="16" y="230" width="361" height="60">
+    <frame id="8156:73054" name="List" x="0" y="0" width="361" height="60">
+      <frame id="8156:73055" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:73056" name="Tag + Text" x="8" y="8" width="285" height="44">
+          <frame id="8156:73057" name="Text" x="0" y="0" width="285" height="44">
+            <text id="8156:73058" name="Message title" x="0" y="0" width="285" height="22" chars="Plan my groceries for the week" />
+            <text id="8156:73059" name="Message timestamp" x="0" y="24" width="83" height="20" chars="2 weeks ago" />
+          </frame>
+        </frame>
+        <instance id="8156:73060" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:73060;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:73067" name="Frame 2147231656" x="16" y="146" width="361" height="72">
+    <frame id="8156:73068" name="Top" x="0" y="0" width="361" height="32">
+      <frame id="8156:73069" name="Header" x="8" y="0" width="345" height="32">
+        <text id="8156:73070" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+      </frame>
+    </frame>
+    <frame id="8156:73071" name="Frame 2147231652" x="0" y="32" width="57" height="40">
+      <text id="8156:73072" name="1 chat" x="8" y="10" width="41" height="20" chars="1 chat" />
+    </frame>
+  </frame>
+  <frame id="8156:73073" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:73074" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:73074;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+  </frame>
+  <instance id="8156:73075" name="Toast" x="16" y="60" width="361" height="56">
+    <frame id="I8156:73075;7102:26285" name="Header container" x="8" y="8" width="345" height="40">
+      <frame id="I8156:73075;7102:26286" name="Message wrapper" x="0" y="11" width="257" height="18">
+        <text id="I8156:73075;7102:26287" name="Message" x="16" y="0" width="225" height="18" chars="3 chats deleted" />
+      </frame>
+      <frame id="I8156:73075;7102:26288" name="Action" x="267" y="11" width="47" height="18" hidden="true">
+        <text id="I8156:73075;7102:26289" name="Action label" x="8" y="0" width="31" height="18" chars="Undo" />
+      </frame>
+      <instance id="I8156:73075;7102:26290" name="Dismiss" x="305" y="0" width="40" height="40">
+        <frame id="I8156:73075;7102:26290;673:1335" name="Send button" x="0" y="0" width="40" height="40">
+          <instance id="I8156:73075;7102:26290;688:1443" name="X" x="12" y="12" width="16" height="16">
+            <vector id="I8156:73075;7102:26290;688:1443;7485:17661" name="Vector" x="3" y="3" width="11" height="11" />
+          </instance>
+        </frame>
+      </instance>
+    </frame>
+  </instance>
+  <instance id="8156:73061" name="Background=true" x="0" y="0" width="393" height="54" />
+</frame>

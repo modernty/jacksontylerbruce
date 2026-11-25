@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: #ffffff;
+  color: #1A1A1A;
+}
+
+textarea {
+  resize: none;
+}
+
+/* Shimmer text effect */
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.shimmer-text {
+  background: linear-gradient(90deg, #8E8E8E 0%, #236CFF 35%, #6B9FFF 50%, #236CFF 65%, #8E8E8E 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 1.8s linear infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E5E5;
+  border-radius: 3px;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hidden {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* old IE/Edge */
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;                /* Chrome / Safari */
+}
+
+/* Embedded in the portfolio: no grey page behind the phone. */
+html.embed, html.embed body, html.embed #root, html.embed #root > div { background: transparent !important; }
+/* No shadow either: the portfolio crops close to the phone, so any shadow is cut off in a sharp-edged box. */
+html.embed #root > div > div { box-shadow: none !important; }

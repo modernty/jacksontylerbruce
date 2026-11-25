@@ -14,6 +14,14 @@ import { MemoryStore } from "./store"
 const catalog = publishCatalog()
 const names = (slugs: string[] = []) => slugs.map((slug) => catalog.projects.find((project) => project.slug === slug)?.name)
 
+test("the case studies starter offers the chosen projects, in order, as cards to open", async () => {
+  const reply = await handleChatAsk({ q: "Show me some case studies.", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  const body = reply.body as { projects?: string[]; cards?: string; answer: string }
+  assert.deepEqual(body.projects, ["intuit", "botpress", "loblaws"])
+  assert.equal(body.cards, "demo")
+  assert.deepEqual(textIssues(body.answer), [])
+})
+
 test("the recent projects starter lists the same three as asking for the work", () => {
   assert.deepEqual(answerChat("Show me recent projects", undefined)?.projects, answerChat("Show me your projects", undefined)?.projects)
 })
@@ -26,7 +34,7 @@ test("asking for the work answers in one sentence: three recent projects from tw
   assert.ok(new Set(picked.map((project) => project?.roleId)).size <= 2)
   // The newest project always leads.
   assert.equal(reply.projects[0], byRecent(catalog.projects)[0]?.slug)
-  assert.equal(reply.answer, `The newest: Overmatch AI, Intuit and Loblaw / PC Health. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`)
+  assert.equal(reply.answer, `The newest: Overmatch AI, Botpress and Intuit. Select one to view, see all ${catalog.projects.length}, or narrow it to one type.`)
   assert.deepEqual(reply.followUps, ["All projects.", "Product design work.", "Brand work.", "Spatial work."])
   assert.equal(reply.expects, "category")
   assert.ok(!reply.answer.includes("\n"))

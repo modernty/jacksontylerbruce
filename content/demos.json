@@ -1,0 +1,578 @@
+{
+  "note": "What a visitor can open from a project's full view. A demo is the work itself, run inside the portfolio. A study is a short case study that ends on the real site. Built demo files live in public/demos/<slug>/ and are made by npm run demos from demos/<slug>/.",
+  "caseStudies": [
+    "intuit",
+    "botpress",
+    "loblaws"
+  ],
+  "projects": {
+    "intuit": {
+      "logo": "/logos/intuit.svg",
+      "demo": {
+        "kind": "autoplay",
+        "src": "/demos/intuit/index.html?autoplay",
+        "frame": "phone",
+        "title": "Invoicing inside ChatGPT"
+      }
+    },
+    "pc-chat": {
+      "study": {
+        "title": "Remedy, the work",
+        "stance": "The handoff is part of the design. A product this regulated ships only as well as it is handed over.",
+        "chapters": [
+          {
+            "id": "context",
+            "kicker": "Context",
+            "title": "A pharmacy agent for Shoppers Drug Mart",
+            "body": [
+              "Remedy is the PC Health AI agent: refills and renewals, appointment booking, answers with sources, and a pharmacist when a person should take over.",
+              "Design, prototyping and agent strategy ran from January to August 2026. Version one launched on iOS in June. The national launch added booking for several patients, vaccines, weight management, web and Android."
+            ]
+          },
+          {
+            "id": "rx",
+            "kicker": "Journey",
+            "title": "One request, two outcomes, one conversation",
+            "body": [
+              "Pharmacy runs on rules: refill or renewal, patient or caregiver, which store, which medication. The golden path was set as the hardest common case. A caregiver asks for refills. One medication is eligible, another needs a renewal. The agent resolves both before the chat ends, and offers to follow up.",
+              "Every flow starts from a person's own words, never from a menu."
+            ],
+            "image": {
+              "src": "/demos/remedy-work/previews/rx-refills.png",
+              "alt": "Rx refill screens: a caregiver's request resolved as one refill and one renewal in the same conversation",
+              "frame": "plain"
+            }
+          },
+          {
+            "id": "safety",
+            "kicker": "Responses and safety",
+            "title": "Safety as a surface, not a disclaimer",
+            "body": [
+              "Answers show where they came from. Long answers stay readable. When a conversation needs real care, red-flag escalation hands it to a person, plainly and quickly.",
+              "Trust is built in the response itself, not in a banner above it."
+            ],
+            "image": {
+              "src": "/demos/remedy-work/previews/citations.png",
+              "alt": "Citations on a Remedy answer, showing the sources behind it",
+              "frame": "plain"
+            }
+          },
+          {
+            "id": "one-agent",
+            "kicker": "Strategy",
+            "title": "One agent, contextual credentials",
+            "body": [
+              "Separate assistants for health and shopping were becoming two relationships with one customer. The direction became a single agent with one name and one context. The voice stays the same. The authority changes with the moment: a pharmacist's sign-off in health, the store in commerce.",
+              "The rule that came with it: a consent beat before any suggestion to buy, and a conversation that ends on care, not the sale."
+            ],
+            "image": {
+              "src": "/demos/remedy-work/previews/remedy-chat-core.png",
+              "alt": "The Remedy chat core: composer, response and thinking states",
+              "frame": "plain"
+            }
+          },
+          {
+            "id": "labs",
+            "kicker": "Labs",
+            "title": "Thirteen questions for what comes next",
+            "body": [
+              "Beyond the launch, thirteen studies, each a question with a method and a signal to watch. How the agent says its first hello. Whether it can build a family profile without a form. What a tasteful handoff from a health question to a shopping one looks like. What makes switching from ChatGPT feel like an upgrade instead of starting over.",
+              "Each is measured by what people do, not what they say they liked."
+            ],
+            "image": {
+              "src": "/demos/remedy-work/labs/agent-intro-poster.jpg",
+              "alt": "Still from the first hello test, an agent introducing itself",
+              "frame": "plain"
+            }
+          },
+          {
+            "id": "handoff",
+            "kicker": "Handoff",
+            "title": "The handoff, as a product",
+            "body": [
+              "Fourteen features, four libraries, thirteen Labs studies and the source files, each card one click from its design on every platform. A spreadsheet is the source of truth, so the site changes without code. Built so engineering, and whoever picks this up next, can find anything in seconds.",
+              "This is that site, as it was delivered."
+            ]
+          }
+        ],
+        "site": {
+          "kind": "site",
+          "src": "/demos/remedy-work/",
+          "frame": "desktop",
+          "title": "Remedy, the work",
+          "caption": "The handoff site as delivered on August 31, 2026. Figma links open the original files and need access."
+        }
+      }
+    },
+    "loblaws": {
+      "logo": "/logos/pc-health.svg",
+      "portal": {
+        "id": "remedy-work",
+        "title": "Remedy / PC Core Elements"
+      },
+      "reel": {
+        "kicker": "Chat History and Memory",
+        "title": "What PC Chat remembers, and how you correct it",
+        "intro": "The live Memory flow first, as engineering received it. Then the core screens behind it.",
+        "demo": {
+          "kind": "site",
+          "src": "/demos/loblaw-handoff/phone/memory/",
+          "frame": "phone",
+          "title": "Memory, live",
+          "caption": "It walks itself through the flow. Tap the phone to take over."
+        },
+        "screens": [
+          {
+            "src": "/demos/loblaw-handoff/screens/memory--home.png",
+            "alt": "The Memory page: a generated summary of what you have told PC Chat, then the memories most on its mind",
+            "title": "Memory",
+            "caption": "What you’ve told PC Chat, written back as one generated paragraph."
+          },
+          {
+            "src": "/demos/loblaw-handoff/screens/memory--viewing.png",
+            "alt": "A selected memory: You have high blood pressure, with its condition and status, and a way to delete it",
+            "title": "A memory",
+            "caption": "One fact, its fields, the chat it came from, and a way to delete it."
+          },
+          {
+            "src": "/demos/loblaw-handoff/screens/memory--used-in-chat.png",
+            "alt": "A chat answer about a COVID-19 booster, with a sheet showing the one memory it used",
+            "title": "Memory in a chat",
+            "caption": "An answer names the memory it used. Designed, then left out of the launch."
+          },
+          {
+            "src": "/demos/loblaw-handoff/screens/chat-history--full.png",
+            "alt": "Chat history: twelve past chats, newest first, each with a menu",
+            "title": "Chat history",
+            "caption": "Every past chat, to search, rename or delete."
+          }
+        ]
+      }
+    },
+    "botpress": {
+      "logo": "/logos/botpress.svg",
+      "study": {
+        "title": "A trusted helpdesk for Botpress",
+        "stance": "Support agents will do more than answer. They will fix the broken link, refund the late box and ship the change, once someone trusts them to. Lily is how that trust gets built, one approval at a time.",
+        "chapters": [
+          {
+            "id": "where",
+            "kicker": "Where support is going",
+            "title": "Agents will take on more and more of the helpdesk",
+            "change": "Sooner or later, every helpdesk will be able to do this. A team will only hand the work to the one it trusts.",
+            "diagram": {
+              "kind": "trust-curve",
+              "steps": [
+                {
+                  "label": "Where support is going",
+                  "title": "Support people move up a layer",
+                  "why": "Support is full of tasks AI can already help with, and the list keeps growing. One by one the work moves to agents, and the people who did it move up: directing the agents and stepping in where a person matters most."
+                },
+                {
+                  "label": "Building trust",
+                  "title": "Nobody hands over a whole support operation on day one",
+                  "why": "No one asks an agent to run everything from the start. Each task it handles reliably earns it the next, slightly bigger one. It proves itself on the small stuff before anyone hands it the big stuff."
+                },
+                {
+                  "label": "Onboarding",
+                  "title": "First impressions establish trust",
+                  "why": "The first steps up the line happen in onboarding: helping set up, introducing Desk, suggesting what to do next. That is where trust starts, from day one."
+                },
+                {
+                  "label": "Lily",
+                  "title": "Build that trust in Lily",
+                  "why": "Lily already helps people inside Botpress. If those early steps happen with Lily, the relationship lives in her. Every small win adds to it, so she is the one people trust as the stakes rise, all the way up to running Desk."
+                }
+              ]
+            }
+          },
+          {
+            "id": "setup",
+            "kicker": "Sign-up",
+            "title": "Sign-up and the first look at Desk",
+            "story": {
+              "point": 0,
+              "steps": [
+                {
+                  "title": "Sign up",
+                  "why": "A Google button and a work email. Nothing to fill in before seeing the product.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/01-1.webp",
+                      "alt": "Desk sign-up: create your Desk account with Google or a work email"
+                    }
+                  ]
+                },
+                {
+                  "title": "One question",
+                  "why": "Lily asks where the support tickets live, says why, and offers a skip.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/01-2.webp",
+                      "alt": "Lily's one question: where should she look for your support tickets?",
+                      "focus": "50 48 1.4"
+                    }
+                  ]
+                },
+                {
+                  "title": "Desk on day one",
+                  "why": "A three-step plan on the home screen. Lily is a small pill in the corner, out of the way.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/01-3.webp",
+                      "alt": "Desk home on day one: a three-step checklist and a small Lily pill",
+                      "later": "62 88 1.9"
+                    }
+                  ]
+                },
+                {
+                  "title": "Opening Lily",
+                  "why": "Her card, bottom right: she offers to draft the first agent from the company's website.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/01-4.webp",
+                      "alt": "Lily opens from the corner and offers to draft the first agent from the company's website",
+                      "focus": "80 75 1.9"
+                    }
+                  ]
+                }
+              ]
+            },
+            "change": "Today, sign-up drops a new user into bot setup. Here they land in a working Desk, and Lily waits until she's asked."
+          },
+          {
+            "id": "first-agent",
+            "kicker": "First agent",
+            "title": "Building the first agent with Lily, in Vibe",
+            "story": {
+              "point": 1,
+              "steps": [
+                {
+                  "title": "Start the first agent",
+                  "why": "Lily has read loopkit.com and offers two agents to start from.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/02-1.webp",
+                      "alt": "Vibe on first load, with Lily offering two agents to start from: a delivery helper and a refunds agent",
+                      "later": "52 100 1.6"
+                    }
+                  ]
+                },
+                {
+                  "title": "Adding the menu",
+                  "why": "She proposes skills, each with the page it came from. Steps check off as she works.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/02-2.webp",
+                      "alt": "Lily offers skills and attributes read from the company's site, each with its source",
+                      "focus": "52 100 1.6"
+                    }
+                  ]
+                },
+                {
+                  "title": "Try it",
+                  "why": "A real customer question, asked in Preview before any customer sees the agent.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/02-3.webp",
+                      "alt": "The delivery helper answering a late-box question in Preview",
+                      "later": "85 55 2"
+                    }
+                  ]
+                },
+                {
+                  "title": "Ready to publish",
+                  "why": "Lily says the agent is ready, and what happens once it's published.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/02-4.webp",
+                      "alt": "Lily says the delivery helper is ready to publish and what happens next",
+                      "focus": "85 55 2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "change": "Vibe already builds agents. Lily gives it a starting point: she reads the site and proposes the agent, so the builder is never blank."
+          },
+          {
+            "id": "into-desk",
+            "kicker": "Going live",
+            "title": "The agent goes live, and Lily opens Desk",
+            "story": {
+              "point": 2,
+              "steps": [
+                {
+                  "title": "Published",
+                  "why": "Lily's card on the publish screen: the agent is live, and she offers to show where its conversations land.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/03-1.webp",
+                      "alt": "The agent is published, and Lily offers to show where its work will show up",
+                      "later": "86 62 2"
+                    }
+                  ]
+                },
+                {
+                  "title": "A short tour",
+                  "why": "Lily points out Home, the inbox, and where she'll flag anything that needs a person.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/03-2.webp",
+                      "alt": "Lily's short tour of the Desk home",
+                      "later": "85 83 2"
+                    }
+                  ]
+                },
+                {
+                  "title": "First ticket handed over",
+                  "why": "The first conversation the agent passed on is highlighted. Lily's suggestion opens to show what happened, the policy, and a drafted reply.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/03-3a.webp",
+                      "alt": "The first ticket handed to a person: a late box and a refund request, with Lily's suggestion",
+                      "later": "80 79 1.9"
+                    },
+                    {
+                      "src": "/studies/botpress/story/03-3b.webp",
+                      "alt": "Lily's suggestion opened up: what happened, why it came to you, the policy and a draft reply",
+                      "focus": "75 66 1.6"
+                    }
+                  ]
+                },
+                {
+                  "title": "Desk after day one",
+                  "why": "The overview, even with little data, shows the agent's first handled conversations.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/03-4.webp",
+                      "alt": "The Desk overview on day one, with the agent's first handled conversations"
+                    }
+                  ]
+                }
+              ]
+            },
+            "change": "Publishing used to be the end of setup. Here it leads into Desk, where the agent's work shows up."
+          },
+          {
+            "id": "check-in",
+            "kicker": "A week in",
+            "title": "The overview after a week, with Lily's check-in",
+            "story": {
+              "point": 3,
+              "steps": [
+                {
+                  "title": "Overview",
+                  "why": "The home screen opens on the week: the two agents handled 316 of 412 conversations.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/04-1.webp",
+                      "alt": "Monday morning: the 2 agents handled 316 of 412 conversations this week"
+                    }
+                  ]
+                },
+                {
+                  "title": "Notifications",
+                  "why": "The bell, top right: only what needs a person, each with its fix one tap away.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/04-2.webp",
+                      "alt": "Notifications: only what needs a person, each with its fix",
+                      "focus": "64 30 1.4"
+                    }
+                  ]
+                },
+                {
+                  "title": "Ask Lily",
+                  "why": "A question typed into the prompt bar on the overview. She answers from the tickets and the agents, in plain words.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/04-3.webp",
+                      "alt": "Asking Lily about the desk in plain words"
+                    }
+                  ]
+                },
+                {
+                  "title": "Monday check-in",
+                  "why": "Lily's weekly read, in Desk or by email: how the week went and one next step.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/04-4.webp",
+                      "alt": "Lily's weekly check-in: how the week went and one next step"
+                    }
+                  ]
+                }
+              ]
+            },
+            "change": "Desk's overview shows numbers. Here Lily reads them: how the agents did, and the few things that need a person."
+          },
+          {
+            "id": "bigger-tasks",
+            "kicker": "Bigger tasks",
+            "title": "A refund draft, approved, until the agent can send it alone",
+            "story": {
+              "point": 4,
+              "steps": [
+                {
+                  "title": "Ticket with a draft",
+                  "why": "A refund request with Lily's drafted reply at the bottom. The support lead reviews it and sends.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/05-1.webp",
+                      "alt": "A refund ticket with Lily's draft reply, ready to approve and send",
+                      "later": "42 89 1.7",
+                      "delay": 2600
+                    }
+                  ],
+                  "point": 4
+                },
+                {
+                  "title": "Approved",
+                  "why": "Each approval counts toward the skill: 18 of 20 so far.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/05-2.webp",
+                      "alt": "Reply sent: the approval counts toward unlocking the skill",
+                      "focus": "80 70 1.7"
+                    }
+                  ],
+                  "point": 4
+                },
+                {
+                  "title": "Skill unlocked",
+                  "why": "After 20 approved drafts, the Refunds agent can send refunds under $50 on its own. Lily asks before switching it on.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/05-3a.webp",
+                      "alt": "New skill unlocked: send refunds under $50, after 20 of 20 approved drafts",
+                      "focus": "80 70 1.7"
+                    },
+                    {
+                      "src": "/studies/botpress/story/05-3b.webp",
+                      "alt": "The unlocked skill's details: refunds under $50 on its own, larger ones still need approval",
+                      "focus": "80 70 1.7"
+                    }
+                  ],
+                  "point": 5
+                },
+                {
+                  "title": "Teach a skill",
+                  "why": "Each agent lists what it can do. Lily suggests the next skill from what customers keep asking.",
+                  "frames": [
+                    {
+                      "src": "/studies/botpress/story/05-4.webp",
+                      "alt": "Each agent's skills, with Lily's suggestion for what to teach next"
+                    }
+                  ],
+                  "point": 5
+                }
+              ]
+            },
+            "change": "Autonomy is unlocked per skill and per limit, from a record of approvals, not one switch for everything."
+          }
+        ]
+      }
+    },
+    "pc-chat-memory": {
+      "study": {
+        "title": "Remembering, with permission",
+        "stance": "An agent should be useful enough to feel like it knows you, and restrained enough that it never feels like it's watching.",
+        "chapters": [
+          {
+            "id": "read",
+            "kicker": "The honest read",
+            "title": "Memory, designed as a list instead of a promise",
+            "body": [
+              "PC Chat remembers health facts drawn from conversation: a condition, a medication, an allergy, a pregnancy. What shipped handles the moment someone tidies their data, with lists, menus and confirmations. It barely touches the points where trust is decided: when a memory is made, how long it lasts, and how it is let go.",
+              "The brief that followed was wider than one product: design the relationship, the points of contact and the feelings in them, not just the screens."
+            ]
+          },
+          {
+            "id": "tensions",
+            "kicker": "Four tensions",
+            "title": "Every rule sits between two failures",
+            "body": [
+              "Trust, between forgetful and presumptuous. Emotion, between cold and creepy. Interaction, between interruptive and buried. Transparency, between black box and overexplained. Twelve ideas, three per tension, each with a principle, a test, and a real moment from PC Chat scored against it."
+            ]
+          },
+          {
+            "id": "permission",
+            "kicker": "Trust · 01",
+            "title": "Remember with permission",
+            "body": [
+              "The gap: someone mentions a vaccine to get booster advice, and PC Chat saves it as a memory. A pill appears afterwards. There is no moment to agree. The fix proposes the memory under the answer and waits for Save."
+            ],
+            "image": {
+              "src": "/studies/pc-chat-memory/t01-remember-with-permission.jpg",
+              "alt": "Remember with permission: a 'Remember this for next time?' prompt beside the PC Chat screen that saved a memory without asking",
+              "frame": "wide"
+            }
+          },
+          {
+            "id": "no",
+            "kicker": "Trust · 02",
+            "title": "Saying no is free",
+            "body": [
+              "Declining should never cost more than accepting. Removing one memory meant a red dialog, with a box that also deleted the whole chat. The fix: Won't remember this, with an undo. Dialogs stay for bulk, irreversible deletes."
+            ],
+            "image": {
+              "src": "/studies/pc-chat-memory/t02-saying-no-is-free.jpg",
+              "alt": "Saying no is free: a quiet 'Won't remember this · Undo' toast beside the delete dialog it replaces",
+              "frame": "wide"
+            }
+          },
+          {
+            "id": "forget",
+            "kicker": "Emotion · 03",
+            "title": "Forget gracefully",
+            "body": [
+              "Chats auto-delete after 60 days. Memories, including \"8 weeks pregnant\", never expire. Facts go stale, and some become painful. Time-bound memories get an expiry and a quiet \"Still true?\" check-in."
+            ],
+            "image": {
+              "src": "/studies/pc-chat-memory/e03-forget-gracefully.jpg",
+              "alt": "Forget gracefully: a 'Still true?' check-in on a pregnancy memory ten months later",
+              "frame": "wide"
+            }
+          },
+          {
+            "id": "leave",
+            "kicker": "Interaction · 03",
+            "title": "Leave the chat",
+            "body": [
+              "Chat is one surface. Refills and booking were designed only as conversations, with no notification, widget or Live Activity. Pickup status belongs on the lock screen; chat is for questions."
+            ],
+            "image": {
+              "src": "/studies/pc-chat-memory/i03-leave-the-chat.jpg",
+              "alt": "Leave the chat: a pickup notification on the lock screen, where routine needs belong",
+              "frame": "wide"
+            }
+          },
+          {
+            "id": "working",
+            "kicker": "Transparency · 01",
+            "title": "Show the working",
+            "body": [
+              "Where PC Chat gets it right: \"1 memory used\" sits beside \"2 sources\" under an answer and opens the exact memory that shaped it. Personal context, cited like any other source."
+            ],
+            "image": {
+              "src": "/studies/pc-chat-memory/x01-show-the-working.jpg",
+              "alt": "Show the working: an answer citing two sources and one memory used",
+              "frame": "wide"
+            }
+          },
+          {
+            "id": "score",
+            "kicker": "Scored",
+            "title": "13 gaps, 10 supports, 3 mixed",
+            "body": [
+              "The gaps cluster in two places: when a memory is made, and how long it lasts. Transparency is strongest. Each idea carries an empty lane for the next product, so the framework outlives this one."
+            ]
+          }
+        ]
+      }
+    },
+    "novart": {
+      "wideMedia": true
+    }
+  }
+}

@@ -1,0 +1,191 @@
+<frame id="8156:234911" name="Side Panel, filled recents" x="902" y="100" width="330" height="852">
+  <frame id="8156:234912" name="Header" x="0" y="52" width="330" height="48">
+    <frame id="8156:234913" name="Frame 2147202988" x="24" y="24" width="115" height="24">
+      <frame id="8156:234914" name="Symbol + Wordmark Stacked 1_WIP 1" x="0" y="0" width="24" height="24">
+        <vector id="8156:234915" name="Vector" x="9" y="15" width="11" height="8" />
+        <vector id="8156:234916" name="Vector" x="2" y="9" width="8" height="11" />
+        <vector id="8156:234917" name="Vector" x="15" y="3" width="8" height="11" />
+        <vector id="8156:234918" name="Vector" x="4" y="2" width="11" height="8" />
+      </frame>
+      <text id="8156:234919" name="Greeting text" x="32" y="0" width="83" height="24" />
+    </frame>
+  </frame>
+  <frame id="8156:234920" name="Content" x="0" y="100" width="330" height="752">
+    <frame id="8156:234921" name="Nav" x="8" y="24" width="314" height="184">
+      <frame id="8156:234922" name="Nav item" x="0" y="0" width="314" height="46">
+        <instance id="8156:234923" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234923;9:2177" name="iOS/square.and.pencil" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234923;9:2177;10:9513" name="Vector" x="3" y="3" width="16" height="16" />
+          </instance>
+        </instance>
+        <text id="8156:234924" name="Message title" x="36" y="12" width="70" height="22" />
+      </frame>
+      <frame id="8156:234925" name="Nav item" x="0" y="40" width="286" height="40" hidden="true">
+        <instance id="8156:234926" name="_Icon" x="8" y="8" width="24" height="24">
+          <text id="I8156:234926;2904:8440" name="􀅼" x="4" y="4" width="16" height="16" />
+        </instance>
+        <text id="8156:234927" name="Message title" x="40" y="9" width="35" height="22" />
+      </frame>
+      <frame id="8156:234928" name="Nav item" x="0" y="46" width="314" height="46">
+        <instance id="8156:234929" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234929;9:2177" name="iOS/message" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234929;9:2177;1:33140" name="Vector" x="1" y="3" width="17" height="14" />
+          </instance>
+        </instance>
+        <text id="8156:234930" name="Message title" x="36" y="12" width="91" height="22" />
+      </frame>
+      <frame id="8156:234931" name="Nav item" x="0" y="92" width="314" height="46">
+        <instance id="8156:234932" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234932;9:2177" name="iOS/book" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234932;9:2177;1:23911" name="Vector" x="2" y="3" width="16" height="13" />
+          </instance>
+        </instance>
+        <text id="8156:234933" name="Message title" x="36" y="12" width="61" height="22" />
+      </frame>
+      <frame id="8156:234934" name="Nav item" x="0" y="138" width="314" height="46">
+        <instance id="8156:234935" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234935;9:2177" name="iOS/gear" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234935;9:2177;10:6158" name="Vector" x="1" y="2" width="17" height="17" />
+          </instance>
+        </instance>
+        <text id="8156:234936" name="Message title" x="36" y="12" width="62" height="22" />
+      </frame>
+    </frame>
+    <frame id="8156:234937" name="Vertical stack" x="8" y="232" width="314" height="496">
+      <frame id="8156:234938" name="Header" x="0" y="0" width="314" height="22">
+        <text id="8156:234939" name="Item title" x="8" y="0" width="60" height="22" />
+      </frame>
+      <frame id="8156:234940" name="List" x="0" y="30" width="314" height="380">
+        <frame id="8156:234941" name="List item" x="0" y="0" width="314" height="60">
+          <frame id="8156:234942" name="Tag + Text" x="8" y="8" width="238" height="44">
+            <frame id="8156:234943" name="Text" x="0" y="0" width="238" height="44">
+              <text id="8156:234944" name="Message title" x="0" y="0" width="238" height="22" />
+              <frame id="8156:234945" name="Metadata" x="0" y="24" width="238" height="20">
+                <text id="8156:234946" name="Message timestamp" x="0" y="0" width="66" height="20" />
+              </frame>
+            </frame>
+          </frame>
+          <instance id="8156:234947" name="Button" x="262" y="8" width="44" height="44">
+            <instance id="I8156:234947;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+              <instance id="I8156:234947;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                <vector id="I8156:234947;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+              </instance>
+            </instance>
+          </instance>
+        </frame>
+        <frame id="8156:234948" name="Frame 2147231642" x="0" y="64" width="314" height="60">
+          <frame id="8156:234949" name="List item" x="0" y="0" width="314" height="60">
+            <frame id="8156:234950" name="Tag + Text" x="8" y="8" width="238" height="44">
+              <frame id="8156:234951" name="Text" x="0" y="0" width="238" height="44">
+                <text id="8156:234952" name="Message title" x="0" y="0" width="238" height="22" />
+                <frame id="8156:234953" name="Metadata" x="0" y="24" width="238" height="20">
+                  <text id="8156:234954" name="Message timestamp" x="0" y="0" width="66" height="20" />
+                  <text id="8156:234955" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="8156:234956" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="8156:234957" name="Button" x="262" y="8" width="44" height="44">
+              <instance id="I8156:234957;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+                <instance id="I8156:234957;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                  <vector id="I8156:234957;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+                </instance>
+              </instance>
+            </instance>
+          </frame>
+        </frame>
+        <frame id="8156:234958" name="Frame 2147231644" x="0" y="128" width="314" height="60">
+          <frame id="8156:234959" name="List item" x="0" y="0" width="314" height="60">
+            <frame id="8156:234960" name="Tag + Text" x="8" y="8" width="238" height="44">
+              <frame id="8156:234961" name="Text" x="0" y="0" width="238" height="44">
+                <text id="8156:234962" name="Message title" x="0" y="0" width="238" height="22" />
+                <frame id="8156:234963" name="Metadata" x="0" y="24" width="238" height="20">
+                  <text id="8156:234964" name="Message timestamp" x="0" y="0" width="72" height="20" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="8156:234965" name="Button" x="262" y="8" width="44" height="44">
+              <instance id="I8156:234965;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+                <instance id="I8156:234965;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                  <vector id="I8156:234965;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+                </instance>
+              </instance>
+            </instance>
+          </frame>
+        </frame>
+        <frame id="8156:234966" name="Frame 2147231645" x="0" y="192" width="314" height="60">
+          <frame id="8156:234967" name="List item" x="0" y="0" width="314" height="60">
+            <frame id="8156:234968" name="Tag + Text" x="8" y="8" width="238" height="44">
+              <frame id="8156:234969" name="Text" x="0" y="0" width="238" height="44">
+                <text id="8156:234970" name="Message title" x="0" y="0" width="238" height="22" />
+                <frame id="8156:234971" name="Metadata" x="0" y="24" width="238" height="20">
+                  <text id="8156:234972" name="Message timestamp" x="0" y="0" width="83" height="20" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="8156:234973" name="Button" x="262" y="8" width="44" height="44">
+              <instance id="I8156:234973;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+                <instance id="I8156:234973;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                  <vector id="I8156:234973;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+                </instance>
+              </instance>
+            </instance>
+          </frame>
+        </frame>
+        <frame id="8156:234974" name="List item" x="0" y="256" width="314" height="60">
+          <frame id="8156:234975" name="Tag + Text" x="8" y="8" width="238" height="44">
+            <frame id="8156:234976" name="Text" x="0" y="0" width="238" height="44">
+              <text id="8156:234977" name="Message title" x="0" y="0" width="238" height="22" />
+              <frame id="8156:234978" name="Metadata" x="0" y="24" width="238" height="20">
+                <text id="8156:234979" name="Message timestamp" x="0" y="0" width="83" height="20" />
+              </frame>
+            </frame>
+          </frame>
+          <instance id="8156:234980" name="Button" x="262" y="8" width="44" height="44">
+            <instance id="I8156:234980;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+              <instance id="I8156:234980;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                <vector id="I8156:234980;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+              </instance>
+            </instance>
+          </instance>
+        </frame>
+        <frame id="8156:234981" name="Frame 2147231646" x="0" y="320" width="314" height="60">
+          <frame id="8156:234982" name="List item" x="0" y="0" width="314" height="60">
+            <frame id="8156:234983" name="Tag + Text" x="8" y="8" width="238" height="44">
+              <frame id="8156:234984" name="Text" x="0" y="0" width="238" height="44">
+                <text id="8156:234985" name="Message title" x="0" y="0" width="238" height="22" />
+                <frame id="8156:234986" name="Metadata" x="0" y="24" width="238" height="20">
+                  <text id="8156:234987" name="Message timestamp" x="0" y="0" width="83" height="20" />
+                  <text id="8156:234988" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="8156:234989" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="8156:234990" name="Button" x="262" y="8" width="44" height="44">
+              <instance id="I8156:234990;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+                <instance id="I8156:234990;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                  <vector id="I8156:234990;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+                </instance>
+              </instance>
+            </instance>
+          </frame>
+        </frame>
+      </frame>
+      <frame id="8156:234991" name="Text button" x="0" y="418" width="93" height="30">
+        <text id="8156:234992" name="View all" x="8" y="4" width="55" height="22" />
+        <instance id="8156:234993" name="Icon/iOS" x="69" y="7" width="16" height="16">
+          <instance id="I8156:234993;9:2173" name="iOS/chevron.right" x="0" y="0" width="16" height="16">
+            <vector id="I8156:234993;9:2173;10:4400" name="Vector" x="5" y="1" width="8" height="14" />
+          </instance>
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:234994" name="Footer" x="0" y="780" width="302" height="72" hidden="true">
+    <instance id="8156:234995" name="_Button" x="230" y="0" width="48" height="48">
+      <instance id="I8156:234995;2862:7707" name="_Icon" x="8" y="8" width="32" height="32">
+        <text id="I8156:234995;2862:7707;2862:7673" name="􀅼" x="4" y="4" width="24" height="24" />
+      </instance>
+    </instance>
+  </frame>
+</frame>

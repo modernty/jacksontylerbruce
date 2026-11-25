@@ -1,0 +1,38 @@
+<frame id="8152:70497" name="History, Search" x="533" y="100" width="393" height="852">
+  <frame id="8152:70876" name="Frame 2147231672" x="0" y="124" width="393" height="728">
+    <frame id="8152:70877" name="Vertical stack, search results" x="16" y="16" width="361" height="60">
+      <frame id="8152:70879" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8152:70884" name="Tag + Text" x="8" y="8" width="345" height="44">
+          <frame id="8152:70885" name="Text" x="0" y="0" width="345" height="44">
+            <text id="8152:70886" name="Message title" x="0" y="0" width="345" height="44" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8152:70498" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8152:70499" name="Top nav" x="0" y="0" width="393" height="124">
+    <frame id="8152:70500" name="Frame 2147231679" x="24" y="66" width="345" height="46">
+      <frame id="8152:70502" name="Button" x="0" y="0" width="265" height="46">
+        <instance id="8152:70503" name="Leading icon" x="16" y="15" width="16" height="16">
+          <vector id="I8152:70503;7485:9536" name="Vector" x="1" y="1" width="14" height="14" />
+        </instance>
+        <text id="8152:70504" name="label" x="40" y="12" width="102" height="22" />
+      </frame>
+      <instance id="8152:70800" name="Button" x="273" y="10" width="72" height="26">
+        <instance id="I8152:70800;2046:16114" name="Leading icon" x="16" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:70800;2046:16114;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:70800;2046:16114;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+        <text id="I8152:70800;5:129" name="label" x="16" y="4" width="40" height="18" />
+        <instance id="I8152:70800;2046:16117" name="Trailing icon" x="85" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:70800;2046:16117;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:70800;2046:16117;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8152:70505" name="Keyboard" x="0" y="535" width="393" height="317" />
+</frame>

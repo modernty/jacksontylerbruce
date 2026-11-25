@@ -1,0 +1,53 @@
+{
+  "slug": "memory--delete-legacy",
+  "name": "Delete confirmation (historical)",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Kept only because the Try it still runs on it. The frame it records was deleted from the file, and the flow it draws — a detail sheet over the home — has been replaced by a Memory details page. Confirming deletion, with an optional second action: also delete the chat the memory started in.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "7294:43120",
+  "image": "/demos/loblaw-handoff/screens/memory--delete-legacy.png",
+  "extracted": true,
+  "extractedOn": "2026-09-21",
+  "tokenSet": "september-launch",
+  "stats": {},
+  "unmapped": [],
+  "looseEnds": [
+    {
+      "kind": "data-model",
+      "severity": "high",
+      "title": "Deleting a memory can also delete a conversation",
+      "detail": "The dialog offers 'Also delete the chat where the memory started', defaulted off, with the clarifier 'The chat stays in your chat history unless you check the box.' That couples Memory Management to Chat History destructively: one checkbox removes a conversation the user may want for other reasons.",
+      "nodes": [
+        "7294:43120"
+      ],
+      "ask": "Confirm the coupling is intended, whether it is recoverable, and what happens to other memories derived from that same chat."
+    },
+    {
+      "kind": "copy-conflict",
+      "severity": "medium",
+      "title": "Sheet behind the dialog uses different copy again",
+      "detail": "Visible behind the scrim: 'Memory details', category 'Vaccines', provenance 'Created last month from a conversation' — all three differing from the detail-sheet frame.",
+      "nodes": [
+        "7294:43120"
+      ],
+      "ask": "Same decision as on the detail sheet."
+    },
+    {
+      "kind": "undrawn",
+      "severity": "medium",
+      "title": "No confirmation or undo after deleting",
+      "detail": "Nothing shows what the user sees once Delete is pressed — whether the sheet dismisses to the list, whether a toast confirms, or whether the action can be undone.",
+      "nodes": [
+        "7294:43120"
+      ],
+      "ask": "Deletion is irreversible as drawn. Is undo expected?"
+    }
+  ],
+  "code": {
+    "css": "/* Memory detail sheet */\n.memory-sheet {\n  background: #ffffffe5;\n  border-radius: 40px 40px 0 0;\n  padding: 24px;\n  backdrop-filter: blur(20px);\n}\n\n.memory-sheet__category {\n  font: 500 12px/18px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #565c79;\n}\n\n.memory-sheet__text {\n  font: 600 15px/22px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #1a1f3c;\n}\n\n.memory-sheet__provenance {\n  font: 400 12px/18px \"SF Pro Text\", -apple-system, sans-serif;\n  color: #717794;\n}\n\n/* The chat this memory came from, as a tappable citation */\n.memory-sheet__citation {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  border-radius: 9999px;\n  border: 1px solid #dddfeb;\n  padding: 12px 16px;\n}",
+    "jsx": "// The detail sheet. Provenance is a link back to the conversation the memory was\n// derived from, which is what makes a memory auditable rather than asserted.\n\nfunction MemoryDetailSheet({ memory, onDelete, onEdit }) {\n  return (\n    <Sheet>\n      <h2 className=\"text-[18px] font-semibold\">About the memory</h2>\n\n      <p className=\"flex items-center gap-1.5 text-[12px] text-[--text-secondary]\">\n        <CategoryIcon name={memory.category.icon} />\n        {memory.category.label}\n      </p>\n\n      <p className=\"text-[15px] font-semibold\">{memory.text}</p>\n      <p className=\"text-[12px] text-[--text-tertiary]\">{memory.provenanceLabel}</p>\n\n      {memory.sourceChat && (\n        <a href={memory.sourceChat.href} className=\"flex items-center gap-2 rounded-full border px-4 py-3\">\n          <ChatIcon />\n          <span className=\"truncate\">{memory.sourceChat.title}</span>\n        </a>\n      )}\n\n      <div className=\"flex gap-3\">\n        <Button variant=\"destructive\" onClick={onDelete}>Delete memory</Button>\n        <Button variant=\"secondary\" onClick={onEdit}>Edit memory</Button>\n      </div>\n    </Sheet>\n  );\n}",
+    "swiftui": "// Hand-translated from the extracted tokens — verify against the iOS UI kit.\n\nstruct MemoryDetailSheet: View {\n    let memory: Memory\n\n    var body: some View {\n        VStack(alignment: .leading, spacing: 16) {\n            Text(\"About the memory\").font(.system(size: 18, weight: .semibold))\n\n            Label(memory.category.label, systemImage: memory.category.symbol)\n                .font(.system(size: 12, weight: .medium))\n                .foregroundStyle(Color.textSecondary)\n\n            Text(memory.text).font(.system(size: 15, weight: .semibold))\n            Text(memory.provenanceLabel)\n                .font(.system(size: 12))\n                .foregroundStyle(Color.textTertiary)\n\n            if let chat = memory.sourceChat {\n                SourceChatChip(chat: chat)\n            }\n\n            HStack(spacing: 12) {\n                Button(\"Delete memory\", role: .destructive) {}\n                Button(\"Edit memory\") {}\n            }\n        }\n        .padding(24)\n        .presentationDetents([.medium])\n    }\n}"
+  }
+}

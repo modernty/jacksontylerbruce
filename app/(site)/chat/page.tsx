@@ -2,6 +2,7 @@ import { isHome } from "@/src/content/home"
 import type { Metadata } from "next"
 import { ConversationStage, type ProjectPreview } from "@/src/components/conversation-stage"
 import { careerEntries } from "@/src/content/career"
+import { openableFor } from "@/src/content/demos"
 import { publishCatalog } from "@/src/content/publish"
 import { projectTitle } from "@/src/content/titles"
 import type { GlobePlace } from "@/src/globe/types"
@@ -24,6 +25,7 @@ export default function ChatPage() {
       summary: project.summary,
       meta: [org === project.name ? "" : org, projectTitle(project, role), project.circa ?? role?.yearLabel].filter(Boolean).join(" · "),
       cover: project.media.cover,
+      logo: openableFor(project.slug).logo,
     }
   })
   const stage = publicStage()

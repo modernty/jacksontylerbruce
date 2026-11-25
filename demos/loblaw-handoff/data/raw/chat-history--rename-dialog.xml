@@ -1,0 +1,98 @@
+<frame id="8156:232934" name="Rename" x="533" y="100" width="393" height="852">
+  <frame id="8156:232935" name="Frame 2147231655" x="16" y="146" width="361" height="72">
+    <frame id="8156:232936" name="Top" x="0" y="0" width="361" height="32">
+      <frame id="8156:232937" name="Header" x="8" y="0" width="345" height="32">
+        <text id="8156:232938" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+      </frame>
+    </frame>
+    <frame id="8156:232939" name="Frame 2147231652" x="0" y="32" width="67" height="40">
+      <text id="8156:232940" name="4 chats" x="8" y="10" width="51" height="20" chars="4 chats" />
+    </frame>
+  </frame>
+  <frame id="8156:232941" name="List" x="16" y="230" width="361" height="252">
+    <frame id="8156:232942" name="List item" x="0" y="0" width="361" height="60">
+      <frame id="8156:232943" name="Tag + Text" x="8" y="8" width="285" height="44" chars="GLP-1 medications and heart health concerns &#183; Yesterday" />
+      <instance id="8156:232947" name="Button" x="309" y="8" width="44" height="44">
+        <instance id="I8156:232947;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+      </instance>
+    </frame>
+    <frame id="8156:232948" name="Frame 2147231642" x="0" y="64" width="361" height="60">
+      <frame id="8156:232949" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:232950" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Recipes for a summer dinner party &#183; Yesterday" />
+        <instance id="8156:232957" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:232957;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:232958" name="Frame 2147231644" x="0" y="128" width="361" height="60">
+      <frame id="8156:232959" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:232960" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Managing nausea after medication dose increase &#183; 3 days ago" />
+        <instance id="8156:232964" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:232964;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+    <frame id="8156:232965" name="Frame 2147231645" x="0" y="192" width="361" height="60">
+      <frame id="8156:232966" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:232967" name="Tag + Text" x="8" y="8" width="285" height="44" chars="Plan my groceries for the week &#183; 2 weeks ago" />
+        <instance id="8156:232971" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:232971;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:232985" name="Overlay" x="393" y="140" width="393" height="140" />
+  <frame id="8156:232986" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:232987" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:232987;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8156:232988" name="Frame 2147231679" x="94" y="66" width="275" height="46">
+      <instance id="8156:232989" name="Button" x="0" y="0" width="148" height="46">
+        <instance id="I8156:232989;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" />
+        <text id="I8156:232989;5:70" name="label" x="60" y="12" width="52" height="22" chars="Search" />
+        <instance id="I8156:232989;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8156:232990" name="Button" x="156" y="0" width="119" height="46">
+        <instance id="I8156:232990;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:232990;5:70" name="label" x="36" y="12" width="47" height="22" chars="Select" />
+        <instance id="I8156:232990;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8156:232991" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8156:233029" name="Isolated chat" x="0" y="0" width="393" height="852">
+    <frame id="8156:233030" name="Frame 2147231636" x="16" y="292" width="361" height="236" />
+    <instance id="8156:233031" name="Alert" x="47" y="280" width="300" height="221">
+      <instance id="I8156:233031;5446:7340" name="BG" x="0" y="0" width="300" height="221" />
+      <frame id="I8156:233031;65:57150" name="Title and Description" x="14" y="14" width="272" height="54">
+        <text id="I8156:233031;65:57151" name="A Short Title Is Best" x="8" y="8" width="256" height="22" chars="Rename your chat" />
+        <text id="I8156:233031;65:57152" name="A description should be a short, complete sentence." x="8" y="51" width="256" height="22" hidden="true" chars="Enter a new name" />
+      </frame>
+      <frame id="I8156:233031;5469:8618" name="Text Field(s)" x="14" y="78" width="272" height="71">
+        <frame id="I8156:233031;5469:8619" name="Fields" x="0" y="0" width="272" height="52">
+          <instance id="I8156:233031;5469:8620" name="_Text Field Background" x="0" y="0" width="272" height="52" />
+          <instance id="I8156:233031;5469:8621" name="Text Field" x="0" y="0" width="272" height="52">
+            <frame id="I8156:233031;5469:8621;5433:15636" name="Contents" x="16" y="0" width="240" height="52">
+              <frame id="I8156:233031;5469:8621;5433:15645" name="Text" x="0" y="1" width="240" height="51">
+                <frame id="I8156:233031;5469:8621;5433:15639" name="Cursor and Value" x="0" y="0" width="240" height="51">
+                  <text id="I8156:233031;5469:8621;5433:15640" name="Value" x="-118" y="16" width="356" height="20" chars="GLP-1 medications and heart health concerns" />
+                  <rectangle id="I8156:233031;5469:8621;5433:15641" name="Cursor" x="238" y="15" width="2" height="22" />
+                </frame>
+                <text id="I8156:233031;5469:8621;5433:15643" name="Clear" x="350" y="0" width="20" height="51" hidden="true" chars="&#63073;" />
+              </frame>
+            </frame>
+          </instance>
+        </frame>
+      </frame>
+      <frame id="I8156:233031;65:57156" name="Buttons" x="14" y="159" width="272" height="48">
+        <instance id="I8156:233031;5446:6990" name="Button 1" x="0" y="0" width="132" height="48">
+          <text id="I8156:233031;5446:6990;5446:6662" name="Label" x="39" y="13" width="55" height="22" chars="Cancel" />
+        </instance>
+        <instance id="I8156:233031;5446:7014" name="Button 2" x="140" y="0" width="132" height="48">
+          <text id="I8156:233031;5446:7014;5446:6662" name="Label" x="47" y="13" width="39" height="22" chars="Save" />
+        </instance>
+      </frame>
+    </instance>
+    <instance id="8156:233032" name="Keyboard" x="0" y="535" width="393" height="317" />
+  </frame>
+</frame>

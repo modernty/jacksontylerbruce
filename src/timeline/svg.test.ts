@@ -28,7 +28,7 @@ test("each role's projects stack under its left edge, one row each", () => {
   const jet = label("Fixed Rate Fixed Term")
   assert.ok(jet.x < label("Novart").x, "Jet's project sits at Jet's start, before Nax's")
   assert.ok(svg.includes(`>${employerPublicName().toUpperCase()}</tspan>`), "the current role reads the employer switch")
-  assert.ok(label("Loblaw / PC Health").x === label("Intuit").x)
+  assert.ok(label("Loblaws / PC Health").x === label("Intuit").x)
 })
 
 test("the mobile timeline still renders every public project", () => {

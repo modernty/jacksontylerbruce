@@ -1,6 +1,8 @@
 import "server-only"
 import { answerAbout, homeLine } from "./about"
 import { qaReply, type QaReply } from "./qa"
+import { stanceReply } from "./stance"
+import { caseStudySlugs, openableFor, openableSlugs } from "@/src/content/demos"
 import { z } from "zod"
 import { careerEntries } from "@/src/content/career"
 import { careerReply, mentionedRoles } from "./career"
@@ -27,7 +29,7 @@ import { aboutTravel, type Go } from "./navigate"
 /** roles lists role ids the reply shows as a resume-style list, newest first. */
 /** followUps are suggested next prompts; contact shows the contact link under the answer. */
 /** source says who answered: the site's own content, or the model for a question outside it. sources are pages an open answer cites. nudge shows the note about general questions. */
-export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: Source[]; nudge?: boolean; placeKind?: "lived" }
+export type ChatReply = { answer: string; projects?: string[]; roles?: string[]; expects?: "category"; panel?: "globe" | "timeline"; go?: Go; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: Source[]; nudge?: boolean; placeKind?: "lived"; cards?: "demo" }
 
 export type ChatDeps = AskDeps & { open?: OpenClient | null; work?: WorkClient | null; onStatus?: (status: Status) => void }
 
@@ -123,6 +125,9 @@ function contextLine(catalog: PublicCatalog, listed: string[] = [], open?: strin
 const fold = (text: string) => text.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().trim()
 const has = (q: string, word: string) => new RegExp(`(^|[^a-z])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`).test(q)
 
+/** "Show me some case studies": the chosen few, not the whole list of work. */
+const CASE_STUDIES = /\bcase stud(y|ies)\b/
+const DEMO = /\b(demos?|prototypes?|something (i|to) (can )?(try|play|click))\b/
 const ALL_WORK = /\b(projects|portfolio|case studies|(your|tyler'?s|the|all|other|recent|latest) work|what (have you|has tyler) (made|built|designed|done))\b/
 const THEME_WORK = /\b(work|design\w*|experience|projects?|built|made|case stud(y|ies))\b/
 const YES = /^(yes|yeah|yep|yup|sure|ok|okay|please|go ahead|do it|y)\b/
@@ -320,10 +325,10 @@ function fromRoute(body: Routed, q: string, catalog: PublicCatalog): ChatReply {
       : suggest(q, ["Where are you right now?", "Show me everywhere you've lived."])
     return { answer: place.answer.startsWith("The globe covers") ? GLOBE_LEAD : place.answer, panel, followUps, ...(place.only ? { placeKind: place.only } : {}) }
   }
-  if (panel === "timeline") return { answer, panel, followUps: suggest(q, ["Show me your projects."]) }
+  if (panel === "timeline") return { answer, panel, followUps: suggest(q, ["Show me all projects."]) }
   // The career is answered in the conversation, as a resume: each role, its dates and what it was.
   if (body.intent === "career") {
-    return { answer: "The career, most recent first. The timeline is open beside it.", roles: careerEntries(catalog).map((entry) => entry.id), panel: "timeline", followUps: suggest(q, ["Show me your projects.", "How do you start a project?"]) }
+    return { answer: "The career, most recent first. The timeline is open beside it.", roles: careerEntries(catalog).map((entry) => entry.id), panel: "timeline", followUps: suggest(q, ["Show me all projects.", "How do you start a project?"]) }
   }
   const focusIds = body.focusIds ?? []
   if (body.intent === "role") {
@@ -364,7 +369,7 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
       if (view.intent !== "off_topic" && view.intent !== "decline") return { ...fromRoute(view, q, catalog), source: "site" }
       return null
     }
-    return { answer: out.text, source: "open", followUps: suggest(q, ["Show me your projects.", "How do you start a project?"]), ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
+    return { answer: out.text, source: "open", followUps: suggest(q, ["Show me all projects.", "How do you start a project?"]), ...(out.sources.length ? { sources: out.sources } : {}), ...(openBefore + 1 >= NUDGE_AFTER ? { nudge: true } : {}) }
   }
 
   /** An answer from the work agent, which reads the projects before it answers. */
@@ -374,13 +379,31 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
     if (!allowed) return "limited"
     const out = await workAgent(q, history, { client: deps.work, onStatus: deps.onStatus, env, context: contextLine(catalog, listed, open, expects), catalog })
     if (!out) return null
-    const followUps = out.followUps.length ? out.followUps : suggest(q, ["How do you start a project?", "Show me your projects."])
+    const followUps = out.followUps.length ? out.followUps : suggest(q, ["How do you start a project?", "Show me all projects."])
     return { answer: out.answer, projects: out.projects, followUps, source: "work", ...(out.panel ? { panel: out.panel } : {}) }
   }
 
   if (!blocked(q)) {
-    // The Notion Q&A first: a matched question or pill is answered without the model.
+    // An opinion is answered with the point of view, before anything else reads it as a project.
     const qa = qaReply(q)
+    // A named project only blocks the broad answer: "what do you think of the Botpress design?" is
+    // about Botpress, but "what do you think about AI memory?" is about memory, not PC Chat: Memory.
+    const stance = stanceReply(q, new Set(catalog.projects.map((project) => project.slug)))
+    if (stance && !(stance.broad && (qa || mentionedProjects(q, catalog).length))) {
+      return { status: 200, body: { answer: stance.answer, followUps: stance.followUps, ...(stance.projects.length ? { projects: stance.projects } : {}) } }
+    }
+    // "Show me some case studies": the chosen projects, in their order, each one to pick and open.
+    if (CASE_STUDIES.test(fold(q)) && !mentionedProjects(q, catalog).length && !asksForEverything(fold(q))) {
+      const shown = new Set(catalog.projects.map((project) => project.slug))
+      const studies = caseStudySlugs().filter((slug) => shown.has(slug))
+      if (studies.length) return { status: 200, body: { answer: "A few case studies to start with. Pick one to open it.", projects: studies, cards: "demo", followUps: ["Show me all projects.", "What's your take on AI?"] } }
+    }
+    // "Show me a demo": the projects that can be opened and played, not one picked for the visitor.
+    if (DEMO.test(fold(q)) && !mentionedProjects(q, catalog).length) {
+      const playable = byRecent(catalog.projects.filter((project) => openableSlugs().includes(project.slug) && openableFor(project.slug).demo))
+      if (playable.length) return { status: 200, body: { answer: "A few you can try. Pick one to open it.", projects: playable.map((project) => project.slug), cards: "demo", followUps: ["What's your take on AI?", "Tell me about your experience."] } }
+    }
+    // The Notion Q&A first: a matched question or pill is answered without the model.
     if (qa && !qa.contact) return { status: 200, body: qaToChat(qa) }
     // A follow-up to an open or Q&A answer stays in that thread: "who is this person?".
     if (last && (last.source === "open" || matchQa(last.q)) && isFollowUp(q, catalog)) {
@@ -418,12 +441,12 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
     if (opened && ABOUT_OPEN.test(fold(q)) && !mentionedProjects(q, catalog).length && !ALL_WORK.test(fold(q))) {
       const reply = await handleProjectAsk({ slug: opened.slug, q, sessionId }, ctx, { store: deps.store, env: deps.env, now: deps.now })
       const body = reply.body as { answer?: string; source?: string }
-      if (reply.status === 200 && body.answer && body.source !== "route") return { status: 200, body: { answer: body.answer, projects: [opened.slug], followUps: suggest(q, ["How do you start a project?", "Show me your projects."]) } }
+      if (reply.status === 200 && body.answer && body.source !== "route") return { status: 200, body: { answer: body.answer, projects: [opened.slug], followUps: suggest(q, ["How do you start a project?", "Show me all projects."]) } }
     }
     // Where Tyler worked, answered with only the roles asked about; the whole history opens the timeline.
     const asksTheme = !mentionedRoles(q, catalog).length && !!themeIn(fold(q), catalog) && THEME_WORK.test(fold(q))
     const career = ALL_WORK.test(fold(q)) || asksTheme ? null : careerReply(q, catalog)
-    if (career) return { status: 200, body: { ...career, followUps: suggest(q, ["Show me your projects.", "How do you start a project?"]) } }
+    if (career) return { status: 200, body: { ...career, followUps: suggest(q, ["Show me all projects.", "How do you start a project?"]) } }
     const answered = answerChat(q, expects, catalog)
     if (answered) return { status: 200, body: answered }
   }

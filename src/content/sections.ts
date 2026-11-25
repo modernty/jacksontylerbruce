@@ -2,7 +2,6 @@ import copyFile from "@/data/copy.json"
 import disciplines from "@/content/disciplines.json"
 import ideas from "@/content/ideas.json"
 import inventory from "@/content/projects.json"
-import tools from "@/content/tools.json"
 import { textIssues } from "./guard"
 import type { Section, SectionItem } from "./schema"
 
@@ -47,7 +46,7 @@ const SOURCES: Record<string, { inventory?: string; copy?: string }> = {
   "usm-milan": { inventory: "usm-milan-2025" },
   "talent-management": { inventory: "talent-management", copy: "talent-management" },
   whitelist: { inventory: "whitelist", copy: "whitelist" },
-  loblaw: { inventory: "loblaw" },
+  loblaws: { inventory: "loblaw" },
   intuit: { inventory: "intuit" },
 }
 
@@ -55,7 +54,6 @@ const records = new Map((inventory as Inventory[]).map((item) => [item.slug, ite
 const copies = copyFile.projects as Record<string, Copy>
 const lookup = (list: Named[]) => new Map(list.filter((item) => item.visible !== false && !item.confidential).map((item) => [item.id, item]))
 const ideaIndex = lookup(ideas as Named[])
-const toolIndex = lookup(tools as Named[])
 const disciplineIndex = lookup(disciplines as Named[])
 
 const PLACEHOLDER = /NEEDS TYLER/
@@ -80,6 +78,9 @@ function section(id: string, title: string, paragraphs: string[], items: Section
 function names(ids: string[] | undefined, index: Map<string, Named>): Named[] {
   return (ids ?? []).map((id) => index.get(id)).filter((item): item is Named => Boolean(item))
 }
+
+/** Hidden on project pages for now. */
+const SHOW_ROLE = false
 
 function role(record: Inventory): Section | null {
   const lines: string[] = []
@@ -107,29 +108,16 @@ function links(record: Inventory | undefined, copy: Copy | undefined): Section |
   return link ? section("links", "Links", [], [{ label: link.label, href: link.href }]) : null
 }
 
-/** Public project names, by inventory slug, that carry an idea. */
-function sharing(ideaId: string, self: string, publicNames: Map<string, string>): string[] {
-  const names = new Set<string>()
-  for (const [slug, name] of publicNames) {
-    const other = SOURCES[slug]?.inventory
-    if (!other || other === self) continue
-    if (records.get(other)?.ideaIds?.includes(ideaId)) names.add(name)
-  }
-  return [...names]
-}
-
-function ideaItem(idea: Named, self: string, publicNames: Map<string, string>): SectionItem {
+/** An idea the project carries, with its note. It never names other projects: a page speaks for itself. */
+function ideaItem(idea: Named): SectionItem {
   const note = (idea.note ?? "").replace(/\s*\([^)]*\)\.?$/, ".").replace(/^\.$/, "")
-  const others = sharing(idea.id, self, publicNames)
-  const also = others.length ? `Also in ${others.join(", ")}.` : ""
-  return { label: idea.name, note: [note, also].filter(Boolean).join(" ") || undefined }
+  return { label: idea.name, note: note || undefined }
 }
 
 /**
  * The sections a project page shows. Authored sections always come first and keep their ids.
- * publicNames maps each public project's slug to its name, so cross-references never reach hidden work.
  */
-export function generateSections(slug: string, authored: Section[], publicNames: Map<string, string>): Section[] {
+export function generateSections(slug: string, authored: Section[]): Section[] {
   const source = SOURCES[slug] ?? {}
   const record = source.inventory ? records.get(source.inventory) : undefined
   const copy = source.copy ? copies[source.copy] : undefined
@@ -140,13 +128,13 @@ export function generateSections(slug: string, authored: Section[], publicNames:
   const generated = [
     section("context", "Context", paragraphs.slice(0, 1)),
     section("approach", "Approach", paragraphs.length > 1 ? paragraphs.slice(1) : fallback),
-    record ? role(record) : null,
+    // Role is hidden on every project for now; role() stays so it can come back in one line.
+    SHOW_ROLE && record ? role(record) : null,
     record ? outcome(record) : null,
     links(record, copy),
-    record ? section("ideas", "Ideas", [], names(record.ideaIds, ideaIndex).map((idea) => ideaItem(idea, source.inventory!, publicNames))) : null,
-    record ? section("tools", "Tools", [], names(record.toolIds, toolIndex).map((tool) => ({ label: tool.name }))) : null,
+    record ? section("ideas", "Core ideas", [], names(record.ideaIds, ideaIndex).map(ideaItem)) : null,
   ].filter((item): item is Section => item !== null)
 
   const taken = new Set(authored.map((item) => item.id))
-  return [...authored, ...generated.filter((item) => !taken.has(item.id))]
+  return [...authored.filter((item) => SHOW_ROLE || item.id !== "role"), ...generated.filter((item) => !taken.has(item.id))]
 }

@@ -438,5 +438,40 @@
     "width": 1800,
     "height": 1163,
     "blur": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAQCdASoQAAoAA4BaJaQAAh0TmJUAAP74ulv1d9IOS8GuYjuA51m6x9xPRC4meng2GbduBzM2qguOGFEQaBPIZbVL3H7NMAA="
+  },
+  "/assets/thumbs/loblaw.webp": {
+    "width": 440,
+    "height": 954,
+    "blur": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAQCdASoHABAAA4BaJaQAAudP88gAAP72Hy0bERkAGNjgAAA="
+  },
+  "/assets/thumbs/botpress.jpg": {
+    "width": 1440,
+    "height": 960,
+    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAABwAQCdASoQAAsAA4BaJaWJJAGIAAD+85SnuycqlBNEspGGqZMAAAAA"
+  },
+  "/assets/thumbs/pc-chat-memory.jpg": {
+    "width": 1832,
+    "height": 620,
+    "blur": "data:image/webp;base64,UklGRi4AAABXRUJQVlA4ICIAAACwAQCdASoQAAUAA4BaJaQAAxf92H4QAP71AsowC4BMCgAA"
+  },
+  "/assets/images/pc-chat-memory/02.jpg": {
+    "width": 1832,
+    "height": 620,
+    "blur": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoQAAUAA4BaJaQAAxfWl07SAAD+8+3y6E5u3qKab9fvrDbDaAAAAA=="
+  },
+  "/assets/images/pc-chat-memory/03.jpg": {
+    "width": 1832,
+    "height": 620,
+    "blur": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAAAwAQCdASoQAAUAA4BaJaQAA3AA/vQ94sNZZxu+8sEXoPRQAAA="
+  },
+  "/assets/images/pc-chat-memory/04.jpg": {
+    "width": 1832,
+    "height": 620,
+    "blur": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoQAAUAA4BaJZwAAsfl2RGAAPff51Jj7onIfz7MerPmXzFriyn/scAA"
+  },
+  "/assets/images/pc-chat-memory/05.jpg": {
+    "width": 1832,
+    "height": 620,
+    "blur": "data:image/webp;base64,UklGRioAAABXRUJQVlA4IB4AAAAwAQCdASoQAAUAA4BaJZwAA3AA/vR1mqxqVMhvCAA="
   }
 }

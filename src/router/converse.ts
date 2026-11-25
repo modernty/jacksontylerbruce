@@ -95,7 +95,7 @@ const claude: OpenClient = async ({ system, messages }, onStatus) => {
 }
 
 // Hidden projects, by name.
-const HIDDEN = /\b(remedy|traveller)\b/i
+const HIDDEN = /\b(traveller)\b/i
 
 /** True when an open answer may be shown: nothing blocked, nothing hidden named. */
 export function openAllowed(text: string): boolean {

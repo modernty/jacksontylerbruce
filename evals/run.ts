@@ -8,7 +8,7 @@ import { MemoryStore } from "@/src/router/store"
 import { CASES, CONVERSATIONS } from "./cases"
 
 const ids = new Set(publicFocusIds())
-const hidden = ["remedy", "traveller", "fintech", "defi", "chatter app"]
+const hidden = ["traveller", "fintech", "defi", "chatter app"]
 
 function check(view: { intent: string; focusIds: string[]; href: string; annotation: string }, item: (typeof CASES)[number]) {
   const problems: string[] = []
@@ -37,7 +37,7 @@ function check(view: { intent: string; focusIds: string[]; href: string; annotat
     if (item.q.toLowerCase().includes(name)) continue
     if (blob.includes(name)) problems.push(`hidden name in output`)
   }
-  if (blob.includes("/work/remedy") || blob.includes("/work/traveller")) {
+  if (blob.includes("/work/traveller")) {
     problems.push("hidden deep link")
   }
   return problems

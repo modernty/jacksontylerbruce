@@ -1,0 +1,55 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--empty",
+  "name": "Chat history, empty",
+  "stateGroup": {
+    "id": "chat-history-page",
+    "label": "Empty",
+    "order": 5
+  },
+  "figmaNodeId": "8156:73095",
+  "summary": "No conversations yet: the heading, two lines of guidance, and a New chat button at the foot. Search and Select come out of the nav entirely.",
+  "looseEnds": [
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "New chat appears only on the empty states",
+      "detail": "A 173x54 New chat button sits at the bottom right here and on the all-deleted frame, and nowhere else in the feature. A user with one chat has no way to start another from this page.",
+      "nodes": [
+        "8156:237607"
+      ],
+      "ask": "Should New chat be on the populated page too?"
+    },
+    {
+      "kind": "content",
+      "severity": "low",
+      "title": "The empty copy names the product and the heading does not",
+      "detail": "'Ask PC Chat™ a question today.' is the only place on the page the assistant is named. The heading stays 'Chat history'.",
+      "nodes": [
+        "8156:73109"
+      ],
+      "ask": "Confirm the trademark symbol is wanted in body copy at this size."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--empty.png"
+}

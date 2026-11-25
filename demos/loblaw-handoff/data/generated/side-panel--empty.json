@@ -1,0 +1,1101 @@
+{
+  "slug": "side-panel--empty",
+  "name": "Side panel",
+  "feature": "side-panel",
+  "section": "Side panel",
+  "pending": false,
+  "live": "panel-empty",
+  "summary": "The panel with no history behind it: the five nav rows, the Recents heading, and one line where the list would be.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:234785",
+  "image": "/demos/loblaw-handoff/screens/side-panel--empty.png",
+  "extracted": true,
+  "extractedOn": "2026-10-08",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 330,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 44,
+    "hiddenNodes": 2,
+    "assetNodes": 14,
+    "sectionNodes": 10,
+    "styledNodes": 0,
+    "looseEnds": 3
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "looseEnds": [
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "All three frames are called \"Side Panel, filled recents\"",
+      "detail": "Including the one that draws the empty state. The name is the only thing distinguishing the frames in the layer list, and it describes none of them accurately.",
+      "nodes": [
+        "8156:234785",
+        "8156:234826",
+        "8156:234911"
+      ],
+      "ask": "Rename to the state each frame draws — empty, four, full."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "A hidden 302-wide Footer sits inside a 330-wide panel",
+      "detail": "Every frame carries a switched-off Footer measuring 302 across. The panel around it is 330 — the width it was before the panel grew. The layer is dead, and it is dead at the old size.",
+      "nodes": [
+        "8156:234816",
+        "8156:234889",
+        "8156:234994"
+      ],
+      "ask": "Delete it, or is the footer coming back?"
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "low",
+      "title": "The second row of each run carries two extra switched-off metadata parts",
+      "detail": "Rows 2 and 6 hold three metadata text nodes where every other row holds one. The two extra are the memory count and its separator, switched off rather than removed, so the shape of the row depends on which row it is.",
+      "nodes": [
+        "8156:234870",
+        "8156:234871",
+        "8156:234988",
+        "8156:234989"
+      ],
+      "ask": "Remove the dead parts, or restore the count on every row."
+    }
+  ],
+  "code": {
+    "css": "/* The side panel on its own — 330×852, no conversation behind it. */\n.side-panel {\n  width: 330px;\n  height: 852px;\n  padding-top: 52px;\n  border-radius: 40px;\n  background: var(--bg-canvas);\n  box-shadow: 0 4px 20px 0 rgba(113, 117, 142, 0.25);\n}\n\n.side-panel__content {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n  padding: 24px 8px;\n}\n\n/* Five nav rows at 46 high, so the list below starts 64px lower than it did. */\n.recents { display: flex; flex-direction: column; gap: 4px; }\n\n.recents__item {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  min-height: 40px;\n  padding: 8px;\n  border-radius: 16px;\n}\n\n.recents__title {\n  font: 400 15px/22px var(--font-ui);\n  color: var(--text-primary);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}",
+    "jsx": "// Rendered from src/components/screens/side-panel-page.tsx rather than served as a\n// screenshot. Every Figma node is an element carrying data-node-id, so the measurements\n// on the Designs tab come from the live DOM.\n//\n// Five nav rows now — Settings last — at 46 high on 20px icons.\n//\n// The row is the same component the Chat history page uses — the panel got its overflow\n// control back, and the `Tag + Text` wrapper with it:\n\n<RecentRow row={row} />\n\n// Half the rows sit inside an extra wrapper frame in the file and half do not. The\n// wrapper is drawn when it exists, so the layer tree here matches the one in Figma.",
+    "swiftui": "// The panel is a fixed 330pt surface, not a sheet.\nstruct SidePanel: View {\n  var body: some View {\n    VStack(alignment: .leading, spacing: 24) {\n      HStack(spacing: 8) {\n        Image(\"pc-chat-mark\").frame(width: 24, height: 24)\n        Text(\"PC Chat\").font(.custom(\"Poppins-SemiBold\", size: 20))\n      }\n      .padding(.horizontal, 24)\n      .padding(.top, 24)\n\n      VStack(spacing: 0) {\n        NavItem(icon: \"square.and.pencil\", label: \"New chat\")\n        NavItem(icon: \"bubble.left\", label: \"Chat history\")\n        NavItem(icon: \"book\", label: \"Memory\")\n        NavItem(icon: \"gear\", label: \"Settings\")\n      }\n\n      VStack(alignment: .leading, spacing: 8) {\n        Text(\"Recents\").font(.system(size: 15, weight: .semibold))\n          .padding(.horizontal, 8)\n        VStack(spacing: 4) { ForEach(recents) { RecentRow(row: $0) } }\n      }\n    }\n    .padding(8)\n    .frame(width: 330, height: 852, alignment: .top)\n    .background(Color.white)\n    .clipShape(RoundedRectangle(cornerRadius: 40))\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "side-panel-page",
+    "label": "Empty",
+    "order": 1
+  },
+  "dimensions": {
+    "width": 330,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 330,
+    "height": 852
+  },
+  "imageScale": 1,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "8156:234785",
+      "name": "Side Panel, filled recents",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 330,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234786",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:234785",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 52,
+        "width": 330,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234787",
+      "name": "Frame 2147202988",
+      "type": "FRAME",
+      "parentId": "8156:234786",
+      "depth": 2,
+      "bounds": {
+        "x": 24,
+        "y": 76,
+        "width": 115,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234788",
+      "name": "Symbol + Wordmark Stacked 1_WIP 1",
+      "type": "FRAME",
+      "parentId": "8156:234787",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 76,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "symbol",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234789",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "8156:234788",
+      "depth": 4,
+      "bounds": {
+        "x": 33,
+        "y": 91,
+        "width": 11,
+        "height": 8
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234790",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "8156:234788",
+      "depth": 4,
+      "bounds": {
+        "x": 26,
+        "y": 85,
+        "width": 8,
+        "height": 11
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234791",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "8156:234788",
+      "depth": 4,
+      "bounds": {
+        "x": 39,
+        "y": 79,
+        "width": 8,
+        "height": 11
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234792",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "8156:234788",
+      "depth": 4,
+      "bounds": {
+        "x": 28,
+        "y": 78,
+        "width": 11,
+        "height": 8
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234793",
+      "name": "Greeting text",
+      "type": "TEXT",
+      "parentId": "8156:234787",
+      "depth": 3,
+      "bounds": {
+        "x": 56,
+        "y": 76,
+        "width": 83,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234794",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "8156:234785",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 100,
+        "width": 330,
+        "height": 752
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234795",
+      "name": "Nav",
+      "type": "FRAME",
+      "parentId": "8156:234794",
+      "depth": 2,
+      "bounds": {
+        "x": 8,
+        "y": 124,
+        "width": 314,
+        "height": 184
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234796",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "8156:234795",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 124,
+        "width": 314,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234797",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234796",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 137,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:234797;9:2177",
+      "name": "iOS/square.and.pencil",
+      "type": "INSTANCE",
+      "parentId": "8156:234797",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 137,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:234797;9:2177;10:9513",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8156:234797;9:2177",
+      "depth": 6,
+      "bounds": {
+        "x": 19,
+        "y": 140,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234798",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:234796",
+      "depth": 4,
+      "bounds": {
+        "x": 44,
+        "y": 136,
+        "width": 70,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234799",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "8156:234795",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 164,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "8156:234800",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234799",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 172,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:234800;2904:8440",
+      "name": "􀅼",
+      "type": "TEXT",
+      "parentId": "8156:234800",
+      "depth": 5,
+      "bounds": {
+        "x": 20,
+        "y": 176,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234801",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:234799",
+      "depth": 4,
+      "bounds": {
+        "x": 48,
+        "y": 173,
+        "width": 35,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234802",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "8156:234795",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 170,
+        "width": 314,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234803",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234802",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 183,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:234803;9:2177",
+      "name": "iOS/message",
+      "type": "INSTANCE",
+      "parentId": "8156:234803",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 183,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:234803;9:2177;1:33140",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8156:234803;9:2177",
+      "depth": 6,
+      "bounds": {
+        "x": 17,
+        "y": 186,
+        "width": 17,
+        "height": 14
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234804",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:234802",
+      "depth": 4,
+      "bounds": {
+        "x": 44,
+        "y": 182,
+        "width": 91,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234805",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "8156:234795",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 216,
+        "width": 314,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234806",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234805",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 229,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:234806;9:2177",
+      "name": "iOS/book",
+      "type": "INSTANCE",
+      "parentId": "8156:234806",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 229,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:234806;9:2177;1:23911",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8156:234806;9:2177",
+      "depth": 6,
+      "bounds": {
+        "x": 18,
+        "y": 232,
+        "width": 16,
+        "height": 13
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234807",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:234805",
+      "depth": 4,
+      "bounds": {
+        "x": 44,
+        "y": 228,
+        "width": 61,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234808",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "8156:234795",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 262,
+        "width": 314,
+        "height": 46
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234809",
+      "name": "Trailing icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234808",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 275,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "trailing",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:234809;9:2177",
+      "name": "iOS/gear",
+      "type": "INSTANCE",
+      "parentId": "8156:234809",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 275,
+        "width": 20,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "I8156:234809;9:2177;10:6158",
+      "name": "Vector",
+      "type": "VECTOR",
+      "parentId": "I8156:234809;9:2177",
+      "depth": 6,
+      "bounds": {
+        "x": 17,
+        "y": 277,
+        "width": 17,
+        "height": 17
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "vector",
+        "exported": false
+      }
+    },
+    {
+      "id": "8156:234810",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "8156:234808",
+      "depth": 4,
+      "bounds": {
+        "x": 44,
+        "y": 274,
+        "width": 62,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234811",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "8156:234794",
+      "depth": 2,
+      "bounds": {
+        "x": 8,
+        "y": 332,
+        "width": 314,
+        "height": 496
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234812",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "8156:234811",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 332,
+        "width": 314,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "8156:234813",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "8156:234812",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 332,
+        "width": 60,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234814",
+      "name": "Frame 2147231660",
+      "type": "FRAME",
+      "parentId": "8156:234811",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 362,
+        "width": 245,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234815",
+      "name": "Your recent chats will appear here.",
+      "type": "TEXT",
+      "parentId": "8156:234814",
+      "depth": 4,
+      "bounds": {
+        "x": 16,
+        "y": 362,
+        "width": 229,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "8156:234816",
+      "name": "Footer",
+      "type": "FRAME",
+      "parentId": "8156:234785",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 780,
+        "width": 302,
+        "height": 72
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "8156:234817",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "8156:234816",
+      "depth": 2,
+      "bounds": {
+        "x": 230,
+        "y": 780,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "I8156:234817;2862:7707",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "8156:234817",
+      "depth": 3,
+      "bounds": {
+        "x": 238,
+        "y": 788,
+        "width": 32,
+        "height": 32
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "I8156:234817;2862:7707;2862:7673",
+      "name": "􀅼",
+      "type": "TEXT",
+      "parentId": "I8156:234817;2862:7707",
+      "depth": 4,
+      "bounds": {
+        "x": 242,
+        "y": 792,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

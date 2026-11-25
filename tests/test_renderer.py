@@ -204,7 +204,7 @@ def test_token_snapshot():
     tokens = _token_block()
     snapshot = json.loads((ROOT / "tests" / "snapshots" / "tokens.json").read_text(encoding="utf-8"))
     assert tokens == snapshot
-    assert tokens["--paper"] == "#FBFBF8"
+    assert tokens["--paper"] == "#FAFAFA"
     assert tokens["--ink"] == "#111111"
     assert "70%" in tokens["--ink-70"]
     assert "40%" in tokens["--ink-40"]

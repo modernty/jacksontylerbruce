@@ -1,0 +1,3 @@
+:HL["/demos/loblaw-handoff/_next/static/chunks/2qmen15_t-myf.css","style"]
+:HL["/demos/loblaw-handoff/_next/static/media/e2334d715941921e-s.p.3o_v2fun1jzxk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"3d9DOEhTu6fYvsw2QwrA5"}

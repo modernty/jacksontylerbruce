@@ -7,6 +7,7 @@ export default function ProjectsPage() {
   const stage = publicStage()
   return (
     <main>
+      <h1 className="sr">Projects</h1>
       <AxisStage mode="projects" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
     </main>
   )

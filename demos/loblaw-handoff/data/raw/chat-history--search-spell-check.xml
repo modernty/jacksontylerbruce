@@ -1,0 +1,63 @@
+<frame id="8152:71678" name="History, Search-after seven seconds-spell check" x="3564" y="100" width="393" height="852">
+  <instance id="8152:71679" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8152:71680" name="Top nav" x="0" y="0" width="393" height="124">
+    <frame id="8152:71681" name="Frame 2147231679" x="24" y="66" width="345" height="46">
+      <frame id="8152:71682" name="Button" x="0" y="0" width="265" height="46">
+        <instance id="8152:71683" name="Leading icon" x="16" y="15" width="16" height="16">
+          <vector id="I8152:71683;7485:9536" name="Vector" x="1" y="1" width="14" height="14" />
+        </instance>
+        <text id="8152:71684" name="label" x="40" y="12" width="93" height="22" />
+      </frame>
+      <instance id="8152:71685" name="Button" x="273" y="10" width="72" height="26">
+        <instance id="I8152:71685;2046:16114" name="Leading icon" x="16" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:71685;2046:16114;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:71685;2046:16114;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+        <text id="I8152:71685;5:129" name="label" x="16" y="4" width="40" height="18" />
+        <instance id="I8152:71685;2046:16117" name="Trailing icon" x="85" y="6" width="16" height="16" hidden="true">
+          <instance id="I8152:71685;2046:16117;9:2173" name="iOS/arrow.up" x="0" y="0" width="16" height="16">
+            <vector id="I8152:71685;2046:16117;9:2173;10:3160" name="Vector" x="2" y="1" width="11" height="14" />
+          </instance>
+        </instance>
+      </instance>
+    </frame>
+  </frame>
+  <instance id="8152:71686" name="Keyboard" x="0" y="535" width="393" height="317" />
+  <frame id="8152:71687" name="Frame 2147231672" x="0" y="124" width="393" height="728">
+    <frame id="8152:71688" name="List" x="16" y="16" width="361" height="124">
+      <frame id="8152:71689" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8152:71690" name="Tag + Text" x="8" y="8" width="285" height="44">
+          <frame id="8152:71691" name="Text" x="0" y="0" width="285" height="44">
+            <text id="8152:71692" name="Message title" x="0" y="0" width="285" height="22" />
+            <text id="8152:71693" name="Message timestamp" x="0" y="24" width="66" height="20" />
+          </frame>
+        </frame>
+        <instance id="8152:71694" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8152:71694;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+            <instance id="I8152:71694;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+              <vector id="I8152:71694;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+            </instance>
+          </instance>
+        </instance>
+      </frame>
+      <frame id="8152:71695" name="Frame 2147231644" x="0" y="64" width="361" height="60">
+        <frame id="8152:71696" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8152:71697" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8152:71698" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8152:71699" name="Message title" x="0" y="0" width="285" height="22" />
+              <text id="8152:71700" name="Message timestamp" x="0" y="24" width="72" height="20" />
+            </frame>
+          </frame>
+          <instance id="8152:71701" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8152:71701;2046:16123" name="Icon" x="14" y="14" width="16" height="16">
+              <instance id="I8152:71701;2046:16123;9:2173" name="Android/more_vert" x="0" y="0" width="16" height="16">
+                <vector id="I8152:71701;2046:16123;9:2173;1:11715" name="Vector" x="7" y="3" width="3" height="11" />
+              </instance>
+            </instance>
+          </instance>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+</frame>

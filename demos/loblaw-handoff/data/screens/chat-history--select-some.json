@@ -1,0 +1,84 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-some",
+  "name": "Chat history, selection",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Two picked",
+    "order": 2
+  },
+  "figmaNodeId": "8156:72773",
+  "summary": "Two of four ticked. A counted Delete appears at the bottom right, sized to its label rather than to a fixed width.",
+  "looseEnds": [
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "The checkbox is built from a radio button",
+      "detail": "The Checkbox instance's only child is a frame named 'Radio Button' holding a check glyph. It draws correctly, but the name will send a developer to the wrong control.",
+      "nodes": [
+        "8156:72777",
+        "8156:72784"
+      ],
+      "ask": "Rename the inner layer, or rebuild the checkbox from its own component."
+    },
+    {
+      "kind": "geometry",
+      "severity": "medium",
+      "title": "The counted button resizes with its own label",
+      "detail": "The button is 186px at 'Delete 2 chats', 187px at three and 194px at 'Delete all chats', always ending flush at x=369. The left edge therefore moves every time the count changes, by a different amount at each number.",
+      "nodes": [
+        "8156:72824"
+      ],
+      "ask": "Is the button meant to grow from the right, or should it hold one width?"
+    }
+  ],
+  "constraints": [
+    {
+      "nodeId": "8156:72778",
+      "label": "Conversation title in selection",
+      "axis": "width",
+      "maxHeight": 245,
+      "summary": "The checkbox takes 40px off the title. The same conversation that cuts at about 37 characters on the normal list cuts at about 32 here.",
+      "derivation": {
+        "steps": [
+          {
+            "label": "Title width on the normal list",
+            "value": "285px"
+          },
+          {
+            "label": "Less checkbox and gap (24 + 16)",
+            "value": "245px"
+          },
+          {
+            "label": "SF Pro Text Regular 15px, average advance",
+            "value": "≈7.6px"
+          }
+        ],
+        "maxChars": 32,
+        "drawnChars": 43,
+        "recommend": 30
+      },
+      "note": "Entering selection re-truncates every row. A user who reads a title in one mode may not recognise it in the other."
+    }
+  ],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-some.png"
+}

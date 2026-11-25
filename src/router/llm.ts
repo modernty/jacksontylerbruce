@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { z } from "zod"
 import { factText, followUpsFor, sectionHref, sheetAnswer, focusAnnotation, roleAnnotation, careerAnnotation, projectsAnnotation, compareAnnotation } from "@/src/content/answers"
 import { notionLines } from "@/src/content/notion"
+import { PRINCIPLES } from "@/src/content/principles"
 import { roleTitle } from "@/src/content/titles"
 import { publishCatalog, publicFocusIds } from "@/src/content/publish"
 import { annotationAllowed } from "./check"
@@ -68,6 +69,7 @@ export function indexText(): string {
     ...catalog.projects.map((project) => [`${project.id} | ${project.name} | ${project.circa ?? ""} | ${project.summary}`, ...notionLines(project.slug).map((line) => `  ${line}`)].join("\n")),
     ...catalog.themes.map((theme) => `${theme.id} | ${theme.name}`),
     ...catalog.places.map((place) => `${place.id} | ${place.name} | ${place.kind}`),
+    ...PRINCIPLES.map((principle) => `principle | ${principle.title} | ${principle.body}`),
     `fact | ${EDUCATION}`,
     `fact | Origin: From ${catalog.profile.location}. Located: Based in ${catalog.profile.location}. These are different questions.`,
   ]

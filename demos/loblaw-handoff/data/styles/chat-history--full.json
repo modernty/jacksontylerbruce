@@ -1,0 +1,39 @@
+{
+  "7525:2570": {
+    "radius": { "value": "16px" },
+    "autoLayout": "horizontal",
+    "gap": { "value": "16px" },
+    "padding": {
+      "top": { "value": "8px" },
+      "right": { "value": "8px" },
+      "bottom": { "value": "8px" },
+      "left": { "value": "8px" }
+    }
+  },
+  "7525:2571": { "autoLayout": "vertical" },
+  "7525:2572": { "autoLayout": "vertical", "gap": { "value": "2px" } },
+  "7525:2574": {
+    "autoLayout": "horizontal",
+    "gap": { "value": "8px", "token": "space/8" }
+  },
+  "7525:2578": {
+    "radius": { "value": "9999px", "token": "radius/full" },
+    "autoLayout": "horizontal",
+    "padding": {
+      "top": { "value": "10px", "token": "space/10" },
+      "right": { "value": "10px", "token": "space/10" },
+      "bottom": { "value": "10px", "token": "space/10" },
+      "left": { "value": "10px", "token": "space/10" }
+    }
+  },
+  "7525:2569": { "autoLayout": "vertical" },
+  "7525:2687": { "autoLayout": "vertical" },
+  "7525:2693": { "autoLayout": "horizontal" },
+  "7525:2697": { "autoLayout": "vertical" },
+  "7525:2699": {
+    "fills": [{ "kind": "solid", "value": "#FFFFFF66", "token": "bg/white-subtle" }],
+    "radius": { "value": "9999px", "token": "radius/full" },
+    "autoLayout": "horizontal",
+    "gap": { "value": "8px", "token": "space/8" }
+  }
+}

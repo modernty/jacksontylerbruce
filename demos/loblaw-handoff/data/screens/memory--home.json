@@ -1,0 +1,58 @@
+{
+  "slug": "memory--home",
+  "name": "Memory",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "The whole memory set, grouped. Seven groups and thirty-two memories under a summary of what the assistant has been told, with Search and Select in the bar.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:263847",
+  "image": "/demos/loblaw-handoff/screens/memory--home.png",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "looseEnds": [
+    {
+      "kind": "inconsistency",
+      "severity": "low",
+      "title": "Two memories appear in two groups each",
+      "detail": "“You’re 8 weeks pregnant” is in Top of mind and Sexual & reproductive health; “You’re allergic to penicillin” is in Top of mind and Current symptoms & conditions. Deleting one has to remove both rows, and nothing says whether Top of mind is a view of the others or a group of its own.",
+      "nodes": [
+        "8156:263883",
+        "8156:264183",
+        "8156:263874",
+        "8156:263992"
+      ],
+      "ask": "Is Top of mind a ranking over the other groups, or a group that holds its own copies?"
+    },
+    {
+      "kind": "scope",
+      "severity": "low",
+      "title": "Nothing is drawn for a long list",
+      "detail": "The content runs to 3097px — roughly four screens. There is no pagination, no section index and no sticky group heading, so a user at the bottom has no way back but scrolling.",
+      "nodes": [
+        "8156:263869"
+      ],
+      "ask": "Does the list page at some count, or is scrolling the whole answer?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "/* The details page: a pushed screen, not a sheet. */\n.memory-details { padding-top: 146px; }\n.memory-details__header { display: flex; flex-direction: column; gap: 4px; }\n.memory-details__fields {\n  border-radius: 20px;\n  background: var(--bg-surface);\n}\n.memory-details__row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  height: 54px;\n  padding: 0 16px;\n}\n\n/* Delete sits fixed at the foot, clear of the rows. */\n.memory-details__delete { position: absolute; inset: auto 16px 16px; height: 54px; }",
+    "jsx": "// Four screens, one route: the list pushes the details page, the page opens an edit\n// sheet per field, and delete is a dialog over the page.\n//\n//   Memory            → the grouped list\n//   Viewing a memory  → category, memory, timestamp, source, fields\n//   Editing a memory  → one field in a sheet, keyboard up, page behind the scrim\n//   Deleting a memory → the confirmation over the page\n//\n// The rows are the same component in all four; what changes is what is over them.",
+    "swiftui": "// The details page is pushed, so it owns its own nav.\nstruct MemoryDetails: View {\n  let memory: Memory\n\n  var body: some View {\n    VStack(alignment: .leading, spacing: 24) {\n      VStack(alignment: .leading, spacing: 4) {\n        Text(memory.category).font(.system(size: 14, weight: .medium))\n        Text(memory.text).font(.system(size: 20, weight: .semibold))\n        Text(memory.updated).font(.system(size: 12))\n      }\n      SourceChip(label: memory.source)\n      VStack(spacing: 0) {\n        ForEach(memory.fields) { FieldRow(field: $0) }\n      }\n      .background(RoundedRectangle(cornerRadius: 20).fill(.background))\n    }\n    .padding(.horizontal, 16)\n    .navigationTitle(\"Memory details\")\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "memory",
+    "label": "Memory",
+    "order": 1
+  }
+}

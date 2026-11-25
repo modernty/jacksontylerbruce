@@ -73,7 +73,7 @@ test("with no key, an error, the cap reached or a blocked answer, the site says 
     throw new Error("down")
   }
   assert.deepEqual((await chat("What is the capital of France?", [], broken)).body, { answer: OUTSIDE, contact: true })
-  assert.deepEqual((await chat("What is the capital of France?", [], says("Ask about Remedy instead."))).body, { answer: OUTSIDE, contact: true })
+  assert.deepEqual((await chat("What is the capital of France?", [], says("Ask about Traveller instead."))).body, { answer: OUTSIDE, contact: true })
   // Cap reached: the model is not called at all.
   const store = new MemoryStore()
   const { recordSpend } = await import("./limits")

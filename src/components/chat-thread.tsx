@@ -1,8 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react"
 import { MessagePair } from "@/src/components/assistant-ui/elements/message-pair"
 import { CONTACT_EVENT } from "./mailto"
+import { PromptLinks } from "./starter-prompts"
 
 /** The composer sends this on pages that hold a conversation, instead of routing to another view. */
 export const CHAT_ASK = "chat:ask"
@@ -10,6 +11,12 @@ export const CHAT_ASK = "chat:ask"
 export const CHAT_RESET = "chat:reset"
 /** Closes the panel beside the home chat. The conversation stays. */
 export const CHAT_CLOSE_PANEL = "chat:close-panel"
+/** Stops the answer in flight: what has appeared stays, the rest is dropped. */
+export const CHAT_STOP = "chat:stop"
+/** Says whether an answer is in flight, so the composer can offer Stop in place of Send. */
+export const CHAT_STREAMING = "chat:streaming"
+/** Said in place of an answer stopped before any of it arrived. */
+const STOPPED = "Stopped."
 export const HOME_PREVIEW = "home-chat-preview"
 
 /** Drops the open preview and tells the chat, if it is on screen, to close it. */
@@ -40,7 +47,7 @@ const WAITING = "…"
 export type Panel = "globe" | "timeline"
 /** followUps are suggested next prompts, in the visitor's words; contact adds the contact link. */
 /** source says who answered (the site, or the model for a question outside it); sources are pages it cites; nudge shows the note about general questions. */
-export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: { title: string; url: string }[]; nudge?: boolean; placeKind?: "lived" }
+export type ReplyExtra = { projects?: string[]; roles?: string[]; expects?: "category"; panel?: Panel; followUps?: string[]; contact?: boolean; source?: "site" | "open" | "work"; sources?: { title: string; url: string }[]; nudge?: boolean; placeKind?: "lived"; cards?: "demo" }
 
 /** What the model is doing while an answer is on its way. */
 export type Status = "thinking" | "searching" | "reading"
@@ -50,7 +57,20 @@ const STATUS_LABEL: Record<Status, string> = { thinking: "Thinking", searching: 
 export type Past = { q: string; a: string; source?: "site" | "open" | "work" }
 const HISTORY_TURNS = 6
 
-type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean; status?: Status } & ReplyExtra
+/** live marks an answer that arrived in this visit, so what follows its text plays in; a restored one is simply there. */
+type Turn = { id: number; question: string; words: string[]; shown: number; pending: boolean; status?: Status; live?: boolean } & ReplyExtra
+
+/**
+ * The parts of an answer that follow its text, played in one by one. The fade itself is in the
+ * stylesheet (.turn.live), so it holds from the first paint; here they are only put in order.
+ */
+const PARTS = ".chat-action, .career-cards > li, ol.career > li, .demo-cards > li, .chat-sources, .chat-nudge"
+/** When the first part starts after the text, the gap between parts, and how long each takes. Match globals.css. */
+const PART_START_MS = 500
+const PART_STEP_MS = 260
+const PART_MS = 600
+/** A breath after the last part before the follow-ups begin. */
+const FOLLOW_GAP_MS = 400
 
 /**
  * Each conversation lives in session storage while the tab is open, so it survives switching
@@ -81,6 +101,7 @@ function load(key: string): Stored[] {
             : undefined,
           nudge: item.nudge === true ? true : undefined,
           placeKind: item.placeKind === "lived" ? "lived" : undefined,
+          cards: item.cards === "demo" ? "demo" : undefined,
         }))
       : []
   } catch {
@@ -193,9 +214,12 @@ export function ChatThread({
   const restoring = useRef(true)
   const restored = useRef(false)
   const seen = useRef(false)
+  // Answers stopped while still on their way: when they land, they are dropped.
+  const stopped = useRef(new Set<number>())
 
   const run = useCallback(
     async (id: number, question: string) => {
+      stopped.current.delete(id)
       record(storeKey, { id, question, answer: null })
       setTurns((all) => all.map((turn) => (turn.id === id ? { ...turn, words: [WAITING], shown: 1, pending: true } : turn)))
       const answered = load(storeKey).filter((item) => item.id < id && item.answer !== null)
@@ -203,10 +227,11 @@ export function ChatThread({
       const history: Past[] = answered.slice(-HISTORY_TURNS).map((item) => ({ q: item.question.slice(0, 400), a: (item.answer ?? "").slice(0, 4000), source: item.source }))
       const onStatus = (status: Status) => setTurns((all) => all.map((turn) => (turn.id === id && turn.pending ? { ...turn, status } : turn)))
       const reply = await ask(question, previous ? { projects: previous.projects, expects: previous.expects } : undefined, { history, onStatus })
+      if (stopped.current.has(id)) return
       const { answer, ...extra }: { answer: string } & ReplyExtra = typeof reply === "string" ? { answer: reply } : reply
       record(storeKey, { id, question, answer, ...extra })
       const words = answer.split(/\s+/).filter(Boolean)
-      setTurns((all) => all.map((turn) => (turn.id === id ? { id, question, words, shown: reduce.current ? words.length : 0, pending: false, ...extra } : turn)))
+      setTurns((all) => all.map((turn) => (turn.id === id ? { id, question, words, shown: reduce.current ? words.length : 0, pending: false, live: !reduce.current, ...extra } : turn)))
     },
     [storeKey, ask],
   )
@@ -219,7 +244,7 @@ export function ChatThread({
     nextId.current = stored.reduce((max, item) => Math.max(max, item.id + 1), 0)
     setTurns(stored.map((item) => {
       const words = item.answer ? item.answer.split(/\s+/).filter(Boolean) : []
-      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null, projects: item.projects, roles: item.roles, expects: item.expects, panel: item.panel, followUps: item.followUps, contact: item.contact, source: item.source, sources: item.sources, nudge: item.nudge, placeKind: item.placeKind }
+      return { id: item.id, question: item.question, words, shown: words.length, pending: item.answer === null, projects: item.projects, roles: item.roles, expects: item.expects, panel: item.panel, followUps: item.followUps, contact: item.contact, source: item.source, sources: item.sources, nudge: item.nudge, placeKind: item.placeKind, cards: item.cards }
     }))
     for (const item of stored) if (item.answer === null) void run(item.id, item.question)
 
@@ -229,13 +254,14 @@ export function ChatThread({
       restoring.current = false
       restored.current = false
       const id = nextId.current++
-      setTurns((all) => [...all, { id, question, words: [], shown: 0, pending: true }])
+      setTurns((all) => [...all, { id, question, words: [], shown: 0, pending: true, live: !reduce.current }])
       void run(id, question)
     }
     const onReset = (event: Event) => {
       if ((event as CustomEvent<string>).detail !== storeKey) return
       nextId.current = 0
       restored.current = false
+      last.current?.closest<HTMLElement>("main")?.style.removeProperty("--chat-tail")
       setTurns([])
     }
     window.addEventListener(CHAT_ASK, onAsk)
@@ -246,12 +272,43 @@ export function ChatThread({
     }
   }, [run, storeKey])
 
+  // Stop keeps what the visitor has already read, so the answer ends where they stopped it.
+  const turnsNow = useRef<Turn[]>([])
+  turnsNow.current = turns
+  useEffect(() => {
+    const onStop = () => {
+      const next = turnsNow.current.map((turn): Turn => {
+        if (turn.pending) {
+          stopped.current.add(turn.id)
+          return { id: turn.id, question: turn.question, words: [STOPPED], shown: 1, pending: false }
+        }
+        if (turn.shown < turn.words.length) return { ...turn, words: turn.words.slice(0, Math.max(1, turn.shown)), shown: Math.max(1, turn.shown), followUps: undefined }
+        return turn
+      })
+      for (const turn of next) {
+        const before = turnsNow.current.find((item) => item.id === turn.id)
+        if (before && (before.pending || before.shown < before.words.length)) {
+          const kept = load(storeKey).find((item) => item.id === turn.id)
+          record(storeKey, { ...kept, id: turn.id, question: turn.question, answer: turn.words.join(" "), followUps: undefined })
+        }
+      }
+      setTurns(next)
+    }
+    window.addEventListener(CHAT_STOP, onStop)
+    return () => window.removeEventListener(CHAT_STOP, onStop)
+  }, [storeKey])
+
   const active = turns.length > 0
   useEffect(() => {
     onActive?.(active, restored.current)
   }, [active, onActive])
 
   const revealing = turns.some((turn) => !turn.pending && turn.shown < turn.words.length)
+  const inFlight = turns.some((turn) => turn.pending || turn.shown < turn.words.length)
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent(CHAT_STREAMING, { detail: inFlight }))
+  }, [inFlight])
+  useEffect(() => () => void window.dispatchEvent(new CustomEvent(CHAT_STREAMING, { detail: false })), [])
   useEffect(() => {
     if (!revealing || hold || concealed) return
     const timer = window.setInterval(() => {
@@ -263,28 +320,100 @@ export function ChatThread({
   // Keep the newest turn above the composer: when it is added, when its answer arrives, and once it has fully revealed.
   const newest = turns[turns.length - 1]
   const stage = newest ? `${turns.length}:${newest.pending}:${newest.shown >= newest.words.length}` : ""
+  // The home conversation is a couple of turns with short answers, so it happens in the middle of the view.
+  const centred = storeKey === HOME_CHAT
+  const growing = useRef(false)
+  growing.current = !!newest && (newest.pending || newest.shown < newest.words.length)
+  const phase = newest ? `${turns.length}:${newest.pending ? "asked" : "answering"}` : ""
   useEffect(() => {
-    // A restored conversation waits where it is; only new questions pull the page down.
-    // The first message stays at the top of the feed while its answer streams in underneath.
+    // A restored conversation waits where it is; only new questions move the page.
     if (hold || concealed || turns.length === 0) return
     if (!seen.current) {
       seen.current = true
-      if (storeKey === HOME_CHAT && !restoring.current) window.scrollTo(0, 0)
-      return
+      if (!centred && storeKey === HOME_CHAT && !restoring.current) window.scrollTo(0, 0)
+      if (!centred) return
     }
     if (restoring.current) return
-    if (storeKey === HOME_CHAT && turns.length < 2) return
+    if (centred) return
     if (stage) last.current?.scrollIntoView({ behavior: reduce.current ? "auto" : "smooth", block: "end" })
-  }, [stage, hold, concealed, turns.length])
+  }, [stage, hold, concealed, turns.length, centred, storeKey])
+  useEffect(() => {
+    // Sent: the question eases into the middle. Answering: the answer takes the middle and is
+    // followed as it grows, until it settles. Scrolling by hand lets go until the next question.
+    if (!centred || hold || concealed || !phase || restoring.current) return
+    const asked = phase.endsWith("asked")
+    let frame = 0
+    let still = 0
+    let taken = false
+    const take = () => {
+      taken = true
+      cancelAnimationFrame(frame)
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (["PageUp", "PageDown", "Home", "End"].includes(event.key) || (event.key.startsWith("Arrow") && !(event.target as HTMLElement)?.closest?.("input,textarea,[contenteditable]"))) take()
+    }
+    // Room below the thread only once it overflows: until then the page does not scroll at all.
+    const main = last.current?.closest<HTMLElement>("main")
+    const roomBelow = () => {
+      if (!main) return
+      const tail = parseFloat(main.style.getPropertyValue("--chat-tail")) || 0
+      const want = document.documentElement.scrollHeight - tail > innerHeight + 1 ? Math.round(innerHeight / 2) : 0
+      if (want !== tail) main.style.setProperty("--chat-tail", `${want}px`)
+    }
+    const follow = () => {
+      roomBelow()
+      const pair = last.current?.firstElementChild
+      const el = (asked ? pair?.firstElementChild : pair?.children[1]) as HTMLElement | null | undefined
+      if (!el || taken) return
+      const top = 96
+      const composer = document.querySelector<HTMLElement>(".shell")
+      const bottom = (composer ? composer.getBoundingClientRect().top : innerHeight - 120) - 16
+      const box = el.getBoundingClientRect()
+      // Taller than the space between the top bar and the composer: keep its start in view instead.
+      const off = box.height > bottom - top - 32 ? box.top - (top + 16) : box.top + box.height / 2 - (top + bottom) / 2
+      const goal = Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, scrollY + off))
+      const gap = goal - scrollY
+      if (Math.abs(gap) < 0.5) still++
+      else {
+        still = 0
+        window.scrollTo({ top: reduce.current ? goal : scrollY + gap * 0.14, behavior: "instant" })
+      }
+      if (growing.current || still < 20) frame = requestAnimationFrame(follow)
+    }
+    frame = requestAnimationFrame(follow)
+    window.addEventListener("wheel", take, { passive: true })
+    window.addEventListener("touchmove", take, { passive: true })
+    window.addEventListener("keydown", onKey)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("wheel", take)
+      window.removeEventListener("touchmove", take)
+      window.removeEventListener("keydown", onKey)
+    }
+  }, [phase, centred, hold, concealed])
   useEffect(() => {
     if (turns.length === 0) seen.current = false
   }, [turns.length])
+
+  // After a live answer's text: its parts fade in one by one, then the follow-ups stream in.
+  const [followOpen, setFollowOpen] = useState<number | null>(null)
+  const finished = newest && newest.live && !newest.pending && newest.shown >= newest.words.length ? newest.id : null
+  useLayoutEffect(() => {
+    if (finished === null) return
+    const parts = [...(last.current?.querySelectorAll<HTMLElement>(PARTS) ?? [])].filter((part) => part.getClientRects().length > 0)
+    parts.forEach((part, index) => {
+      part.style.setProperty("--part", String(index))
+    })
+    const wait = (parts.length ? PART_START_MS + (parts.length - 1) * PART_STEP_MS + PART_MS : PART_START_MS) + FOLLOW_GAP_MS
+    const timer = window.setTimeout(() => setFollowOpen(finished), wait)
+    return () => window.clearTimeout(timer)
+  }, [finished])
 
   if (turns.length === 0) return null
   return (
     <section className={hold || concealed ? "chat held" : arrive ? "chat arrive" : "chat"} aria-label={label} aria-live="polite">
       {turns.map((turn, index) => (
-        <div key={turn.id} ref={index === turns.length - 1 ? last : undefined}>
+        <div key={turn.id} ref={index === turns.length - 1 ? last : undefined} className={turn.live ? "turn live" : "turn"}>
           <MessagePair
             userMessage={turn.question}
             words={turn.words}
@@ -292,10 +421,10 @@ export function ChatThread({
             streaming={turn.pending || turn.shown < turn.words.length}
             tint={tint}
             status={turn.pending ? STATUS_LABEL[turn.status ?? "thinking"] : undefined}
-            className="max-w-none gap-8 text-[15px]"
+            className="max-w-none gap-8 text-[16px]"
             onCopy={turn.pending ? undefined : () => void navigator.clipboard?.writeText(turn.words.join(" "))}
             onRegenerate={turn.pending ? undefined : () => void run(turn.id, turn.question)}
-            final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind }) : undefined}
+            final={renderAnswer && !turn.pending ? renderAnswer({ id: turn.id, answer: turn.words.join(" "), projects: turn.projects, roles: turn.roles, expects: turn.expects, panel: newestAction(turns, index) ? turn.panel : undefined, placeKind: turn.placeKind, cards: turn.cards }) : undefined}
           />
           {after && !turn.pending && turn.shown >= turn.words.length ? after(turn) : null}
           {!turn.pending && turn.shown >= turn.words.length && turn.sources?.length ? (
@@ -310,34 +439,16 @@ export function ChatThread({
           {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && turn.nudge ? (
             <p className="chat-nudge">Yo, use your own subscriptions for general questions.</p>
           ) : null}
-          {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && (turn.followUps?.length || turn.contact) ? (
+          {index === turns.length - 1 && !turn.pending && turn.shown >= turn.words.length && (turn.followUps?.length || turn.contact) && (!turn.live || followOpen === turn.id) ? (
             <section className="follow-ups" aria-label="Follow up">
               <p className="follow-label">Follow up</p>
-              {/* Read as a paragraph, the same as the quick start: inline spans wrap mid-question like text,
-                  which a <button> cannot. Each still acts as a button: focusable, and Enter or Space asks it. */}
-              <p className="prompts prompt-links">
-                {[
+              <PromptLinks
+                stream={turn.live ? true : undefined}
+                items={[
                   ...(turn.contact ? [{ label: "Start a conversation", pick: () => window.dispatchEvent(new Event(CONTACT_EVENT)) }] : []),
                   ...(turn.followUps ?? []).map((text) => ({ label: text, pick: () => window.dispatchEvent(new CustomEvent(CHAT_ASK, { detail: text })) })),
-                ].map((item, at, all) => (
-                  <span key={item.label}>
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      className="prompt-link"
-                      onClick={item.pick}
-                      onKeyDown={(event) => {
-                        if (event.key !== "Enter" && event.key !== " ") return
-                        event.preventDefault()
-                        item.pick()
-                      }}
-                    >
-                      {item.label}
-                    </span>
-                    {at < all.length - 1 ? " " : null}
-                  </span>
-                ))}
-              </p>
+                ]}
+              />
             </section>
           ) : null}
         </div>

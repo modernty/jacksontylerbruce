@@ -8,7 +8,7 @@ import { targetPath } from "@/src/analytics/scrub"
 import { DEFAULT_PILLS } from "@/src/router/pills"
 import { bindComposer, loadIn } from "./behaviors"
 import { usePills } from "./pills"
-import { CHAT_ASK, CHAT_RESET, HOME_CHAT, handOff } from "./chat-thread"
+import { CHAT_ASK, CHAT_RESET, CHAT_STOP, CHAT_STREAMING, HOME_CHAT, handOff } from "./chat-thread"
 import { StarterPrompts } from "./starter-prompts"
 import { CONTACT_EVENT, mailtoLink } from "./mailto"
 import { inlineChat, quietPage } from "./chrome"
@@ -57,6 +57,22 @@ export function Composer({ email }: { email: string }) {
   // The timeline offers the conversation's starting questions on top of the composer, until one
   // is picked or a conversation has started.
   const [started, setStarted] = useState(true)
+  // While the window is resized, layout slides are off, so the composer moves with everything else.
+  useEffect(() => {
+    const root = document.documentElement
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const onResize = () => {
+      root.classList.add("resizing")
+      clearTimeout(timer)
+      timer = setTimeout(() => root.classList.remove("resizing"), 150)
+    }
+    window.addEventListener("resize", onResize)
+    return () => {
+      window.removeEventListener("resize", onResize)
+      clearTimeout(timer)
+      root.classList.remove("resizing")
+    }
+  }, [])
   useEffect(() => {
     try {
       setStarted((JSON.parse(sessionStorage.getItem(HOME_CHAT) ?? "[]") as unknown[]).length > 0)
@@ -85,6 +101,13 @@ export function Composer({ email }: { email: string }) {
       window.removeEventListener(CHAT_RESET, onReset)
       window.removeEventListener(CONTACT_EVENT, onContact)
     }
+  }, [])
+  // While an answer is on its way, Send becomes Stop.
+  const [streaming, setStreaming] = useState(false)
+  useEffect(() => {
+    const onStreaming = (event: Event) => setStreaming((event as CustomEvent<boolean>).detail === true)
+    window.addEventListener(CHAT_STREAMING, onStreaming)
+    return () => window.removeEventListener(CHAT_STREAMING, onStreaming)
   }, [])
   // A note to Tyler uses the tall composer. The chat itself stays one line.
   const tall = quiet && emailing
@@ -219,11 +242,19 @@ export function Composer({ email }: { email: string }) {
                 <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
               </svg>
             </button>
-            <button className="ib send" type="submit" title="Send" aria-label="Send">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paper)" strokeWidth="2">
-                <path d="M12 19V5M6 11l6-6 6 6" />
-              </svg>
-            </button>
+            {streaming && !emailing ? (
+              <button className="ib send stop" type="button" title="Stop" aria-label="Stop the answer" onClick={() => window.dispatchEvent(new Event(CHAT_STOP))}>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                  <rect x="2" y="2" width="8" height="8" rx="1.5" fill="var(--paper)" />
+                </svg>
+              </button>
+            ) : (
+              <button className="ib send" type="submit" title="Send" aria-label="Send">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paper)" strokeWidth="2">
+                  <path d="M12 19V5M6 11l6-6 6 6" />
+                </svg>
+              </button>
+            )}
           </div>
           </div>
         </form>

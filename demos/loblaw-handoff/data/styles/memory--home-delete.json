@@ -1,0 +1,60 @@
+{
+  "7294:43317": {
+    "fills": [{ "kind": "solid", "value": "#F5F6FA", "token": "bg/surface" }],
+    "radius": { "value": "32px", "token": "radius/4xl" },
+    "autoLayout": "vertical",
+    "gap": { "value": "24px", "token": "space/24" },
+    "padding": {
+      "top": { "value": "24px", "token": "space/24" },
+      "right": { "value": "24px", "token": "space/24" },
+      "bottom": { "value": "24px", "token": "space/24" },
+      "left": { "value": "24px", "token": "space/24" }
+    }
+  },
+  "7294:43318": { "autoLayout": "vertical", "gap": { "value": "4px", "token": "space/4" } },
+  "7294:43321": { "autoLayout": "vertical", "gap": { "value": "12px", "token": "space/12" } },
+  "7294:43322": { "autoLayout": "vertical" },
+  "7294:43323": { "autoLayout": "horizontal", "gap": { "value": "8px", "token": "space/8" } },
+  "7294:43324": {
+    "fills": [{ "kind": "solid", "value": "#FFFFFF", "token": "New Neutrals/White" }],
+    "radius": { "value": "4px", "token": "App Foundations/Radius/extra-small" }
+  },
+  "7294:43326": { "autoLayout": "vertical" },
+  "7294:43327": { "autoLayout": "horizontal", "gap": { "value": "8px", "token": "space/8" } },
+  "7294:43329": {
+    "fills": [{ "kind": "solid", "value": "#FFFFFF66", "token": "alpha/white-40" }],
+    "radius": { "value": "48px" },
+    "autoLayout": "horizontal",
+    "padding": {
+      "top": { "value": "4px" },
+      "right": { "value": "16px" },
+      "bottom": { "value": "4px" },
+      "left": { "value": "16px" }
+    },
+    "effects": {
+      "dropShadow": [
+        { "x": "0", "y": "0", "blur": "13px", "spread": "0", "color": "#0000000D" },
+        { "x": "0", "y": "0", "blur": "4px", "spread": "0", "color": "#00000014" }
+      ]
+    }
+  },
+  "7294:43331": {
+    "fills": [
+      {
+        "kind": "gradient",
+        "value": "linear-gradient(180deg, #FFFFFF33 0%, #FFFFFF00 100%), linear-gradient(90deg, #CC323A 0%, #CC323A 100%)"
+      }
+    ],
+    "radius": { "value": "40px" },
+    "autoLayout": "horizontal",
+    "padding": {
+      "top": { "value": "4px" },
+      "right": { "value": "16px" },
+      "bottom": { "value": "4px" },
+      "left": { "value": "16px" }
+    },
+    "effects": {
+      "dropShadow": [{ "x": "0", "y": "0", "blur": "8px", "spread": "0", "color": "#9A222840" }]
+    }
+  }
+}

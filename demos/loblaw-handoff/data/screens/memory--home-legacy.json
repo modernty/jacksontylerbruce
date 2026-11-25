@@ -1,0 +1,202 @@
+{
+  "slug": "memory--home-legacy",
+  "name": "Memory (historical)",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "Kept only because the Try it still runs on it. The frame it records was deleted from the file, and the flow it draws — a detail sheet over the home — has been replaced by a Memory details page. Everything the assistant has saved: a written summary of what it knows, then the same facts again as editable rows grouped by theme.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "7717:19094",
+  "image": "/demos/loblaw-handoff/screens/memory--home-legacy.png",
+  "extracted": true,
+  "extractedOn": "2026-09-28",
+  "tokenSet": "september-launch",
+  "stats": {},
+  "unmapped": [
+    {
+      "value": "#DDDFEB",
+      "count": 2,
+      "where": "Group dividers (7188:2053, 7188:2076)",
+      "note": "Painted as a raw hex rather than bound to New Neutrals/Light Grey - #DDDFEB, which carries the same value."
+    }
+  ],
+  "looseEnds": [
+    {
+      "kind": "empty-token",
+      "severity": "medium",
+      "title": "Four library variables resolve to no value",
+      "detail": "gradient/stroke-glass, gradient/sheen-white, gradient/stroke-glass-button and 'Remedy background 1' are all defined in the library and all resolve to an empty string. Anything bound to them falls back silently.",
+      "nodes": [
+        "7717:19094"
+      ],
+      "ask": "Either give them values or unbind them; today they read as tokens but behave as nothing."
+    },
+    {
+      "kind": "content-model",
+      "severity": "high",
+      "title": "The summary and the memory list are two separate representations",
+      "detail": "'What you've told PC Chat™' is a written paragraph set covering pregnancy, blood pressure, lisinopril, a peanut allergy, a son's cold, province, family physician, a COVID-19 vaccine and an MRI. 'Top of mind' below it lists the same facts as discrete items. Nothing on the frame says whether the paragraph is generated from the list, authored separately, or refreshed on a different cadence — and 'Last updated today' is attached only to the summary.",
+      "nodes": [
+        "7717:19094"
+      ],
+      "ask": "Is the summary derived from the memory list, and does editing or deleting a memory regenerate it?"
+    },
+    {
+      "kind": "token-conflict",
+      "severity": "high",
+      "title": "text/secondary is bound to two different values inside this one frame",
+      "detail": "The intro paragraph (7188:1992) binds text/secondary with a fallback of #565C79. The summary card heading (7188:1998) binds the same token with a fallback of #3D456B. One frame, one token name, two colours — so this is not two library modes, it is an inconsistent binding. The Review and update memory sheet resolves it to #3D456B too.",
+      "nodes": [
+        "7717:19099"
+      ],
+      "ask": "Confirm which value text/secondary carries, and rebind whichever node is wrong."
+    },
+    {
+      "kind": "content-model",
+      "severity": "high",
+      "title": "The same memory appears in more than one group",
+      "detail": "“You’re 8 weeks pregnant” is listed under both Top of mind (7188:2026) and Your current health (7188:2061). “You have a cough and fever” likewise appears at 7188:2051 and 7188:2070. Either Top of mind is a view over the same records — in which case deleting from one place must remove it from the other — or these are duplicate rows.",
+      "nodes": [
+        "7717:19122",
+        "7717:19157",
+        "7717:19147",
+        "7717:19166"
+      ],
+      "ask": "Is Top of mind a filter over the groups, or its own list? It changes the delete behaviour."
+    },
+    {
+      "kind": "inconsistent-type",
+      "severity": "medium",
+      "title": "Timestamps are 12px in one group and 14px in the next",
+      "detail": "Top of mind timestamps bind font/size/text-xs at 12/18 (7188:2028, 7188:2038). Your current health timestamps are hardcoded to 14/20 (7188:2071, 7188:2075). Same list-item component, two sizes, and the second pair bypasses the type tokens entirely.",
+      "nodes": [
+        "7717:19124",
+        "7717:19167",
+        "7717:19171"
+      ],
+      "ask": "Rebind the 14px ones to Text xs/Regular."
+    },
+    {
+      "kind": "content",
+      "severity": "medium",
+      "title": "“Updated 40 days ago” does not follow the pattern of the others",
+      "detail": "Timestamps elsewhere coarsen as they age — today, yesterday, 3 days ago. 7188:2075 reads “Updated 40 days ago”, where the summary paragraph above describes the same period as “about a month ago”.",
+      "nodes": [
+        "7717:19171"
+      ],
+      "ask": "Define the thresholds at which relative time coarsens to weeks and months."
+    },
+    {
+      "kind": "naming-mismatch",
+      "severity": "low",
+      "title": "Summary card is named “What I know about you” but headed otherwise",
+      "detail": "Layer 7188:1993 is named “What I know about you” while its heading reads “What you’ve told PC Chat™”. A third phrasing, “What you’ve told me”, appears on 7290:41806.",
+      "nodes": [
+        "7717:19100"
+      ],
+      "ask": "Three phrasings for one card. Settle the voice."
+    },
+    {
+      "kind": "undrawn",
+      "severity": "medium",
+      "title": "Search is a button, and what it opens is not drawn",
+      "detail": "7340:57519 is a Button pinned over a white gradient scrim, not a text field. No frame shows the search surface it opens, a query in progress, results, or a no-match state.",
+      "nodes": [
+        "7717:19176"
+      ],
+      "ask": "What does search open, and does it match memory text only or categories too?"
+    },
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "Select memories is the only way into multi-select, and nothing shows what it opens",
+      "detail": "The top nav carries a 196x46 pill reading 'Select memories'. It is the entry point the Delete all frames assume, but no frame in this set draws the state immediately after it is pressed — what becomes selectable, how a row reads when checked, or where the Delete action then lives.",
+      "nodes": [
+        "7717:19182"
+      ],
+      "ask": "Draw the selecting state, or confirm the Delete all frames already are it."
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "medium",
+      "title": "The top fade is drawn in one frame of this set and not in this one",
+      "detail": "Memory home, chips and summary carries an Overlay layer (7788:24142) — a 393x140 white gradient turned 180°, the search overlay's fade reversed — sitting under the status bar and the top nav so content scrolling past stays legible behind them. The home frame this screen documents has no such layer, yet its content is 1148px in an 852px frame and scrolls under exactly the same chrome. The prototype draws the fade because without it the title rides over the clock.",
+      "nodes": [
+        "7717:19173",
+        "7717:19179"
+      ],
+      "ask": "Add the Overlay to every frame whose content scrolls, or confirm it belongs only to the chips-and-summary state."
+    }
+  ],
+  "code": {
+    "css": "/* Memory home — node 7188:1983 */\n:root {\n  --text-primary: #1a1f3c;\n  --text-secondary: #565c79;\n  --text-tertiary: #717794;\n  --neutral-700: #3d456b;\n  --bg-surface: #f5f6fa;\n  --bg-canvas: #ffffff;\n  --space-8: 8px;\n  --space-12: 12px;\n  --space-16: 16px;\n  --space-24: 24px;\n}\n\n.memory-title {\n  font: 600 24px/32px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-primary);\n}\n\n.memory-intro {\n  font: 400 15px/22px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-secondary);\n}\n\n/* \"What you've told PC Chat(TM)\" summary card */\n.memory-summary {\n  background: var(--bg-canvas);\n  border-radius: 24px;\n  padding: var(--space-16);\n  display: flex;\n  flex-direction: column;\n  gap: var(--space-12);\n}\n\n.memory-summary__heading {\n  font: 600 18px/28px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-primary);\n}\n\n.memory-summary__body {\n  font: 400 15px/22px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--neutral-700);\n}\n\n.memory-summary__updated {\n  font: 400 12px/18px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-tertiary);\n}\n\n/* \"Top of mind\" list */\n.memory-item__title {\n  font: 600 15px/22px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-primary);\n}\n\n.memory-item__updated {\n  font: 400 14px/20px \"SF Pro Text\", -apple-system, sans-serif;\n  color: var(--text-secondary);\n}",
+    "jsx": "// Memory home, as returned by the Figma MCP for node 7188:1983. Trimmed to the\n// structure that matters — status bar and icon assets removed.\n//\n// Note the two bindings of text/secondary below: the intro falls back to #565c79,\n// the card heading to #3d456b. Same token, same frame, two values.\n\nexport default function MemoryHome() {\n  return (\n    <div className=\"bg-[var(--bg/canvas,white)] rounded-[48px] size-full\" data-node-id=\"7188:1983\">\n      <div className=\"absolute flex flex-col gap-[32px] left-0 right-0 top-[122px] px-[16px] pt-[24px] pb-[16px]\" data-node-id=\"7188:1988\" data-name=\"Content\">\n\n        <header className=\"flex flex-col gap-[4px] px-[8px]\" data-node-id=\"7188:1990\">\n          <p className=\"text-[24px] leading-[32px] font-['SF_Pro_Text:Semibold'] text-[color:var(--text/primary,#1a1f3c)]\" data-node-id=\"7188:1991\">\n            Memory\n          </p>\n          <p className=\"text-[length:var(--font/size/text-md,15px)] leading-[var(--font/lh/text-md,22px)] text-[color:var(--text/secondary,#565c79)]\" data-node-id=\"7188:1992\">\n            Memories are details you&rsquo;ve shared about your health, family, lifestyle, and\n            preferences. They help personalize PC Chat&trade; answers and you can update or\n            delete them anytime.\n          </p>\n        </header>\n\n        {/* Figma layer name: \"What I know about you\" — heading text says otherwise */}\n        <section\n          className=\"flex flex-col gap-[8px] w-[359px] rounded-[20px] border-2 border-[var(--new-neutrals/white,white)] bg-[var(--bg/surface,#f5f6fa)] p-[var(--space/16,16px)] backdrop-blur-[calc(var(--blur/glass-sm,20px)/2)]\"\n          data-node-id=\"7188:1993\"\n          data-name=\"What I know about you\"\n        >\n          <BrandMark className=\"size-[32px]\" />\n\n          <p className=\"text-[length:var(--font/size/text-lg,18px)] leading-[var(--font/lh/text-lg,28px)] text-[color:var(--text/secondary,#3d456b)]\" data-node-id=\"7188:1998\">\n            What you&rsquo;ve told PC Chat&trade;\n          </p>\n\n          {summary.paragraphs.map((text) => (\n            <p key={text} className=\"text-[length:var(--font/size/text-sm,14px)] leading-[var(--font/lh/text-sm,20px)] text-[color:var(--neutral/700,#3d456b)]\">\n              {text}\n            </p>\n          ))}\n\n          <p className=\"pt-[8px] text-[length:var(--font/size/text-xs,12px)] leading-[var(--font/lh/text-xs,18px)] text-[color:var(--text/tertiary,#717794)]\" data-node-id=\"7188:2002\">\n            Last updated {summary.updatedLabel}\n          </p>\n        </section>\n\n        {/* Groups: \"Top of mind\", \"Your current health\", … separated by 1px #dddfeb rules */}\n        {groups.map((group) => (\n          <section key={group.title} className=\"flex flex-col gap-[8px]\">\n            <h2 className=\"px-[8px] text-[length:var(--font/size/text-md,15px)] leading-[var(--font/lh/text-md,22px)] text-[color:var(--text/primary,#1a1f3c)]\">\n              {group.title}\n            </h2>\n\n            <ul className=\"flex flex-col\">\n              {group.items.map((item) => (\n                <li key={item.id} className=\"flex min-h-[40px] items-center p-[8px]\">\n                  <div className=\"flex flex-1 flex-col gap-[2px]\">\n                    <p className=\"truncate text-[15px] leading-[var(--font/lh/text-md,22px)] text-[color:var(--text/primary,#1a1f3c)]\">\n                      {item.text}\n                    </p>\n                    <p className=\"text-[length:var(--font/size/text-xs,12px)] leading-[var(--font/lh/text-xs,18px)] text-[color:var(--new-neutrals/darkest-grey,#565c79)]\">\n                      {item.updatedLabel}\n                    </p>\n                  </div>\n                </li>\n              ))}\n            </ul>\n          </section>\n        ))}\n      </div>\n\n      {/* Search is a pinned button over a white scrim, not an inline field */}\n      <div className=\"absolute bottom-0 left-0 h-[140px] w-[393px]\" data-node-id=\"7340:57517\" data-name=\"Search with overlay\">\n        <div className=\"absolute bottom-0 h-[140px] w-full bg-gradient-to-b from-white/0 via-white/70 to-white/90\" />\n        <button className=\"absolute left-[24px] top-[64px] flex h-[44px] w-[345px] items-center gap-[8px] rounded-full border-2 border-white bg-[var(--bg/white-subtle,rgba(255,255,255,0.4))] px-[16px]\" data-node-id=\"7340:57519\">\n          <MagnifyingGlass className=\"size-[16px]\" />\n          <span className=\"text-[length:var(--font/size/text-md,15px)] text-[color:var(--text/tertiary,#717794)]\">Search</span>\n        </button>\n      </div>\n    </div>\n  );\n}",
+    "swiftui": "// Hand-translated from the extracted tokens — verify against the iOS UI kit.\n\nstruct MemoryHome: View {\n    let summary: MemorySummary\n    let groups: [MemoryGroup]\n\n    var body: some View {\n        ScrollView {\n            VStack(alignment: .leading, spacing: 24) {\n                VStack(alignment: .leading, spacing: 8) {\n                    Text(\"Memory\")\n                        .font(.system(size: 24, weight: .semibold))\n                    Text(\"Memories are details you've shared about your health, family, lifestyle, and preferences. They help personalize PC Chat\\u{2122} answers and you can update or delete them anytime.\")\n                        .font(.system(size: 15))\n                        .foregroundStyle(Color.textSecondary)\n                }\n\n                MemorySummaryCard(summary: summary)\n\n                ForEach(groups) { group in\n                    MemoryGroupSection(group: group)\n                }\n            }\n            .padding(.horizontal, 24)\n        }\n        .background(Color.bgSurface)\n    }\n}"
+  },
+  "constraints": [
+    {
+      "nodeId": "7717:19100",
+      "label": "Summary card — “What you’ve told PC Chat™”",
+      "maxHeight": 350,
+      "summary": "The card is drawn at a fixed 359 × 350. Everything inside it except the summary prose is fixed too, so the prose has a hard height budget — and therefore a hard character budget, which the generator that writes this text has to respect.",
+      "derivation": {
+        "steps": [
+          {
+            "label": "Card height",
+            "value": "350px"
+          },
+          {
+            "label": "Padding (top + bottom)",
+            "value": "−32px"
+          },
+          {
+            "label": "Brand mark",
+            "value": "−32px"
+          },
+          {
+            "label": "Heading, 18/28",
+            "value": "−28px"
+          },
+          {
+            "label": "“Last updated” block",
+            "value": "−26px"
+          },
+          {
+            "label": "Stack gaps (4 × 8px)",
+            "value": "−32px"
+          },
+          {
+            "label": "Left for prose",
+            "value": "200px"
+          },
+          {
+            "label": "Line height, Text sm/Regular 14/20",
+            "value": "20px"
+          },
+          {
+            "label": "Lines available",
+            "value": "10"
+          },
+          {
+            "label": "Width inside padding",
+            "value": "327px"
+          },
+          {
+            "label": "SF Pro Text 14px, mixed-case prose",
+            "value": "≈46 chars/line"
+          }
+        ],
+        "maxChars": 460,
+        "drawnChars": 443,
+        "recommend": 430
+      },
+      "note": "The 46 chars/line figure is derived from the drawn copy itself: paragraph one is 280 characters across exactly 6 lines, paragraph two 163 across 4. That is 443 characters in 10 lines — 96% of the ceiling, so the design as drawn has almost no headroom. Character width varies with content (numbers and capitals are wider), so generate to about 430 and truncate rather than let the card grow."
+    }
+  ],
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  }
+}

@@ -74,7 +74,7 @@ test("a blocked question declines without echoing a hidden link", async () => {
   const body = result.body as { intent: string; href: string; annotation: string }
   assert.equal(body.intent, "decline")
   assert.equal(body.href.includes("/work/"), false)
-  assert.equal(/remedy|traveller|fintech/i.test(body.annotation), false)
+  assert.equal(/traveller|fintech/i.test(body.annotation), false)
 })
 
 test("model calls use the token cap and a timeout", async () => {

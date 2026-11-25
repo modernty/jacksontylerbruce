@@ -53,7 +53,7 @@ export function MessagePair({
     >
       <p
         className={cn(
-          "max-w-[85%] self-end text-[15px] leading-[22px] [text-wrap:pretty]",
+          "max-w-[85%] self-end text-[16px] leading-[24px] tracking-[-0.01em] [text-wrap:pretty]",
           variant === "bubble"
             ? "rounded-[18px] bg-[var(--ink-wash)] px-4 py-2.5"
             : "text-foreground/90 text-end",
@@ -64,7 +64,7 @@ export function MessagePair({
       <div className="group/message relative flex flex-col items-start">
         {/* A div, not a p: a rendered answer can hold a list. */}
         {/* Room is held only while the answer is arriving, so what follows a finished answer sits close to it. */}
-        <div className={cn("text-[15px] leading-relaxed", streaming && "min-h-[4.25rem]")}>
+        <div className={cn("text-[16px] leading-[24px] tracking-[-0.01em]", streaming && "min-h-[4.25rem]")}>
           {status ? (
             <Thinking label={status} />
           ) : !streaming && final ? final : shown.map((word, index) => {
@@ -131,5 +131,5 @@ function Thinking({ label }: { label: string }) {
     const timer = window.setInterval(() => setSeconds(Math.floor((Date.now() - start) / 1000)), 1000);
     return () => window.clearInterval(timer);
   }, []);
-  return <ThinkingIndicator role="status" label={label} elapsed={seconds > 0 ? `${seconds}s` : undefined} className="text-[15px]" />;
+  return <ThinkingIndicator role="status" label={label} elapsed={seconds > 0 ? `${seconds}s` : undefined} className="text-[16px] leading-[24px]" />;
 }

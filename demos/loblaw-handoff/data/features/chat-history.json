@@ -1,0 +1,161 @@
+{
+  "slug": "chat-history",
+  "name": "Chat History",
+  "status": "design-complete",
+  "order": 2,
+  "summary": "Saved conversations. History shows up in two places: a shortlist in the side panel, and a dedicated page with the full list.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaPageId": "7454:3769",
+  "figmaPageName": "Chat history",
+  "overview": [
+    "Chat History gives a returning user a way back into a conversation they have already had. In the September Launch it surfaces in two places rather than one, and the two are not states of the same screen — they are different surfaces with different jobs.",
+    "The side panel carries a shortlist under Recents, reachable from anywhere, for picking up something recent without leaving what you are doing. The dedicated page carries the counted list, with Search and Select in the nav, a per-row menu offering Rename and Delete, and a pager once the list reaches fifty.",
+    "The page used to report, on every row, how many memories a conversation had produced — the one place in the product that made the join with Memory Management visible. It does not any more: the count survives on three rows as a switched-off layer and is absent from the rest. That is the biggest single change in this round and it needs a decision, not an assumption."
+  ],
+  "states": [
+    {
+      "name": "In the side panel",
+      "screen": "side-panel--four-recents",
+      "description": "A shortlist under Recents, reachable from anywhere, for picking a recent conversation back up. Three content states: empty, the everyday four, and the shortlist at capacity."
+    },
+    {
+      "name": "The Chat history page",
+      "screen": "chat-history--page-default",
+      "description": "The full list: counted, searchable, each row carrying its age and an overflow control. Five content states: four chats, twelve, twelve scrolled, fifty behind a pager, and none at all."
+    },
+    {
+      "name": "Renaming a chat",
+      "screen": "chat-history--rename-dialog",
+      "description": "The row menu's first option. An alert over the list with the keyboard up, prefilled with the existing title. Three states: opened, cleared, and the renamed row."
+    },
+    {
+      "name": "Deleting one chat",
+      "screen": "chat-history--row-menu",
+      "description": "The row menu's second option, gated behind an alert that is explicit about memories outliving the conversation. Three states: the menu, the gate, and the toast."
+    },
+    {
+      "name": "Deleting several",
+      "screen": "chat-history--select-none",
+      "description": "Select turns every row into a checkbox and the nav into Select all and Cancel. Eight states walk from nothing picked through a counted delete, an all-chats delete, and the empty page that follows."
+    },
+    {
+      "name": "Search",
+      "screen": "chat-history--search-prompt",
+      "description": "Search replaces the title bar rather than sitting under it. Six frames walk the character bands: inert under the threshold, a spinner while the query runs, matches with the matched run bolded, and a silent spell correction past seven characters."
+    }
+  ],
+  "behaviour": [
+    {
+      "rule": "Two surfaces",
+      "detail": "The side panel holds a shortlist; the dedicated page holds the full list. What decides how many appear in the panel, and whether its order matches the page's, is not drawn.",
+      "source": "partial"
+    },
+    {
+      "rule": "Where it lives",
+      "detail": "A screen of its own, reached from the side panel. The assistant home carries no history list.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Row content",
+      "detail": "Title on one line, then the age on a second. A 44x44 overflow control sits at the right, opening Rename and Delete.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Row geometry",
+      "detail": "361 x 60 on a 64px pitch; title 285px wide at Text md/Medium 15/22, metadata at 14/20.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Title truncation",
+      "detail": "One line, ellipsised at 285px — roughly 37 characters — and at 245px, roughly 32, once selection puts a checkbox in front of it. See the container constraints on the screens.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Count",
+      "detail": "“12 chats” sits under the title and matches the rows drawn. Whether it counts all conversations or only those loaded is not stated.",
+      "source": "partial"
+    },
+    {
+      "rule": "Memory count",
+      "detail": "Gone from every drawn row. Three rows out of twelve keep a Metadata frame holding a bullet and the literal text “3 memories created”, both switched off; the other nine do not carry the frame at all. The older frames reported “N memories saved”.",
+      "source": "open"
+    },
+    {
+      "rule": "Overflow menu",
+      "detail": "Every row has one. It opens a 225x112 panel with Rename and Delete, anchored under the row's own button, with no scrim behind it.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Grouping and paging",
+      "detail": "The list is drawn flat with no date headers. Twelve chats scroll; fifty page ten at a time behind a five-number pager that scrolls with the content. The length at which paging starts, and what the pager does past five pages, is undrawn.",
+      "source": "partial"
+    },
+    {
+      "rule": "Search",
+      "detail": "Search sits in the nav beside Select, where it used to be a pill pinned over the foot of the list. The same move was made on Memory home.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Empty state",
+      "detail": "“No chats yet” over “Ask PC Chat™ a question today.”, with a New chat button at the foot and no Search or Select in the nav. Reached either from a new account or by deleting everything.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Search takes over the bar",
+      "detail": "Tapping Search swaps the whole 124px top bar for a field and a Cancel. The title, the count and Select all go; the list below stays where it was.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Nothing fires under two characters",
+      "detail": "One character leaves the screen inert. The second triggers a query. The threshold is visible only in the frame names — nothing drawn marks it.",
+      "source": "partial"
+    },
+    {
+      "rule": "The prompt is fixed",
+      "detail": "“Try searching for medications, symptoms, or allergies.” is the same line under the threshold and under an empty result. It counts nothing and reacts to nothing, which was the MVP decision.",
+      "source": "extracted"
+    },
+    {
+      "rule": "A match anywhere in the title counts",
+      "detail": "Both results for “med” match mid-word — “medications” and “medication” — and the matched run is set in Semibold. Results are newest first; where exact and partial matches both exist is not drawn.",
+      "source": "partial"
+    },
+    {
+      "rule": "Spell check corrects silently",
+      "detail": "Past about seven characters a misspelling is corrected and the results are for the corrected spelling, with the field still holding what was typed and nothing saying so.",
+      "source": "partial"
+    },
+    {
+      "rule": "The keyboard never leaves",
+      "detail": "All eight frames keep the keyboard up, so every state is one you reach while still typing. Results with the keyboard dismissed are not drawn.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Select",
+      "detail": "Select swaps the nav for Select all and Cancel and puts a 24px checkbox on every row, indenting the title to 48 and re-truncating it. The overflow control stays.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Deleting a selection",
+      "detail": "A counted Delete appears at the bottom right once something is ticked, growing from the right as the count changes. At full selection it stops counting and reads “Delete all chats”, and Select all leaves the nav rather than becoming Deselect all.",
+      "source": "extracted"
+    },
+    {
+      "rule": "After a bulk delete",
+      "detail": "The count corrects and inflects — “1 chat” — and a toast reports how many went. The nav is empty on both bulk-delete frames: no Back, no Search, no Select. The single-chat delete keeps all three.",
+      "source": "partial"
+    },
+    {
+      "rule": "Undo",
+      "detail": "The Toast component carries an Undo action. It is switched off in all four delete toasts across this feature, as it is in Memory, so nothing drawn offers a way back.",
+      "source": "open"
+    },
+    {
+      "rule": "Rename",
+      "detail": "An alert over the list with the keyboard up, prefilled and scrolled to the end of the existing title. Save has no disabled state, nothing validates an empty name, and saving raises no confirmation.",
+      "source": "partial"
+    }
+  ],
+  "statesLabel": "Surfaces",
+  "thumbnail": "/demos/loblaw-handoff/thumbs/chat-history-overflow.png"
+}

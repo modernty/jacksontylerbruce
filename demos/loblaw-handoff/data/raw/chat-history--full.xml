@@ -1,0 +1,196 @@
+<frame id="8156:75510" name="Chat history, full" x="2265" y="100" width="393" height="852">
+  <frame id="8156:75511" name="Frame 2147231662" x="16" y="146" width="361" height="848">
+    <frame id="8156:75512" name="Frame 2147231656" x="0" y="0" width="361" height="72">
+      <frame id="8156:75513" name="Top" x="0" y="0" width="361" height="32">
+        <frame id="8156:75514" name="Header" x="8" y="0" width="345" height="32">
+          <text id="8156:75515" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+        </frame>
+      </frame>
+      <frame id="8156:75516" name="Frame 2147231652" x="0" y="32" width="73" height="40">
+        <text id="8156:75517" name="12 chats" x="8" y="10" width="57" height="20" chars="12 chats" />
+      </frame>
+    </frame>
+    <frame id="8156:75518" name="List" x="0" y="84" width="361" height="764">
+      <frame id="8156:75519" name="List item" x="0" y="0" width="361" height="60">
+        <frame id="8156:75520" name="Tag + Text" x="8" y="8" width="285" height="44">
+          <frame id="8156:75521" name="Text" x="0" y="0" width="285" height="44">
+            <text id="8156:75522" name="Message title" x="0" y="0" width="285" height="22" chars="GLP-1 medications and heart health concerns" />
+            <text id="8156:75523" name="Message timestamp" x="0" y="24" width="66" height="20" chars="Yesterday" />
+          </frame>
+        </frame>
+        <instance id="8156:75524" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:75524;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:75525" name="Frame 2147231642" x="0" y="64" width="361" height="60">
+        <frame id="8156:75526" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75527" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75528" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75529" name="Message title" x="0" y="0" width="285" height="22" chars="Recipes for a summer dinner party" />
+              <frame id="8156:75530" name="Metadata" x="0" y="24" width="285" height="20">
+                <text id="8156:75531" name="Message timestamp" x="0" y="0" width="66" height="20" chars="Yesterday" />
+                <text id="8156:75532" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" chars="&#8226;" />
+                <text id="8156:75533" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" chars="3 memories created" />
+              </frame>
+            </frame>
+          </frame>
+          <instance id="8156:75534" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75534;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75535" name="Frame 2147231644" x="0" y="128" width="361" height="60">
+        <frame id="8156:75536" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75537" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75538" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75539" name="Message title" x="0" y="0" width="285" height="22" chars="Managing nausea after medication dose increase" />
+              <text id="8156:75540" name="Message timestamp" x="0" y="24" width="72" height="20" chars="3 days ago" />
+            </frame>
+          </frame>
+          <instance id="8156:75541" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75541;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75542" name="Frame 2147231645" x="0" y="192" width="361" height="60">
+        <frame id="8156:75543" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75544" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75545" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75546" name="Message title" x="0" y="0" width="285" height="22" chars="Plan my groceries for the week" />
+              <text id="8156:75547" name="Message timestamp" x="0" y="24" width="83" height="20" chars="2 weeks ago" />
+            </frame>
+          </frame>
+          <instance id="8156:75548" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75548;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75549" name="List item" x="0" y="256" width="361" height="60">
+        <frame id="8156:75550" name="Tag + Text" x="8" y="8" width="285" height="44">
+          <frame id="8156:75551" name="Text" x="0" y="0" width="285" height="44">
+            <text id="8156:75552" name="Message title" x="0" y="0" width="285" height="22" chars="Reading a nutrition label for added sugar" />
+            <text id="8156:75553" name="Message timestamp" x="0" y="24" width="83" height="20" chars="2 weeks ago" />
+          </frame>
+        </frame>
+        <instance id="8156:75554" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:75554;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:75555" name="Frame 2147231646" x="0" y="320" width="361" height="60">
+        <frame id="8156:75556" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75557" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75558" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75559" name="Message title" x="0" y="0" width="285" height="22" chars="Low-sodium swaps for weeknight dinners" />
+              <frame id="8156:75560" name="Metadata" x="0" y="24" width="285" height="20">
+                <text id="8156:75561" name="Message timestamp" x="0" y="0" width="83" height="20" chars="3 weeks ago" />
+                <text id="8156:75562" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" chars="&#8226;" />
+                <text id="8156:75563" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" chars="3 memories created" />
+              </frame>
+            </frame>
+          </frame>
+          <instance id="8156:75564" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75564;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75565" name="Frame 2147231647" x="0" y="384" width="361" height="60">
+        <frame id="8156:75566" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75567" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75568" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75569" name="Message title" x="0" y="0" width="285" height="22" chars="What to take for seasonal allergies" />
+              <text id="8156:75570" name="Message timestamp" x="0" y="24" width="74" height="20" chars="Last month" />
+            </frame>
+          </frame>
+          <instance id="8156:75571" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75571;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75572" name="Frame 2147231648" x="0" y="448" width="361" height="60">
+        <frame id="8156:75573" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75574" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75575" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75576" name="Message title" x="0" y="0" width="285" height="22" chars="Building a lunch box my kid will eat" />
+              <text id="8156:75577" name="Message timestamp" x="0" y="24" width="74" height="20" chars="Last month" />
+            </frame>
+          </frame>
+          <instance id="8156:75578" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75578;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75579" name="List item" x="0" y="512" width="361" height="60">
+        <frame id="8156:75580" name="Tag + Text" x="8" y="8" width="285" height="44">
+          <frame id="8156:75581" name="Text" x="0" y="0" width="285" height="44">
+            <text id="8156:75582" name="Message title" x="0" y="0" width="285" height="22" chars="Vitamin D through the winter" />
+            <text id="8156:75583" name="Message timestamp" x="0" y="24" width="91" height="20" chars="2 months ago" />
+          </frame>
+        </frame>
+        <instance id="8156:75584" name="Button" x="309" y="8" width="44" height="44">
+          <instance id="I8156:75584;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+        </instance>
+      </frame>
+      <frame id="8156:75585" name="Frame 2147231649" x="0" y="576" width="361" height="60">
+        <frame id="8156:75586" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75587" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75588" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75589" name="Message title" x="0" y="0" width="285" height="22" chars="Gluten-free baking substitutions" />
+              <frame id="8156:75590" name="Metadata" x="0" y="24" width="285" height="20">
+                <text id="8156:75591" name="Message timestamp" x="0" y="0" width="91" height="20" chars="2 months ago" />
+                <text id="8156:75592" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" chars="&#8226;" />
+                <text id="8156:75593" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" chars="3 memories created" />
+              </frame>
+            </frame>
+          </frame>
+          <instance id="8156:75594" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75594;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75595" name="Frame 2147231650" x="0" y="640" width="361" height="60">
+        <frame id="8156:75596" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75597" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75598" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75599" name="Message title" x="0" y="0" width="285" height="22" chars="Caffeine and trouble sleeping" />
+              <text id="8156:75600" name="Message timestamp" x="0" y="24" width="91" height="20" chars="3 months ago" />
+            </frame>
+          </frame>
+          <instance id="8156:75601" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75601;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+      <frame id="8156:75602" name="Frame 2147231651" x="0" y="704" width="361" height="60">
+        <frame id="8156:75603" name="List item" x="0" y="0" width="361" height="60">
+          <frame id="8156:75604" name="Tag + Text" x="8" y="8" width="285" height="44">
+            <frame id="8156:75605" name="Text" x="0" y="0" width="285" height="44">
+              <text id="8156:75606" name="Message title" x="0" y="0" width="285" height="22" chars="Stocking a pantry on a budget" />
+              <text id="8156:75607" name="Message timestamp" x="0" y="24" width="91" height="20" chars="3 months ago" />
+            </frame>
+          </frame>
+          <instance id="8156:75608" name="Button" x="309" y="8" width="44" height="44">
+            <instance id="I8156:75608;2046:16123" name="Icon" x="14" y="14" width="16" height="16" />
+          </instance>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <instance id="8156:75609" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="8156:76059" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:76060" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:76060;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+    <frame id="8156:76061" name="Frame 2147231679" x="94" y="66" width="275" height="46">
+      <instance id="8156:76062" name="Button" x="0" y="0" width="148" height="46">
+        <instance id="I8156:76062;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" />
+        <text id="I8156:76062;5:70" name="label" x="60" y="12" width="52" height="22" chars="Search" />
+        <instance id="I8156:76062;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+      <instance id="8156:76063" name="Button" x="156" y="0" width="119" height="46">
+        <instance id="I8156:76063;2046:16015" name="Leading icon" x="36" y="15" width="16" height="16" hidden="true" />
+        <text id="I8156:76063;5:70" name="label" x="36" y="12" width="47" height="22" chars="Select" />
+        <instance id="I8156:76063;2046:16018" name="Trailing icon" x="111" y="15" width="16" height="16" hidden="true" />
+      </instance>
+    </frame>
+  </frame>
+</frame>

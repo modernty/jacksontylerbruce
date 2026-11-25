@@ -1,0 +1,74 @@
+{
+  "id": "september-launch",
+  "label": "September Launch token set",
+  "note": "Read off the [iOS] Remedy — September Launch file. This is a newer, semantic system than the V1 handoff file: roles (text/primary, bg/surface, icon/default) rather than ramp positions (New Neutrals/Black), and composed type tokens that reference font/family, font/size and font/lh rather than restating them.",
+  "colors": [
+    { "token": "text/primary", "value": "#1A1F3C", "usage": "Headings, memory titles, body ink" },
+    { "token": "text/secondary", "value": "#565C79", "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets" },
+    { "token": "text/tertiary", "value": "#717794", "usage": "Provenance lines, helper text" },
+    { "token": "neutral/700", "value": "#3D456B", "usage": "Body copy on the memory summary card" },
+    { "token": "icon/default", "value": "#1A1F3C", "usage": "Nav and control icons" },
+    { "token": "icon/secondary", "value": "#565C79", "usage": "Secondary icons" },
+    { "token": "icon/tertiary", "value": "#8C92AF", "usage": "Sheet grabber, muted affordances" },
+    { "token": "bg/surface", "value": "#F5F6FA", "usage": "Screen background" },
+    { "token": "bg/canvas", "value": "#FFFFFF", "usage": "Cards and sheets" },
+    { "token": "bg/white-subtle", "value": "#FFFFFF66", "usage": "Glass control fills" },
+    { "token": "bg/scrim", "value": "#00000066", "usage": "Dimmer behind sheets and dialogs" },
+    { "token": "alpha/white-40", "value": "#FFFFFF66", "usage": "Glass tiles" },
+    { "token": "alpha/white-90", "value": "#FFFFFFE5", "usage": "Sheet surface" },
+    { "token": "action/primary-default", "value": "#1A1F3C", "usage": "Primary button fill" },
+    { "token": "action/on-primary", "value": "#FFFFFF", "usage": "Primary button label" },
+    { "token": "border/inverse", "value": "#1A1F3C", "usage": "Inverted borders" },
+    { "token": "New Neutrals/Light Grey", "value": "#DDDFEB", "usage": "Dividers" },
+    { "token": "New Neutrals/White", "value": "#FFFFFF", "usage": "Card borders" },
+    { "token": "shadow/black-05", "value": "#0000000D", "usage": "Ambient button shadow" },
+    { "token": "shadow/black-08", "value": "#00000014", "usage": "Button shadow" },
+    { "token": "shadow/black-10", "value": "#0000001A", "usage": "Medium elevation" },
+    { "token": "shadow/elevation-sm", "value": "#1A1F3C14", "usage": "Glass small elevation" },
+    { "token": "shadow/glass-ambient", "value": "#1A1F3C0D", "usage": "Glass ambient" }
+  ],
+  "text": [
+    { "token": "SF Pro Text/Display xs/Semibold", "value": "SF Pro Text 24/32, weight 600", "usage": "“Memory” page title" },
+    { "token": "Text lg/Semibold", "value": "SF Pro Text 18/28, weight 600", "usage": "Summary card heading, sheet headings" },
+    { "token": "Text md/Semibold", "value": "SF Pro Text 15/22, weight 600", "usage": "Memory item titles, button labels" },
+    { "token": "Text md/Medium", "value": "SF Pro Text 15/22, weight 500", "usage": "List items" },
+    { "token": "Text md/Regular", "value": "SF Pro Text 15/22, weight 400", "usage": "Body copy" },
+    { "token": "Text sm/Medium", "value": "SF Pro Text 14/20, weight 500", "usage": "Secondary labels" },
+    { "token": "Text sm/Regular", "value": "SF Pro Text 14/20, weight 400", "usage": "Descriptions, provenance" },
+    { "token": "Text xs/Medium", "value": "SF Pro Text 12/18, weight 500", "usage": "Eyebrows, category labels" },
+    { "token": "Text xs/Regular", "value": "SF Pro Text 12/18, weight 400", "usage": "Timestamps, helper text" }
+  ],
+  "spacing": [
+    { "token": "space/4", "value": "4" },
+    { "token": "space/6", "value": "6" },
+    { "token": "space/8", "value": "8" },
+    { "token": "space/10", "value": "10" },
+    { "token": "space/12", "value": "12" },
+    { "token": "space/16", "value": "16" },
+    { "token": "space/24", "value": "24" }
+  ],
+  "radius": [
+    { "token": "App Foundations/Radius/none", "value": "0" },
+    { "token": "radius/4xl", "value": "32" },
+    { "token": "radius/5xl", "value": "40" },
+    { "token": "radius/full", "value": "9999" }
+  ],
+  "stroke": [
+    { "token": "stroke/thin", "value": "1" },
+    { "token": "stroke/thick", "value": "2" }
+  ],
+  "effects": [
+    { "token": "glass/blur-sm", "value": "BACKGROUND_BLUR radius 20", "usage": "Glass surfaces" },
+    { "token": "glass/button", "value": "GLASS radius 8 + two drop shadows", "usage": "Nav buttons" },
+    { "token": "glass/control", "value": "GLASS radius 8 + drop shadow", "usage": "Composer controls" },
+    { "token": "glass/sm", "value": "GLASS radius 8 + elevation-sm + glass-ambient", "usage": "Sheets" },
+    { "token": "elevation/sm", "value": "Drop shadow, blur 5", "usage": "Raised cards" },
+    { "token": "elevation/md", "value": "Drop shadow, blur 8", "usage": "Dialogs" }
+  ],
+  "empty": [
+    { "token": "gradient/stroke-glass", "note": "Defined in the library, resolves to no value." },
+    { "token": "gradient/sheen-white", "note": "Defined in the library, resolves to no value." },
+    { "token": "gradient/stroke-glass-button", "note": "Defined in the library, resolves to no value." },
+    { "token": "Remedy background 1", "note": "Resolves to no value, and still carries the old product name." }
+  ]
+}

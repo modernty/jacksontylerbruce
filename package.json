@@ -13,7 +13,8 @@
     "tokens": "node scripts/tokens.mjs",
     "assets": "node scripts/assets.mjs",
     "qa:misses": "tsx --conditions=react-server scripts/qa-misses.ts",
-    "borders": "node scripts/borders.mjs"
+    "borders": "node scripts/borders.mjs",
+    "demos": "node scripts/build-demos.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.0",

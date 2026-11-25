@@ -1,0 +1,101 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--page-default",
+  "name": "Chat history",
+  "live": "chat-history-default",
+  "stateGroup": {
+    "id": "chat-history-page",
+    "label": "Default",
+    "order": 1
+  },
+  "figmaNodeId": "8156:74666",
+  "summary": "The everyday case: four conversations under a counted heading, with Search and Select in the nav. The pill that used to sit at the foot of the list is gone.",
+  "looseEnds": [
+    {
+      "kind": "missing-content",
+      "severity": "high",
+      "title": "The memory count no longer renders anywhere",
+      "detail": "Three of the twelve rows across these frames still carry a Metadata frame holding a bullet and the words '3 memories created'. Both are switched off, and the other nine rows do not carry the frame at all — so no row reports what a conversation contributed. This is the one place in the product that reported it, and the copy also changed from 'N memories saved' to a hardcoded '3 memories created'.",
+      "nodes": [
+        "8156:74693",
+        "8156:74695",
+        "8156:74696"
+      ],
+      "ask": "Is the memory count dropped for launch, or switched off by hand? If it is staying, it needs a rule for the number and for rows that produced none."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "Rows come in two shapes on the same list",
+      "detail": "Row 2 holds a Metadata frame; rows 1, 3 and 4 hold a bare timestamp text node. They render identically, so a developer reading the layer tree sees a structural difference that carries no meaning.",
+      "nodes": [
+        "8156:74686",
+        "8156:74693"
+      ],
+      "ask": "Flatten the rows to one shape, or keep the Metadata frame on all four."
+    },
+    {
+      "kind": "inconsistent-geometry",
+      "severity": "low",
+      "title": "The pill group sits 4px further left here than on the same nav elsewhere",
+      "detail": "Search and Select are the same two components throughout, but the group that holds them is 275 wide with an 8px gap on the History frames and 271 wide with a 4px gap on the Deleting frames and on Memory. Both end flush at x=369, so the difference shows up on the left edge.",
+      "nodes": [
+        "8156:76056"
+      ],
+      "ask": "Pick one gap. 4px matches Memory, which a developer will build from the same component."
+    }
+  ],
+  "constraints": [
+    {
+      "nodeId": "8156:74685",
+      "label": "Conversation title",
+      "axis": "width",
+      "maxHeight": 285,
+      "summary": "One line, 285px wide, truncated with an ellipsis. Narrows to 245px the moment selection turns on, so the same conversation cuts in two different places.",
+      "derivation": {
+        "steps": [
+          {
+            "label": "List item width",
+            "value": "361px"
+          },
+          {
+            "label": "Less padding (8 + 8)",
+            "value": "345px"
+          },
+          {
+            "label": "Less overflow button and gap (44 + 16)",
+            "value": "285px"
+          },
+          {
+            "label": "SF Pro Text Regular 15px, average advance",
+            "value": "≈7.6px"
+          }
+        ],
+        "maxChars": 37,
+        "drawnChars": 45,
+        "recommend": 34
+      },
+      "note": "Derived from the drawn geometry. The same title is cut at about 31 characters in the side panel, about 37 here, and about 32 here once a checkbox appears."
+    }
+  ],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--page-default.png"
+}

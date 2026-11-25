@@ -1,0 +1,3340 @@
+{
+  "slug": "chat-history--side-panel-open",
+  "name": "Side panel",
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "live": "side-panel-open",
+  "summary": "The shortlist at capacity: eight conversations in reverse-chronological order, and a View all into the full Chat history page.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "7612:3214",
+  "image": "/demos/loblaw-handoff/screens/chat-history--side-panel-open.png",
+  "extracted": true,
+  "extractedOn": "2026-09-23",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {
+    "totalNodes": 193,
+    "hiddenNodes": 31,
+    "assetNodes": 5,
+    "sectionNodes": 24,
+    "styledNodes": 0,
+    "looseEnds": 5
+  },
+  "unmapped": [
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/sheen-white",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "gradient/stroke-glass-button",
+      "note": "Defined in the library, resolves to no value."
+    },
+    {
+      "value": "(empty)",
+      "count": 1,
+      "where": "Remedy background 1",
+      "note": "Resolves to no value, and still carries the old product name."
+    }
+  ],
+  "looseEnds": [
+    {
+      "kind": "copy",
+      "severity": "medium",
+      "title": "The fifth row's title starts with a tab character",
+      "detail": "The string is \"\\tReading a nutrition label for added sugar\". The tab indents that row against the seven around it. Reproduced here rather than tidied, because the site documents what the file says.",
+      "nodes": [
+        "7621:5387"
+      ],
+      "ask": "Delete the leading tab."
+    },
+    {
+      "kind": "behaviour",
+      "severity": "high",
+      "title": "Rows lost their overflow control",
+      "detail": "The row is now a title and a timestamp and nothing else — no per-row menu, so rename, delete and view-associated-memory have no entry point from the panel. The Chat history page still draws one on every row.",
+      "nodes": [
+        "7621:5358"
+      ],
+      "ask": "Is the panel deliberately read-only, with actions only on the full page?"
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "high",
+      "title": "The status bar is behind the panel in two of the three states",
+      "detail": "Empty and Default paint the panel after the status bar, so the clock and the signal indicators vanish behind it and only the battery shows past the panel's right edge. Full paints the status bar last and keeps it. Same screen, three frames, two answers.",
+      "nodes": [
+        "7612:3336",
+        "7612:3337"
+      ],
+      "ask": "Does the panel cover the status bar or sit under it? It cannot be both."
+    },
+    {
+      "kind": "geometry",
+      "severity": "medium",
+      "title": "Two full-bleed scrims are stacked on the conversation",
+      "detail": "Every frame carries Frame 2147231635 and a second layer named Scrim, both 393x852 over the conversation. Two dims at 40% compose to about 64%, which is darker than either was drawn to be.",
+      "nodes": [
+        "7612:3335",
+        "7623:5696"
+      ],
+      "ask": "Is the doubling intended, or is one of these a leftover?"
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "low",
+      "title": "The panel is 330 wide here and 302 elsewhere",
+      "detail": "Side Panel, filled recents measures 330x852. The two spare Side Panel layers inside the same frame are 302. The 28px difference changes the row width and therefore where every title truncates.",
+      "nodes": [
+        "7612:3337",
+        "7612:3271"
+      ],
+      "ask": "Which width is the spec?"
+    }
+  ],
+  "constraints": [
+    {
+      "label": "Row title",
+      "axis": "width",
+      "maxHeight": 298,
+      "summary": "One line, 298px wide, truncated with an ellipsis. The row lost its overflow control, so the title is 60px wider than it was — only the longest titles still cut.",
+      "derivation": {
+        "steps": [
+          {
+            "label": "List item width",
+            "value": "314px"
+          },
+          {
+            "label": "Less padding (8 + 8)",
+            "value": "298px"
+          },
+          {
+            "label": "No overflow button to subtract",
+            "value": "298px"
+          },
+          {
+            "label": "SF Pro Text Regular 15px, average advance",
+            "value": "≈7.6px"
+          }
+        ],
+        "maxChars": 39,
+        "drawnChars": 43,
+        "recommend": 36
+      },
+      "note": "Derived from the drawn geometry. The Chat history page keeps its overflow control, so the same title is cut at about 37 characters there and about 39 here.",
+      "nodeId": "7621:5361"
+    }
+  ],
+  "code": {
+    "css": "/* Side panel open — 393×852 composition\n   The panel itself is 330 wide and sits over the conversation with a 40% scrim. */\n.side-panel {\n  width: 330px;\n  height: 852px;\n  padding-top: 52px;\n  border-radius: 40px;\n  background: var(--bg-canvas);\n  box-shadow: 0 4px 20px 0 rgba(113, 117, 142, 0.25);\n}\n\n.side-panel__scrim {\n  position: absolute;\n  inset: 0;\n  background: var(--bg-scrim); /* rgba(0, 0, 0, 0.4) */\n}\n\n.recents__item {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  min-height: 40px;\n  padding: 8px;\n  border-radius: 16px;\n}\n\n.recents__title {\n  font: 400 15px/22px var(--font-ui);\n  color: var(--text-primary);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.recents__meta {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  font: 400 14px/20px var(--font-ui);\n  color: var(--text-secondary);\n}",
+    "jsx": "// This screen is not a screenshot on this site — it is rendered from\n// src/components/screens/side-panel-open.tsx, which is the reference\n// implementation. Every Figma node is an element carrying data-node-id,\n// so the measurements on the Designs tab come from the live DOM.\n//\n// Open that file for the full component. The shape of a row:\n\nfunction RecentRow({ row }) {\n  return (\n    <div className=\"recents__item\">\n      <div className=\"min-w-0 flex-1\">\n        <p className=\"recents__title\">{row.title}</p>\n        <div className=\"recents__meta\">\n          <span>{row.when}</span>\n          {row.memories > 0 && (\n            <>\n              <span aria-hidden>•</span>\n              <span>{row.memories} memor{row.memories === 1 ? 'y' : 'ies'} saved</span>\n            </>\n          )}\n        </div>\n      </div>\n      <button className=\"size-11 rounded-full\" aria-label={`More options for ${row.title}`}>\n        <MoreIcon />\n      </button>\n    </div>\n  );\n}",
+    "swiftui": "// Approximate. The panel is a fixed 330pt overlay, not a sheet.\nstruct SidePanel: View {\n  var body: some View {\n    VStack(alignment: .leading, spacing: 32) {\n      HStack(spacing: 8) {\n        Image(\"pc-chat-mark\").frame(width: 24, height: 24)\n        Text(\"PC Chat\").font(.custom(\"Poppins-SemiBold\", size: 20))\n      }\n      .padding(.horizontal, 24)\n      .padding(.top, 24)\n\n      VStack(spacing: 0) {\n        NavItem(icon: \"square.and.pencil\", label: \"New chat\")\n        NavItem(icon: \"book\", label: \"Memory\")\n      }\n\n      VStack(alignment: .leading, spacing: 8) {\n        Text(\"Recents\").font(.system(size: 15, weight: .semibold))\n          .padding(.horizontal, 8)\n        VStack(spacing: 4) { ForEach(recents) { RecentRow(row: $0) } }\n      }\n    }\n    .padding(8)\n    .frame(width: 330, height: 852, alignment: .top)\n    .background(Color.white)\n    .clipShape(RoundedRectangle(cornerRadius: 40))\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "side-panel",
+    "label": "Full list",
+    "order": 3
+  },
+  "dimensions": {
+    "width": 393,
+    "height": 852
+  },
+  "imagePixels": {
+    "width": 1179,
+    "height": 2556
+  },
+  "imageScale": 3,
+  "tokensUsed": {
+    "colors": [
+      {
+        "token": "text/primary",
+        "value": "#1A1F3C",
+        "usage": "Headings, memory titles, body ink"
+      },
+      {
+        "token": "text/secondary",
+        "value": "#565C79",
+        "usage": "Supporting copy, timestamps — see loose ends, this resolves differently on the sheets"
+      },
+      {
+        "token": "text/tertiary",
+        "value": "#717794",
+        "usage": "Provenance lines, helper text"
+      },
+      {
+        "token": "neutral/700",
+        "value": "#3D456B",
+        "usage": "Body copy on the memory summary card"
+      },
+      {
+        "token": "icon/default",
+        "value": "#1A1F3C",
+        "usage": "Nav and control icons"
+      },
+      {
+        "token": "icon/secondary",
+        "value": "#565C79",
+        "usage": "Secondary icons"
+      },
+      {
+        "token": "icon/tertiary",
+        "value": "#8C92AF",
+        "usage": "Sheet grabber, muted affordances"
+      },
+      {
+        "token": "bg/surface",
+        "value": "#F5F6FA",
+        "usage": "Screen background"
+      },
+      {
+        "token": "bg/canvas",
+        "value": "#FFFFFF",
+        "usage": "Cards and sheets"
+      },
+      {
+        "token": "bg/white-subtle",
+        "value": "#FFFFFF66",
+        "usage": "Glass control fills"
+      },
+      {
+        "token": "bg/scrim",
+        "value": "#00000066",
+        "usage": "Dimmer behind sheets and dialogs"
+      },
+      {
+        "token": "alpha/white-40",
+        "value": "#FFFFFF66",
+        "usage": "Glass tiles"
+      },
+      {
+        "token": "alpha/white-90",
+        "value": "#FFFFFFE5",
+        "usage": "Sheet surface"
+      },
+      {
+        "token": "action/primary-default",
+        "value": "#1A1F3C",
+        "usage": "Primary button fill"
+      },
+      {
+        "token": "action/on-primary",
+        "value": "#FFFFFF",
+        "usage": "Primary button label"
+      },
+      {
+        "token": "border/inverse",
+        "value": "#1A1F3C",
+        "usage": "Inverted borders"
+      },
+      {
+        "token": "New Neutrals/Light Grey",
+        "value": "#DDDFEB",
+        "usage": "Dividers"
+      },
+      {
+        "token": "New Neutrals/White",
+        "value": "#FFFFFF",
+        "usage": "Card borders"
+      },
+      {
+        "token": "shadow/black-05",
+        "value": "#0000000D",
+        "usage": "Ambient button shadow"
+      },
+      {
+        "token": "shadow/black-08",
+        "value": "#00000014",
+        "usage": "Button shadow"
+      },
+      {
+        "token": "shadow/black-10",
+        "value": "#0000001A",
+        "usage": "Medium elevation"
+      },
+      {
+        "token": "shadow/elevation-sm",
+        "value": "#1A1F3C14",
+        "usage": "Glass small elevation"
+      },
+      {
+        "token": "shadow/glass-ambient",
+        "value": "#1A1F3C0D",
+        "usage": "Glass ambient"
+      }
+    ],
+    "text": [
+      {
+        "token": "SF Pro Text/Display xs/Semibold",
+        "value": "SF Pro Text 24/32, weight 600",
+        "usage": "“Memory” page title"
+      },
+      {
+        "token": "Text lg/Semibold",
+        "value": "SF Pro Text 18/28, weight 600",
+        "usage": "Summary card heading, sheet headings"
+      },
+      {
+        "token": "Text md/Semibold",
+        "value": "SF Pro Text 15/22, weight 600",
+        "usage": "Memory item titles, button labels"
+      },
+      {
+        "token": "Text md/Medium",
+        "value": "SF Pro Text 15/22, weight 500",
+        "usage": "List items"
+      },
+      {
+        "token": "Text md/Regular",
+        "value": "SF Pro Text 15/22, weight 400",
+        "usage": "Body copy"
+      },
+      {
+        "token": "Text sm/Medium",
+        "value": "SF Pro Text 14/20, weight 500",
+        "usage": "Secondary labels"
+      },
+      {
+        "token": "Text sm/Regular",
+        "value": "SF Pro Text 14/20, weight 400",
+        "usage": "Descriptions, provenance"
+      },
+      {
+        "token": "Text xs/Medium",
+        "value": "SF Pro Text 12/18, weight 500",
+        "usage": "Eyebrows, category labels"
+      },
+      {
+        "token": "Text xs/Regular",
+        "value": "SF Pro Text 12/18, weight 400",
+        "usage": "Timestamps, helper text"
+      }
+    ],
+    "spacing": [
+      {
+        "token": "space/4",
+        "value": "4"
+      },
+      {
+        "token": "space/6",
+        "value": "6"
+      },
+      {
+        "token": "space/8",
+        "value": "8"
+      },
+      {
+        "token": "space/10",
+        "value": "10"
+      },
+      {
+        "token": "space/12",
+        "value": "12"
+      },
+      {
+        "token": "space/16",
+        "value": "16"
+      },
+      {
+        "token": "space/24",
+        "value": "24"
+      }
+    ],
+    "radius": [
+      {
+        "token": "App Foundations/Radius/none",
+        "value": "0"
+      },
+      {
+        "token": "radius/4xl",
+        "value": "32"
+      },
+      {
+        "token": "radius/5xl",
+        "value": "40"
+      },
+      {
+        "token": "radius/full",
+        "value": "9999"
+      }
+    ],
+    "stroke": [
+      {
+        "token": "stroke/thin",
+        "value": "1"
+      },
+      {
+        "token": "stroke/thick",
+        "value": "2"
+      }
+    ],
+    "effects": [
+      {
+        "token": "glass/blur-sm",
+        "value": "BACKGROUND_BLUR radius 20",
+        "usage": "Glass surfaces"
+      },
+      {
+        "token": "glass/button",
+        "value": "GLASS radius 8 + two drop shadows",
+        "usage": "Nav buttons"
+      },
+      {
+        "token": "glass/control",
+        "value": "GLASS radius 8 + drop shadow",
+        "usage": "Composer controls"
+      },
+      {
+        "token": "glass/sm",
+        "value": "GLASS radius 8 + elevation-sm + glass-ambient",
+        "usage": "Sheets"
+      },
+      {
+        "token": "elevation/sm",
+        "value": "Drop shadow, blur 5",
+        "usage": "Raised cards"
+      },
+      {
+        "token": "elevation/md",
+        "value": "Drop shadow, blur 8",
+        "usage": "Dialogs"
+      }
+    ]
+  },
+  "flatNodes": [
+    {
+      "id": "7612:3214",
+      "name": "Side panel, recents-full",
+      "type": "FRAME",
+      "parentId": null,
+      "depth": 0,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3215",
+      "name": "Side Panel",
+      "type": "FRAME",
+      "parentId": "7612:3214",
+      "depth": 1,
+      "bounds": {
+        "x": -302,
+        "y": 0,
+        "width": 302,
+        "height": 852
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3216",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3215",
+      "depth": 2,
+      "bounds": {
+        "x": -302,
+        "y": 0,
+        "width": 302,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3217",
+      "name": "Frame 2147202988",
+      "type": "FRAME",
+      "parentId": "7612:3216",
+      "depth": 3,
+      "bounds": {
+        "x": -278,
+        "y": 24,
+        "width": 115,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3218",
+      "name": "Symbol + Wordmark Stacked 1_WIP 1",
+      "type": "FRAME",
+      "parentId": "7612:3217",
+      "depth": 4,
+      "bounds": {
+        "x": -278,
+        "y": 24,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "symbol",
+        "exported": false
+      }
+    },
+    {
+      "id": "7612:3223",
+      "name": "Greeting text",
+      "type": "TEXT",
+      "parentId": "7612:3217",
+      "depth": 4,
+      "bounds": {
+        "x": -246,
+        "y": 24,
+        "width": 83,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3224",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "7612:3215",
+      "depth": 2,
+      "bounds": {
+        "x": -302,
+        "y": 48,
+        "width": 302,
+        "height": 804
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3225",
+      "name": "Nav",
+      "type": "FRAME",
+      "parentId": "7612:3224",
+      "depth": 3,
+      "bounds": {
+        "x": -294,
+        "y": 72,
+        "width": 286,
+        "height": 120
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3226",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3225",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 72,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3227",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3226",
+      "depth": 5,
+      "bounds": {
+        "x": -286,
+        "y": 80,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3228",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3226",
+      "depth": 5,
+      "bounds": {
+        "x": -254,
+        "y": 81,
+        "width": 70,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3229",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3225",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 112,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3230",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3229",
+      "depth": 5,
+      "bounds": {
+        "x": -286,
+        "y": 120,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3231",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3229",
+      "depth": 5,
+      "bounds": {
+        "x": -254,
+        "y": 121,
+        "width": 44,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3232",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3225",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 112,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3233",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3232",
+      "depth": 5,
+      "bounds": {
+        "x": -286,
+        "y": 120,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3234",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3232",
+      "depth": 5,
+      "bounds": {
+        "x": -254,
+        "y": 121,
+        "width": 35,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3235",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3225",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 152,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3236",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3235",
+      "depth": 5,
+      "bounds": {
+        "x": -286,
+        "y": 160,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3237",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3235",
+      "depth": 5,
+      "bounds": {
+        "x": -254,
+        "y": 161,
+        "width": 61,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3238",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7612:3224",
+      "depth": 3,
+      "bounds": {
+        "x": -294,
+        "y": 224,
+        "width": 286,
+        "height": 604
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3239",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3238",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 224,
+        "width": 286,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3240",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7612:3239",
+      "depth": 5,
+      "bounds": {
+        "x": -286,
+        "y": 224,
+        "width": 60,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3241",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7612:3238",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 254,
+        "width": 286,
+        "height": 240
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3242",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3241",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 254,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3243",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3242",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 262,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3244",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3243",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 262,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3245",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3243",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 286,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3246",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3245",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 286,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3247",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3245",
+      "depth": 8,
+      "bounds": {
+        "x": -173,
+        "y": 286,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3248",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3245",
+      "depth": 8,
+      "bounds": {
+        "x": -158,
+        "y": 286,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3249",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3241",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 314,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3250",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3249",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 322,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3251",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3250",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 322,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3252",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3250",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 346,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3253",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3252",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 346,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3254",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3252",
+      "depth": 8,
+      "bounds": {
+        "x": -212,
+        "y": 346,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3255",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3252",
+      "depth": 8,
+      "bounds": {
+        "x": -197,
+        "y": 346,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3256",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3241",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 374,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3257",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3256",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 382,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3258",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3257",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 382,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3259",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3257",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 406,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3260",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3259",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 406,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3261",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3241",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 434,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3262",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3261",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 442,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3263",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3262",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 442,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3264",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3262",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 466,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3265",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3264",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 466,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3266",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3264",
+      "depth": 8,
+      "bounds": {
+        "x": -206,
+        "y": 466,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3267",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3264",
+      "depth": 8,
+      "bounds": {
+        "x": -191,
+        "y": 466,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3268",
+      "name": "Footer",
+      "type": "FRAME",
+      "parentId": "7612:3215",
+      "depth": 2,
+      "bounds": {
+        "x": -302,
+        "y": 780,
+        "width": 302,
+        "height": 72
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3269",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "7612:3268",
+      "depth": 3,
+      "bounds": {
+        "x": -72,
+        "y": 780,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3270",
+      "name": "Chat history",
+      "type": "FRAME",
+      "parentId": "7612:3214",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3271",
+      "name": "Side Panel",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": -302,
+        "y": 0,
+        "width": 302,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3272",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3271",
+      "depth": 3,
+      "bounds": {
+        "x": -302,
+        "y": 0,
+        "width": 302,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3273",
+      "name": "Frame 2147202988",
+      "type": "FRAME",
+      "parentId": "7612:3272",
+      "depth": 4,
+      "bounds": {
+        "x": -278,
+        "y": 24,
+        "width": 115,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3274",
+      "name": "Symbol + Wordmark Stacked 1_WIP 1",
+      "type": "FRAME",
+      "parentId": "7612:3273",
+      "depth": 5,
+      "bounds": {
+        "x": -278,
+        "y": 24,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "symbol",
+        "exported": false
+      }
+    },
+    {
+      "id": "7612:3279",
+      "name": "Greeting text",
+      "type": "TEXT",
+      "parentId": "7612:3273",
+      "depth": 5,
+      "bounds": {
+        "x": -246,
+        "y": 24,
+        "width": 83,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3280",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "7612:3271",
+      "depth": 3,
+      "bounds": {
+        "x": -302,
+        "y": 48,
+        "width": 302,
+        "height": 804
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3281",
+      "name": "Nav",
+      "type": "FRAME",
+      "parentId": "7612:3280",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 72,
+        "width": 286,
+        "height": 120
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3282",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3281",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 72,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3283",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3282",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 80,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3284",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3282",
+      "depth": 6,
+      "bounds": {
+        "x": -254,
+        "y": 81,
+        "width": 70,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3285",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3281",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 112,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3286",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3285",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 120,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3287",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3285",
+      "depth": 6,
+      "bounds": {
+        "x": -254,
+        "y": 121,
+        "width": 44,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3288",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3281",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 112,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3289",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3288",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 120,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3290",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3288",
+      "depth": 6,
+      "bounds": {
+        "x": -254,
+        "y": 121,
+        "width": 35,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3291",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3281",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 152,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3292",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3291",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 160,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3293",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3291",
+      "depth": 6,
+      "bounds": {
+        "x": -254,
+        "y": 161,
+        "width": 61,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3294",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7612:3280",
+      "depth": 4,
+      "bounds": {
+        "x": -294,
+        "y": 224,
+        "width": 286,
+        "height": 604
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3295",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3294",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 224,
+        "width": 286,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3296",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7612:3295",
+      "depth": 6,
+      "bounds": {
+        "x": -286,
+        "y": 224,
+        "width": 60,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3297",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7612:3294",
+      "depth": 5,
+      "bounds": {
+        "x": -294,
+        "y": 254,
+        "width": 286,
+        "height": 240
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3298",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3297",
+      "depth": 6,
+      "bounds": {
+        "x": -294,
+        "y": 254,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3299",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3298",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 262,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3300",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3299",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 262,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3301",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3299",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 286,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3302",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3301",
+      "depth": 9,
+      "bounds": {
+        "x": -286,
+        "y": 286,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3303",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3301",
+      "depth": 9,
+      "bounds": {
+        "x": -173,
+        "y": 286,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3304",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3301",
+      "depth": 9,
+      "bounds": {
+        "x": -158,
+        "y": 286,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3305",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3297",
+      "depth": 6,
+      "bounds": {
+        "x": -294,
+        "y": 314,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3306",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3305",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 322,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3307",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3306",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 322,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3308",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3306",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 346,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3309",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3308",
+      "depth": 9,
+      "bounds": {
+        "x": -286,
+        "y": 346,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3310",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3308",
+      "depth": 9,
+      "bounds": {
+        "x": -212,
+        "y": 346,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3311",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3308",
+      "depth": 9,
+      "bounds": {
+        "x": -197,
+        "y": 346,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3312",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3297",
+      "depth": 6,
+      "bounds": {
+        "x": -294,
+        "y": 374,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3313",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3312",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 382,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3314",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3313",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 382,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3315",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3313",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 406,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3316",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3315",
+      "depth": 9,
+      "bounds": {
+        "x": -286,
+        "y": 406,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3317",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7612:3297",
+      "depth": 6,
+      "bounds": {
+        "x": -294,
+        "y": 434,
+        "width": 286,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3318",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7612:3317",
+      "depth": 7,
+      "bounds": {
+        "x": -286,
+        "y": 442,
+        "width": 270,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3319",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3318",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 442,
+        "width": 270,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3320",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7612:3318",
+      "depth": 8,
+      "bounds": {
+        "x": -286,
+        "y": 466,
+        "width": 270,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3321",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3320",
+      "depth": 9,
+      "bounds": {
+        "x": -286,
+        "y": 466,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3322",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3320",
+      "depth": 9,
+      "bounds": {
+        "x": -206,
+        "y": 466,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3323",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7612:3320",
+      "depth": 9,
+      "bounds": {
+        "x": -191,
+        "y": 466,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3324",
+      "name": "Footer",
+      "type": "FRAME",
+      "parentId": "7612:3271",
+      "depth": 3,
+      "bounds": {
+        "x": -302,
+        "y": 780,
+        "width": 302,
+        "height": 72
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3325",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "7612:3324",
+      "depth": 4,
+      "bounds": {
+        "x": -72,
+        "y": 780,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3326",
+      "name": "Footer",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 726,
+        "width": 393,
+        "height": 126
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3327",
+      "name": "_Composer",
+      "type": "INSTANCE",
+      "parentId": "7612:3326",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 726,
+        "width": 361,
+        "height": 94
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3328",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 122,
+        "width": 393,
+        "height": 604
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3329",
+      "name": "Symbol + Wordmark Stacked 1_WIP 1",
+      "type": "INSTANCE",
+      "parentId": "7612:3328",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 146,
+        "width": 40,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "symbol",
+        "exported": false
+      }
+    },
+    {
+      "id": "7612:3330",
+      "name": "Greeting text",
+      "type": "TEXT",
+      "parentId": "7612:3328",
+      "depth": 3,
+      "bounds": {
+        "x": 16,
+        "y": 210,
+        "width": 361,
+        "height": 76
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3331",
+      "name": "Top nav",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 54,
+        "width": 393,
+        "height": 68
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3332",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "7612:3331",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 64,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3333",
+      "name": "Right",
+      "type": "FRAME",
+      "parentId": "7612:3331",
+      "depth": 3,
+      "bounds": {
+        "x": 321,
+        "y": 64,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3334",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "7612:3333",
+      "depth": 4,
+      "bounds": {
+        "x": 321,
+        "y": 64,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3335",
+      "name": "Frame 2147231635",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7623:5696",
+      "name": "Scrim",
+      "type": "FRAME",
+      "parentId": "7612:3270",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3337",
+      "name": "Side Panel, filled recents",
+      "type": "FRAME",
+      "parentId": "7612:3214",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 330,
+        "height": 852
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3338",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3337",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 52,
+        "width": 330,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3339",
+      "name": "Frame 2147202988",
+      "type": "FRAME",
+      "parentId": "7612:3338",
+      "depth": 3,
+      "bounds": {
+        "x": 24,
+        "y": 76,
+        "width": 115,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3340",
+      "name": "Symbol + Wordmark Stacked 1_WIP 1",
+      "type": "FRAME",
+      "parentId": "7612:3339",
+      "depth": 4,
+      "bounds": {
+        "x": 24,
+        "y": 76,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "symbol",
+        "exported": false
+      }
+    },
+    {
+      "id": "7612:3345",
+      "name": "Greeting text",
+      "type": "TEXT",
+      "parentId": "7612:3339",
+      "depth": 4,
+      "bounds": {
+        "x": 56,
+        "y": 76,
+        "width": 83,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3346",
+      "name": "Content",
+      "type": "FRAME",
+      "parentId": "7612:3337",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 100,
+        "width": 330,
+        "height": 752
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3347",
+      "name": "Nav",
+      "type": "FRAME",
+      "parentId": "7612:3346",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 124,
+        "width": 314,
+        "height": 80
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3348",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3347",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 124,
+        "width": 314,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3349",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3348",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 132,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3350",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3348",
+      "depth": 5,
+      "bounds": {
+        "x": 48,
+        "y": 133,
+        "width": 70,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3351",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3347",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 164,
+        "width": 286,
+        "height": 40
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3352",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3351",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 172,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3353",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3351",
+      "depth": 5,
+      "bounds": {
+        "x": 48,
+        "y": 173,
+        "width": 35,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3354",
+      "name": "Nav item",
+      "type": "FRAME",
+      "parentId": "7612:3347",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 164,
+        "width": 314,
+        "height": 40
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3355",
+      "name": "_Icon",
+      "type": "INSTANCE",
+      "parentId": "7612:3354",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 172,
+        "width": 24,
+        "height": 24
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3356",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7612:3354",
+      "depth": 5,
+      "bounds": {
+        "x": 48,
+        "y": 173,
+        "width": 61,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3357",
+      "name": "Vertical stack",
+      "type": "FRAME",
+      "parentId": "7612:3346",
+      "depth": 3,
+      "bounds": {
+        "x": 8,
+        "y": 236,
+        "width": 314,
+        "height": 567
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3358",
+      "name": "Header",
+      "type": "FRAME",
+      "parentId": "7612:3357",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 236,
+        "width": 314,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3359",
+      "name": "Item title",
+      "type": "TEXT",
+      "parentId": "7612:3358",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 236,
+        "width": 60,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5358",
+      "name": "List",
+      "type": "FRAME",
+      "parentId": "7612:3357",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 266,
+        "width": 314,
+        "height": 480
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7621:5359",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 266,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5360",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5359",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 274,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5361",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5360",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 274,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5362",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5360",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 298,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5363",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5362",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 298,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5364",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5362",
+      "depth": 8,
+      "bounds": {
+        "x": 129,
+        "y": 298,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5365",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5362",
+      "depth": 8,
+      "bounds": {
+        "x": 144,
+        "y": 298,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5366",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 326,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5367",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5366",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 334,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5368",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5367",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 334,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5369",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5367",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 358,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5370",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5369",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 358,
+        "width": 66,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5371",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5369",
+      "depth": 8,
+      "bounds": {
+        "x": 90,
+        "y": 358,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5372",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5369",
+      "depth": 8,
+      "bounds": {
+        "x": 105,
+        "y": 358,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5373",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 386,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5374",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5373",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 394,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5375",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5374",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 394,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5376",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5374",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 418,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5377",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5376",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 418,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5378",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 446,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5379",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5378",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 454,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5380",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5379",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 454,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5381",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5379",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 478,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5382",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5381",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 478,
+        "width": 72,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5383",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5381",
+      "depth": 8,
+      "bounds": {
+        "x": 96,
+        "y": 478,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5384",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5381",
+      "depth": 8,
+      "bounds": {
+        "x": 111,
+        "y": 478,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5385",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 506,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5386",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5385",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 514,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5387",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5386",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 514,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5388",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5386",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 538,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5389",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5388",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 538,
+        "width": 83,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5390",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5388",
+      "depth": 8,
+      "bounds": {
+        "x": 129,
+        "y": 538,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5391",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5388",
+      "depth": 8,
+      "bounds": {
+        "x": 144,
+        "y": 538,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5392",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 566,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5393",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5392",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 574,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5394",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5393",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 574,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5395",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5393",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 598,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5396",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5395",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 598,
+        "width": 83,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5397",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5395",
+      "depth": 8,
+      "bounds": {
+        "x": 90,
+        "y": 598,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5398",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5395",
+      "depth": 8,
+      "bounds": {
+        "x": 105,
+        "y": 598,
+        "width": 132,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5399",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 626,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5400",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5399",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 634,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5401",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5400",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 634,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5402",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5400",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 658,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5403",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5402",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 658,
+        "width": 74,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5404",
+      "name": "List item",
+      "type": "FRAME",
+      "parentId": "7621:5358",
+      "depth": 5,
+      "bounds": {
+        "x": 8,
+        "y": 686,
+        "width": 314,
+        "height": 60
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5405",
+      "name": "Text",
+      "type": "FRAME",
+      "parentId": "7621:5404",
+      "depth": 6,
+      "bounds": {
+        "x": 16,
+        "y": 694,
+        "width": 298,
+        "height": 44
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5406",
+      "name": "Message title",
+      "type": "TEXT",
+      "parentId": "7621:5405",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 694,
+        "width": 298,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5407",
+      "name": "Metadata",
+      "type": "FRAME",
+      "parentId": "7621:5405",
+      "depth": 7,
+      "bounds": {
+        "x": 16,
+        "y": 718,
+        "width": 298,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5408",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5407",
+      "depth": 8,
+      "bounds": {
+        "x": 16,
+        "y": 718,
+        "width": 74,
+        "height": 20
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7621:5409",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5407",
+      "depth": 8,
+      "bounds": {
+        "x": 96,
+        "y": 718,
+        "width": 7,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7621:5410",
+      "name": "Message timestamp",
+      "type": "TEXT",
+      "parentId": "7621:5407",
+      "depth": 8,
+      "bounds": {
+        "x": 111,
+        "y": 718,
+        "width": 119,
+        "height": 20
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3413",
+      "name": "Text button",
+      "type": "FRAME",
+      "parentId": "7612:3357",
+      "depth": 4,
+      "bounds": {
+        "x": 8,
+        "y": 754,
+        "width": 93,
+        "height": 30
+      },
+      "hidden": false,
+      "isSection": true
+    },
+    {
+      "id": "7612:3414",
+      "name": "View all",
+      "type": "TEXT",
+      "parentId": "7612:3413",
+      "depth": 5,
+      "bounds": {
+        "x": 16,
+        "y": 758,
+        "width": 55,
+        "height": 22
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3415",
+      "name": "Icon/iOS",
+      "type": "INSTANCE",
+      "parentId": "7612:3413",
+      "depth": 5,
+      "bounds": {
+        "x": 77,
+        "y": 761,
+        "width": 16,
+        "height": 16
+      },
+      "hidden": false,
+      "isSection": false,
+      "asset": {
+        "kind": "icon",
+        "inferred": "ios",
+        "exported": false
+      }
+    },
+    {
+      "id": "7612:3416",
+      "name": "Footer",
+      "type": "FRAME",
+      "parentId": "7612:3337",
+      "depth": 2,
+      "bounds": {
+        "x": 0,
+        "y": 780,
+        "width": 302,
+        "height": 72
+      },
+      "hidden": true,
+      "isSection": false
+    },
+    {
+      "id": "7612:3417",
+      "name": "_Button",
+      "type": "INSTANCE",
+      "parentId": "7612:3416",
+      "depth": 3,
+      "bounds": {
+        "x": 230,
+        "y": 780,
+        "width": 48,
+        "height": 48
+      },
+      "hidden": false,
+      "isSection": false
+    },
+    {
+      "id": "7612:3336",
+      "name": "Background=true",
+      "type": "INSTANCE",
+      "parentId": "7612:3214",
+      "depth": 1,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 393,
+        "height": 54
+      },
+      "hidden": false,
+      "isSection": false
+    }
+  ]
+}

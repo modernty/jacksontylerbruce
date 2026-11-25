@@ -1,0 +1,48 @@
+{
+  "note": "The point of view behind the work (design/source/pov.md, approved Nov 19 2026). Each project names at most one principle it proves. The chat answers opinion questions from here only.",
+  "principles": [
+    {
+      "id": "remember",
+      "title": "Earn the right to remember.",
+      "body": "An assistant should be useful enough to feel like it knows you, and restrained enough that it never feels like it's watching. A memory needs a moment of asking, a moment of review, a date it expires, and a way to be forgotten for good."
+    },
+    {
+      "id": "useful-first",
+      "title": "Be useful before you ask.",
+      "body": "Tools are becoming relationships, and a relationship starts with a favour. An agent earns trust by doing real work before it asks for any. Its first message carries a real number, not a greeting. Small wins add up to the relationship."
+    },
+    {
+      "id": "surface",
+      "title": "Conversation is a surface, not the product.",
+      "body": "Chat is one door among many. A refill belongs on the lock screen. An allergy belongs in the cart. An invoice belongs where the work already happens. The interface steps back and the outcome stays."
+    },
+    {
+      "id": "show-the-working",
+      "title": "Show the working, then earn the autonomy.",
+      "body": "Trust in AI is built from reasoning a person can check: sources, provenance, a reason at every level. Autonomy follows the evidence. An agent drafts for approval first, and is given more one skill and one limit at a time. The person stays in charge."
+    },
+    {
+      "id": "one-voice",
+      "title": "One voice, contextual credentials.",
+      "body": "An agent should feel like one relationship, however many systems sit behind it. The voice stays the same. The authority changes with the moment: a pharmacist's sign-off, a bank's confirmation."
+    },
+    {
+      "id": "handoff",
+      "title": "The handoff is part of the design.",
+      "body": "Design that can't be built as intended isn't finished. Design and strategy travel together, and the spec is a product of its own: data-driven, reviewable, hard to misread."
+    }
+  ],
+  "projects": {
+    "overmatch-ai": "show-the-working",
+    "botpress": "useful-first",
+    "intuit": "surface",
+    "pc-chat-memory": "remember",
+    "loblaws": "handoff",
+    "pc-chat": "one-voice",
+    "lzr-2": "show-the-working",
+    "model-playground": "show-the-working",
+    "talent-management": "show-the-working",
+    "whitelist": "show-the-working",
+    "lazarus-brand": "show-the-working"
+  }
+}

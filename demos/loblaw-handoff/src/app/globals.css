@@ -1,0 +1,583 @@
+/* Source detection is scoped to `src` deliberately. The spec data in `/data` carries
+   Figma's own Tailwind output as sample code — strings like `gap-[var(--space/16,16px)]`
+   — and Tailwind would otherwise try to compile them into real rules, which fails on
+   the slash in the variable name. */
+@import "tailwindcss" source(none);
+@source "../../src";
+
+/*
+ * This is a specification tool, so it borrows the vernacular of a measured drawing:
+ * values sit on rules, identifiers sit in the margin, and colour carries meaning
+ * rather than mood. Loblaw's New Neutrals are fixed by the brief; what is chosen here
+ * is how they are used.
+ */
+:root {
+  /* The designs specify SF Pro Text. This stack renders real SF on Apple devices and
+     falls back to the closest platform UI font elsewhere. */
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "New York", ui-serif, Iowan Old Style, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  /* New Neutrals, as named in the Figma library. */
+  --ink: #1a1f3c;
+  --ink-2: #3d456b;
+  --ink-3: #717794;
+  --ink-4: #8c92af;
+  --surface: #f5f6fa;
+  --paper: #ffffff;
+  --rule: #dddfeb;
+  --rule-strong: #abb1c9;
+
+  /*
+   * Three accents, three meanings, used nowhere else. A reader who learns them once
+   * can read any page on the site without a legend.
+   */
+  --measure: #2563eb;
+  /* The hatch stroke for padding bands — the accent at the weight a 1px rule wants. */
+  --measure-hatch: rgba(37, 99, 235, 0.35); /* measured, selected, inspectable */
+  --limit: #b45309; /* a hard limit that content must respect */
+  --flag: #cb333b; /* something wrong, or undecided */
+
+  --measure-wash: rgba(37, 99, 235, 0.1);
+  --limit-wash: rgba(180, 83, 9, 0.08);
+  --flag-wash: rgba(203, 51, 59, 0.07);
+
+  /* The two brand marks, at their own values. A lockup is not themed — these are the
+     colours the marks are drawn in, not part of the site's ink ramp. */
+  --lca-mark: #000000;
+  --ink-display: #27312e;
+
+  --surface-80: rgba(245, 246, 250, 0.82);
+  --ok: #00853d;
+  --shadow-soft: rgba(26, 31, 60, 0.06);
+  --shadow-lift: rgba(26, 31, 60, 0.12);
+
+  --code-bg: #12162b;
+  --code-ink: #dfe3f2;
+
+  /*
+   * A modular scale at 1.25, rounded to whole pixels. Body sits at 15px to match the
+   * product's own Text md, which keeps the specs and the thing they describe in step.
+   */
+  --step-display: 46px;
+  --step-1: 29px;
+  --step-2: 20px;
+  --step-3: 17px;
+  --step-body: 15px;
+  --step-small: 13px;
+  --step-micro: 11px;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-measure: var(--measure);
+  --color-limit: var(--limit);
+  --color-flag: var(--flag);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-mono);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-size: var(--step-body);
+    line-height: 1.6;
+  }
+
+  /* The product's own display face, used for the page's one display moment. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background: var(--measure-wash);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--measure);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /*
+   * Monospace marks a literal: something a reader will type, paste, or search for —
+   * a node id, a hex value, a token name, a dimension. It is never used to make a
+   * label look technical.
+   */
+  .literal {
+    font-family: var(--font-mono);
+    font-size: var(--step-micro);
+    letter-spacing: 0;
+  }
+
+  /*
+   * A small heading, in sentence case. Deliberately not tracked-out capitals: the
+   * site is dense with real labels from Figma, and a wall of caps competes with them.
+   */
+  .label {
+    font-size: var(--step-small);
+    font-weight: 590;
+    color: var(--ink-3);
+    letter-spacing: -0.005em;
+  }
+
+  /*
+   * A dimension line: a hairline that runs the width of the block with its value
+   * sitting on it. The rule is the measurement, not decoration.
+   */
+  .measured {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .measured::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* Instruments — the stage, the inspector — read as apparatus, not as content. */
+  /* Reserved space — padding, leading, the air inside an icon box. Hatched so it reads
+   as space the layout claims rather than as a filled surface. */
+.hatch {
+  background-color: color-mix(in srgb, var(--measure) 10%, transparent);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--measure-hatch) 0 1px,
+    transparent 1px 5px
+  );
+}
+
+.instrument {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+
+  /* Content surfaces are softer and carry no border, so they recede behind apparatus. */
+  .sheet {
+    background: var(--paper);
+    border-radius: 14px;
+  }
+}
+
+/*
+ * A single static ground, not an animation. The Labs site drifts this gradient
+ * perpetually, which suits a landing page; behind a measuring instrument it is
+ * movement with nothing to say.
+ */
+.ground {
+  background:
+    radial-gradient(70% 55% at 12% 0%, rgba(106, 187, 233, 0.16) 0%, rgba(106, 187, 233, 0) 68%),
+    radial-gradient(60% 50% at 92% 8%, rgba(203, 51, 59, 0.07) 0%, rgba(203, 51, 59, 0) 70%);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   The prototype's own scope.
+
+   These are the product's tokens, not this site's. They are deliberately kept
+   out of `@theme` so Loblaw's palette never enters the documentation site's
+   utility namespace and the two can never be confused.
+
+   The naming is an invertible transform of the Figma name: strip `--fig-`,
+   swap `-` for `/`. `--fig-text-primary` is `text/primary`. That matters
+   because `/` is exactly what Tailwind cannot parse — the reason this file
+   uses `source(none)` in the first place.
+   ─────────────────────────────────────────────────────────────────────────── */
+.proto {
+  --fig-font-ui:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  /* The wordmark and greeting face. Poppins is loaded in the root layout; the fallback
+     keeps the metrics close enough that the frame does not reflow while it swaps. */
+  --fig-font-display: var(--font-pc-chat), "Poppins", var(--fig-font-ui);
+
+  --fig-text-primary: #1a1f3c;
+  /* text/secondary resolves to two different values across this feature. Both are
+     kept, named, rather than silently picking one — it is a logged open question. */
+  --fig-text-secondary: #565c79;
+  --fig-text-secondary-alt: #3d456b;
+  --fig-text-tertiary: #717794;
+  --fig-text-danger: #a3140c;
+  --fig-text-inverse: #ffffff;
+  --fig-neutral-700: #3d456b;
+
+  --fig-icon-default: #1a1f3c;
+  --fig-icon-secondary: #565c79;
+  --fig-icon-tertiary: #8c92af;
+
+  --fig-bg-surface: #f5f6fa;
+  --fig-bg-canvas: #ffffff;
+  --fig-bg-white-subtle: rgba(255, 255, 255, 0.4);
+  --fig-bg-surface-translucent: rgba(245, 246, 250, 0.9);
+  --fig-bg-scrim: rgba(0, 0, 0, 0.4);
+  --fig-new-neutrals-white: #ffffff;
+  --fig-new-neutrals-light-grey: #dddfeb;
+
+  --fig-space-4: 4px;
+  --fig-space-6: 6px;
+  --fig-space-8: 8px;
+  --fig-space-10: 10px;
+  --fig-space-12: 12px;
+  --fig-space-16: 16px;
+  --fig-space-24: 24px;
+
+  --fig-radius-xs: 4px;
+  --fig-radius-3xl: 24px;
+  --fig-radius-4xl: 32px;
+  --fig-radius-5xl: 40px;
+  --fig-radius-full: 9999px;
+
+  --fig-stroke-thin: 1px;
+  --fig-stroke-thick: 2px;
+
+  /* Composite type tokens. One CSS property per Figma type token, because
+     "Text md/Semibold" genuinely is a composite of family, size and line height. */
+  --fig-display-xs-semibold: 600 24px/32px var(--fig-font-ui);
+  --fig-text-lg-semibold: 600 18px/28px var(--fig-font-ui);
+  --fig-text-md-semibold: 600 15px/22px var(--fig-font-ui);
+  --fig-text-md-medium: 500 15px/22px var(--fig-font-ui);
+  --fig-text-md-regular: 400 15px/22px var(--fig-font-ui);
+  --fig-text-sm-medium: 500 14px/20px var(--fig-font-ui);
+  --fig-text-sm-regular: 400 14px/20px var(--fig-font-ui);
+  --fig-text-xs-semibold: 600 12px/18px var(--fig-font-ui);
+  --fig-text-xs-medium: 500 12px/18px var(--fig-font-ui);
+  --fig-text-xs-regular: 400 12px/18px var(--fig-font-ui);
+
+  /* Motion. Durations live in custom properties so the reduced-motion query can
+     override values rather than remove declarations — see the note below. */
+  --proto-ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --proto-ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --proto-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --proto-dur-sheet-in: 420ms;
+  --proto-dur-sheet-out: 260ms;
+  --proto-dur-dialog-in: 200ms;
+  --proto-dur-dialog-out: 140ms;
+  --proto-dur-scrim: 240ms;
+  --proto-dur-collapse: 260ms;
+  /* The load-in. `enter` is one section's fade and rise; `delay-card` is the beat
+     between the header landing and the card starting; `stagger-group` is the gap
+     between Top of mind and the group under it. */
+  --proto-ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --proto-dur-enter: 360ms;
+  --proto-delay-card: 140ms;
+  --proto-stagger-group: 110ms;
+  /* How long the summary takes to fade when the reveal is set to Opacity rather than
+     Stream. The two are alternatives being compared, so the number is named. */
+  --proto-dur-body: 1600ms;
+
+  /* The site sets body line-height 1.6; left alone it would quietly destroy every
+     22/28/18/20px line height below. */
+  font: var(--fig-text-md-regular);
+  color: var(--fig-text-primary);
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .proto-display-xs-semibold { font: var(--fig-display-xs-semibold); }
+  .proto-text-lg-semibold { font: var(--fig-text-lg-semibold); }
+  .proto-text-md-semibold { font: var(--fig-text-md-semibold); }
+  .proto-text-md-medium { font: var(--fig-text-md-medium); }
+  .proto-text-md-regular { font: var(--fig-text-md-regular); }
+  .proto-text-sm-medium { font: var(--fig-text-sm-medium); }
+  .proto-text-sm-regular { font: var(--fig-text-sm-regular); }
+  .proto-text-xs-medium { font: var(--fig-text-xs-medium); }
+  .proto-text-xs-regular { font: var(--fig-text-xs-regular); }
+}
+
+/* Figma's GLASS does refraction and a specular edge that CSS has no equivalent for.
+   This reproduces the blur, tint, sheen and shadows — most of the read, not all of it.
+   The saturation boost is a deliberate deviation: without it, blur over the pale
+   surface goes flat grey. */
+.proto-glass {
+  background-color: var(--fig-bg-white-subtle);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(10px) saturate(180%);
+  border: var(--fig-stroke-thick) solid var(--fig-new-neutrals-white);
+  box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.05), 0 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* A legibility fallback, not a cosmetic one — 40% white over unblurred scrolling
+     text is unreadable. */
+  .proto-glass {
+    background-color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* The device. `isolation` keeps Safari from mis-painting the 48px corners while the
+   list scrolls; a filter here would break backdrop sampling for the glass inside. */
+.proto-frame {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  overflow: hidden;
+  border-radius: 48px;
+  isolation: isolate;
+  background: var(--fig-bg-surface);
+}
+
+.proto-scroller {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.proto-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrims and overlays never unmount. `visibility` is a discrete property, so
+   transitioning it with a delay equal to the duration holds the element visible
+   through its exit and then snaps it away — which is how exit animates without a
+   library. */
+.proto-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--fig-bg-scrim);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--proto-dur-scrim) linear,
+    visibility 0s linear var(--proto-dur-scrim);
+}
+
+.proto-scrim[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--proto-dur-scrim) linear,
+    visibility 0s linear 0s;
+}
+
+/* Translate only. The drawer is a glass surface, and any ancestor with opacity < 1
+   creates a group that breaks backdrop sampling — in Safari the glass goes flat grey
+   mid-animation. Opacity belongs on the scrim, which has no backdrop-filter. */
+.proto-sheet {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 16px;
+  translate: 0 calc(100% + 16px);
+  visibility: hidden;
+  transition:
+    translate var(--proto-dur-sheet-out) var(--proto-ease-sheet),
+    visibility 0s linear var(--proto-dur-sheet-out);
+}
+
+.proto-sheet[data-open="true"] {
+  translate: 0 0;
+  visibility: visible;
+  transition:
+    translate var(--proto-dur-sheet-in) var(--proto-ease-sheet),
+    visibility 0s linear 0s;
+}
+
+/* A memory opens as a pushed page, not a drawer. Same contract as .proto-sheet —
+   translate only, visibility held through the exit — but it comes from the right edge
+   and covers the list, because that is what the file draws now. */
+.proto-page {
+  position: absolute;
+  inset: 0;
+  translate: 100% 0;
+  visibility: hidden;
+  transition:
+    translate var(--proto-dur-sheet-out) var(--proto-ease-sheet),
+    visibility 0s linear var(--proto-dur-sheet-out);
+}
+
+.proto-page[data-open="true"] {
+  translate: 0 0;
+  visibility: visible;
+  transition:
+    translate var(--proto-dur-sheet-in) var(--proto-ease-sheet),
+    visibility 0s linear 0s;
+}
+
+/* The side panel enters from the left edge. Same contract as .proto-sheet — translate
+   only, and visibility held through the exit — because the panel carries a shadow that
+   an animating ancestor opacity would flatten. */
+.proto-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -100% 0;
+  visibility: hidden;
+  transition:
+    translate var(--proto-dur-sheet-out) var(--proto-ease-sheet),
+    visibility 0s linear var(--proto-dur-sheet-out);
+}
+
+.proto-panel[data-open="true"] {
+  translate: 0 0;
+  visibility: visible;
+  transition:
+    translate var(--proto-dur-sheet-in) var(--proto-ease-sheet),
+    visibility 0s linear 0s;
+}
+
+.proto-dialog {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 50%;
+  translate: 0 -50%;
+  opacity: 0;
+  scale: 0.94;
+  visibility: hidden;
+  transition:
+    opacity var(--proto-dur-dialog-out) var(--proto-ease-in),
+    scale var(--proto-dur-dialog-out) var(--proto-ease-in),
+    visibility 0s linear var(--proto-dur-dialog-out);
+}
+
+.proto-dialog[data-open="true"] {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition:
+    opacity var(--proto-dur-dialog-in) var(--proto-ease-out),
+    scale var(--proto-dur-dialog-in) var(--proto-ease-out),
+    visibility 0s linear 0s;
+}
+
+/* height:auto is not animatable and interpolate-size is Chromium-only, so a row
+   collapses by going from 1fr to 0fr. The padding lives on the inner child, or it
+   would survive the collapse and leave a ghost gap. */
+.proto-row {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows var(--proto-dur-collapse) var(--proto-ease-out),
+    opacity var(--proto-dur-collapse) linear;
+}
+
+.proto-row > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.proto-row[data-removing="true"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+/* The load-in, in the same shape as the overlays above: a resting state and an
+   attribute that releases it. Nothing here unmounts, so there is no entrance flash
+   before hydration — the sections are painted and simply held down.
+
+   `opacity` is safe on these three because none of them contains a `.proto-glass`
+   element; the glass is all in the top nav, the search control and the overlays, which
+   do not stage. See the note on `.proto-sheet` for why that matters. */
+.proto-enter {
+  opacity: 0;
+  translate: 0 10px;
+  transition:
+    opacity var(--proto-dur-enter) var(--proto-ease-enter),
+    translate var(--proto-dur-enter) var(--proto-ease-enter);
+  transition-delay: calc(var(--i, 0) * var(--proto-stagger-group));
+}
+
+.proto-enter[data-enter="true"] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Reset has to put everything back before it can play forward again. Two frames of
+   `data-enter="false"` only walks a 360ms transition about 1% of the way, so the
+   header and the top-nav actions visibly never left — they eased back from 0.99 and
+   read as not replaying at all. Zeroing duration and delay while the sequence sits at
+   `idle` snaps them to the resting state instead, which is what the release then has
+   something to animate FROM. Nothing listens for transitionend on these (the delete
+   machine's listener is on .proto-row), so there is no stalled-state risk here. */
+[data-reset="true"] .proto-enter,
+[data-reset="true"] .proto-body-fade {
+  transition-duration: 0s;
+  transition-delay: 0s;
+}
+
+/* The interlock turns only while the summary is streaming. A constant rate over the
+   Lottie's own 1.5s — see brand-mark.tsx for why not the file's eased half-turn. */
+@keyframes proto-interlock-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.proto-interlock[data-spinning] {
+  animation: proto-interlock-spin 1.5s var(--proto-ease-out) 1 forwards;
+}
+
+/* The summary's other reveal: the whole body at once, over --proto-dur-body. No
+   translate — the text is already in its place, only its arrival differs. */
+.proto-body-fade {
+  opacity: 0;
+  transition: opacity var(--proto-dur-body) var(--proto-ease-enter);
+}
+
+.proto-body-fade[data-enter="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Durations are overridden, never removed. With `transition: none` the
+     `transitionend` events never fire, the delete phase machine never advances, and
+     the row is never removed. 0.01ms still fires on the next frame. */
+  .proto {
+    --proto-dur-sheet-in: 0.01ms;
+    --proto-dur-sheet-out: 0.01ms;
+    --proto-dur-dialog-in: 120ms;
+    --proto-dur-dialog-out: 100ms;
+    --proto-dur-scrim: 120ms;
+    --proto-dur-collapse: 0.01ms;
+    --proto-dur-enter: 0.01ms;
+    --proto-delay-card: 0ms;
+    --proto-stagger-group: 0ms;
+    --proto-dur-body: 0.01ms;
+  }
+
+  .proto-enter {
+    translate: 0 0;
+  }
+
+  .proto-interlock[data-spinning] {
+    animation: none;
+  }
+
+  .proto-sheet,
+  .proto-sheet[data-open="true"] {
+    translate: 0 0;
+  }
+
+  .proto-dialog,
+  .proto-dialog[data-open="true"] {
+    scale: 1;
+  }
+}
+
+/* The bare phone page the portfolio embeds: the frame alone, centred, on no background. */
+html:has(.phone-page), body:has(.phone-page) { background: transparent; }
+.phone-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; }

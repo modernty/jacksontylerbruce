@@ -1,15 +1,15 @@
 {
   "source": "https://app.notion.com/p/40e2280fd03d81108891f863fb6cb5cd",
   "note": "Project facts from the Notion intake pages, keyed by the site's slug (site ids never change). order: 1 = most recent. circa shows in the spec block. glance, standard, role and context give the model grounded detail. Anything under a page's Confidentiality, notes to self, and To fill fields are left out.",
-  "synced": "2026-11-11",
+  "synced": "2026-11-24",
   "projects": {
     "intuit": {
       "notionId": "intuit-wallet-gpt-integration",
-      "order": 2,
+      "order": 3,
       "circa": "2026",
       "glance": "Finance, dissolved into conversation.",
-      "standard": "Invoicing has always required a destination. Here it has none. Invoice, payment, and wallet fold into a single conversation inside ChatGPT. Language is reduced to the threshold of understanding. Information appears only where the user arrives. The interface recedes. The transaction remains.",
-      "role": "Design and coded prototype. Flow, microcopy, voice. Worked with Intuit leadership.",
+      "standard": "Invoicing has always needed a destination: an app to open, a dashboard to check. Inside ChatGPT, it doesn't. Invoice, payment and Intuit Wallet fold into one conversation, and the only link out is to QuickBooks. Information appears only where it's needed, with the benefits at send and not before. The coded prototype, voice included, won sign-off for a larger effort.",
+      "role": "Senior Product Designer. Design and coded prototype. Flow, microcopy, voice. Worked with Intuit leadership.",
       "context": [
         "Intuit Wallet and QuickBooks invoicing, inside ChatGPT.",
         "Seven touchpoints: creation prompt, preview and send, confirmation, sign-up, Wallet setup, payment notice, revenue card.",
@@ -17,22 +17,23 @@
         "The coded prototype, including voice, won sign-off for a larger effort."
       ]
     },
-    "loblaw": {
+    "loblaws": {
       "notionId": "loblaw-pc-health",
-      "order": 3,
+      "order": 5,
       "circa": "2026",
       "glance": "The grocer as a front door to care.",
-      "standard": "Health care is a maze. PC Health places a front door inside a loyalty app. Nurses and dietitians on call. Health goals paid in points. A national network, compressed into one device.",
+      "standard": "Health care is a maze, and PC Health puts a front door inside a loyalty app: nurses and dietitians on call, health goals paid in PC Optimum points. As PC Chat, its assistant, takes on more, two features decide whether people trust it: Chat History and Memory. This is their handoff, a living spec of every screen, state and rule that engineering can read, built from the live design files so the spec and the design never drift apart.",
       "role": "Senior product designer. Design and prototype.",
       "context": [
         "PC Health is Loblaw's health and wellness app for iOS and Android, launched October 2020.",
         "Free chat with a care team of registered nurses, dietitians and care navigators. Health goals earn PC Optimum points. A marketplace of health products and services.",
-        "2026 scope: new features, an app redesign, and Labs concepts for agentic personal health and commerce."
+        "2026 scope: new features, an app redesign, and Labs concepts for agentic personal health and commerce.",
+        "Chat History: browse, search, rename and delete. Memory: fifteen kinds of health facts, each shown as a plain sentence the user can edit field by field."
       ]
     },
     "rv": {
       "notionId": "rv",
-      "order": 4,
+      "order": 7,
       "circa": "2026",
       "role": "Senior product designer.",
       "context": [
@@ -41,10 +42,10 @@
     },
     "usm-milan": {
       "notionId": "usm-milan",
-      "order": 6,
+      "order": 9,
       "circa": "Apr 2025",
       "glance": "Connected by Our Dreams. USM Haller, softened, in Milan.",
-      "standard": "A system of steel tubes and chrome balls, unchanged since 1965. Here it receives a soft surface. Connected by Our Dreams stages USM Haller at Spotti, Milan, and debuts the Haller Soft Panel. Rigid frame. Soft skin. Same grammar.",
+      "standard": "USM Haller has been steel tubes and chrome balls since 1965. At Milan Design Week 2025, it received a soft surface. Connected by Our Dreams, USM's installation at the Spotti showroom, debuted the Haller Soft Panel, made with Joba Studio. Rigid frame, soft skin, the same grammar.",
       "role": "Designer on the installation. 3D and rendering.",
       "context": [
         "USM's Milan Design Week 2025 installation, designed by Joba Studio.",
@@ -54,32 +55,35 @@
     },
     "model-playground": {
       "notionId": "model-playground",
-      "order": 7,
+      "order": 10,
       "circa": "2025",
       "glance": "A room to test the models before trusting them.",
       "context": [
         "Where Lazarus's models, RikAI and ATLS, are tested. A customer demo tool and an internal tool in one."
-      ]
+      ],
+      "standard": "Enterprise buyers in Public Sector, Insurance, Healthcare and Finance aren't buying an algorithm. They're buying certainty about their own data, and a model reached only through an API gives them nothing to see. Model Playground is where Lazarus AI's models become visible: buyers prompt them directly, run custom demos and assemble tools that drop into their real workflows. One room serves as the customer demo and the internal test bench."
     },
     "talent-management": {
       "notionId": "talent-management",
-      "order": 8,
+      "order": 11,
       "circa": "2025",
       "context": [
         "An AI agent workflow at Lazarus, built as a customer use case and pitch concept."
-      ]
+      ],
+      "standard": "Putting the right person in the right role means weighing skills, constraints, context and a hundred intangibles, and the people deciding can't hand that judgment to a black box. Talent Management backs their judgment up instead of replacing it. Built on ATLS, Lazarus AI's agentic platform, it ranks candidates against open roles and explains every match, so decisions move with confidence."
     },
     "whitelist": {
       "notionId": "whitelist",
-      "order": 9,
-      "circa": "2024–25"
+      "order": 12,
+      "circa": "2024–25",
+      "standard": "In the field, speed and certainty are the same requirement. Operators have to flag a hostile drone or confirm a platform meets the mission on the spot, and trust the answer enough to act on it. Whitelist puts that call in their hand. Built on ATLS, Lazarus AI's agentic platform, it draws on partnered drone research, production data and open-source intelligence, and returns a verdict with the reasoning behind it."
     },
     "lazarus-brand": {
       "notionId": "lazarus-brand",
-      "order": 10,
+      "order": 13,
       "circa": "2024",
       "glance": "An identity for AI that has to be trusted. A refresh, extended into a system.",
-      "standard": "Regulated industries refuse the black box. The identity is built as its opposite: legible, exact, accountable. A brand for systems that must show their reasoning.",
+      "standard": "Regulated industries refuse the black box. Lazarus AI builds foundation models for insurance, healthcare, banking and government, where every answer has to be traceable, so its identity is built as the black box's opposite: legible, exact and accountable. It signals precision without raising its voice. The work speaks, and the marketing recedes.",
       "role": "Design Director. Owned design across the company.",
       "context": [
         "Lazarus AI, founded 2017 in Boston. AI for insurance, healthcare, banking and government. The pitch: explainable AI, every answer traceable.",
@@ -88,10 +92,10 @@
     },
     "chatter": {
       "notionId": "chatter",
-      "order": 11,
+      "order": 14,
       "circa": "2023–24",
       "glance": "Social, rebuilt around groups. Live, not scrolled.",
-      "standard": "The feed isolates. Chatter inverts it. Every post belongs to a group, not a timeline. Rooms run live. RocketChats lift one voice above the room. The community, not the individual, is the unit of the network.",
+      "standard": "The feed isolates: posts go to a timeline, and community is a layer bolted on top. Chatter inverts it. Every post belongs to a group, rooms run live, and creators earn without leaving the room. A group-first social app for creators and their communities, launched on iPhone in July 2024 and announced by Davido.",
       "role": "Founding designer. App, brand, and system from zero to launch.",
       "context": [
         "A group-first social network on iPhone. Live rooms, short video, and RocketChats: paid messages that rise above the room.",
@@ -100,20 +104,21 @@
     },
     "novart": {
       "notionId": "novart",
-      "order": 12,
+      "order": 15,
       "circa": "2023",
       "glance": "An art marketplace, in a pocket.",
       "role": "Product designer.",
       "context": [
         "Built at Nax Group, a venture studio for products founded in 2018."
-      ]
+      ],
+      "standard": "Novart lets collectors borrow against their art. A loan against a collection used to mean one long application, filled in before anyone knew whether it would be approved. Novart turns it into two quick checks, a short form and a dashboard, and sits between lender and borrower from request to decision."
     },
     "fixed-rate-fixed-term": {
       "notionId": "fixed-rate-fixed-term",
-      "order": 13,
+      "order": 16,
       "circa": "2022–23",
       "glance": "A bond market, on-chain. Fixed rate. Fixed term.",
-      "standard": "DeFi lending floats. Fixed Rate fixes it. Rate and term are set in an open order book, not by a pool. Lenders and borrowers meet as makers and takers. Autoroll carries a position past maturity. The mechanism is complex. The surface must not be.",
+      "standard": "Most DeFi lending floats: rates move with the pool. Jet Protocol fixed it. Fixed Rate puts lending on Solana into an open order book, where lenders and borrowers set rate and term as makers and takers, and autoroll carries a position past maturity. The mechanism is complex. The surface couldn't be.",
       "role": "Lead product designer.",
       "context": [
         "Jet Protocol: lending and borrowing on Solana. Launch markets: 1-day and 30-day, in USDC and SOL.",
@@ -122,10 +127,10 @@
     },
     "the-terminal": {
       "notionId": "the-terminal",
-      "order": 14,
+      "order": 17,
       "circa": "2022",
       "glance": "Professional market data. For everyone else.",
-      "standard": "Professional market data has always sat behind a paywall and a desk. The Terminal removes both. Data, analysis, and discussion share one surface. A platform funded by the community it serves.",
+      "standard": "Professional market data has always sat behind a paywall and a desk. The Terminal removes both. Data, analysis, news and education share one surface for everyday investors, with tiers that scale from learner to active trader. Urvin Finance built it for its community, and about 2,000 backers on Wefunder funded it.",
       "role": "Product designer.",
       "context": [
         "Urvin Finance, founded 2021. Funded by about 2,000 community backers on Wefunder."
@@ -133,20 +138,21 @@
     },
     "corelogic": {
       "notionId": "soul-machines-corelogic",
-      "order": 15,
+      "order": 18,
       "circa": "2021–22",
       "glance": "A digital human for real estate.",
       "role": "Interface and web experience.",
       "context": [
         "Soul Machines builds Digital People: AI faces animated live by a Digital Brain. CoreLogic: property data and analytics."
-      ]
+      ],
+      "standard": "Understanding real estate risk means moving from a national view down to a single property without losing the data that matters. CoreLogic's Discovery Center in Texas makes that move physical: executives explore their portfolios across churn, hazards and liens on a 6×3 video wall, guided by Cora, a digital person who acts as their chief of staff. Designed and built at Soul Machines."
     },
     "nestle": {
       "notionId": "soul-machines-nestle",
-      "order": 16,
+      "order": 19,
       "circa": "2021",
       "glance": "Ruth. A digital human who helps you bake.",
-      "standard": "A customer line, given a face. Ruth began as the answer to baking questions phoned in to Nestlé. She now answers them directly: expression, voice, recipe, in real time. The Toll House kitchen, rendered as a person.",
+      "standard": "Bakers used to phone Nestlé's customer line with their questions. Now Ruth answers them. A digital person built by Soul Machines, she walks people at home through the perfect Toll House chocolate chip cookie in real time, finds recipes from what's already in the cupboard, and lets them shop for next time. A customer line, given a face. She debuted in February 2021.",
       "role": "Interface and web experience for Ruth.",
       "context": [
         "Ruth, the Nestlé Toll House cookie coach, debuted February 2021 on the web."
@@ -154,19 +160,20 @@
     },
     "usm-hue-man": {
       "notionId": "usm-hue-man",
-      "order": 17,
+      "order": 20,
       "circa": "2020",
       "role": "Lead designer. 3D and rendering.",
       "context": [
         "Built on the USM Haller modular system, with Joba Studio."
-      ]
+      ],
+      "standard": "Less than 1% of the furniture made by leading brands is designed by Black designers. HUE+MAN answers that with a global design competition and a travelling installation that open resources and access to BIPOC creatives. It's a collaboration between Kevin Jones's Joba Studio and USM, the Swiss maker whose modular furniture has been in production for over fifty years. It began in 2020."
     },
     "lzr-2": {
       "notionId": "lzr-2-website",
-      "order": 5,
+      "order": 8,
       "circa": "2025–26",
       "glance": "One company. Three readers. One argument.",
-      "standard": "AI for regulated industries is sold against suspicion. LZR 2.0 restates Lazarus for three readers: the practitioner, the buyer, the researcher. Each arrives with a different doubt. Each is answered in turn. Explainability is the organizing idea.",
+      "standard": "AI for regulated industries is sold against suspicion. Insurers, health systems, banks and governments won't buy a black box, and each person deciding arrives with a different doubt. LZR 2.0 restates Lazarus AI for three of them: the practitioner, the buyer and the researcher. Each doubt is answered in turn, with explainability as the organizing idea.",
       "role": "Design Director.",
       "context": [
         "Lazarus AI, founded 2017 in Boston. AI for insurance, healthcare, banking and government. Models: RikAI and ATLS, explainable by design.",
@@ -180,10 +187,52 @@
       "role": "Lead / founding designer.",
       "context": [
         "Scope: product and platform UI, brand identity, website."
-      ]
+      ],
+      "standard": "Overmatch AI is in progress, and already delivering. A handoff is in the customer's hands, Transitions has been delivered, and a simple demonstration is to come. The product and platform UI, the brand identity and the website are designed together, as one system."
+    },
+    "botpress": {
+      "notionId": "botpress",
+      "circa": "Nov 2026",
+      "glance": "A helpdesk you can trust, earned one skill at a time.",
+      "standard": "Support work is moving to agents, and the support team's job is moving with it: from working tickets to running a team of agents. Botpress gives support leads a builder for agents and Desk to watch the tickets, but nothing to run those agents as a team. This concept grows Botpress into the place support is run, with Lily, the assistant already in the product, as chief of support. She directs the agents, and is handed more as she proves herself. Two design sprints, built on what the Botpress engagement and audit found.",
+      "role": "Senior Product Designer. Audit, concepts and onboarding flows, with Nate.",
+      "context": [
+        "Botpress Desk is an AI-native helpdesk. Botpress also makes Studio and Viber, a chat-based bot builder.",
+        "Trust ladder: helps you set up, introduces you to Desk, suggests what to do next, drafts work for approval, acts on its own, runs the desk.",
+        "Skills-first onboarding: connect a helpdesk, Lily reads the tickets, the user picks one skill to teach first, the rest join a training plan.",
+        "Loopkit is a fictional company; all numbers are sample data."
+      ],
+      "order": 2
+    },
+    "pc-chat-memory": {
+      "notionId": "pc-chat-memory",
+      "circa": "Oct 2026",
+      "glance": "Memory, designed as consent.",
+      "standard": "An assistant that remembers can feel like it knows you, or like it's watching. PC Chat, Loblaw's health assistant, remembers health facts from conversation: a condition, a medication, an allergy, a pregnancy. This study asks what it should remember and how it should ask, and scores the live product against 12 labs across four tensions.",
+      "role": "Senior Product Designer. Research, frameworks and design.",
+      "context": [
+        "PC Chat stores consumer health memory: structured facts drawn from conversation, shown to the user as plain sentences they can edit.",
+        "Four tensions: forgetful or presumptuous, cold or creepy, interruptive or buried, black box or overexplained.",
+        "Findings: memories never expire while chats auto-delete; deleting a memory doesn't stop it being saved again; forgetting fully takes two deletes."
+      ],
+      "order": 4
+    },
+    "pc-chat": {
+      "notionId": "pc-chat",
+      "circa": "Jan–Aug 2026",
+      "glance": "One agent, for every pharmacy moment.",
+      "standard": "PC Chat is the AI health agent for Shoppers Drug Mart. Refills, renewals and questions start from a person's own words, never a menu, and resolve in one conversation. Every answer shows its sources, and a pharmacist steps in when a person should. It launched on iOS in June 2026, then grew to booking, vaccines and web for the national launch.",
+      "role": "Senior Product Designer. Rx refills and renewals, handoff site.",
+      "context": [
+        "PC Chat is the PC Health AI agent for Shoppers Drug Mart. V1 launched June 10 2026 on iOS.",
+        "National launch scope: Rx refills and renewals, appointment booking for several patients, web, Android, vaccines, weight management.",
+        "Golden path: a caregiver asks for refills; one medication is eligible for refill, another needs renewal; both resolved in one conversation.",
+        "The pharmacy agent and the store chat became one agent, later PC One: one name, one context, credentials that change with the moment."
+      ],
+      "order": 6
     }
   },
   "notOnSite": {
-    "rv": "Order 4. Hidden on the site until its Notion page has a Glance and Confidentiality."
+    "rv": "Order 7. Hidden on the site until its Notion page has a Glance and Confidentiality."
   }
 }

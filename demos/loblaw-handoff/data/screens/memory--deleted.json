@@ -1,0 +1,67 @@
+{
+  "slug": "memory--deleted",
+  "name": "Memory",
+  "feature": "memory-management",
+  "section": "Memory",
+  "pending": false,
+  "summary": "The list after a delete. A toast confirms what happened, the group it came from is two rows shorter, and the memory is gone from everywhere it appeared.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:265684",
+  "image": "/demos/loblaw-handoff/screens/memory--deleted.png",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "constraints": [],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "The toast carries an Undo that is switched off",
+      "detail": "The Toast component has an Action slot holding “Undo”. This frame hides it, so the only control is the dismiss. Delete is otherwise a one-way door with a dialog as its only gate.",
+      "nodes": [
+        "I8156:265992;7102:26288",
+        "I8156:265992;7102:26289"
+      ],
+      "ask": "Is Undo coming, or is the dialog the whole protection? If it is coming, how long does it stay?"
+    },
+    {
+      "kind": "behaviour",
+      "severity": "low",
+      "title": "The toast sits over the summary card",
+      "detail": "It lands at y=60, which on a scrolled list covers the card rather than the rows the delete changed. Nothing says whether the list scrolls to the affected group first.",
+      "nodes": [
+        "8156:265992"
+      ],
+      "ask": "Does the list move to show what changed, or does the toast do all the telling?"
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "low",
+      "title": "The summary card is headed “What you’ve told me” here",
+      "detail": "Every other Memory frame heads it “What you’ve told PC Chat™”, and uses the brand mark rather than a placed image for the icon.",
+      "nodes": [
+        "8156:265697",
+        "8156:265695"
+      ],
+      "ask": "Which heading is current?"
+    }
+  ],
+  "code": {
+    "css": "/* The toast: 361 wide inside the 393 frame, 8px padding, 24 in to the message. */\n.toast {\n  position: absolute;\n  inset: 60px 16px auto;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n  height: 56px;\n  padding: 8px;\n  border-radius: 32px;\n  background: var(--bg-surface-translucent);\n  backdrop-filter: blur(8px);\n  box-shadow: 0 4px 20px 0 rgba(113, 117, 142, 0.25);\n}\n\n.toast__message { padding-left: 16px; font: var(--text-xs-semibold); }\n.toast__dismiss { width: 40px; height: 40px; border-radius: 50%; background: rgb(255 255 255 / 0.4); }",
+    "jsx": "// The post-delete state. The toast is the same component the Chat settings page\n// uses — message, an Action slot, and a dismiss — with the Action switched off here.\n//\n// A memory drawn in two groups leaves both when it goes, which is why Top of mind is\n// two rows shorter rather than one.\n\n<Toast message=\"Memory deleted\" onDismiss={dismiss} />",
+    "swiftui": "// Toast sits above the list, not over the tab bar.\nstruct MemoryToast: View {\n  let message: String\n  var onDismiss: () -> Void\n\n  var body: some View {\n    HStack(spacing: 8) {\n      Text(message)\n        .font(.system(size: 12, weight: .semibold))\n        .padding(.leading, 16)\n      Spacer(minLength: 0)\n      Button(action: onDismiss) {\n        Image(systemName: \"xmark\").frame(width: 40, height: 40)\n      }\n      .background(Circle().fill(.white.opacity(0.4)))\n    }\n    .padding(8)\n    .frame(height: 56)\n    .background(Capsule().fill(.thinMaterial))\n    .padding(.horizontal, 16)\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "memory",
+    "label": "After deletion",
+    "order": 5
+  }
+}

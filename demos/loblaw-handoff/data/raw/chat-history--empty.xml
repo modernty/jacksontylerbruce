@@ -1,0 +1,26 @@
+<frame id="8156:73095" name="Chat history, empty" x="7508" y="100" width="393" height="852">
+  <frame id="8156:73102" name="Frame 2147231673" x="16" y="146" width="361" height="96">
+    <frame id="8156:73103" name="Frame 2147231656" x="0" y="0" width="361" height="32">
+      <frame id="8156:73104" name="Top" x="0" y="0" width="361" height="32">
+        <frame id="8156:73105" name="Header" x="8" y="0" width="345" height="32">
+          <text id="8156:73106" name="Message title" x="0" y="0" width="145" height="32" chars="Chat history" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="8156:73107" name="Frame 2147231669" x="0" y="44" width="361" height="52">
+      <text id="8156:73108" name="Message title" x="8" y="0" width="85" height="20" chars="No chats yet" />
+      <text id="8156:73109" name="Ask PC Chat&#8482; a question today." x="8" y="32" width="345" height="20" chars="Ask PC Chat&#8482; a question today." />
+    </frame>
+  </frame>
+  <frame id="8156:73110" name="Top nav" x="0" y="0" width="393" height="124">
+    <instance id="8156:73111" name="Button" x="24" y="68" width="44" height="44">
+      <instance id="I8156:73111;892:44251" name="CaretLeft" x="14" y="14" width="16" height="16" />
+    </instance>
+  </frame>
+  <instance id="8156:73096" name="Background=true" x="0" y="0" width="393" height="54" />
+  <instance id="8156:237607" name="Button" x="196" y="774" width="173" height="54">
+    <instance id="I8156:237607;2046:16060" name="Leading icon" x="40" y="19" width="16" height="16" />
+    <text id="I8156:237607;5:99" name="label" x="64" y="16" width="69" height="22" chars="New chat" />
+    <instance id="I8156:237607;2046:16063" name="Trailing icon" x="115" y="18" width="16" height="16" hidden="true" />
+  </instance>
+</frame>

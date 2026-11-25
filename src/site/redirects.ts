@@ -30,6 +30,8 @@ export function legacyRedirects(): Redirect[] {
   // Brand projects folded into their parents.
   rows.push({ source: "/work/jet-brand", destination: "/work/fixed-rate-fixed-term", permanent: true })
   rows.push({ source: "/work/chatter-brand", destination: "/work/chatter", permanent: true })
+  // The Loblaws project moved from /work/loblaw to /work/loblaws.
+  rows.push({ source: "/work/loblaw", destination: "/work/loblaws", permanent: true })
   // /assets is not redirected: the images live there, at the same paths the old site used.
   for (const source of ["/index.html", "/404.html", "/README.md", "/CNAME", "/data/:path*"]) {
     rows.push({ source, destination: "/", permanent: true })

@@ -1,0 +1,117 @@
+{
+  "slug": "side-panel--full",
+  "name": "Side panel",
+  "feature": "side-panel",
+  "section": "Side panel",
+  "pending": false,
+  "live": "panel-full",
+  "summary": "The shortlist at capacity: six conversations, newest first, and a View all into the full Chat history page.",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaNodeId": "8156:234911",
+  "image": "/demos/loblaw-handoff/screens/side-panel--full.png",
+  "extracted": true,
+  "extractedOn": "2026-10-08",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 330,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "looseEnds": [
+    {
+      "kind": "behaviour",
+      "severity": "medium",
+      "title": "Adding Settings cost the shortlist a row",
+      "detail": "The nav went from three live rows to four and from 40 high to 46, so it stands 184 tall rather than 120. The list below it lost that height and now holds six conversations where it held seven. Nothing says six is the intended capacity rather than whatever happens to fit.",
+      "nodes": [
+        "8156:234921",
+        "8156:234937",
+        "8156:234940"
+      ],
+      "ask": "Is the shortlist a fixed count or whatever fits? If fixed, it needs stating — it has now changed twice by accident."
+    },
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "All three frames are called \"Side Panel, filled recents\"",
+      "detail": "Including the one that draws the empty state. The name is the only thing distinguishing the frames in the layer list, and it describes none of them accurately.",
+      "nodes": [
+        "8156:234785",
+        "8156:234826",
+        "8156:234911"
+      ],
+      "ask": "Rename to the state each frame draws — empty, four, full."
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "A hidden 302-wide Footer sits inside a 330-wide panel",
+      "detail": "Every frame carries a switched-off Footer measuring 302 across. The panel around it is 330 — the width it was before the panel grew. The layer is dead, and it is dead at the old size.",
+      "nodes": [
+        "8156:234816",
+        "8156:234889",
+        "8156:234994"
+      ],
+      "ask": "Delete it, or is the footer coming back?"
+    },
+    {
+      "kind": "inconsistency",
+      "severity": "low",
+      "title": "The second row of each run carries two extra switched-off metadata parts",
+      "detail": "Rows 2 and 6 hold three metadata text nodes where every other row holds one. The two extra are the memory count and its separator, switched off rather than removed, so the shape of the row depends on which row it is.",
+      "nodes": [
+        "8156:234870",
+        "8156:234871",
+        "8156:234988",
+        "8156:234989"
+      ],
+      "ask": "Remove the dead parts, or restore the count on every row."
+    }
+  ],
+  "constraints": [
+    {
+      "nodeId": "8156:234944",
+      "label": "Row title",
+      "axis": "width",
+      "maxHeight": 238,
+      "summary": "One line, 238px wide, truncated with an ellipsis. The overflow control is back on the row, so the title is 60px narrower than it was on the panel drawn over a conversation — most of the drawn titles now cut.",
+      "derivation": {
+        "steps": [
+          {
+            "label": "List item width",
+            "value": "314px"
+          },
+          {
+            "label": "Less padding (8 + 8)",
+            "value": "298px"
+          },
+          {
+            "label": "Less overflow button and its gap (44 + 16)",
+            "value": "238px"
+          },
+          {
+            "label": "SF Pro Text Regular 15px, average advance",
+            "value": "≈7.6px"
+          }
+        ],
+        "maxChars": 31,
+        "drawnChars": 45,
+        "recommend": 28
+      },
+      "note": "Derived from the drawn geometry. Three of the four titles in the file exceed the budget, so the panel shows them cut."
+    }
+  ],
+  "code": {
+    "css": "/* The side panel on its own — 330×852, no conversation behind it. */\n.side-panel {\n  width: 330px;\n  height: 852px;\n  padding-top: 52px;\n  border-radius: 40px;\n  background: var(--bg-canvas);\n  box-shadow: 0 4px 20px 0 rgba(113, 117, 142, 0.25);\n}\n\n.side-panel__content {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n  padding: 24px 8px;\n}\n\n/* Five nav rows at 46 high, so the list below starts 64px lower than it did. */\n.recents { display: flex; flex-direction: column; gap: 4px; }\n\n.recents__item {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  min-height: 40px;\n  padding: 8px;\n  border-radius: 16px;\n}\n\n.recents__title {\n  font: 400 15px/22px var(--font-ui);\n  color: var(--text-primary);\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}",
+    "jsx": "// Rendered from src/components/screens/side-panel-page.tsx rather than served as a\n// screenshot. Every Figma node is an element carrying data-node-id, so the measurements\n// on the Designs tab come from the live DOM.\n//\n// Five nav rows now — Settings last — at 46 high on 20px icons.\n//\n// The row is the same component the Chat history page uses — the panel got its overflow\n// control back, and the `Tag + Text` wrapper with it:\n\n<RecentRow row={row} />\n\n// Half the rows sit inside an extra wrapper frame in the file and half do not. The\n// wrapper is drawn when it exists, so the layer tree here matches the one in Figma.",
+    "swiftui": "// The panel is a fixed 330pt surface, not a sheet.\nstruct SidePanel: View {\n  var body: some View {\n    VStack(alignment: .leading, spacing: 24) {\n      HStack(spacing: 8) {\n        Image(\"pc-chat-mark\").frame(width: 24, height: 24)\n        Text(\"PC Chat\").font(.custom(\"Poppins-SemiBold\", size: 20))\n      }\n      .padding(.horizontal, 24)\n      .padding(.top, 24)\n\n      VStack(spacing: 0) {\n        NavItem(icon: \"square.and.pencil\", label: \"New chat\")\n        NavItem(icon: \"bubble.left\", label: \"Chat history\")\n        NavItem(icon: \"book\", label: \"Memory\")\n        NavItem(icon: \"gear\", label: \"Settings\")\n      }\n\n      VStack(alignment: .leading, spacing: 8) {\n        Text(\"Recents\").font(.system(size: 15, weight: .semibold))\n          .padding(.horizontal, 8)\n        VStack(spacing: 4) { ForEach(recents) { RecentRow(row: $0) } }\n      }\n    }\n    .padding(8)\n    .frame(width: 330, height: 852, alignment: .top)\n    .background(Color.white)\n    .clipShape(RoundedRectangle(cornerRadius: 40))\n  }\n}"
+  },
+  "stateGroup": {
+    "id": "side-panel-page",
+    "label": "Full",
+    "order": 3
+  }
+}

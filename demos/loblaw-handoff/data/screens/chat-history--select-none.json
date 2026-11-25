@@ -1,0 +1,58 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-none",
+  "name": "Chat history, selections — none",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Nothing picked",
+    "order": 1
+  },
+  "figmaNodeId": "8156:72723",
+  "summary": "Select turns every row into a choice: a 24px checkbox appears at the left and the text indents to 48. The nav swaps Search and Select for Select all and Cancel.",
+  "looseEnds": [
+    {
+      "kind": "missing-content",
+      "severity": "medium",
+      "title": "There is no Delete button until something is ticked",
+      "detail": "With nothing selected the foot of the screen is empty. The button appears only once a row is picked, so nothing tells a user what selection is for before they commit to it.",
+      "nodes": [
+        "8156:72740"
+      ],
+      "ask": "Is the button absent, or present and disabled, before the first tick?"
+    },
+    {
+      "kind": "interaction",
+      "severity": "medium",
+      "title": "The overflow control stays on every row while the row is also a checkbox",
+      "detail": "Selection adds a 24px checkbox at the left but leaves the per-row overflow button in place at x=309. Nothing says what tapping the row body does in this mode, or what the overflow menu offers when other chats are already ticked.",
+      "nodes": [
+        "8156:72748",
+        "8156:72758",
+        "8156:72765",
+        "8156:72772"
+      ],
+      "ask": "Does the row body toggle the tick in selection, and is the overflow menu reachable at all?"
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-none.png"
+}

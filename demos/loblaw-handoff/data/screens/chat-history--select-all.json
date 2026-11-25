@@ -1,0 +1,55 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-all",
+  "name": "Chat history, selection — all",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "All picked",
+    "order": 4
+  },
+  "figmaNodeId": "8156:72825",
+  "summary": "Every row ticked. Select all comes out of the nav, leaving Cancel alone, and the button stops counting: it reads Delete all chats.",
+  "looseEnds": [
+    {
+      "kind": "content",
+      "severity": "medium",
+      "title": "The button stops counting at full",
+      "detail": "At two and three the button names a number; at four it reads 'Delete all chats'. The user therefore loses the count at the point the action is most destructive, and the confirmation they land on is a different one from the counted path.",
+      "nodes": [
+        "8156:72875"
+      ],
+      "ask": "Should full selection read 'Delete 4 chats' and keep one confirmation, or is the all-chats wording deliberate?"
+    },
+    {
+      "kind": "geometry",
+      "severity": "low",
+      "title": "The nav group collapses to one button",
+      "detail": "The action group shrinks from 267px at x=102 to 123px at x=246 so that Cancel stays flush right. Nothing is drawn for the transition, so Cancel appears to jump.",
+      "nodes": [
+        "8156:72873"
+      ],
+      "ask": "Confirm Cancel holds its position while Select all leaves."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-all.png"
+}

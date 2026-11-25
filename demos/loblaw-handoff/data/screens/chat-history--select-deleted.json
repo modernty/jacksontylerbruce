@@ -1,0 +1,66 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--select-deleted",
+  "name": "Chat history, chats deleted",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "After the delete",
+    "order": 6
+  },
+  "figmaNodeId": "8156:73052",
+  "summary": "Three gone, one left. The count inflects correctly to '1 chat', and the toast reports the number removed.",
+  "looseEnds": [
+    {
+      "kind": "missing-content",
+      "severity": "high",
+      "title": "The whole nav goes after a bulk delete",
+      "detail": "Back, Search and Select are all absent — the nav holds nothing but its own 393x124 frame. The single-chat delete frame keeps all three, so this is specific to deleting a selection and leaves the user with no drawn way off the page.",
+      "nodes": [
+        "8156:73073"
+      ],
+      "ask": "Restore the nav after a bulk delete, or say what replaces it."
+    },
+    {
+      "kind": "inconsistent-content",
+      "severity": "high",
+      "title": "The toast carries an Undo that is switched off",
+      "detail": "The Toast component has an Action slot holding the word Undo. It is hidden in this frame, as it is in every other delete toast across Chat history and Memory — so no drawn state offers a way back from a delete, although the component is built for one.",
+      "nodes": [
+        "I8156:73075;7102:26288",
+        "I8156:73075;7102:26289"
+      ],
+      "ask": "Is Undo in scope? If it is, it needs a window and a drawn state; if it is not, the slot should come off the component so it stops reading as available."
+    },
+    {
+      "kind": "content",
+      "severity": "low",
+      "title": "The singular is handled here and nowhere else",
+      "detail": "This frame proves the count inflects — '1 chat', not '1 chats'. No other frame in the feature shows a singular, and the confirmation titles are still drawn as plain text.",
+      "nodes": [
+        "8156:73072"
+      ],
+      "ask": "Apply the same inflection to the confirmation titles and the counted button."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--select-deleted.png"
+}

@@ -14,3 +14,4 @@ __pycache__
 data/engine/models
 design/source/resume-timeline.svg
 .claude
+/demos

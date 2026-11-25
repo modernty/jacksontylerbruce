@@ -7,6 +7,7 @@ export default function TimelinePage() {
   const stage = publicStage()
   return (
     <main>
+      <h1 className="sr">Timeline</h1>
       <AxisStage mode="timeline" desktop={stage.desktop} mobile={stage.mobile} cards={stage.cards} />
     </main>
   )

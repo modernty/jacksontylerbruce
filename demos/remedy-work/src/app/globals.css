@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+/**
+ * Tokens read off the reference handoff site (the Baylee/BSWH screenshot). Values were
+ * estimated from the image rather than sampled from source — the screenshot lived in a
+ * temp directory that was cleared before it could be read pixel-wise. Everything visual
+ * is a named token here, so matching the reference exactly is a case of correcting values
+ * in this block and nothing else.
+ */
+:root {
+  /* The designs specify SF Pro Text. This stack renders real SF on Apple devices and
+     falls back to the closest platform UI font elsewhere. Carried over from the Loblaw
+     Labs token set so the two sites share a type stack. */
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui,
+    sans-serif;
+
+  /* Ink. The reference runs near-black titles over mid-grey body copy, with a third,
+     lighter step for the sidebar's group labels. */
+  --ink: #1a1c1f;
+  /* The hero display line only. A charcoal biased toward the accent's green, so the
+     largest type on the page reads as chosen rather than as default near-black. */
+  --ink-display: #27312e;
+  /* The LCA lockup renders solid black, not the display ink. */
+  --lca-mark: #000000;
+  --ink-secondary: #575d66;
+  --ink-muted: #767c86;
+  --ink-faint: #a2a7ae;
+
+  /* The single accent, used by the section eyebrow and the active nav marker. The
+     reference is a health-brand green; change this one value to retheme the site. */
+  --accent: #2f8265;
+  --accent-soft: #e8f1ed;
+
+  /* Surfaces. The page itself is the warm wash in `gradient-wash.tsx`; these are the
+     things that sit on top of it. */
+  --surface: #ffffff;
+  --surface-muted: #f4f5f7;
+  --border-default: #e6e4df;
+  --border-strong: #d5d2cb;
+
+  /* The wash, read off the Loblaw Labs background: a band of warm colour along the top
+     edge — coral at the left, peach through the middle, rose at the right — falling away
+     to near-white by a third of the way down, with a faint warm cast in the bottom-right
+     corner. Stops are estimated from a screenshot; see the note at the top of this file. */
+  --wash-base: #fdfcfb;
+  --wash-coral: rgba(236, 154, 110, 0.72);
+  --wash-peach: rgba(244, 199, 166, 0.7);
+  --wash-rose: rgba(237, 155, 171, 0.78);
+  --wash-ember: rgba(240, 200, 184, 0.45);
+
+  /* The gradient behind every card's preview panel, taken from the `Gradient` frame on
+     the Figma handoff page (node 2142:47786) rather than estimated: pale blue (#d9ebf9) at
+     the left falling to the UI kit's red-light (#fff4f5) at the right. The second stop
+     lands past the panel at 119.81%, so the red never fully arrives — the right edge stays
+     a warm off-white.
+
+     Carried at full strength. It ran at 50% while every thumbnail was a transparent
+     export floating on it, but the Figma frames now carry their own fills — lavender on
+     Personalization and Menu, mint on Navigation UI, periwinkle on Explain Enhanced — and
+     beside those a half-strength wash read as an empty card rather than a quieter one.
+     This is the fallback surface for the frames that have not been given a fill yet, so it
+     has to hold its own next to them. */
+  --panel-gradient: linear-gradient(98.78deg, #d9ebf9 4.13%, #fff4f5 119.81%);
+
+  /* The scrim behind a card's hover affordance. Light rather than dark: the preview
+     panels are pale, so a bright scrim with dark buttons stays in the page's register. */
+  --panel-scrim: rgba(252, 251, 248, 0.78);
+
+  --radius-card: 16px;
+
+  /* Status pill tones. Six sheet statuses collapse onto four semantic tones: shipped,
+     ready, in-progress and open. */
+  --tone-done-bg: #e4f0e9;
+  --tone-done-ink: #1f6b4a;
+  --tone-ready-bg: #e4eef2;
+  --tone-ready-ink: #1d6076;
+  --tone-progress-bg: #fbeed6;
+  --tone-progress-ink: #8a5c14;
+  --tone-open-bg: #ecedf0;
+  --tone-open-ink: #565d69;
+}
+
+@theme inline {
+  --font-sans: var(--font-ui);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-border-default: var(--border-default);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-ui);
+    scroll-behavior: smooth;
+    /* Anchored cards clear the top of the viewport rather than butting against it. */
+    scroll-padding-top: 48px;
+  }
+
+  body {
+    margin: 0;
+    background: var(--wash-base);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The wash is fixed behind everything, so it never scrolls or repeats. */
+  a {
+    color: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/**
+ * The hover affordance on a card's preview panel.
+ *
+ * Split by input capability rather than screen size: a device that can hover gets the
+ * overlay, and one that cannot gets the persistent link row under the description, since
+ * there is no hover state for it to discover. `pointer-events` follows opacity so the
+ * hidden links are never clickable, and `focus-within` reveals the overlay for keyboard
+ * users — otherwise tabbing would land focus on an invisible link.
+ */
+.reveal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.group:hover .reveal,
+.group:focus-within .reveal {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .reveal {
+    display: none;
+  }
+}
+
+.touch-links {
+  display: flex;
+}
+
+@media (hover: hover) {
+  .touch-links {
+    display: none;
+  }
+}
+
+/**
+ * The wash moves.
+ *
+ * Three layers at three speeds, so the band rearranges itself instead of sliding as one
+ * piece, and the unequal durations keep them from falling into step and pulsing together.
+ *
+ * Each layer does two things at once, because on a gradient this soft they are worth very
+ * different amounts. Translation barely registers — a blob 2,800px across is nearly flat
+ * locally, so sliding it a few percent leaves every pixel about the colour it was; the
+ * first pass at this moved at 0.8px a second and was invisible, and five times that was
+ * still invisible. Opacity is what you actually see: a tint fading between 70% and full
+ * changes the colour under your eye directly. So the travel is now large enough to matter
+ * (14% of each layer, around 20px a second) and each tint breathes against the others.
+ *
+ * Transform and opacity only, so every layer stays on the compositor and none of this
+ * costs layout. `alternate` reverses each cycle rather than cutting back to the start, so
+ * there is no seam. The reduced-motion block above stops all of it — if the wash looks
+ * frozen, check that setting first.
+ */
+@keyframes wash-drift-a {
+  from {
+    transform: translate3d(-6%, -3%, 0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(14%, 6%, 0) scale(1.16);
+    opacity: 0.68;
+  }
+}
+
+@keyframes wash-drift-b {
+  from {
+    transform: translate3d(6%, 0, 0) scale(1.12);
+    opacity: 0.74;
+  }
+  to {
+    transform: translate3d(-13%, 7%, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wash-drift-c {
+  from {
+    transform: translate3d(3%, 2%, 0) scale(1);
+    opacity: 0.95;
+  }
+  to {
+    transform: translate3d(-12%, -6%, 0) scale(1.14);
+    opacity: 0.66;
+  }
+}
+
+.wash-drift-a {
+  animation: wash-drift-a 26s ease-in-out infinite alternate;
+}
+
+.wash-drift-b {
+  animation: wash-drift-b 34s ease-in-out infinite alternate;
+}
+
+.wash-drift-c {
+  animation: wash-drift-c 21s ease-in-out infinite alternate;
+}

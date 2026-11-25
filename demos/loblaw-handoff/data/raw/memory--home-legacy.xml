@@ -1,0 +1,127 @@
+<frame id="7717:19094" name="Memory home" x="1399" y="100" width="393" height="852">
+  <frame id="7717:19095" name="Content" x="0" y="122" width="393" height="1148">
+    <frame id="7717:19096" name="Top" x="16" y="24" width="361" height="124">
+      <frame id="7717:19097" name="Header" x="8" y="0" width="345" height="124">
+        <text id="7717:19098" name="Message title" x="0" y="0" width="97" height="32" />
+        <text id="7717:19099" name="Message title" x="0" y="36" width="345" height="88" />
+      </frame>
+    </frame>
+    <frame id="7717:19100" name="What I know about you" x="16" y="180" width="359" height="350">
+      <instance id="7717:19101" name="Background Gradient" x="454" y="-79" width="567" height="320" hidden="true" />
+      <instance id="7717:19102" name="Background Gradient" x="630" y="432" width="1190" height="671" hidden="true" />
+      <frame id="7717:19103" name="Symbol + Wordmark Stacked 1_WIP 1" x="16" y="16" width="32" height="32" />
+      <frame id="7717:19108" name="Frame 2147202619" x="16" y="56" width="295" height="28">
+        <text id="7717:19109" name="What you’ve told PC Chat™" x="0" y="0" width="295" height="28" />
+      </frame>
+      <text id="7717:19110" name="You&#x27;re 8 weeks pregnant. You&#x27;ve had a cough and fever for a few days, and you&#x27;re working on managing your blood pressure — you take lisinopril for it, and there&#x27;s a history of high blood pressure in your family. You have a peanut allergy. Your 8-year-old son has a cold right now." x="16" y="92" width="327" height="120" />
+      <text id="7717:19111" name="You live in Ontario and see Dr. Sara Smith as your family physician. You&#x27;ve had a COVID-19 vaccine, and about a month ago you had an MRI for some liver discomfort." x="16" y="220" width="327" height="80" />
+      <frame id="7717:19112" name="Frame 2147231606" x="16" y="308" width="112" height="26">
+        <text id="7717:19113" name="Last updated today" x="0" y="8" width="112" height="18" />
+      </frame>
+    </frame>
+    <frame id="7717:19114" name="Frame 2147231614" x="16" y="562" width="361" height="570">
+      <frame id="7717:19115" name="Vertical stack" x="0" y="0" width="361" height="264">
+        <frame id="7717:19116" name="Header" x="0" y="0" width="361" height="22">
+          <text id="7717:19117" name="Item title" x="8" y="0" width="87" height="22" />
+        </frame>
+        <frame id="7717:19118" name="List" x="0" y="30" width="361" height="234">
+          <frame id="7717:19119" name="List item" x="0" y="0" width="361" height="60">
+            <frame id="7717:19120" name="Tag + Text" x="8" y="9" width="345" height="42">
+              <frame id="7717:19121" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7717:19122" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7717:19123" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7717:19124" name="Message timestamp" x="0" y="0" width="84" height="18" />
+                  <text id="7717:19125" name="Message timestamp" x="106" y="0" width="7" height="20" hidden="true" />
+                  <text id="7717:19126" name="Message timestamp" x="121" y="0" width="98" height="20" hidden="true" />
+                </frame>
+              </frame>
+              <frame id="7717:19127" name="Tag" x="300" y="0" width="45" height="22" hidden="true">
+                <text id="7717:19128" name="Message timestamp" x="4" y="2" width="37" height="18" />
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7717:19129" name="List item" x="0" y="60" width="361" height="58">
+            <frame id="7717:19130" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7717:19131" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7717:19132" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7717:19133" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7717:19134" name="Message timestamp" x="0" y="0" width="108" height="18" />
+                  <text id="7717:19135" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="7717:19136" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7717:19137" name="List item" x="0" y="118" width="361" height="58">
+            <frame id="7717:19138" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7717:19139" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7717:19140" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7717:19141" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7717:19142" name="Message timestamp" x="0" y="0" width="108" height="18" />
+                  <text id="7717:19143" name="Message timestamp" x="74" y="0" width="7" height="20" hidden="true" />
+                  <text id="7717:19144" name="Message timestamp" x="89" y="0" width="132" height="20" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7717:19145" name="List item" x="0" y="176" width="361" height="58">
+            <frame id="7717:19146" name="Text" x="8" y="8" width="345" height="42">
+              <text id="7717:19147" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7717:19148" name="Message timestamp" x="0" y="24" width="345" height="18" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7717:19149" name="Rectangle 16020" x="0" y="296" width="361" height="1" />
+      <frame id="7717:19150" name="Vertical stack" x="0" y="329" width="361" height="208">
+        <frame id="7717:19151" name="Header" x="0" y="0" width="361" height="22">
+          <text id="7717:19152" name="Item title" x="8" y="0" width="142" height="22" />
+        </frame>
+        <frame id="7717:19153" name="List" x="0" y="30" width="361" height="178">
+          <frame id="7717:19154" name="List item" x="0" y="0" width="361" height="58">
+            <frame id="7717:19155" name="Tag + Text" x="8" y="8" width="345" height="42">
+              <frame id="7717:19156" name="Text" x="0" y="0" width="345" height="42">
+                <text id="7717:19157" name="Message title" x="0" y="0" width="345" height="22" />
+                <frame id="7717:19158" name="Metadata" x="0" y="24" width="345" height="18">
+                  <text id="7717:19159" name="Message timestamp" x="0" y="0" width="84" height="18" />
+                  <text id="7717:19160" name="Message timestamp" x="106" y="0" width="7" height="20" hidden="true" />
+                  <text id="7717:19161" name="Message timestamp" x="121" y="0" width="98" height="20" hidden="true" />
+                </frame>
+              </frame>
+              <frame id="7717:19162" name="Tag" x="300" y="0" width="45" height="22" hidden="true">
+                <text id="7717:19163" name="Message timestamp" x="4" y="2" width="37" height="18" />
+              </frame>
+            </frame>
+          </frame>
+          <frame id="7717:19164" name="List item" x="0" y="58" width="361" height="60">
+            <frame id="7717:19165" name="Text" x="8" y="8" width="345" height="44">
+              <text id="7717:19166" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7717:19167" name="Message timestamp" x="0" y="24" width="345" height="20" />
+            </frame>
+          </frame>
+          <frame id="7717:19168" name="List item" x="0" y="118" width="361" height="60">
+            <frame id="7717:19169" name="Text" x="8" y="8" width="345" height="44">
+              <text id="7717:19170" name="Message title" x="0" y="0" width="345" height="22" />
+              <text id="7717:19171" name="Message timestamp" x="0" y="24" width="345" height="20" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7717:19172" name="Rectangle 16021" x="0" y="569" width="361" height="1" />
+    </frame>
+  </frame>
+  <instance id="7717:19173" name="Background=true" x="0" y="0" width="393" height="54" />
+  <frame id="7717:19174" name="Search with overlay" x="0" y="712" width="393" height="140">
+    <frame id="7717:19175" name="Frame 2147231637" x="0" y="0" width="393" height="140" />
+    <frame id="7717:19176" name="Button" x="24" y="64" width="345" height="44">
+      <instance id="7717:19177" name="Leading icon" x="16" y="14" width="16" height="16" />
+      <text id="7717:19178" name="label" x="40" y="11" width="51" height="22" />
+    </frame>
+  </frame>
+  <frame id="7717:19179" name="Top nav" x="0" y="54" width="393" height="68">
+    <instance id="7717:19180" name="Button" x="24" y="12" width="44" height="44" />
+    <frame id="7717:19181" name="Frame 2147231667" x="173" y="11" width="196" height="46">
+      <instance id="7717:19182" name="Button" x="0" y="0" width="196" height="46" />
+    </frame>
+  </frame>
+</frame>

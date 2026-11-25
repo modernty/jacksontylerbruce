@@ -1,0 +1,61 @@
+{
+  "slug": "side-panel",
+  "name": "Side Panel",
+  "status": "design-complete",
+  "order": 3,
+  "summary": "The navigation surface.",
+  "tryIt": "side-panel",
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "figmaPageId": "7043:2798",
+  "figmaPageName": "History / Memories",
+  "overview": [
+    "The side panel is how a user moves around PC Chat. It slides over whatever they were doing, offers four destinations — New chat, Chat history, Memory, and a Files entry that is drawn but switched off — and lists the conversations they had most recently.",
+    "It already appears on this site inside the screens it covers: Chat History documents it over a conversation, and Memory documents the recents it produces. Those stay. This page is the panel on its own, at the 330 width the file now draws it, so the surface can be specified once instead of being re-derived from each screen it happens to appear on.",
+    "Three content states are drawn: nothing, four conversations, and the shortlist at capacity. They are the same surface holding different amounts of data, so they sit behind one toggle rather than as three entries."
+  ],
+  "statesLabel": "Content states",
+  "states": [
+    {
+      "name": "Empty",
+      "screen": "side-panel--empty",
+      "description": "No history yet. The Recents heading stays and one line sits where the list would be, so the panel does not collapse to just its nav."
+    },
+    {
+      "name": "Four recents",
+      "screen": "side-panel--four-recents",
+      "description": "The everyday case: four conversations, newest first, each with a timestamp and an overflow control."
+    },
+    {
+      "name": "Full",
+      "screen": "side-panel--full",
+      "description": "The shortlist at capacity — six rows filling the stack, with a View all through to the Chat history page."
+    }
+  ],
+  "behaviour": [
+    {
+      "rule": "Five destinations, one switched off",
+      "detail": "New chat, Chat history, Memory and Settings are drawn and visible. A Files item sits between the first two, switched off rather than deleted, so the live rows are not consecutive in the layer tree. Settings is the newest and leads to the Chat settings page.",
+      "source": "partial"
+    },
+    {
+      "rule": "The shortlist caps at six",
+      "detail": "The fullest frame draws six rows and then a View all, which is where the seventh row would have gone. It held seven before Settings was added — the nav grew by 64px and the list lost exactly that. Whether six is the intended capacity or simply what now fits is not stated.",
+      "source": "partial"
+    },
+    {
+      "rule": "Rows carry an overflow control",
+      "detail": "Each row is a title, a timestamp and a menu button. The panel drawn over a conversation had lost that button; these frames have it back, which makes the panel's row the same component the Chat history page uses.",
+      "source": "extracted"
+    },
+    {
+      "rule": "Titles truncate at 238px",
+      "detail": "The overflow control takes 44px and its gap another 16, leaving 238 of the row's 298 for the title — about 31 characters. Three of the four conversations in the file are longer than that and show cut.",
+      "source": "extracted"
+    },
+    {
+      "rule": "View all leads to the Chat history page",
+      "detail": "Drawn only on the full state. The empty and four-recent frames end at the list, so the route to the full history appears once the shortlist fills.",
+      "source": "extracted"
+    }
+  ]
+}

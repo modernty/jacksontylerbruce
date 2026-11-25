@@ -373,10 +373,37 @@
       "images": [],
       "needs": "illustration"
     },
-    "loblaw": {
-      "cover": null,
-      "images": [],
-      "needs": "illustration"
+    "loblaws": {
+      "cover": "/assets/thumbs/loblaw.webp",
+      "coverAlt": "The Memory prototype from the handoff, playing: the list of what PC Chat remembers, one memory opened, deleted after a confirmation, and the list returning with an undo.",
+      "images": []
+    },
+    "botpress": {
+      "cover": "/assets/thumbs/botpress.jpg",
+      "coverAlt": "Botpress Desk home for a new team: three setup steps, with Lily in the corner offering to draft the first agent from the company's website.",
+      "images": []
+    },
+    "pc-chat-memory": {
+      "cover": "/assets/thumbs/pc-chat-memory.jpg",
+      "coverAlt": "Remember with permission: a 'Remember this for next time?' prompt beside the PC Chat screen that saved a memory without asking.",
+      "images": [
+        {
+          "src": "/assets/images/pc-chat-memory/02.jpg",
+          "alt": "Saying no is free: a quiet 'Won't remember this · Undo' toast beside the delete dialog it replaces."
+        },
+        {
+          "src": "/assets/images/pc-chat-memory/03.jpg",
+          "alt": "Forget gracefully: a 'Still true?' check-in on a pregnancy memory ten months later."
+        },
+        {
+          "src": "/assets/images/pc-chat-memory/04.jpg",
+          "alt": "Leave the chat: a pickup notification on the lock screen, where routine needs belong."
+        },
+        {
+          "src": "/assets/images/pc-chat-memory/05.jpg",
+          "alt": "Show the working: an answer citing two sources and one memory used."
+        }
+      ]
     }
   }
 }

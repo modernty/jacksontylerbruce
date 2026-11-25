@@ -1,0 +1,56 @@
+{
+  "feature": "chat-history",
+  "section": "Chat history",
+  "pending": false,
+  "figmaFileKey": "yIzE3IWqhgtCP2Fo44aAvp",
+  "extracted": true,
+  "extractedOn": "2026-10-20",
+  "tokenSet": "september-launch",
+  "imageFrame": {
+    "width": 393,
+    "height": 852,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "stats": {},
+  "unmapped": [],
+  "slug": "chat-history--delete-all-confirm",
+  "name": "Chat history, confirm deleting all",
+  "stateGroup": {
+    "id": "chat-history-select",
+    "label": "Confirm all",
+    "order": 7
+  },
+  "figmaNodeId": "8156:72990",
+  "summary": "The all-chats gate. Same body as the counted one, different title — and the button behind it still reads Delete 3 chats.",
+  "looseEnds": [
+    {
+      "kind": "inconsistent-content",
+      "severity": "high",
+      "title": "The dialog says all while the button behind it says three",
+      "detail": "Three of four rows are ticked and the counted button reads 'Delete 3 chats', but the alert over it is titled 'Delete all chats?'. One of the two is wrong: either this gate belongs to the four-ticked state, or the all-chats wording is reached from a partial selection.",
+      "nodes": [
+        "8156:73045",
+        "8156:73036"
+      ],
+      "ask": "Confirm which selection this gate belongs to, and whether all-chats is a separate action from deleting every row one by one."
+    },
+    {
+      "kind": "naming",
+      "severity": "low",
+      "title": "The dialog layer is called 'Delete memory'",
+      "detail": "The alert is a layer named 'Delete memory', copied from the Memory section.",
+      "nodes": [
+        "8156:73042"
+      ],
+      "ask": "Rename the layer."
+    }
+  ],
+  "constraints": [],
+  "code": {
+    "css": "",
+    "jsx": "",
+    "swiftui": ""
+  },
+  "image": "/demos/loblaw-handoff/screens/chat-history--delete-all-confirm.png"
+}

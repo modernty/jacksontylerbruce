@@ -1,0 +1,70 @@
+<frame id="8156:234785" name="Side Panel, filled recents" x="100" y="100" width="330" height="852">
+  <frame id="8156:234786" name="Header" x="0" y="52" width="330" height="48">
+    <frame id="8156:234787" name="Frame 2147202988" x="24" y="24" width="115" height="24">
+      <frame id="8156:234788" name="Symbol + Wordmark Stacked 1_WIP 1" x="0" y="0" width="24" height="24">
+        <vector id="8156:234789" name="Vector" x="9" y="15" width="11" height="8" />
+        <vector id="8156:234790" name="Vector" x="2" y="9" width="8" height="11" />
+        <vector id="8156:234791" name="Vector" x="15" y="3" width="8" height="11" />
+        <vector id="8156:234792" name="Vector" x="4" y="2" width="11" height="8" />
+      </frame>
+      <text id="8156:234793" name="Greeting text" x="32" y="0" width="83" height="24" />
+    </frame>
+  </frame>
+  <frame id="8156:234794" name="Content" x="0" y="100" width="330" height="752">
+    <frame id="8156:234795" name="Nav" x="8" y="24" width="314" height="184">
+      <frame id="8156:234796" name="Nav item" x="0" y="0" width="314" height="46">
+        <instance id="8156:234797" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234797;9:2177" name="iOS/square.and.pencil" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234797;9:2177;10:9513" name="Vector" x="3" y="3" width="16" height="16" />
+          </instance>
+        </instance>
+        <text id="8156:234798" name="Message title" x="36" y="12" width="70" height="22" />
+      </frame>
+      <frame id="8156:234799" name="Nav item" x="0" y="40" width="286" height="40" hidden="true">
+        <instance id="8156:234800" name="_Icon" x="8" y="8" width="24" height="24">
+          <text id="I8156:234800;2904:8440" name="􀅼" x="4" y="4" width="16" height="16" />
+        </instance>
+        <text id="8156:234801" name="Message title" x="40" y="9" width="35" height="22" />
+      </frame>
+      <frame id="8156:234802" name="Nav item" x="0" y="46" width="314" height="46">
+        <instance id="8156:234803" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234803;9:2177" name="iOS/message" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234803;9:2177;1:33140" name="Vector" x="1" y="3" width="17" height="14" />
+          </instance>
+        </instance>
+        <text id="8156:234804" name="Message title" x="36" y="12" width="91" height="22" />
+      </frame>
+      <frame id="8156:234805" name="Nav item" x="0" y="92" width="314" height="46">
+        <instance id="8156:234806" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234806;9:2177" name="iOS/book" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234806;9:2177;1:23911" name="Vector" x="2" y="3" width="16" height="13" />
+          </instance>
+        </instance>
+        <text id="8156:234807" name="Message title" x="36" y="12" width="61" height="22" />
+      </frame>
+      <frame id="8156:234808" name="Nav item" x="0" y="138" width="314" height="46">
+        <instance id="8156:234809" name="Trailing icon" x="8" y="13" width="20" height="20">
+          <instance id="I8156:234809;9:2177" name="iOS/gear" x="0" y="0" width="20" height="20">
+            <vector id="I8156:234809;9:2177;10:6158" name="Vector" x="1" y="2" width="17" height="17" />
+          </instance>
+        </instance>
+        <text id="8156:234810" name="Message title" x="36" y="12" width="62" height="22" />
+      </frame>
+    </frame>
+    <frame id="8156:234811" name="Vertical stack" x="8" y="232" width="314" height="496">
+      <frame id="8156:234812" name="Header" x="0" y="0" width="314" height="22">
+        <text id="8156:234813" name="Item title" x="8" y="0" width="60" height="22" />
+      </frame>
+      <frame id="8156:234814" name="Frame 2147231660" x="0" y="30" width="245" height="20">
+        <text id="8156:234815" name="Your recent chats will appear here." x="8" y="0" width="229" height="20" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="8156:234816" name="Footer" x="0" y="780" width="302" height="72" hidden="true">
+    <instance id="8156:234817" name="_Button" x="230" y="0" width="48" height="48">
+      <instance id="I8156:234817;2862:7707" name="_Icon" x="8" y="8" width="32" height="32">
+        <text id="I8156:234817;2862:7707;2862:7673" name="􀅼" x="4" y="4" width="24" height="24" />
+      </instance>
+    </instance>
+  </frame>
+</frame>
