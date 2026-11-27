@@ -3,7 +3,7 @@ import { test } from "node:test"
 import { loadCatalog } from "@/src/content/catalog"
 import { publishCatalog } from "@/src/content/publish"
 import { runTool, workAgent, workAllowed, type WorkClient } from "./agent"
-import { handleChatAsk, wantsWork } from "./chat"
+import { OUTSIDE, handleChatAsk, wantsWork } from "./chat"
 import { MemoryStore } from "./store"
 
 const catalog = publishCatalog()
@@ -130,4 +130,53 @@ test("the career still opens the timeline", async () => {
     const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: practises({ answer: "x", projects: [], followUps: [] }) })
     assert.equal((reply.body as { panel?: string }).panel, "timeline", q)
   }
+})
+
+const SIMPLE = { q: "What do you do, in one sentence?", a: "Find what's confusing. Make it simple. Then make it beautiful." }
+
+test("\"Show me an example\" after a Q&A answer goes to the agent with the conversation and returns projects", async () => {
+  const sent: string[] = []
+  const client: WorkClient = async ({ messages }) => {
+    sent.push(...messages.map((message) => (typeof message.content === "string" ? message.content : "")))
+    return { content: [{ type: "tool_use", id: "r", name: "reply", input: { answer: "Intuit makes invoicing one conversation. Loblaws / PC Health makes care one place.", projects: ["intuit", "loblaws"], followUps: ["a?", "b?", "c?"] } }] }
+  }
+  const reply = await handleChatAsk(
+    { q: "Show me an example.", sessionId: "s", history: [{ ...SIMPLE, source: "site" }] },
+    { ip: "1" },
+    { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: client },
+  )
+  const body = reply.body as { answer: string; projects?: string[]; cards?: string; source?: string }
+  assert.equal(body.source, "work")
+  assert.deepEqual(body.projects, ["intuit", "loblaws"])
+  assert.equal(body.cards, "demo")
+  assert.ok(sent.some((text) => text.includes("Find what's confusing")), "the agent sees the conversation")
+})
+
+test("with no model, \"Show me an example\" returns projects that fit the conversation, never \"outside\"", async () => {
+  for (const history of [[], [{ ...SIMPLE, source: "site" as const }]]) {
+    const reply = await handleChatAsk({ q: "Show me an example.", sessionId: "s", history }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+    const body = reply.body as { answer: string; projects?: string[]; cards?: string }
+    assert.notEqual(body.answer, OUTSIDE)
+    assert.ok(body.projects && body.projects.length >= 2 && body.projects.length <= 4)
+    assert.equal(body.cards, "demo")
+  }
+  const memory = [{ q: "What do you think about AI that remembers you?", a: "Memory has to be earned. People should see what the assistant keeps about their health and correct it.", source: "site" as const }]
+  const reply = await handleChatAsk({ q: "Like what?", sessionId: "s", history: memory }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  assert.equal((reply.body as { projects?: string[] }).projects?.[0], "loblaws")
+})
+
+test("an unmatched question reaches the agent first; one it calls off topic goes to the general chat", async () => {
+  let asked = 0
+  const offTopic: WorkClient = async () => {
+    asked++
+    return { content: [{ type: "tool_use", id: "r", name: "reply", input: { answer: "-", projects: [], followUps: [], offTopic: true } }] }
+  }
+  const open = async () => ({ content: [{ type: "text", text: "Sunny in Miami today." }] })
+  const reply = await handleChatAsk(
+    { q: "What's the weather like?", sessionId: "s" },
+    { ip: "1" },
+    { store: new MemoryStore(), env: { NODE_ENV: "test", DAILY_USD_CAP: "5" }, work: offTopic, open: open as never },
+  )
+  assert.equal(asked, 1)
+  assert.notEqual((reply.body as { source?: string }).source, "work")
 })

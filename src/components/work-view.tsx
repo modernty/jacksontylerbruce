@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { track } from "@vercel/analytics"
 import { AnswerStream, type AnswerGroup } from "./answer-stream"
 import type { CareerEntry } from "@/src/content/career"
@@ -17,12 +17,22 @@ const TOP = 120
 const BREAK = 900
 /** The width from which the gallery sits beside the text. Matches the stylesheet. */
 const PAIR_MIN = 769
-/** Hiding the media: how long the text and media take to fade out, then how long the text rests out of
- *  sight in its new place before fading back in. The fades' lengths match the stylesheet. */
-const LEAVE_MS = 960
-const REST_MS = 160
 /** What the text lines up with in the first plate: the first heading, picture or demo it shows. */
 const LEAD_MARK = ".chapter-kicker, h3, .media-demo-stage, img, video"
+
+/** A phone's media view: the project shows only its media, with no text, chat or composer. */
+const MediaMode = createContext<{ available: boolean; on: boolean; toggle: () => void }>({ available: false, on: false, toggle: () => {} })
+
+/** The switch for the media view, at the far right of the project's title. Phones only (see the stylesheet). */
+export function MediaModeToggle() {
+  const { available, on, toggle } = useContext(MediaMode)
+  if (!available) return null
+  return (
+    <button type="button" className={on ? "media-mode-toggle on" : "media-mode-toggle"} aria-pressed={on} onClick={toggle}>
+      Media
+    </button>
+  )
+}
 
 /**
  * Pins the info column while the photos scroll. A column taller than the window scrolls with the
@@ -124,23 +134,29 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
     setGallery(true)
     track("gallery_opened", { slug })
   }, [hasMedia, slug])
-  // Hiding the media fades the text and the media out together; the text comes back centred, as it
-  // sits with no gallery. On a phone the media is a sheet over the text, so it simply closes.
-  const [leaving, setLeaving] = useState(false)
-  const leaveTimer = useRef(0)
-  useEffect(() => () => window.clearTimeout(leaveTimer.current), [])
+  // Hiding the media leaves the text exactly where it was, with no fade or move: only the media goes.
+  // On a phone the media is a sheet over the text, so it simply closes.
+  const [kept, setKept] = useState(false)
+  const [mediaMode, setMediaMode] = useState(false)
   const closeGallery = useCallback(() => {
-    const fade = matchMedia(`(min-width: ${PAIR_MIN}px)`).matches && !matchMedia("(prefers-reduced-motion: reduce)").matches
-    window.clearTimeout(leaveTimer.current)
-    if (fade) {
-      setLeaving(true)
-      leaveTimer.current = window.setTimeout(() => {
-        setGallery(false)
-        // A beat in the new place, still hidden, so the move is never seen, then it fades back in.
-        leaveTimer.current = window.setTimeout(() => setLeaving(false), REST_MS)
-      }, LEAVE_MS)
-    } else setGallery(false)
+    if (matchMedia(`(min-width: ${PAIR_MIN}px)`).matches) setKept(true)
+    setGallery(false)
+    setMediaMode(false)
   }, [])
+  const toggleMediaMode = useCallback(() => {
+    if (mediaMode) {
+      setMediaMode(false)
+      setGallery(false)
+      return
+    }
+    if (!hasMedia) return
+    setArriving(false)
+    setMediaMode(true)
+    setGallery(true)
+    window.scrollTo(0, 0)
+    track("gallery_opened", { slug })
+  }, [mediaMode, hasMedia, slug])
+  const mediaModeValue = useMemo(() => ({ available: hasMedia && !boring, on: mediaMode && gallery, toggle: toggleMediaMode }), [hasMedia, boring, mediaMode, gallery, toggleMediaMode])
 
   // On arrival: no media, reading view, or a phone closes the gallery the page opened with. ?media
   // (a demo picked in the chat) keeps it open on any screen, and shows it at once.
@@ -173,7 +189,7 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
   // Where the text starts: level with the top of the first plate's content, which sits centred in
   // the panel. Measured before paint, and again when the panel changes size.
   useLayoutEffect(() => {
-    if (!gallery || leaving) return
+    if (!gallery) return
     const panel = scroller.current
     if (!panel || !matchMedia(`(min-width: ${PAIR_MIN}px)`).matches) {
       setPlaced(true)
@@ -194,7 +210,7 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
     if (first) observer.observe(first)
     first?.querySelectorAll(".media-demo-stage").forEach((stage) => observer.observe(stage))
     return () => observer.disconnect()
-  }, [gallery, leaving])
+  }, [gallery])
 
   useEffect(() => {
     if (!gallery) return
@@ -251,7 +267,8 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
   const after = hasMedia ? null : <div className="answer-media">{media}</div>
 
   return (
-    <div className={["work-stage", gallery && hasMedia && "galleried", wide && "wide", leaving && "leaving", arriving && "arriving", placed && "placed"].filter(Boolean).join(" ")} data-project={slug}>
+    <MediaMode.Provider value={mediaModeValue}>
+    <div className={["work-stage", gallery && hasMedia && "galleried", mediaMode && gallery && "media-mode", wide && "wide", kept && !gallery && "kept", arriving && "arriving", placed && "placed"].filter(Boolean).join(" ")} data-project={slug}>
       <article className="column">
         {head}
         {anchors}
@@ -287,5 +304,6 @@ export function WorkView({ slug, openable, portal, head, leadIds, lead, meta, se
         </>
       ) : null}
     </div>
+    </MediaMode.Provider>
   )
 }

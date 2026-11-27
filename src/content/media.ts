@@ -4,7 +4,8 @@ import type { Image, Media } from "./schema"
 
 type Authored = { src: string; alt: string; kind?: Image["kind"] }
 /** coverInGallery: false keeps the cover out of the project page's gallery (its images already show it). */
-type Entry = { cover: string | null; coverAlt?: string; coverInGallery?: boolean; images: Authored[] }
+/** tiled: true shows the images together as one 3-column tile on the project page, not one to a page. */
+type Entry = { cover: string | null; coverAlt?: string; coverInGallery?: boolean; tiled?: boolean; images: Authored[] }
 type Measured = { width: number; height: number; blur: string }
 
 const entries = authored.projects as Record<string, Entry>
@@ -23,6 +24,7 @@ export function mediaFor(slug: string, name: string): Media {
   const count = entry.images.length
   return {
     ...(entry.coverInGallery === false ? { coverInGallery: false } : {}),
+    ...(entry.tiled ? { tiled: true } : {}),
     cover: entry.cover ? image(entry.cover, entry.coverAlt?.trim() || `${name}, cover`) : null,
     coverInk: entry.cover ? `/media/${slug}/cover-ink.webp` : null,
     images: entry.images.map((item, index) =>

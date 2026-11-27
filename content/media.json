@@ -145,7 +145,46 @@
     "lazarus-brand": {
       "cover": "/assets/thumbs/lazarus-ai-pubsec-brand.jpg",
       "coverAlt": "Grid of Lazarus AI brand applications: stationery, data visualization, infographics, event graphics, a map and printed documents.",
-      "images": []
+      "coverInGallery": false,
+      "tiled": true,
+      "images": [
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/01.png",
+          "alt": "Video title card: a placeholder title over a blurred interview, with the Lazarus wordmark."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/02.png",
+          "alt": "Diagram of how a request is routed: objective, routing model, subtasks, model and tool selection, then aggregated analysis."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/03.png",
+          "alt": "Map visualization: intelligence sources feeding a prediction across a map of the United States, with three locations identified."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/04.png",
+          "alt": "Data visualization page in light mode: a market-share ring, line, bar and progress charts with usage guidance."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/05.png",
+          "alt": "Infographic style page in light mode: containers, connectors and nodes, with rules for spacing and highlight colour."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/06.png",
+          "alt": "Stationery: letterhead, business cards, envelopes and a mug in black with the Lazarus wordmark."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/07.png",
+          "alt": "Document layouts: a three-page article, TracerCon Recap, with photography and pull quotes."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/08.png",
+          "alt": "Presentation slides for the ITC Vegas conference deck: statistics, comparisons and a closing slide."
+        },
+        {
+          "src": "/assets/images/lazarus-ai-pubsec-brand/09.png",
+          "alt": "Event collateral for TracerCon: exercise guidance, name badges and an orange poster with arrow marks."
+        }
+      ]
     },
     "model-playground": {
       "cover": "/assets/thumbs/model-playground.jpg",

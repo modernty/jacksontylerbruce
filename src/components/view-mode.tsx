@@ -13,9 +13,11 @@ const ViewModeContext = createContext<{ boring: boolean; setBoring: (boring: boo
 export function ViewModeProvider({ children }: { children: ReactNode }) {
   const [boring, setState] = useState(false)
 
+  // Reading view has no toggle in the header any more, so a visitor who left it on starts back in the
+  // conversation view instead of being stuck in it.
   useEffect(() => {
     try {
-      if (localStorage.getItem(KEY) === "on") setState(true)
+      localStorage.removeItem(KEY)
     } catch {
       // Storage can be unavailable; the conversation view is the default.
     }

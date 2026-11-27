@@ -14,20 +14,29 @@ test("questions draw from the matching generated section", async () => {
   const why = (await ask("novart", "Why did this project exist?")).body as ProjectReply
   assert.equal(why.sectionId, "context")
   const ideas = (await ask("loblaws", "What are the core ideas?")).body as ProjectReply
-  assert.equal(ideas.sectionId, "ideas")
+  // The core ideas close the Approach now; the reply is that line.
+  assert.equal(ideas.sectionId, "approach")
+  assert.match(ideas.answer, /consent and data trust/i)
   for (const reply of [why, ideas]) {
     assert.ok(reply.answer.length > 0)
     assert.deepEqual(textIssues(reply.answer), [])
   }
 })
 
-test("role and tools are hidden from every project, and ideas never name other projects", () => {
+test("role, tools and a Core ideas section are hidden from every project; the ideas close one section and never name other projects", () => {
+  const names = publishCatalog().projects.flatMap((project) => [project.name, ...project.aliases])
   for (const item of publishCatalog().projects) {
     const ids = item.sections.map((section) => section.id)
     assert.ok(!ids.includes("role"), `${item.slug} shows a role`)
     assert.ok(!ids.includes("tools"), `${item.slug} shows tools`)
-    for (const section of item.sections) for (const entry of section.items) assert.doesNotMatch(entry.note ?? "", /Also in/, item.slug)
+    assert.ok(!ids.includes("ideas"), `${item.slug} shows a Core ideas section`)
+    const lines = item.sections.flatMap((section) => section.body.split("\n\n")).filter((paragraph) => paragraph.startsWith("Built on"))
+    assert.ok(lines.length <= 1, `${item.slug} has more than one ideas line`)
+    for (const line of lines) for (const name of names) if (name.length > 3) assert.ok(!line.includes(name), `${item.slug}: ${line}`)
   }
+  const loblaws = publishCatalog().projects.find((project) => project.slug === "loblaws")
+  const approach = loblaws?.sections.find((section) => section.id === "approach")
+  assert.match(approach?.body ?? "", /Built on three ideas: consent and data trust; trust and verifiable reasoning; making AI legible\.$/)
 })
 
 test("a topic the project has not written up says so instead of repeating the intro", async () => {

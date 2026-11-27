@@ -10,7 +10,8 @@ import type { Section, SectionItem } from "./schema"
  * a section appears only when its source fields exist, so projects differ in which ones they get.
  *
  * Order: the authored summary, any other authored sections, then
- * Context, Approach (long-form copy), Role, Outcome, Links, Ideas and Tools (the inventory).
+ * Context, Approach (long-form copy), Role, Outcome and Links (the inventory). The project's core ideas
+ * are not a section of their own: they close the Approach, or the description when there is no Approach.
  * Every sentence passes the public text checks, and one that fails is dropped, not rewritten.
  */
 
@@ -108,10 +109,24 @@ function links(record: Inventory | undefined, copy: Copy | undefined): Section |
   return link ? section("links", "Links", [], [{ label: link.label, href: link.href }]) : null
 }
 
-/** An idea the project carries, with its note. It never names other projects: a page speaks for itself. */
-function ideaItem(idea: Named): SectionItem {
-  const note = (idea.note ?? "").replace(/\s*\([^)]*\)\.?$/, ".").replace(/^\.$/, "")
-  return { label: idea.name, note: note || undefined }
+/** How the ideas line starts, so the project chat can find it. */
+export const IDEAS_LEAD = "Built on"
+const COUNT = ["", "one idea", "two ideas", "three ideas", "four ideas", "five ideas"]
+
+/**
+ * The project's core ideas as one closing sentence: "Built on three ideas: consent and data trust;
+ * trust and verifiable reasoning; making AI legible." Semicolons, since names can hold an "and".
+ * Names only: the notes name other projects, and a page speaks for itself.
+ */
+function ideasLine(ideas: Named[]): string {
+  if (!ideas.length) return ""
+  const lower = (name: string) => (/^[A-Z][a-z]/.test(name) ? name[0].toLowerCase() + name.slice(1) : name)
+  return `${IDEAS_LEAD} ${COUNT[ideas.length] ?? `${ideas.length} ideas`}: ${ideas.map((idea) => lower(idea.name)).join("; ")}.`
+}
+
+/** The section with one more paragraph at its end. */
+function withParagraph(section: Section, paragraph: string): Section {
+  return { ...section, body: [section.body, paragraph].filter(Boolean).join("\n\n") }
 }
 
 /**
@@ -132,9 +147,14 @@ export function generateSections(slug: string, authored: Section[]): Section[] {
     SHOW_ROLE && record ? role(record) : null,
     record ? outcome(record) : null,
     links(record, copy),
-    record ? section("ideas", "Core ideas", [], names(record.ideaIds, ideaIndex).map(ideaItem)) : null,
   ].filter((item): item is Section => item !== null)
 
   const taken = new Set(authored.map((item) => item.id))
-  return [...authored.filter((item) => SHOW_ROLE || item.id !== "role"), ...generated.filter((item) => !taken.has(item.id))]
+  const sections = [...authored.filter((item) => (SHOW_ROLE || item.id !== "role") && item.id !== "ideas"), ...generated.filter((item) => !taken.has(item.id))]
+  // The core ideas close the Approach; with no Approach, the description.
+  const line = clean(ideasLine(names(record?.ideaIds, ideaIndex)))
+  if (!line) return sections
+  const at = sections.findIndex((item) => item.id === "approach")
+  const host = at >= 0 ? at : 0
+  return sections.map((item, index) => (index === host ? withParagraph(item, line) : item))
 }

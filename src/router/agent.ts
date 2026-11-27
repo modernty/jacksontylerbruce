@@ -20,7 +20,7 @@ import { DEFAULT_MODEL, GENERAL_TIMEOUT_MS, costUsd, recordSpend, thinkingOff } 
  * with words, the projects to link, and follow-ups that point at what it read but did not say.
  */
 
-export type WorkAnswer = { answer: string; projects: string[]; panel?: "globe" | "timeline"; followUps: string[] }
+export type WorkAnswer = { answer: string; projects: string[]; panel?: "globe" | "timeline"; followUps: string[]; offTopic?: boolean }
 
 type Block = { type: string; id?: string; name?: string; input?: unknown; text?: string }
 type Message = { role: "user" | "assistant"; content: string | unknown[] }
@@ -105,6 +105,7 @@ const TOOLS = [
         projects: { type: "array", items: { type: "string" }, maxItems: 4, description: "Slugs of the projects the answer discusses, most relevant first. One slug opens its preview." },
         panel: { type: "string", enum: ["globe", "timeline"], description: "Only when the answer is about places (globe) or the career over time (timeline)." },
         followUps: { type: "array", items: { type: "string" }, minItems: 3, maxItems: 3, description: "Three short next questions, each about a specific detail you read but did not say." },
+        offTopic: { type: "boolean", description: "True only when the question has nothing to do with Tyler, his work or the site (the weather, a celebrity, general trivia). The general chat answers it instead." },
       },
       required: ["answer", "projects", "followUps"],
     },
@@ -142,6 +143,9 @@ export function workSystem(catalog: PublicCatalog = publishCatalog()): string {
   return [
     "You are the conversation on Tyler Jackson's design portfolio, answering questions about the work: a project, a role, how projects compare, or how Tyler works.",
     "For a question about process, approach, thinking, values or ways of working (\"walk me through your process\", \"how do you work?\"), call read_practice first, then read one or two projects that show it in practice. Answer from the practice, with a project as the example. Never answer it with the career or a list of roles, and never set panel for it.",
+    "Read the conversation first. A short or vague ask (\"show me an example\", \"like what?\", \"more\", \"why?\", \"which one?\") continues the last answer: work out what it refers to before calling any tool, and answer that.",
+    "When the visitor asks for an example, or to see work, choose the two to four projects that best show what the conversation just said. Call list_work, then read_project on each, and return them in projects, most relevant first. In the answer, say in a sentence what each one shows.",
+    "Ground every answer in the site: the practice (read_practice), the projects and the roles. Never answer from general knowledge about design. If the question has nothing to do with Tyler, his work or the site, call reply with offTopic true and a one-word answer.",
     "Read before you answer. Call read_project for every project you discuss, and list_work or read_role when the question is broader. Facts about the work come only from what the tools return. If the content does not cover something, say the site does not go into it, then say what it does cover.",
     "Keep each fact as written. Never join two separate facts into a new claim (if the work was done with leadership and a prototype won sign-off, do not say leadership signed off).",
     "Stay on the subject asked. A follow-up about one project answers about that project only; do not bring the others back in. Lead with the answer, not with what the site lacks.",
@@ -212,7 +216,8 @@ export async function workAgent(
 }
 
 function checked(input: unknown, catalog: PublicCatalog): WorkAnswer | null {
-  const raw = (input ?? {}) as { answer?: unknown; projects?: unknown; panel?: unknown; followUps?: unknown }
+  const raw = (input ?? {}) as { answer?: unknown; projects?: unknown; panel?: unknown; followUps?: unknown; offTopic?: unknown }
+  if (raw.offTopic === true) return { answer: "", projects: [], followUps: [], offTopic: true }
   const answer = typeof raw.answer === "string" ? raw.answer.replace(/\s+/g, " ").trim() : ""
   if (!answer || !workAllowed(answer)) return null
   const slugs = new Set(catalog.projects.map((project) => project.slug))

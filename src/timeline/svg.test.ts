@@ -21,10 +21,11 @@ test("each role's projects stack under its left edge, one row each", () => {
   const hue = label("USM Hue + Man")
   const milan = label("USM: Milan")
   assert.equal(milan.x, hue.x, "Milan stacks under Joba with Hue + Man")
-  assert.equal(milan.y - hue.y, 15)
+  // A name's line plus 2px of clear space.
+  assert.equal(milan.y - hue.y, 17)
   const lazarus = ["Whitelist", "Lazarus brand", "Model Playground", "Talent Management"].map(label)
   assert.ok(lazarus.every((point) => point.x === lazarus[0].x))
-  assert.deepEqual(lazarus.map((point) => point.y - lazarus[0].y), [0, 15, 30, 45])
+  assert.deepEqual(lazarus.map((point) => point.y - lazarus[0].y), [0, 17, 34, 51])
   const jet = label("Fixed Rate Fixed Term")
   assert.ok(jet.x < label("Novart").x, "Jet's project sits at Jet's start, before Nax's")
   assert.ok(svg.includes(`>${employerPublicName()}</tspan>`), "the current role reads the employer switch")

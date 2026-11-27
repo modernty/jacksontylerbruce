@@ -6,11 +6,8 @@ import { CHAT_ASK } from "./chat-thread"
 /** The same pace as the welcome above it. */
 const WORD_MS = 45
 
-/**
- * The questions a first visit starts with: the case studies, the career, and how a project starts.
- * Each is answered from the site's own content, so they never call the model.
- */
-export const STARTERS: readonly string[] = ["Show me some case studies", "Tell me about your experience", "How do you start a project?"]
+import { STARTERS } from "./starters"
+export { STARTERS }
 
 /** Starting questions on a project page, answered from that project's own content. */
 export const PROJECT_STARTERS = ["How was it approached?", "What was the outcome?", "What are the core ideas?"]

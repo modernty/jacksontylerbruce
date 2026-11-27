@@ -33,8 +33,8 @@ export function openTab(slug: string) {
 }
 
 /**
- * The conversation and the projects opened from it, as tabs under the name. Closing the tab
- * you are on, or picking Conversation, goes back to the chat as it was left.
+ * The projects opened from the conversation, as tabs beside the name. Closing the tab you are on
+ * goes back to the chat as it was left.
  */
 export function ProjectTabs({ names }: { names: Record<string, string> }) {
   const path = usePathname()
@@ -50,7 +50,7 @@ export function ProjectTabs({ names }: { names: Record<string, string> }) {
 
   const current = path.startsWith("/work/") ? path.slice("/work/".length).split(/[/?#]/)[0] : null
   // A project page is always one of the tabs, however the visitor got there (a shared link, another
-  // window), so the way back to the conversation is always beside the name.
+  // window).
   useEffect(() => {
     if (current && names[current] && !read().includes(current)) openTab(current)
   }, [current, names])
@@ -65,9 +65,6 @@ export function ProjectTabs({ names }: { names: Record<string, string> }) {
 
   return (
     <nav className="tabs" aria-label="Open tabs">
-      <Link href="/chat" className="tab" aria-current={path === "/chat" ? "page" : undefined}>
-        Conversation
-      </Link>
       {list.map((slug) => (
         <span key={slug} className="tab" aria-current={slug === current ? "page" : undefined}>
           <Link href={`/work/${slug}`}>{names[slug]}</Link>

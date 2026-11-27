@@ -10,7 +10,7 @@ import { DISCIPLINES, byRecent, disciplineOf, type Discipline } from "@/src/cont
 import { containsBlocked } from "@/src/content/guard"
 import { publishCatalog, type PublicCatalog } from "@/src/content/publish"
 import type { Project } from "@/src/content/schema"
-import { workAgent, type WorkClient } from "./agent"
+import { projectFile, workAgent, type WorkClient } from "./agent"
 import { converse, type OpenClient, type PastTurn, type Source, type Status } from "./converse"
 import { handleAsk, type AskDeps } from "./handle"
 import { freshFollowUps } from "./followups"
@@ -401,6 +401,38 @@ export async function handleChatAsk(raw: unknown, ctx: { ip: string; now?: numbe
   return { ...reply, body: { ...body, ...(followUps.length ? { followUps } : {}) } }
 }
 
+/** An ask for an example of what was just said: "show me an example", "like what?", "for instance?". */
+const EXAMPLE = /\b(examples?|for instance|like what|such as|show me one|any (proof|evidence)|proof|case of (that|this)|where (have|did) you (done|do|did) (that|this|it))\b/
+export const asksExample = (question: string) => EXAMPLE.test(fold(question))
+
+const STOP = new Set("about above after again also and any are because been before being both but can could did does doing done each even every from have having here how into just like make made more most much only other our over same should show some such than that the their them then there these they this those through too under until very want was were what when where which while who why will with would your yours you tyler".split(" "))
+const words = (text: string) => new Set(fold(text).replace(/['’]/g, "").split(/[^a-z0-9]+/).filter((word) => word.length >= 4 && !STOP.has(word)))
+
+/**
+ * The projects that best show what the conversation was just about, for when no model can answer.
+ * Each public project is scored by the words it shares with the last two turns; a project the
+ * conversation named counts most. Nothing in common: the case studies.
+ */
+export function relatedProjects(history: PastTurn[], catalog: PublicCatalog = publishCatalog(), count = 3): string[] {
+  const recent = history.slice(-2)
+  const said = recent.map((turn) => `${turn.q} ${turn.a}`).join(" ")
+  const asked = words(said)
+  const named = new Set(mentionedProjects(said, catalog).map((project) => project.slug))
+  const scored = catalog.projects
+    .map((project) => {
+      const head = words(`${project.name} ${project.summary} ${project.aliases.join(" ")}`)
+      const body = words(projectFile(project, catalog))
+      let score = named.has(project.slug) ? 10 : 0
+      for (const word of asked) score += head.has(word) ? 3 : body.has(word) ? 1 : 0
+      return { slug: project.slug, score }
+    })
+    .filter((item) => item.score >= 2)
+    .sort((a, b) => b.score - a.score)
+  const shown = new Set(catalog.projects.map((project) => project.slug))
+  const picked = scored.length ? scored.map((item) => item.slug) : caseStudySlugs().filter((slug) => shown.has(slug))
+  return picked.slice(0, count)
+}
+
 async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, deps: ChatDeps = {}): Promise<{ status: number; body: ChatReply | { error: string } }> {
   const parsed = ChatAsk.safeParse(raw)
   if (!parsed.success) return { status: 400, body: { error: "Expected {q, sessionId}." } }
@@ -436,7 +468,7 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
     const allowed = await underLimit(ctx.ip || "local", now, store).catch(() => underLimit(ctx.ip || "local", now, memoryStore))
     if (!allowed) return "limited"
     const out = await workAgent(q, history, { client: deps.work, onStatus: deps.onStatus, env, context: contextLine(catalog, listed, open, expects), catalog })
-    if (!out) return null
+    if (!out || out.offTopic) return null
     const followUps = out.followUps.length ? out.followUps : suggest(q, ["How do you start a project?", "Show me all projects."])
     return { answer: out.answer, projects: out.projects, followUps, source: "work", ...(out.panel ? { panel: out.panel } : {}) }
   }
@@ -455,6 +487,15 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
       if (!qaReply(q) && !stanceReply(q, new Set(catalog.projects.map((project) => project.slug))) && start) {
         return { status: 200, body: qaToChat({ answer: resolveTokens(start.answer), ...(start.followUps.length ? { followUps: start.followUps } : {}) }) }
       }
+    }
+    // "Show me an example": the projects that show what the conversation just said. The agent reads the
+    // conversation and picks them; with no model, they are ranked by what the last turns talked about.
+    if (asksExample(q) && !mentionedProjects(q, catalog).length && !CASE_STUDIES.test(fold(q)) && !DEMO.test(fold(q)) && !ALL_WORK.test(fold(q))) {
+      const reply = await workTurn()
+      if (reply === "limited") return { status: 429, body: { error: "Too many questions." } }
+      if (reply && reply.projects?.length) return { status: 200, body: { ...reply, panel: undefined, cards: "demo" } }
+      const projects = relatedProjects(history, catalog)
+      if (projects.length) return { status: 200, body: { answer: "A few that show it. Pick one to open it.", projects, cards: "demo", followUps: suggest(q, ["How do you start a project?", "Show me all projects."]) } }
     }
     // An opinion is answered with the point of view, before anything else reads it as a project.
     const qa = qaReply(q)
@@ -522,6 +563,17 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
     const answered = answerChat(q, expects, catalog)
     if (answered) return { status: 200, body: answered }
   }
+  // Anything else about the site goes to the agent first, with the conversation so far, unless the
+  // keyword router is sure it is a view to open. The agent hands back what has nothing to do with the site.
+  if (!blocked(q)) {
+    const routed = keywordRoute(q)
+    const sure = routed.intent !== "off_topic" && routed.confidence >= 0.9
+    if (!sure) {
+      const reply = await workTurn()
+      if (reply === "limited") return { status: 429, body: { error: "Too many questions." } }
+      if (reply) return { status: 200, body: reply }
+    }
+  }
   // Not a list: the main router answers, knowing where the conversation stands, and the reply
   // either changes the view beside the chat or says where to go.
   const result = await handleAsk({ q, sessionId, context: contextLine(catalog, listed, open, expects) }, ctx, deps)
@@ -536,6 +588,11 @@ async function answerChatAsk(raw: unknown, ctx: { ip: string; now?: number }, de
     }
     await logMiss(store, q, "fallback", now)
     if (expects === "category") return { status: 200, body: askTypeAgain() }
+    // Mid-conversation, a follow-up the site can't place still gets the work that fits the thread.
+    if (last && isFollowUp(q, catalog)) {
+      const projects = relatedProjects(history, catalog)
+      if (projects.length) return { status: 200, body: { answer: "Here's the work closest to that. Pick one to open it.", projects, cards: "demo", followUps: suggest(q, ["How do you start a project?", "Show me all projects."]) } }
+    }
     return { status: 200, body: { answer: OUTSIDE, contact: true } }
   }
   if (!blocked(q)) await logMiss(store, q, body.qaKey ? `qa-fuzzy:${body.qaKey}` : `route:${body.intent ?? "unknown"}`, now)

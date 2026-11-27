@@ -79,6 +79,10 @@ function Opening({ slotRef, leaving }: { slotRef: RefObject<HTMLDivElement | nul
         <p className="quick-label">Quick start</p>
         <StarterPrompts className="quick-links" onPick={askHere} stream={ready} />
       </div>
+      <div className="opening-photo-wrap">
+        {/* eslint-disable-next-line @next/next/no-img-element -- a corner photo, sized in CSS */}
+        <img className="opening-photo" src="/assets/images/tyler.webp" width={2000} height={880} alt="Tyler on a city street at night" />
+      </div>
     </div>
   )
 }
@@ -163,9 +167,12 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     if (slot.parentElement) observer.observe(slot.parentElement)
     if (shell) observer.observe(shell)
     window.addEventListener("resize", place)
+    // On a phone the photo sits below the fold, so the page scrolls and the composer moves with its slot.
+    window.addEventListener("scroll", place, { passive: true })
     return () => {
       observer.disconnect()
       window.removeEventListener("resize", place)
+      window.removeEventListener("scroll", place)
       root.style.removeProperty("--empty-bottom")
       root.style.removeProperty("--composer-h")
     }
@@ -276,6 +283,18 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
     router.push(media ? `/work/${slug}?media` : `/work/${slug}`)
   }
 
+  // A project picked on the timeline (a click, or Enter or Space on a focused name) opens its page, as a
+  // project card does. Names with no page of their own do nothing.
+  const slugByName = useRef(new Map(previews.map((item) => [item.name, item.slug])))
+  const openFromTimeline = (target: EventTarget | null) => {
+    const node = target instanceof Element ? target.closest(".pj, .mpj") : null
+    const name = node?.getAttribute("aria-label") ?? node?.textContent?.trim()
+    const slug = name ? slugByName.current.get(name) : undefined
+    if (!slug) return false
+    openFull(slug)
+    return true
+  }
+
   const close = () => setShown(null)
   const panel = shown && shown.kind !== "project" ? shown.kind : null
   // An answer about places lived shows only those; home always stays.
@@ -348,7 +367,14 @@ export function ConversationStage({ previews, places, timeline, careers }: { pre
                 <p className="summary">{panel === "globe" ? (livedOnly ? "Places lived. Drag the globe to turn it." : "Places lived and travelled. Drag the globe to turn it.") : "Each role and the projects under it, from 2019 to now."}</p>
               </div>
             </header>
-            <div className="frame" ref={centreOnScreen}>
+            <div
+              className="frame"
+              ref={centreOnScreen}
+              onClick={panel === "timeline" ? (event) => void openFromTimeline(event.target) : undefined}
+              onKeyDown={panel === "timeline" ? (event) => {
+                if ((event.key === "Enter" || event.key === " ") && openFromTimeline(event.target)) event.preventDefault()
+              } : undefined}
+            >
               {panel === "globe" ? <Travel key={livedOnly ? "lived" : "all"} places={globePlaces} fit="panel" /> : (
                 <>
                   {timeline.model ? <PanelTimeline model={timeline.model} fallback={timeline.desktop} /> : <div className="panel-timeline desk" ref={desktopTimeline} dangerouslySetInnerHTML={{ __html: timeline.desktop }} />}

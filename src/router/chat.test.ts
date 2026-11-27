@@ -7,6 +7,7 @@ import { loadCatalog } from "@/src/content/catalog"
 import { employerPublicName } from "@/src/content/employer"
 import { publishCatalog } from "@/src/content/publish"
 import { careerReply } from "./career"
+import { STARTERS } from "@/src/components/starters"
 import { answerChat, handleChatAsk } from "./chat"
 import { qaReply } from "./qa"
 import { MemoryStore } from "./store"
@@ -15,12 +16,21 @@ const catalog = publishCatalog()
 const names = (slugs: string[] = []) => slugs.map((slug) => catalog.projects.find((project) => project.slug === slug)?.name)
 
 test("each quick-start question is answered by the site itself, without a model", async () => {
-  for (const q of ["Show me some case studies", "Tell me about your experience", "How do you start a project?"]) {
+  for (const q of STARTERS) {
     const reply = await handleChatAsk({ q, sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
     const body = reply.body as { answer?: string; contact?: boolean; projects?: string[]; roles?: string[] }
     assert.equal(reply.status, 200, q)
     assert.ok(body.answer && !body.contact, `${q}: ${JSON.stringify(body)}`)
   }
+})
+
+test("the product design starter lists the product design projects, newest first", async () => {
+  const reply = await handleChatAsk({ q: "Show me all product design projects", sessionId: "s" }, { ip: "1" }, { store: new MemoryStore(), env: { NODE_ENV: "test" } })
+  const body = reply.body as { projects?: string[]; answer: string }
+  assert.ok(STARTERS.includes("Show me all product design projects"))
+  assert.match(body.answer, /^Product design work/)
+  assert.ok((body.projects?.length ?? 0) >= 3, JSON.stringify(body))
+  assert.equal(body.projects?.[0], "botpress")
 })
 
 test("the case studies starter offers the chosen projects, in order, as cards to open", async () => {

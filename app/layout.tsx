@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { IBM_Plex_Mono, Source_Serif_4 } from "next/font/google"
+import { Source_Serif_4 } from "next/font/google"
 import { Suspense } from "react"
 import { SiteAnalytics } from "@/src/components/analytics"
 import { Composer } from "@/src/components/composer"
 import { PillsProvider } from "@/src/components/pills"
-import { ProjectTabs } from "@/src/components/project-tabs"
 import { TopBar } from "@/src/components/top-bar"
 import { ViewModeProvider } from "@/src/components/view-mode"
 import { loadCatalog } from "@/src/content/catalog"
@@ -14,14 +13,6 @@ import { HERO, SITE_NAME, indexable, siteUrl } from "@/src/site/seo"
 import "./tokens.css"
 import "./tailwind.css"
 import "./globals.css"
-
-const plex = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--plex",
-})
 
 /** The reading face: answers and project text. Optical sizing keeps it open and crisp at 16px. */
 const serif = Source_Serif_4({
@@ -49,17 +40,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const home = places.find((place) => place.id === profile.placeId)?.name
   const names = Object.fromEntries(publishCatalog().projects.map((project) => [project.slug, project.name]))
   return (
-    <html lang="en" className={`pre ${plex.variable} ${serif.variable}`}>
+    <html lang="en" className={`pre ${serif.variable}`}>
       <head>
         {faces ? <style dangerouslySetInnerHTML={{ __html: faces }} /> : null}
       </head>
       <body>
         <ViewModeProvider>
-          <TopBar location={profile.location} place={home} linkedin={profile.linkedin} />
-          <ProjectTabs names={names} />
+          <TopBar location={profile.location} place={home} linkedin={profile.linkedin} names={names} />
           <PillsProvider>
             {children}
-            <p className="disclaimer">This is a working demo. Contact for more information.</p>
             <Suspense fallback={null}>
               <Composer email={profile.email} />
             </Suspense>

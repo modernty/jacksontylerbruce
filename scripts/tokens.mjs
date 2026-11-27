@@ -21,7 +21,13 @@ function css() {
   for (const [name, value] of Object.entries(tokens.track)) lines.push(`--track-${kebab(name)}:${value};`)
   for (const [name, value] of Object.entries(tokens.radius)) lines.push(`--radius-${kebab(name)}:${value};`)
   for (const [name, value] of Object.entries(tokens.motion)) lines.push(`--motion-${kebab(name)}:${value};`)
-  return `/* ${header} */\n:root{\n${lines.map((line) => `  ${line}`).join("\n")}\n}\n`
+  // Shadows are cast in ink on paper, but in black on the dark surface, where ink would glow.
+  lines.push("--shade:var(--ink);")
+  const dark = ["color-scheme:dark;", "--shade:#000;"]
+  for (const [name, value] of Object.entries(tokens.dark?.color ?? {})) dark.push(`--${kebab(name)}:${value};`)
+  for (const [name, value] of Object.entries(tokens.dark?.ink ?? {})) dark.push(`--ink-${kebab(name)}:${value};`)
+  const indent = (list, pad) => list.map((line) => `${pad}${line}`).join("\n")
+  return `/* ${header} */\n:root{\n  color-scheme:light dark;\n${indent(lines, "  ")}\n}\n@media (prefers-color-scheme:dark){\n  :root{\n${indent(dark, "    ")}\n  }\n}\n`
 }
 
 function ts() {

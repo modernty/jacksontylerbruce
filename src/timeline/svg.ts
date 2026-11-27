@@ -2,7 +2,9 @@ import { F, I, add, div, fmt, maxN, mul, sub, tw, type N } from "./num"
 import type { ProjectMark, TimelineModel } from "./types"
 import { tokens } from "@/src/design/tokens"
 
-const INK = tokens.color.ink
+// Drawn inline on the page, so ink is the page's text colour (currentColor) and follows dark mode; the
+// bar fill keeps the light paper as a fallback, and the stylesheet sets it to the live --paper.
+const INK = "currentColor"
 const PAPER = tokens.color.paper
 
 /** Every plain line (lanes, ticks, NOW) takes the hairline weight from the tokens. */
@@ -72,6 +74,9 @@ export function desktopSvg(model: TimelineModel, width = 1120, drawnHeight = 340
     )
   }
   const rows = new Map<string, number>()
+  // One project name to the next: the name's own line (its font size x 1.1625, to the half pixel, as
+  // the browser draws it: 14px at 12, 18.5px at 16), plus 2px of clear space between them.
+  const step = F(Math.round(size(13) * 1.1625 * 2) / 2 + 2)
   const timeline = model.projects.filter((project) => project.onTimeline).sort((a, b) => a.start - b.start)
   timeline.forEach((project, index) => {
     const name = project.name
@@ -87,16 +92,16 @@ export function desktopSvg(model: TimelineModel, width = 1120, drawnHeight = 340
     const key = `${lane}:${fmt(xx)}`
     const row = rows.get(key) ?? 0
     rows.set(key, row + lines.length)
-    const ly = add(add(lanes[lane], v(24)), mul(I(row), v(15)))
+    const ly = add(add(lanes[lane], v(24)), mul(I(row), step))
     const label = (cls: string, weight: string) =>
       `<text class="${cls}" x="${fmt(tx)}" y="${fmt(ly)}" font-size="${size(13)}"${weight}>` +
-      lines.map((line, at) => `<tspan x="${fmt(tx)}" y="${fmt(add(ly, mul(I(at), v(15))))}">${line}</tspan>`).join("") +
+      lines.map((line, at) => `<tspan x="${fmt(tx)}" y="${fmt(add(ly, mul(I(at), step)))}">${line}</tspan>`).join("") +
       `</text>`
     const laneTop = lanes[lane]
     timelineGroup.push(
       `<line class="tk" data-t="${fmt(F(project.anchor))}" x1="${fmt(xx)}" y1="${fmt(add(laneTop, I(8)))}" x2="${fmt(xx)}" y2="${fmt(sub(ly, v(10)))}" stroke="${INK}" stroke-opacity=".3"/>` +
         `<g class="pj" tabindex="0" role="button" aria-label="${name}" data-i="${index}" data-t="${fmt(F(project.anchor))}">` +
-        `<rect x="${fmt(tx)}" y="${fmt(sub(ly, v(11)))}" width="${fmt(add(mul(tw(lines.reduce((a, b) => (a.length >= b.length ? a : b)), (type ? F(type * 0.885) : F(11.5))), F(1.1)), I(8)))}" height="${Math.round(15 * k) * lines.length}" fill="transparent"/>` +
+        `<rect x="${fmt(tx)}" y="${fmt(sub(ly, v(11)))}" width="${fmt(add(mul(tw(lines.reduce((a, b) => (a.length >= b.length ? a : b)), (type ? F(type * 0.885) : F(11.5))), F(1.1)), I(8)))}" height="${step.v * lines.length}" fill="transparent"/>` +
         label("w4", "") +
         label("w6", ' font-weight="600"') +
         `</g>`,

@@ -5,6 +5,7 @@ import { z } from "zod"
 import { containsBlocked, textIssues } from "@/src/content/guard"
 import { publishCatalog } from "@/src/content/publish"
 import type { Project, Section } from "@/src/content/schema"
+import { IDEAS_LEAD } from "@/src/content/sections"
 import { annotationAllowed, factBlob } from "./check"
 import { mediaReply, routeQuestion, type Go } from "./navigate"
 import { ASK_TIMEOUT_MS, DEFAULT_MODEL, MAX_CHARS, costUsd, modelCallsAllowed, recordSpend, spendRatio, thinkingOff, underLimit } from "./limits"
@@ -24,7 +25,7 @@ const TOPICS: [RegExp, string[], string][] = [
   [/\b(tools?|stack|software|built with|figma|code)\b/i, ["tools"], "tools"],
   [/\b(role|lead|led|team|solo|your part|responsib|you do|own(ed)?)\b/i, ["role"], "role"],
   [/\b(result|outcome|impact|metric|award|launch|ship|success|numbers?)\b/i, ["outcome"], "outcome"],
-  [/\b(ideas?|principles?|patterns?|themes?|learn)\b/i, ["ideas", "patterns"], "ideas"],
+  [/\b(ideas?|principles?|patterns?|themes?|learn)\b/i, ["patterns"], "ideas"],
   [/\b(how|approach|process|decision|design(ed)?|solve|built|flow|system)\b/i, ["approach", "flow", "system", "patterns"], "approach"],
   [/\b(why|problem|context|brief|about|what is|what was|who)\b/i, ["context", "summary"], "context"],
 ]
@@ -42,6 +43,13 @@ function pick(project: Project, question: string): Pick {
   const byId = new Map(project.sections.map((section) => [section.id, section]))
   for (const [pattern, ids, label] of TOPICS) {
     if (!pattern.test(question)) continue
+    // The core ideas are the closing line of the Approach (or the description): answer with that line.
+    if (label === "ideas") {
+      for (const section of project.sections) {
+        const line = section.body.split("\n\n").find((paragraph) => paragraph.startsWith(IDEAS_LEAD))
+        if (line) return { section: { ...section, body: line, items: [] }, missing: null }
+      }
+    }
     const hit = ids.map((id) => byId.get(id)).find(Boolean)
     return hit ? { section: hit, missing: null } : { section: null, missing: label }
   }

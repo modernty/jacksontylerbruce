@@ -2,13 +2,14 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { TrackOnMount } from "@/src/components/analytics"
 import { SectionAnchor } from "@/src/components/section-anchor"
-import { WorkView } from "@/src/components/work-view"
+import { MediaModeToggle, WorkView } from "@/src/components/work-view"
 import { careerEntries } from "@/src/content/career"
 import { openableFor } from "@/src/content/demos"
 import { portalSections } from "@/src/content/portals"
 import { publishCatalog } from "@/src/content/publish"
 import type { Section } from "@/src/content/schema"
 import { Grain } from "@/src/plates/grain"
+import { LoadingImage } from "@/src/plates/loading-image"
 import { MediaFrame } from "@/src/plates/media-frame"
 
 function find(slug: string) {
@@ -91,6 +92,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         head={
           <header className="column-head">
             <h1>{project.name}</h1>
+            <MediaModeToggle />
             {external.length ? (
               <p className="links">
                 {external.map((item) => (
@@ -115,7 +117,15 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
           tail: section.items.length ? <Items key={section.id} section={section} /> : undefined,
         }))}
         media={
-          images.length ? (
+          images.length && project.media.tiled ? (
+            <section className="media" aria-label={`${project.name} images`}>
+              <figure className="frame tile-grid">
+                {images.map((image, index) => (
+                  <LoadingImage key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} priority={index < 3} sizes="(max-width: 768px) 33vw, 22vw" />
+                ))}
+              </figure>
+            </section>
+          ) : images.length ? (
             <section className="media" aria-label={`${project.name} images`}>
               {images.map((image, index) => (
                 <MediaFrame key={image.src} image={image} index={index} total={images.length} priority={index === 0} sizes="(max-width: 900px) 100vw, 60vw" />

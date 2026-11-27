@@ -9,6 +9,8 @@ import { PromptLinks } from "./starter-prompts"
 export const CHAT_ASK = "chat:ask"
 /** Clears one conversation, named by its store key, so it starts again empty. */
 export const CHAT_RESET = "chat:reset"
+/** Fired when a conversation saves a turn, with its storage key as detail. */
+export const CHAT_CHANGED = "chat:changed"
 /** Closes the panel beside the home chat. The conversation stays. */
 export const CHAT_CLOSE_PANEL = "chat:close-panel"
 /** Stops the answer in flight: what has appeared stays, the rest is dropped. */
@@ -84,7 +86,7 @@ type Turn = { id: number; question: string; words: string[]; shown: number; pend
 const PARTS = ".chat-action, .career-cards > li, ol.career > li, .demo-cards > li, .chat-sources, .chat-nudge"
 /** When the first part starts after the text, the gap between parts, and how long each takes. Match globals.css. */
 const PART_START_MS = 500
-const PART_STEP_MS = 260
+const PART_STEP_MS = 360
 const PART_MS = 600
 /** The least time the thinking state shows before an answer starts to stream. */
 const THINKING_MIN_MS = 2000
@@ -137,6 +139,12 @@ function record(key: string, turn: Stored) {
   } catch {
     // Storage full or blocked: the conversation still works, it just is not kept.
   }
+  window.dispatchEvent(new CustomEvent(CHAT_CHANGED, { detail: key }))
+}
+
+/** Whether a conversation has any turns saved: the header offers New chat once it does. */
+export function hasTurns(key: string): boolean {
+  return load(key).length > 0
 }
 
 export function sessionId(): string {
@@ -422,16 +430,65 @@ export function ChatThread({
   // After a live answer's text: its parts fade in one by one, then the follow-ups stream in.
   const [followOpen, setFollowOpen] = useState<number | null>(null)
   const finished = newest && newest.live && !newest.pending && newest.shown >= newest.words.length ? newest.id : null
+  // Until a part's turn comes it takes no room (see .turn.live in globals.css), so the answer never
+  // holds a blank space for what is still to come: each part joins the stack as it fades in, and the
+  // page follows it down so the newest one sits just above the composer.
   useLayoutEffect(() => {
     if (finished === null) return
-    const parts = [...(last.current?.querySelectorAll<HTMLElement>(PARTS) ?? [])].filter((part) => part.getClientRects().length > 0)
-    parts.forEach((part, index) => {
-      part.style.setProperty("--part", String(index))
-    })
+    const all = [...(last.current?.querySelectorAll<HTMLElement>(PARTS) ?? [])]
+    // Measure with every part in place, before paint, to skip the ones this layout hides anyway.
+    all.forEach((part) => part.classList.add("part-in"))
+    const parts = all.filter((part) => part.getClientRects().length > 0)
+    all.forEach((part) => part.classList.remove("part-in"))
+    let taken = false
+    const take = () => {
+      taken = true
+    }
+    window.addEventListener("wheel", take, { passive: true })
+    window.addEventListener("touchmove", take, { passive: true })
+    const timers = parts.map((part, index) =>
+      window.setTimeout(() => {
+        part.classList.add("part-in")
+        const composer = document.querySelector<HTMLElement>(".hero-work .shell")
+        if (taken || !composer) return
+        const over = part.getBoundingClientRect().bottom - (composer.getBoundingClientRect().top - 16)
+        if (over > 0) window.scrollBy({ top: over, behavior: "smooth" })
+      }, PART_START_MS + index * PART_STEP_MS),
+    )
     const wait = (parts.length ? PART_START_MS + (parts.length - 1) * PART_STEP_MS + PART_MS : PART_START_MS) + FOLLOW_GAP_MS
-    const timer = window.setTimeout(() => setFollowOpen(finished), wait)
-    return () => window.clearTimeout(timer)
+    timers.push(window.setTimeout(() => setFollowOpen(finished), wait))
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer))
+      window.removeEventListener("wheel", take)
+      window.removeEventListener("touchmove", take)
+      // Anything not yet in shows at once, so nothing is left hidden if this stops early.
+      parts.forEach((part) => part.classList.add("part-in"))
+    }
   }, [finished])
+  // The follow-ups are part of the answer: once they are in, the page scrolls just far enough that
+  // they end 16px above the composer, unless the visitor has scrolled away by hand since.
+  useEffect(() => {
+    if (followOpen === null || hold || concealed) return
+    let taken = false
+    const take = () => {
+      taken = true
+    }
+    window.addEventListener("wheel", take, { passive: true })
+    window.addEventListener("touchmove", take, { passive: true })
+    // After the follow-ups have laid out.
+    const timer = window.setTimeout(() => {
+      const end = last.current?.querySelector<HTMLElement>(".follow-ups") ?? last.current
+      const composer = document.querySelector<HTMLElement>(".hero-work .shell")
+      if (taken || !end || !composer) return
+      const over = end.getBoundingClientRect().bottom - (composer.getBoundingClientRect().top - 16)
+      if (over > 0) window.scrollBy({ top: over, behavior: reduce.current ? "auto" : "smooth" })
+    }, 50)
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener("wheel", take)
+      window.removeEventListener("touchmove", take)
+    }
+  }, [followOpen, hold, concealed])
 
   if (turns.length === 0) return null
   return (

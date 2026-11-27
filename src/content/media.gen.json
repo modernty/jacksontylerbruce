@@ -174,10 +174,55 @@
     "height": 564,
     "blur": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQAQCdASoQAAkAA4BaJQAAYvdmjOnGAAD+h/R2MGo68JjgZ7u4BdWppFD8qxDbS0zCheJXwqXPhoXB5Xo+eh1NJEjApX+5huVnMpf8zBlhfcIK2T7lydkXkY+6Hr+DwH4AAA=="
   },
+  "/assets/images/lazarus-ai-pubsec-brand/01.png": {
+    "width": 1252,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSC4AAAABR0AmbeNfb9m72IiIwI5gGpKVh/BCyCSEKEJIIPX7iiCi/xMgdP0JzBa6BvcAVlA4IE4AAADwAQCdASoQAAkAA4BaJZwAAqH5E7hD0gAA/gdOZgUfDxbe9KqGDtnzxWVzKe+l59UPSBGngORWbJvWHv56mYis9R2Yym2tI84z7WcCAAA="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/02.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCAaAAAAMAEAnQEqEAAJAAOAWiWkAANwAP702oiwAAA="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/03.png": {
+    "width": 1250,
+    "height": 703,
+    "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSBgAAAABH3D//4iIA0G2zdDHM6Qb3SCi/wH4VQNWUDggKgAAALABAJ0BKhAACQADgFolpAAC52TamUAA/vi4B4hfMDU0/NRqvJkbjYAAAA=="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/04.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCAkAAAAsAEAnQEqEAAJAAOAWiWkAAMWE1xcAAD+9PDbqCTdpFy7gAAA"
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/05.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCAsAAAAsAEAnQEqEAAJAAOAWiWkAALnVV1bgAD+9PDZomlc6YVav8Hj//TQLTKgAAA="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/06.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRogAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCA8AAAA0AEAnQEqEAAJAAOAWiWkAALEhxsFRAAA/vRWB4ybM1ueycHldS8DU5SYb0sYg0Wl7rsN3v47PFsn6AAA"
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/07.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCBQAAAA0AEAnQEqEAAJAAOAWiWkAALnWKf+4gAA/onfLVDrk2K7YWsJD9oAgJNs5vPFJ+x7PoLoJUg4Yow3tlAa/i9lujRlzH7O+WQ4aPfkxSAAAAA="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/08.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCA4AAAAsAEAnQEqEAAJAAOAWiWkAALrSbzD4AD+9J1Hq6yL/Bf9iawnb3V0qOvVJHYvm/WOfC/4AZ/CQAA="
+  },
+  "/assets/images/lazarus-ai-pubsec-brand/09.png": {
+    "width": 1250,
+    "height": 704,
+    "blur": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4WAoAAAAQAAAADwAACAAAQUxQSCYAAAABLyAWTPx5+5tGRAQ0DANQk0IGIQQRwvxp7jWCiP5PgDh/zBVnfFZQOCBEAAAA0AEAnQEqEAAJAAOAWiWwAALc8NEnngAA/vWDflFoTVFO3ftjbI1T5snU5CHQofBE8IB4dmgc1j/tjVi+/+zcCBsAAAA="
+  },
   "/assets/thumbs/model-playground.jpg": {
-    "width": 1100,
-    "height": 710,
-    "blur": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAABwAQCdASoQAAoAA4BaJaQ2wAAXQAD+9OH8YyBs75NDrklmACYgAA=="
+    "width": 1331,
+    "height": 860,
+    "blur": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAABwAQCdASoQAAoAA4BaJaQ2wAAXQAD+9OH8YyBs75NHWfkUVptRKQAA"
   },
   "/assets/images/model-playground/01.jpg": {
     "width": 1800,

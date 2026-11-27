@@ -40,6 +40,8 @@ form.shell{font:inherit;color:inherit}
 .mode.on{opacity:1;transform:none;pointer-events:auto}
 .d{position:relative}
 .pj{cursor:pointer;outline:none}
+/* The phone drawing's project names open their pages too. */
+.mpj{cursor:pointer}
 .pj .w6,.co .w4{opacity:0}
 .pj .w4{opacity:.7}
 .pj text,.co text{transition:opacity var(--motion-base) var(--motion-ease-move)}
@@ -168,8 +170,6 @@ body:has(.sheet) .cards{display:none}
 .chat>div{scroll-margin-bottom:180px}
 .chat [data-slot=message-pair]>div>div:first-child{min-height:0}
 .top-work span.right{display:flex;gap:28px;align-items:center}
-/* The disclaimer, small, at the very top of every page, above the header. */
-.disclaimer{position:fixed;left:0;right:0;top:calc(14px + env(safe-area-inset-top));z-index:11;margin:0;padding:0 16px;text-align:center;font-family:var(--sans);font-size:var(--fs-micro);line-height:16px;letter-spacing:0;color:var(--ink);opacity:.6;pointer-events:none}
 /* The empty conversation has no Contact control. */
 .top-work span.contact{display:flex;gap:20px;align-items:center}
 /* Email, LinkedIn and the globe (About) as icons; the label is for screen readers and the tooltip. */
@@ -283,7 +283,7 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
   .top-work{top:24px;left:16px;right:16px}
   .top-work span.right{display:flex;gap:20px}
   .top-work span.contact{gap:20px}
-  /* The project bar also holds the view toggle, so the links wait on the other pages. */
+  /* On a project the tabs take the row under the name, so the links wait on the other pages. */
   .top-work span.contact.on-project{display:none}
   .work{padding-top:28vh}
 }
@@ -300,14 +300,11 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
    The 36px button is centred on the 20px header line. */
 .conv-tools{position:fixed;z-index:4;top:32px;left:50%;transform:translateX(-50%);display:flex;justify-content:center}
 @media (max-width:600px){
-  .disclaimer{top:calc(8px + env(safe-area-inset-top))}
   .top-work{top:34px}
   .conv-tools{top:26px}
 }
-/* On desktop the disclaimer sits in the header row, centred on its 20px line (centre 50px), and
-   New chat drops 16px under it. The chat, its top fade and the preview start lower to clear both. */
+/* On desktop the chat, its top fade and the preview start below the header row. */
 @media (min-width:769px){
-  .disclaimer{top:41px}
   .conv-tools{top:73px}
   body .conversation::before{height:156px}
   body .conversation:has(.chat:not(.held)){padding-top:164px}
@@ -324,7 +321,7 @@ body:has(.stage.docked) .hero-work .in{max-width:none;margin:0}
 /* Paper behind the name bar and tabs, so scrolled messages fade out under them. */
 .conversation::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:120px;background:linear-gradient(var(--paper) 72%,color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
 /* The greeting, composer, and quick start sit in the middle of the window. Equal padding keeps
-   that middle clear of the top bar and the disclaimer. safe center lets a short window scroll.
+   that middle clear of the top bar. safe center lets a short window scroll.
    Once a question is in the feed it sits at the top, and the answer streams in under it. */
 .conversation:has(.conv-empty),.conversation:has(.chat){display:flex;flex-direction:column;justify-content:safe center;box-sizing:border-box;min-height:100svh;padding-top:80px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
 /* A short conversation sits in the middle of the view and the page does not scroll. Once it overflows, the
@@ -364,6 +361,11 @@ body:has(.conv-empty.ready) .hero-work .in{pointer-events:auto}
 .top-work .top-link span{display:inline;text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--link) 45%,transparent)}
 .top-work .top-link:hover span{text-decoration-color:var(--link)}
 .top-work .top-link:focus-visible{outline:1px solid var(--link);outline-offset:3px;border-radius:2px}
+/* New chat: styled like the links beside it, in ink rather than blue. */
+.top-work .new-chat{background:none;border:0;padding:0;margin:0;cursor:pointer;color:var(--ink)}
+.top-work .new-chat span{text-decoration-color:color-mix(in srgb,var(--ink) 45%,transparent)}
+.top-work .new-chat:hover span{text-decoration-color:var(--ink)}
+.top-work .new-chat:focus-visible{outline-color:var(--ink)}
 .conv-empty .quick-links button::after,.conversation .follow-ups .prompts button::after{display:none}
 .conv-empty .quick-links button:hover,.conversation .follow-ups .prompts button:hover{background:none;color:var(--ink);text-decoration-color:var(--ink)}
 /* Prompts read as links wherever they are (follow-ups, a project's prompts, the quick start): a calm
@@ -375,6 +377,21 @@ body:has(.conv-empty.ready) .hero-work .in{pointer-events:auto}
 .conversation .chat.held{display:none}
 .conversation .chat.arrive{animation:welcome-in var(--motion-page) var(--motion-ease)}
 @keyframes welcome-in{from{opacity:0}to{opacity:1}}
+/* The photo on the empty home page: the bottom-right corner, fading in as the page loads and leaving with the greeting.
+   600px wide at 1440, growing with the window to 1120px at 2000 and wider; never under 420px or wider than the content column. */
+.conv-empty .opening-photo{position:fixed;right:16px;bottom:16px;z-index:1;width:min(1120px,var(--content,100vw),max(420px,calc(600px + (100vw - 1440px) * .93)));height:auto;aspect-ratio:2000/880;object-fit:cover;border-radius:4px;pointer-events:none;filter:saturate(.15)}
+.conv-empty .opening-photo{animation:welcome-in var(--motion-page) var(--motion-ease) both}
+/* On a phone the opening reads down to the bottom: the welcome, the quick start, the composer, then the photo. */
+@media(max-width:768px){
+  .conversation:has(.conv-empty){justify-content:safe flex-end;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+  .conv-empty{display:flex;flex-direction:column}
+  .conv-empty .opening-composer{order:3}
+  /* The composer ends the first screen, 16px above the bottom; the photo waits below the fold, 16px under the
+     composer once scrolled to, with 16px after it. */
+  .conv-empty{position:relative}
+  .conv-empty .opening-photo-wrap{position:absolute;left:0;right:0;top:calc(100% + 16px);padding-bottom:16px}
+  .conv-empty .opening-photo{position:static;display:block;width:100%}
+}
 /* The thread reads at the landing line's size: 15px on a 24px line, wrapped without a lone last word. */
 .conversation .chat [data-slot=message-pair]>p,
 .conversation .chat [data-slot=message-pair] [class~="group/message"]>div{font-size:15px;line-height:24px;letter-spacing:-.01em;text-wrap:pretty}
@@ -425,6 +442,8 @@ svg .tk{display:none}
 .panel-timeline::-webkit-scrollbar{display:none}
 .panel-timeline svg{display:block;width:100%;height:auto}
 .panel-timeline.phone{max-width:520px}
+/* On very wide screens the chat's timeline keeps 36px more room on each side, so it doesn't stretch so far. */
+@media(min-width:2000px){.conversation .preview .panel-timeline.desk{width:calc(100% - 72px)}}
 @media(min-width:769px){
   .career{display:none}
   .panel-timeline.phone{display:none}
@@ -530,7 +549,6 @@ body:has(.work-stage.wide){--media-max:1000px}
 .gallery .media{margin-top:0;gap:96px;padding-bottom:24px}
 @keyframes preview-in{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
 @keyframes gallery-arrive{from{opacity:0}to{opacity:1}}
-@keyframes gallery-out{from{opacity:1}to{opacity:0}}
 @keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
 @media(min-width:769px){
   /* The chat and the preview sit side by side as one centred pair. */
@@ -553,10 +571,10 @@ body:has(.work-stage.wide){--media-max:1000px}
   /* The wider pair while the timeline is open. Kept right after the rule above and one class stronger,
      so the composer always lines up with the chat it belongs to. */
   body:has(.conv.previewing.showing-timeline) .hero-work{left:max(36px,calc((100vw - min(1320px,calc(100vw - 72px))) / 2))}
-  .work-stage.galleried .column{margin-left:calc(var(--start) - 16px);width:var(--text)}
+  .work-stage:is(.galleried,.kept) .column{margin-left:calc(var(--start) - 16px);width:var(--text)}
   body:has(.work-stage) .hero-work{--col:min(540px,calc(100vw - 32px));left:calc((100vw - var(--col)) / 2);right:auto;width:var(--col);padding:0;transition:left var(--motion-page) var(--motion-ease-move),width var(--motion-page) var(--motion-ease-move)}
   body:has(.work-stage) .hero-work .in{max-width:none;margin:0}
-  body:has(.work-stage.galleried) .hero-work{left:var(--start);width:var(--text)}
+  body:has(.work-stage:is(.galleried,.kept)) .hero-work{left:var(--start);width:var(--text)}
   .gallery{position:fixed;z-index:3;top:132px;right:max(36px,calc((100vw - var(--pair)) / 2));bottom:calc(48px + env(safe-area-inset-bottom));width:calc(var(--pair) - var(--side) - 96px);display:flex;flex-direction:column;overflow:hidden;animation:preview-in var(--motion-page) var(--motion-ease-move) both}
   .gallery-scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
   .work-stage .gallery{left:calc(var(--start) + var(--text) + var(--gap));right:auto;width:var(--media)}
@@ -583,7 +601,44 @@ body:has(.work-stage.wide){--media-max:1000px}
   .preview{animation:none}
 }
 /* Site tabs: the conversation and the projects opened from it. */
-.tabs{position:fixed;z-index:3;top:76px;left:36px;right:36px;display:flex;gap:6px;font-family:var(--sans);font-size:var(--fs-small);letter-spacing:0;overflow-x:auto;scrollbar-width:none}
+/* With tabs open, a project page gets paper behind the name and the tabs, so scrolled text slides under
+   them (solid to 16px below the tabs, then a short fade), never into the gaps between them. */
+body:has(.tabs) .work::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:148px;background:linear-gradient(var(--paper) 124px,color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
+/* On desktop the text on the left is cut off on the same line the gallery is (--crop), a hard edge, tabs or not. */
+@media(min-width:769px){.media-mode-toggle{display:none}}
+@media(min-width:769px){body:has(.work-stage){--crop:112px}.work-stage .column-head{top:var(--crop)}body:has(.work-stage) .work::before{content:"";position:fixed;z-index:2;top:0;left:0;right:0;height:var(--crop);background:var(--paper);pointer-events:none}}
+@media(max-width:600px){body:has(.tabs) .work::before{height:124px;background:linear-gradient(var(--paper) 100px,color-mix(in srgb,var(--paper) 0%,transparent))}}
+/* On a phone a project's text starts right under the header, where its title pins; the composer stays at the bottom. */
+@media(max-width:768px){
+  /* The composer rests 16px above the bottom, as on desktop. */
+  .hero-work{bottom:calc(16px + env(safe-area-inset-bottom))}
+  body:has(.work-stage){--phone-top:80px}
+  /* With project tabs open they take the row under the name, so the text starts under them. */
+  body:has(.work-stage):has(.tabs > *){--phone-top:112px}
+  body .work:has(.work-stage){padding-top:var(--phone-top)}
+  body .work-stage .column-head{top:var(--phone-top)}
+  /* The header grows a row when tabs are open, so the band that hides the scrolled chat grows with it. */
+  body:has(.tabs > *) .conversation::before{height:148px;background:linear-gradient(var(--paper) 128px,color-mix(in srgb,var(--paper) 0%,transparent))}
+  /* The header carries its own paper on a phone, from the top of the screen to 16px under its last row
+     (the name, the tabs, the links: however many show), so nothing scrolled ever shows behind it. */
+  .top-work::before{content:"";position:absolute;z-index:-1;left:-16px;right:-16px;top:-48px;bottom:-16px;background:linear-gradient(var(--paper) calc(100% - 12px),color-mix(in srgb,var(--paper) 0%,transparent));pointer-events:none}
+  /* The media view's switch sits at the far right of the project's title. */
+  .work-stage .column-head{padding-right:84px}
+  .media-mode-toggle{position:absolute;top:0;right:0;height:28px;padding:0 12px;border:1px solid var(--ink-hair);border-radius:4px;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:var(--fs-small);line-height:1;cursor:pointer}
+  .media-mode-toggle.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  /* The media view: only the title and the media. The text, the chat and the composer step aside, and the
+     media fills the screen under the title instead of rising as a sheet. */
+  .work-stage.media-mode .column>:not(.column-head){display:none}
+  body:has(.work-stage.media-mode) .hero-work{display:none}
+  .work-stage.media-mode .sheet-scrim{display:none}
+  .work-stage.media-mode .gallery{top:calc(var(--phone-top) + 44px);bottom:0;left:0;right:0;height:auto;max-height:none;border-radius:0;box-shadow:none;background:var(--paper);padding:0 16px env(safe-area-inset-bottom);animation:fade-in var(--motion-page) var(--motion-ease) both}
+  .work-stage.media-mode .gallery-bar{position:static;margin:0 0 12px}
+  .work-stage.media-mode .gallery-bar .preview-close{display:none}
+  /* No media button on a phone: the gallery is reached another way. */
+  .work-stage .work-actions:has(.media-toggle){display:none}
+}
+/* In the header row, 20px after the name; the links stay at the far right. */
+.tabs{display:flex;gap:6px;flex:0 1 auto;min-width:0;margin-left:20px;font-family:var(--sans);font-size:var(--fs-small);letter-spacing:0;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ink-hair);border-radius:6px;padding:6px 12px;background:var(--paper);color:var(--ink);text-decoration:none;white-space:nowrap}
 .tab a{color:inherit;text-decoration:none}
@@ -591,9 +646,12 @@ body:has(.work-stage.wide){--media-max:1000px}
 .tab:hover{border-color:var(--ink)}
 .tab-close{all:unset;cursor:pointer;display:grid;place-items:center;width:16px;height:16px;border-radius:999px;opacity:.72}
 .tab-close:hover,.tab-close:focus-visible{opacity:1;background:var(--ink-hover)}
-@media(max-width:600px){
-  .tabs{top:54px;left:16px;right:16px}
+/* Narrower than desktop, the tabs take their own row under the name. */
+@media(max-width:768px){
+  .top-work{flex-wrap:wrap;row-gap:8px}
+  .tabs{order:2;flex-basis:100%;margin-left:0}
 }
+.top-work .tabs .tab{line-height:normal}
 
 /* Under an answer the model gave: the pages it cites, then the note about general questions. */
 .chat-sources{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-family:var(--sans);font-size:var(--fs-small);line-height:20px}
@@ -631,7 +689,6 @@ p{text-wrap:pretty}
    so a new message can be sent while the globe, the timeline, a project or the gallery is open. */
 @media(max-width:768px){
   body:has(.preview) .hero,body:has(.gallery) .hero{z-index:21}
-  body:has(.preview) .disclaimer,body:has(.gallery) .disclaimer{z-index:22}
   .preview,.gallery{padding-bottom:calc(132px + env(safe-area-inset-bottom))}
   .preview.view-globe .globe-svg{max-height:46svh}
   .globe-svg{max-height:calc(100svh - 340px)}
@@ -663,9 +720,20 @@ p{text-wrap:pretty}
    what matters), then the section's steps and what the active one says. */
 .media-story{--onb:var(--study-mark)}
 .story{display:grid;gap:20px}
-.story-head h3,.media-chapter h3{margin:0;font-size:var(--fs-header);font-weight:var(--fw-regular);letter-spacing:var(--track-header);line-height:1.25}
-.story-change{margin:8px 0 0;font-size:var(--fs-body);line-height:1.55;opacity:.7}
-.chapter-kicker{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--ink-meta);margin:0 0 10px}
+/* The section header over the media: label, title and intro stacked against a light left stroke (the
+   chat's career cards use the same one). All three at 16px; only the title is medium. */
+.story-head{display:flex;flex-direction:column;gap:4px;padding-left:4px;border-left:1px solid var(--ink-hair)}
+.story-head>*{margin:0;font-family:var(--sans);font-size:var(--fs-body);line-height:1.4;letter-spacing:0;font-weight:var(--fw-regular)}
+.story-head h3,.media-chapter h3{margin:0;font-size:var(--fs-body);font-weight:var(--fw-medium);letter-spacing:0;line-height:1.4}
+.story-change{margin:0;font-size:var(--fs-body);line-height:1.4;opacity:.7}
+.chapter-kicker{font-family:var(--sans);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--ink-meta);margin:0 0 10px}
+.story-head .chapter-kicker{font-size:var(--fs-body);letter-spacing:0;text-transform:none;margin:0}
+/* The project header at the very top of the gallery (the portal) keeps its own look: a small caps label,
+   a larger title and the intro, with no stroke. */
+.media-portal .story-head{display:block;padding-left:0;border-left:0}
+.media-portal .story-head h3{font-size:var(--fs-header);font-weight:var(--fw-regular);letter-spacing:var(--track-header);line-height:1.25}
+.media-portal .story-head .chapter-kicker{font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;margin:0 0 10px;line-height:normal}
+.media-portal .story-head .story-change{margin:8px 0 0;line-height:1.55}
 /* The play/pause control sits at the start of the step bars. */
 .story-controls{display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;margin-top:4px}
 .story-pause{all:unset;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ink-hair);color:var(--ink);transition:background-color var(--motion-base) var(--motion-ease)}
@@ -723,7 +791,8 @@ p{text-wrap:pretty}
 /* Everything in a live turn that is not streamed text fades in: the question as it is sent, then each part
    after the answer's text, in order (--part, set by the thread), then the follow-ups. */
 .turn.live [data-slot=message-pair]>p{animation:chat-part-in 400ms var(--motion-ease) both}
-.turn.live :is(.chat-action,.career-cards>li,ol.career>li,.demo-cards>li,.chat-sources,.chat-nudge){animation:chat-part-in 600ms var(--motion-ease) both;animation-delay:calc(500ms + var(--part,0) * 260ms)}
+.turn.live :is(.chat-action,.career-cards>li,ol.career>li,.demo-cards>li,.chat-sources,.chat-nudge):not(.part-in){display:none}
+.turn.live .part-in{animation:chat-part-in 600ms var(--motion-ease) both}
 .turn.live .follow-ups .follow-label{animation:chat-part-in 600ms var(--motion-ease) both}
 
 /* A project preview, like the conversation, is anchored in the middle: the image holds the centre of the
@@ -748,7 +817,9 @@ p{text-wrap:pretty}
 .media-demo-stage{height:50vh;display:flex;align-items:center;justify-content:center}
 .media-demo-crop{position:relative;overflow:hidden;flex:none}
 .media-demo.desktop .media-demo-crop{border-radius:var(--radius-card);box-shadow:0 0 0 1px var(--ink-rule)}
-.media-demo-crop iframe{position:absolute;top:0;border:0;background:transparent;transform-origin:0 0}
+/* The demos are light pages. Matching their colour scheme keeps the frame transparent in dark mode;
+   a mismatch makes the browser paint the frame white behind them. */
+.media-demo-crop iframe{position:absolute;top:0;border:0;background:transparent;transform-origin:0 0;color-scheme:light}
 .media-demo-crop iframe.watch-only{pointer-events:none}
 .media-demo-caption{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;text-align:center}
 .media-demo-caption>span{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em;opacity:.5}
@@ -760,6 +831,9 @@ p{text-wrap:pretty}
 .split-media>*+*{margin-top:120px}
 .gallery-scroll{container-type:size;overscroll-behavior:contain}
 .gallery-scroll>.media{display:contents}
+/* A tiled gallery: the images together, three across, as one page of the gallery. */
+.frame.tile-grid,.gallery-scroll>.media>.frame.tile-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:center}
+.frame.tile-grid img{display:block;width:100%;height:auto;max-height:none!important;border-radius:4px}
 /* Every plate sits centred in the panel; the project text starts level with the first plate's top. */
 .gallery-scroll>:not(.media),.gallery-scroll>.media>*{box-sizing:border-box;min-height:100cqh;margin:0;padding:24px 0;display:flex;flex-direction:column;justify-content:center}
 .gallery-scroll .story{width:min(100%,calc((100cqh - 385px) * 1.5));margin-inline:auto}
@@ -774,7 +848,7 @@ p{text-wrap:pretty}
 .gallery-scroll .chapter-figure img{width:auto;max-width:100%;max-height:calc(100cqh - 300px);margin-inline:auto}
 .gallery-scroll .chapter-figure{display:flex;justify-content:center}
 @media(min-width:769px){
-  .work-stage .gallery{top:112px;bottom:24px}
+  .work-stage .gallery{top:var(--crop,112px);bottom:24px}
   .gallery-scroll .media-chapter{gap:20px}
 }
 @media(max-width:768px){
@@ -829,7 +903,7 @@ p{text-wrap:pretty}
 @property --av{syntax:"<length>";inherits:true;initial-value:0px}
 .shift{--tier:5.5em;--sgap:2em;--pad:1.1em;--head:2.6em;--av:2.6em;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88%,40em);display:grid;grid-template-rows:var(--tier) var(--sgap) auto;place-items:stretch}
 .shift-k{font-size:.74em;font-weight:var(--fw-medium);letter-spacing:.07em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 55%,transparent)}
-.shift-tier{display:grid;align-content:center;gap:.2em;padding:0 var(--pad) 0 calc(var(--pad) + var(--av) + .9em);border-radius:1.2em;background:color-mix(in srgb,var(--surface) 70%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 10%,transparent),0 18px 40px -20px color-mix(in srgb,var(--ink) 25%,transparent);opacity:0;transform:translateY(1em);transition:opacity .5s,transform .6s cubic-bezier(.3,.7,.2,1)}
+.shift-tier{display:grid;align-content:center;gap:.2em;padding:0 var(--pad) 0 calc(var(--pad) + var(--av) + .9em);border-radius:1.2em;background:color-mix(in srgb,var(--surface) 70%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 10%,transparent),0 18px 40px -20px color-mix(in srgb,var(--shade) 25%,transparent);opacity:0;transform:translateY(1em);transition:opacity .5s,transform .6s cubic-bezier(.3,.7,.2,1)}
 .shift-tier b{font-size:1.45em;font-weight:var(--fw-semibold);letter-spacing:-.01em}
 .shift-link{justify-self:center;border-left:1.5px dashed color-mix(in srgb,var(--ink) 30%,transparent);opacity:0;transition:opacity .4s}
 .shift-box{padding:var(--pad);border-radius:1.2em;background:color-mix(in srgb,var(--surface) 40%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 10%,transparent)}
@@ -846,7 +920,7 @@ p{text-wrap:pretty}
 .tile-in{position:relative;display:block;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1)}
 .tile.is-ai .tile-in{transform:rotateX(180deg)}
 .tile-f,.tile-b{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;gap:.4em;padding:0 .65em 0 .95em;border-radius:.8em;font-size:.95em;font-weight:var(--fw-medium);backface-visibility:hidden;white-space:nowrap}
-.tile-f{background:var(--surface);box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 8%,transparent),0 4px 14px color-mix(in srgb,var(--ink) 4%,transparent)}
+.tile-f{background:var(--surface);box-shadow:0 1px 2px color-mix(in srgb,var(--shade) 8%,transparent),0 4px 14px color-mix(in srgb,var(--shade) 4%,transparent)}
 .tile-b{background:var(--ink);color:var(--paper);transform:rotateX(180deg)}
 .tile-b em{flex:none;font-style:normal;font-size:.72em;padding:.15em .45em;border-radius:999px;background:color-mix(in srgb,var(--surface) 16%,transparent)}
 /* The trust line: it draws in, its rungs arrive, onboarding lights up, then Lily climbs it. */
@@ -863,7 +937,7 @@ p{text-wrap:pretty}
 .curve-pt{position:absolute;left:var(--x);top:var(--y);width:0;height:0;scale:0;opacity:0;transition:opacity .7s,scale .8s cubic-bezier(.25,.6,.3,1)}
 .curve.is-drawn .curve-pt{scale:1;opacity:1;transition-delay:calc(2.2s + var(--i) * .32s)}
 .curve.is-drawn:is([data-stage=onboarding],[data-stage=lily]) .curve-pt{transition-delay:0s}
-.curve-dot{position:absolute;left:-.55em;top:-.55em;width:1.1em;height:1.1em;border-radius:50%;background:var(--ink);border:3px solid var(--surface);box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 25%,transparent);transition:background .7s,transform .7s,border-color .7s}
+.curve-dot{position:absolute;left:-.55em;top:-.55em;width:1.1em;height:1.1em;border-radius:50%;background:var(--ink);border:3px solid var(--surface);box-shadow:0 1px 3px color-mix(in srgb,var(--shade) 25%,transparent);transition:background .7s,transform .7s,border-color .7s}
 .curve-lab{position:absolute;left:.75em;top:.35em;width:max-content;max-width:9.5em;font-size:.8em;font-weight:var(--fw-medium);line-height:1.2}
 .curve-callout{position:absolute;left:17%;top:47%;max-width:10em;padding:.45em .75em;border-radius:.6em;background:var(--study-mark);font-size:.82em;font-weight:var(--fw-medium);line-height:1.25;text-wrap:balance;opacity:0;transform:translateY(.4em);transition:opacity .8s,transform .9s cubic-bezier(.25,.6,.3,1)}
 .curve-callout-lily{left:auto;right:calc(12.87% + 2.8em);top:18%;margin-top:-3em;max-width:15em;border-radius:.9em .25em .9em .9em;background:var(--surface);box-shadow:0 0 0 1.5px var(--study-lily);transition-duration:.3s}
@@ -997,24 +1071,22 @@ p{text-wrap:pretty}
 .portal-overview-note{margin:18px 0 0;padding:12px 14px;border-radius:var(--radius-card);background:var(--accent-soft);color:var(--accent);font-size:var(--fs-small);line-height:1.45}
 @media(max-width:560px){.layer{grid-template-columns:1fr;gap:6px}.layer-head{grid-row:auto}.layer-count{flex-basis:auto;padding-left:0}}
 
-/* Beside the media, the text starts where the media starts and runs the same height; with no media it
-   sits lower, centred as before. Opening the media moves it up; hiding fades both out, and the text
-   fades back in at its centred place. */
+/* Beside the media, the text starts at the top of the gallery and runs the same height; with no media it
+   sits lower, centred as before. Opening the media moves it up; hiding it leaves the text where it is. */
 @media(min-width:769px){
   .work{transition:padding-top var(--motion-slide) var(--motion-ease-move)}
-  /* The title starts level with the top of the first plate's content, measured on arrival (--lead-top).
-     Until it is measured the text is held back, so it never shows in one place and jumps to another. */
-  .work:has(.work-stage.galleried){padding-top:var(--lead-top,180px)}
+  /* The title starts as high as it can go: at the crop line, level with the top of the gallery rather
+     than with the first plate's content. Until the gallery is placed the text is held back. */
+  .work:has(.work-stage.galleried){padding-top:var(--crop,112px)}
+  /* Media hidden by hand: the text and composer stay put, with nothing moving or fading. */
+  .work:has(.work-stage.kept){padding-top:var(--crop,112px);transition:none}
+  .work-stage.kept .column,body:has(.work-stage.kept) .hero-work{transition:none}
   .work:has(.work-stage.galleried:not(.placed)){transition:none}
   .work-stage.galleried:not(.placed) .column{visibility:hidden}
   /* The media the page opens with waits two seconds, while the text starts to stream, then fades in. */
   .work-stage.arriving .gallery{animation:gallery-arrive 900ms var(--motion-ease) 2000ms both}
   /* Fading back in is slower than fading out, so the text settles rather than pops. */
   .work-stage .column{transition:margin-left var(--motion-slide) var(--motion-ease-move),width var(--motion-slide) var(--motion-ease-move),opacity 1280ms var(--motion-ease)}
-  .work-stage.leaving .column,.work-stage.leaving .gallery,body:has(.work-stage.leaving) .hero-work{opacity:0;transition:opacity 960ms var(--motion-ease-slide)}
-  /* The gallery's entrance animation holds its opacity, so it leaves on an animation of its own, in step with the rest. */
-  .work-stage.leaving .gallery{animation:gallery-out 960ms var(--motion-ease-slide) both}
-  .work:has(.work-stage.leaving){transition:none}
   body:has(.work-stage) .hero-work{transition:left var(--motion-slide) var(--motion-ease-move),width var(--motion-slide) var(--motion-ease-move),opacity 1280ms var(--motion-ease)}
 }
 @media(min-width:769px) and (prefers-reduced-motion:reduce){.work{transition:none}.work-stage.arriving .gallery{animation:none}}
@@ -1039,14 +1111,18 @@ p{text-wrap:pretty}
    content (a preview, the globe, a project's media) takes the other 8. Phones keep one column. */
 @media(min-width:769px){
   :root{
-    --edge:36px;
+    /* Everything sits 16px from the window's edge. The columns are still measured on the 36px
+       grid, and the 20px gained on the left goes to the chat side, so it starts at the edge and
+       ends where it did; the content ends 16px from the right. */
+    --edge:16px;
+    --grid-edge:36px;
     --gutter:24px;
-    --gcol:calc((100vw - var(--edge) * 2 - var(--gutter) * 11) / 12);
+    --gcol:calc((100vw - var(--grid-edge) * 2 - var(--gutter) * 11) / 12);
     /* A tenth wider than four columns up to an ordinary desktop (484px at 1440 wide). Past that it
        holds at 484px until three quarters of four columns is wider (about 2090 wide), then grows
        with the screen at that rate (about 770px at 3200); the content takes the rest. */
     --cols4:calc(var(--gcol) * 4 + var(--gutter) * 3);
-    --left:max(min(calc(var(--cols4) * 1.1), 484px), calc(var(--cols4) * .75));
+    --left:calc(max(min(calc(var(--cols4) * 1.1), 484px), calc(var(--cols4) * .75)) + var(--grid-edge) - var(--edge));
     /* The chat side and the content sit a double gutter apart; the content takes the rest. */
     --split:48px;
     --content-start:calc(var(--edge) + var(--left) + var(--split));
@@ -1057,37 +1133,32 @@ p{text-wrap:pretty}
   body:has(.conv) .hero-work,body:has(.conv.previewing) .hero-work,body:has(.conv.previewing.showing-timeline) .hero-work{left:var(--edge);width:var(--left)}
   .conversation .preview{left:var(--content-start);right:auto;width:var(--content)}
   /* A project: its text and composer in the 4 columns, at one width whether the media is open or not;
-     the media in the 8. */
-  body:has(.work-stage){--start:var(--edge);--text:var(--left);--gap:var(--split);--media:var(--content)}
+     the media in the 8, with twice the split between them: the extra room comes out of the media. */
+  body:has(.work-stage){--start:var(--edge);--text:var(--left);--gap:calc(var(--split) * 2);--media:calc(var(--content) - var(--split))}
   .work-stage .column{margin-left:calc(var(--edge) - 16px);width:var(--left)}
   body:has(.work-stage) .hero-work{left:var(--edge);width:var(--left)}
   /* The opening (the intro, the welcome, the quick start, then the composer) sits at the bottom of
      the left columns, the composer 36px above the window's edge, where it rests on other pages. */
-  .conversation:has(.conv-empty){justify-content:flex-end;padding-bottom:calc(36px + env(safe-area-inset-bottom))}
+  .conversation:has(.conv-empty){justify-content:flex-end;padding-bottom:calc(var(--edge) + env(safe-area-inset-bottom))}
   /* The composer comes last, under the quick start: at the bottom, where it rests on every page. */
   .conv-empty{display:flex;flex-direction:column}
   .conv-empty .opening-composer{order:3}
-  body:has(.conv-empty) .hero-work{top:auto;bottom:calc(36px + env(safe-area-inset-bottom))}
+  body:has(.conv-empty) .hero-work{top:auto;bottom:calc(var(--edge) + env(safe-area-inset-bottom))}
+  .top-work{left:var(--edge);right:var(--edge)}
+  .conversation{padding-left:var(--edge);padding-right:var(--edge)}
+  .hero-work{bottom:calc(var(--edge) + env(safe-area-inset-bottom))}
 }
 /* The name in the header: larger, in Medium. */
 .top-work>a:first-child{font-size:18px;font-weight:var(--fw-medium)}
 /* On a phone the name keeps its smaller size, so it clears New chat centred in the same row. */
 @media(max-width:600px){.top-work>a:first-child{font-size:var(--fs-text)}}
-/* The header reads from the left: the name, then mail, LinkedIn and the location beside it, in the
-   chat's columns. Only Reading view (on a project) stays at the far right. */
+/* The header: the name at the left, LinkedIn and the location at the far right. */
 .top-work{justify-content:flex-start;align-items:center}
-.top-work span.contact{margin-left:28px}
-.top-work span.right{margin-left:auto}
+.top-work span.contact{margin-left:auto}
 /* On a phone the links take their own row under the name. */
 @media(max-width:600px){
   .top-work{flex-wrap:wrap;row-gap:8px}
   .top-work span.contact{order:3;flex-basis:100%;margin-left:0}
-}
-/* On desktop the links end where the chat's columns end, flush with the composer's right edge. */
-@media(min-width:769px){
-  /* On narrow desktops the four columns are too tight for the name and the links side by side, so
-     the links reach at least 440px from the left and clear the name. */
-  .top-work span.contact{position:absolute;top:0;bottom:0;right:calc(100% - max(var(--left), 440px));margin-left:0}
 }
 
 /* The experience list, on desktop and phone: dates, company, role, each a line of the same size and
@@ -1112,7 +1183,6 @@ p{text-wrap:pretty}
 .career-card + .career-card{border-top:0}
 /* Below 1200px the header row is full (the name, its links, Reading view), so the demo note moves up
    onto its own line above it, as on phones. */
-@media(min-width:769px) and (max-width:1199px){.disclaimer{top:calc(14px + env(safe-area-inset-top))}}
 /* The "Follow up" label over the follow-ups is the serif too, like the prompts under it. */
 .follow-ups .follow-label{font-family:var(--serif);letter-spacing:0;font-optical-sizing:auto}
 
@@ -1162,7 +1232,7 @@ svg[font-family]{font-family:var(--sans)}
     order:0;margin:0;padding:4px;gap:4px;border-radius:8px;
     background:color-mix(in srgb,var(--paper) 55%,transparent);
     -webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
-    box-shadow:inset 0 1px 0 color-mix(in srgb,white 85%,transparent),inset 0 0 0 1px color-mix(in srgb,white 45%,transparent),0 0 0 1px var(--ink-rule),0 10px 30px color-mix(in srgb,var(--ink) 10%,transparent)
+    box-shadow:inset 0 1px 0 color-mix(in srgb,white var(--glass-hi,85%),transparent),inset 0 0 0 1px color-mix(in srgb,white var(--glass-edge,45%),transparent),0 0 0 1px var(--ink-rule),0 10px 30px color-mix(in srgb,var(--shade) 10%,transparent)
   }
   .work-stage .gallery-bar .gallery-count{margin:0 8px 0 12px}
   .work-stage .gallery-bar .gallery-step,.work-stage .gallery-bar .preview-close{background:color-mix(in srgb,var(--ink) 5%,transparent)}
@@ -1175,3 +1245,10 @@ svg[font-family]{font-family:var(--sans)}
 .gallery-scroll.held{overflow:hidden}
 .gallery-scroll.held .portal-body{overscroll-behavior:contain}
 .gallery:has(.gallery-scroll.held) .gallery-step{opacity:.3;pointer-events:none}
+
+/* Dark mode. The colours come from the tokens (app/tokens.css). The timeline draws in currentColor;
+   its bars take the live paper here. The glass bar's white highlights are toned down. */
+svg .pr{fill:var(--paper)}
+@media (prefers-color-scheme:dark){
+  :root{--glass-hi:12%;--glass-edge:8%}
+}

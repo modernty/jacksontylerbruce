@@ -44,6 +44,8 @@ export const MediaSchema = z.object({
   coverInk: z.string().nullable(),
   /** False when the gallery's own images already show the cover, so it is not shown twice. */
   coverInGallery: z.literal(false).optional(),
+  /** True when the images show together as one tile, not one to a page. */
+  tiled: z.literal(true).optional(),
   images: z.array(ImageSchema),
 })
 

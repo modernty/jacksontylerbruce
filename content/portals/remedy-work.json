@@ -48,48 +48,54 @@
           }
         },
         {
-          "slug": "loyalty-scan-test",
-          "title": "Loyalty scan test",
-          "oneLiner": "How can we turn in store behaviors into an introduction to the agent?",
-          "description": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is still imagined as campaigns. The Optimum scan becomes the first conversation, and one tap opens an agent that already knows the points balance and the pharmacy.",
+          "slug": "connection-test",
+          "title": "Connection test",
+          "oneLiner": "What value convinces someone to connect their health data, and what do they get back?",
+          "description": "The connection is one tap and almost nobody takes it, because the ask arrives before any proof. Value gets shown before permission is asked, then paid off immediately by an answer that knows the dosage and the timing.",
           "platform": "Not platform specific",
           "status": "Prototype ready",
           "video": {
-            "card": "/demos/remedy-work/labs/pc-one-loyalty-card.mp4",
-            "full": "/demos/remedy-work/labs/pc-one-loyalty.mp4",
-            "poster": "/demos/remedy-work/labs/pc-one-loyalty-poster.jpg"
+            "card": "/demos/remedy-work/labs/connection-card.mp4",
+            "full": "/demos/remedy-work/labs/connection.mp4",
+            "poster": "/demos/remedy-work/labs/connection-poster.jpg"
           },
           "study": {
-            "number": "02",
-            "category": "Earning first use",
-            "question": "How can we turn in-store behaviors into an introduction to the agent?",
-            "testing": "The Optimum scan at checkout as the acquisition moment. Habits people already have in store, turned into first conversations instead of campaigns.",
-            "method": "Framing test",
-            "participants": "Optimum members, in and out of SDM",
-            "hypothesis": "The checkout scan is the one second Loblaw already has permission to speak. An introduction framed as something the card just unlocked lands as a perk. The identical message framed as a feature announcement lands as an ad and burns the moment. Same agent, opposite first impression, decided by the frame.",
-            "why": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is currently imagined as campaigns. If the scan works, the first conversation costs nothing per person and happens at the exact moment of proven loyalty. First frames are also close to impossible to re run. Whatever this moment says, it says once.",
+            "number": "05",
+            "category": "Personalization and memory",
+            "question": "What value convinces someone to connect their health data, and what do they get back?",
+            "testing": "The value shown before the ask, and the visibly better answers after it. Includes whether people even know which records they have and what connecting does.",
+            "method": "Ask frame test",
+            "participants": "Wearable and Apple Health owners who shop SDM",
+            "hypothesis": "The connect ask fails because it arrives before any proof. Show one visibly better answer built on connected data, a preview, a sample, a named wall the agent cannot get past without it, and the tap follows. Value has to be visible before the permission is requested.",
+            "why": "The connection is one tap and almost nobody takes it. Connected labs and vitals change answer quality in a step, not a slope, which makes this single permission moment the growth lever for the entire personalization stage. Nobody has tested what the ask should look like.",
+            "receipts": [
+              {
+                "quote": "Not just Remedy knowing their medications, but really going so far as knowing and incorporating things like their dosage, the timing of their medications, knowing ahead of time if anything with our meds have changed.",
+                "attribution": "Research finding"
+              }
+            ],
             "prototype": [
-              "The Optimum card scans at self checkout.",
-              "A notification arrives framed as something the card unlocked.",
-              "One tap opens the agent mid errand.",
-              "The greeting already knows the points balance and the pharmacy."
+              "Mid conversation, the agent names what it cannot see.",
+              "A preview shows the shape of a connected answer.",
+              "The consent sheet says in plain words what is shared.",
+              "The first connected answer proves the trade was worth it."
             ],
             "run": [
               {
-                "lead": "Two framings of the same moment, traded off by every person.",
-                "detail": "The perk frame speaks in reward language and points context. The feature frame announces an assistant. Everyone sees both at a simulated checkout, in random order."
+                "lead": "Three asks, traded off by every person.",
+                "detail": "The cold ask as it exists today. The preview ask, a sample of what connected answers look like. The earned ask, three turns in, where the agent names the wall. With your labs I could answer this properly."
               },
               {
-                "lead": "An intercept read seconds after a real scan,",
-                "detail": "because a lab reaction to a mockup and a real reaction at a real register are different data. We measure open intent and the creepy read right there."
+                "lead": "Measure the tap and the comprehension together,",
+                "detail": "because a connection someone does not understand is a revocation waiting to happen. People explain back what is shared and with whom."
               },
               {
-                "lead": "The decline path, tested on purpose.",
-                "detail": "What a no thanks does next, whether it stays quiet or asks again, and how much resentment a re ask earns."
+                "lead": "A revoke read.",
+                "detail": "Whether knowing exactly how to disconnect raises willingness to connect, which is what autonomy research predicts."
               },
               {
                 "lead": "What this settles, stated plainly.",
-                "detail": "The winning frame and the moment. It does not settle national opt in rates, which need a live pilot. If the frame result warrants it, we will say that is the next study rather than dress this one up as the answer."
+                "detail": "The design of the ask. It does not settle whether people keep the connection over months, which is a live pilot question."
               }
             ]
           }
@@ -173,54 +179,48 @@
           }
         },
         {
-          "slug": "connection-test",
-          "title": "Connection test",
-          "oneLiner": "What value convinces someone to connect their health data, and what do they get back?",
-          "description": "The connection is one tap and almost nobody takes it, because the ask arrives before any proof. Value gets shown before permission is asked, then paid off immediately by an answer that knows the dosage and the timing.",
+          "slug": "loyalty-scan-test",
+          "title": "Loyalty scan test",
+          "oneLiner": "How can we turn in store behaviors into an introduction to the agent?",
+          "description": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is still imagined as campaigns. The Optimum scan becomes the first conversation, and one tap opens an agent that already knows the points balance and the pharmacy.",
           "platform": "Not platform specific",
           "status": "Prototype ready",
           "video": {
-            "card": "/demos/remedy-work/labs/connection-card.mp4",
-            "full": "/demos/remedy-work/labs/connection.mp4",
-            "poster": "/demos/remedy-work/labs/connection-poster.jpg"
+            "card": "/demos/remedy-work/labs/pc-one-loyalty-card.mp4",
+            "full": "/demos/remedy-work/labs/pc-one-loyalty.mp4",
+            "poster": "/demos/remedy-work/labs/pc-one-loyalty-poster.jpg"
           },
           "study": {
-            "number": "05",
-            "category": "Personalization and memory",
-            "question": "What value convinces someone to connect their health data, and what do they get back?",
-            "testing": "The value shown before the ask, and the visibly better answers after it. Includes whether people even know which records they have and what connecting does.",
-            "method": "Ask frame test",
-            "participants": "Wearable and Apple Health owners who shop SDM",
-            "hypothesis": "The connect ask fails because it arrives before any proof. Show one visibly better answer built on connected data, a preview, a sample, a named wall the agent cannot get past without it, and the tap follows. Value has to be visible before the permission is requested.",
-            "why": "The connection is one tap and almost nobody takes it. Connected labs and vitals change answer quality in a step, not a slope, which makes this single permission moment the growth lever for the entire personalization stage. Nobody has tested what the ask should look like.",
-            "receipts": [
-              {
-                "quote": "Not just Remedy knowing their medications, but really going so far as knowing and incorporating things like their dosage, the timing of their medications, knowing ahead of time if anything with our meds have changed.",
-                "attribution": "Research finding"
-              }
-            ],
+            "number": "02",
+            "category": "Earning first use",
+            "question": "How can we turn in-store behaviors into an introduction to the agent?",
+            "testing": "The Optimum scan at checkout as the acquisition moment. Habits people already have in store, turned into first conversations instead of campaigns.",
+            "method": "Framing test",
+            "participants": "Optimum members, in and out of SDM",
+            "hypothesis": "The checkout scan is the one second Loblaw already has permission to speak. An introduction framed as something the card just unlocked lands as a perk. The identical message framed as a feature announcement lands as an ad and burns the moment. Same agent, opposite first impression, decided by the frame.",
+            "why": "Ninety percent of Canadians live within ten kilometres of a store, and acquisition is currently imagined as campaigns. If the scan works, the first conversation costs nothing per person and happens at the exact moment of proven loyalty. First frames are also close to impossible to re run. Whatever this moment says, it says once.",
             "prototype": [
-              "Mid conversation, the agent names what it cannot see.",
-              "A preview shows the shape of a connected answer.",
-              "The consent sheet says in plain words what is shared.",
-              "The first connected answer proves the trade was worth it."
+              "The Optimum card scans at self checkout.",
+              "A notification arrives framed as something the card unlocked.",
+              "One tap opens the agent mid errand.",
+              "The greeting already knows the points balance and the pharmacy."
             ],
             "run": [
               {
-                "lead": "Three asks, traded off by every person.",
-                "detail": "The cold ask as it exists today. The preview ask, a sample of what connected answers look like. The earned ask, three turns in, where the agent names the wall. With your labs I could answer this properly."
+                "lead": "Two framings of the same moment, traded off by every person.",
+                "detail": "The perk frame speaks in reward language and points context. The feature frame announces an assistant. Everyone sees both at a simulated checkout, in random order."
               },
               {
-                "lead": "Measure the tap and the comprehension together,",
-                "detail": "because a connection someone does not understand is a revocation waiting to happen. People explain back what is shared and with whom."
+                "lead": "An intercept read seconds after a real scan,",
+                "detail": "because a lab reaction to a mockup and a real reaction at a real register are different data. We measure open intent and the creepy read right there."
               },
               {
-                "lead": "A revoke read.",
-                "detail": "Whether knowing exactly how to disconnect raises willingness to connect, which is what autonomy research predicts."
+                "lead": "The decline path, tested on purpose.",
+                "detail": "What a no thanks does next, whether it stays quiet or asks again, and how much resentment a re ask earns."
               },
               {
                 "lead": "What this settles, stated plainly.",
-                "detail": "The design of the ask. It does not settle whether people keep the connection over months, which is a live pilot question."
+                "detail": "The winning frame and the moment. It does not settle national opt in rates, which need a live pilot. If the frame result warrants it, we will say that is the next study rather than dress this one up as the answer."
               }
             ]
           }

@@ -1,5 +1,6 @@
 /* Generated from design/tokens.json by scripts/tokens.mjs. Do not edit. */
 :root{
+  color-scheme:light dark;
   --ink:#111111;
   --accent:#2E3A87;
   --link:#3A4FA0;
@@ -31,7 +32,7 @@
   --ink-meta:color-mix(in srgb,var(--ink) 60%,transparent);
   --ink-quiet:color-mix(in srgb,var(--ink) 70%,transparent);
   --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
-  --mono:var(--plex),ui-monospace,monospace;
+  --mono:'Helvetica Neue',Helvetica,Arial,sans-serif;
   --serif:'Helvetica Neue',Helvetica,Arial,sans-serif;
   --fs-display:28px;
   --fs-display-small:26px;
@@ -68,4 +69,23 @@
   --motion-stagger:40ms;
   --motion-pulse:2600ms;
   --motion-load:2100ms;
+  --shade:var(--ink);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --shade:#000;
+    --ink:#EFEFEF;
+    --paper:#191919;
+    --surface:#222222;
+    --well:#2A2A2A;
+    --charcoal:#EFEFEF;
+    --accent:#A9B4F0;
+    --link:#9DAEF5;
+    --accent-soft:#2A3050;
+    --ink-rule:#222222;
+    --ink-hair:#3B3B3B;
+    --ink-wash:#3B3B3B;
+    --ink-shadow:rgba(0,0,0,.45);
+  }
 }
